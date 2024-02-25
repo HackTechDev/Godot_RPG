@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Sprites/Player/player_without_sword.png" id="1_ny3qo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
-size = Vector2(30, 29)
+size = Vector2(32, 50)
 
 [sub_resource type="Animation" id="Animation_4bk70"]
 length = 0.001
@@ -235,11 +235,14 @@ vframes = 21
 frame = 105
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 15.5)
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_386wa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-enabled = false
+limit_left = -1088
+limit_top = -752
+limit_right = 1152
+limit_bottom = 848
 
 [node name="anim" type="AnimationPlayer" parent="."]
 libraries = {
