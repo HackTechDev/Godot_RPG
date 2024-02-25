@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/Entity/player.gd" id="1_2tdbd"]
 [ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Sprites/Player/player_without_sword.png" id="1_ny3qo"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e020f"]
-radius = 15.0333
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
+size = Vector2(30, 29)
 
 [sub_resource type="Animation" id="Animation_4bk70"]
 length = 0.001
@@ -225,6 +225,7 @@ states/Move/position = Vector2(585, 97)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_xiog5"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_tf3nr"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_lqe3w")]
 
 [node name="Player" type="CharacterBody2D"]
+y_sort_enabled = true
 script = ExtResource("1_2tdbd")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -234,8 +235,8 @@ vframes = 21
 frame = 105
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 16)
-shape = SubResource("CircleShape2D_e020f")
+position = Vector2(0, 15.5)
+shape = SubResource("RectangleShape2D_386wa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = false
