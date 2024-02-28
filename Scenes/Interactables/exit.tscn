@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://8ayxrj7qhpkj"]
+
+[ext_resource type="Texture2D" uid="uid://kekt6idngyia" path="res://Sprites/Background/tileset_scifi.png" id="2_epxox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rddu6"]
+size = Vector2(32, 16)
+
+[node name="entry" type="Area2D"]
+y_sort_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_rddu6")
+debug_color = Color(0.482353, 0.580392, 0.215686, 0.419608)
+
+[node name="entry" type="Sprite2D" parent="."]
+texture = ExtResource("2_epxox")
+region_enabled = true
+region_rect = Rect2(32, 480, 32, 32)
+
+[node name="spawn_point" type="Marker2D" parent="."]
+position = Vector2(0, 40)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
