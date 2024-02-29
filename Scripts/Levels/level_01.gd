@@ -1,11 +1,11 @@
 extends Node2D
 
-
-# Called when the node enters the scene tree for the first time.
+@onready var player_scene = preload("res://Scenes/Player/player.tscn")
+@onready var spawn_point = $entry/spawn_point
 func _ready():
-	pass # Replace with function body.
+	on_player_spawn()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func on_player_spawn():
+	var player = player_scene.instantiate()
+	player.position = spawn_point.global_position
+	add_child(player)

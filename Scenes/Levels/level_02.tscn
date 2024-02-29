@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://x0dnrlw6lv4s"]
+[gd_scene load_steps=6 format=3 uid="uid://x0dnrlw6lv4s"]
 
 [ext_resource type="Texture2D" uid="uid://kekt6idngyia" path="res://Sprites/Background/tileset_scifi.png" id="1_f6388"]
+[ext_resource type="Script" path="res://Scripts/Levels/level_01.gd" id="1_hrr5p"]
 [ext_resource type="PackedScene" uid="uid://8ayxrj7qhpkj" path="res://Scenes/Interactables/exit.tscn" id="2_jwyox"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8ukfe"]
@@ -5297,6 +5298,7 @@ terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_8ukfe")
 
 [node name="level_02" type="Node2D"]
+script = ExtResource("1_hrr5p")
 
 [node name="ground" type="TileMap" parent="."]
 y_sort_enabled = true
