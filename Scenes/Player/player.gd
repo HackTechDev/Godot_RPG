@@ -5,8 +5,12 @@ extends CharacterBody2D
 
 var speed = 70
 var input_movement = Vector2.ZERO
+var health = Player_data.player_health
 
-func _physics_process(delta):
+func _ready():
+	pass
+
+func _physics_process(_delta):
 	input_move()
 
 

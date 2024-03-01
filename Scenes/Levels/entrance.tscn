@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw4nsq6x175wy"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/entrance.gd" id="1_d54cp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wdoae"]
+size = Vector2(16, 128)
+
+[node name="Entrance" type="Area2D"]
+collision_layer = 2
+script = ExtResource("1_d54cp")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wdoae")
+debug_color = Color(0.835294, 0.333333, 0.533333, 0.419608)
+metadata/_edit_group_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

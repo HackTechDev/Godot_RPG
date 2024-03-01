@@ -1,7 +1,7 @@
 [gd_scene load_steps=28 format=3 uid="uid://cakef76kp4kgi"]
 
-[ext_resource type="Script" path="res://Scripts/Entity/player.gd" id="1_2tdbd"]
-[ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Sprites/Player/player_without_sword.png" id="1_ny3qo"]
+[ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_76lnb"]
+[ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_gwmam"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
 size = Vector2(32, 50)
@@ -226,10 +226,10 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
-script = ExtResource("1_2tdbd")
+script = ExtResource("1_76lnb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_ny3qo")
+texture = ExtResource("2_gwmam")
 hframes = 13
 vframes = 21
 frame = 105
