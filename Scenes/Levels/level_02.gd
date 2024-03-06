@@ -6,9 +6,9 @@ extends Node2D
 
 func _ready():
 	print("Come from: " + Player_data.player_previous_scene)
-	
+
 	Player_data.player_previous_scene = self.name
-	
+
 	var player = player_scene.instantiate()
 	player.position = spawnpoint_level_01.position
 	add_child(player)

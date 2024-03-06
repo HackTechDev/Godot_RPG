@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://bw4nsq6x175wy"]
 
-[ext_resource type="Script" path="res://Scenes/Levels/entrance.gd" id="1_d54cp"]
+[ext_resource type="Script" path="res://Scenes/Levels/entrance_y_2.gd" id="1_d54cp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wdoae"]
 size = Vector2(16, 128)
 
-[node name="Entrance" type="Area2D"]
+[node name="Entrance_y_2" type="Area2D"]
 collision_layer = 2
 script = ExtResource("1_d54cp")
 metadata/_edit_group_ = true

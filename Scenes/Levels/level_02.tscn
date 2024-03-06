@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/Levels/level_02.gd" id="1_i740l"]
 [ext_resource type="Texture2D" uid="uid://kekt6idngyia" path="res://Sprites/Background/tileset_scifi.png" id="1_rr71u"]
-[ext_resource type="PackedScene" uid="uid://bw4nsq6x175wy" path="res://Scenes/Levels/entrance.tscn" id="3_md2qm"]
+[ext_resource type="PackedScene" uid="uid://bw4nsq6x175wy" path="res://Scenes/Levels/entrance_y_2.tscn" id="3_md2qm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r0nlg"]
 texture = ExtResource("1_rr71u")
