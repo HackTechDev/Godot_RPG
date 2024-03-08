@@ -3,7 +3,7 @@ extends Area2D
 func _on_body_entered(body):
 	if body.name == "Player":
 		var scene_next =  self.name.get_slice("_", 1)
-		
+	
 		Player_data.spawnpoint_current = self.name.get_slice("_", 2)
 		Player_data.spawnpoint_next = self.name.get_slice("_", 3)
 
