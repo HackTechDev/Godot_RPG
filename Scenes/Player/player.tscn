@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cakef76kp4kgi"]
+[gd_scene load_steps=31 format=3 uid="uid://cakef76kp4kgi"]
 
 [ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_76lnb"]
 [ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_gwmam"]
@@ -224,6 +224,12 @@ states/Move/node = SubResource("AnimationNodeBlendSpace2D_n0s5w")
 states/Move/position = Vector2(585, 97)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_xiog5"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_tf3nr"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_lqe3w")]
 
+[sub_resource type="SystemFont" id="SystemFont_nirn5"]
+
+[sub_resource type="SystemFont" id="SystemFont_yrlwt"]
+
+[sub_resource type="SystemFont" id="SystemFont_etw5c"]
+
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
 script = ExtResource("1_76lnb")
@@ -257,3 +263,130 @@ tree_root = SubResource("AnimationNodeStateMachine_g406o")
 anim_player = NodePath("../anim")
 parameters/Idle/blend_position = Vector2(0, 0.00550628)
 parameters/Move/blend_position = Vector2(0, 0)
+
+[node name="MainMenu" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+
+[node name="Menu" type="ColorRect" parent="MainMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.211765, 0.337255, 0.333333, 1)
+
+[node name="Inventory" type="Button" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -496.0
+offset_top = -188.0
+offset_right = -316.0
+offset_bottom = -152.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_nirn5")
+theme_override_font_sizes/font_size = 20
+text = "INVENTORY
+"
+
+[node name="Information" type="Button" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -248.0
+offset_top = -188.0
+offset_right = -68.0
+offset_bottom = -152.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_nirn5")
+theme_override_font_sizes/font_size = 20
+text = "INFORMATION
+"
+
+[node name="Resume" type="Button" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -520.0
+offset_top = -300.0
+offset_right = -340.0
+offset_bottom = -264.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_nirn5")
+theme_override_font_sizes/font_size = 20
+text = "RESUME
+"
+
+[node name="Configuration" type="Button" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -300.0
+offset_right = -76.0
+offset_bottom = -264.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_yrlwt")
+theme_override_font_sizes/font_size = 20
+text = "CONFIGURATION
+"
+
+[node name="Quit" type="Button" parent="MainMenu/Menu"]
+y_sort_enabled = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 352.0
+offset_top = -292.0
+offset_right = 532.0
+offset_bottom = -256.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_etw5c")
+theme_override_font_sizes/font_size = 20
+text = "QUIT GAME"
+
+[node name="Help" type="Button" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 56.0
+offset_top = -300.0
+offset_right = 236.0
+offset_bottom = -264.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_nirn5")
+theme_override_font_sizes/font_size = 20
+text = "HELP
+"
+
+[connection signal="pressed" from="MainMenu/Menu/Inventory" to="." method="_on_inventory_pressed"]
+[connection signal="pressed" from="MainMenu/Menu/Information" to="." method="_on_information_pressed"]
+[connection signal="pressed" from="MainMenu/Menu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="MainMenu/Menu/Configuration" to="." method="_on_configuration_pressed"]
+[connection signal="pressed" from="MainMenu/Menu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="MainMenu/Menu/Help" to="." method="_on_help_pressed"]
