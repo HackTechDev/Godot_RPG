@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
-@onready var main_menu = $MainMenu
+@onready var pause_menu = $PauseMenu
 
 var speed = 70
 var input_movement = Vector2.ZERO
@@ -17,10 +17,10 @@ func _physics_process(_delta):
 	input_move()
 
 func _input(event):
-	if !main_menu.visible:
+	if !pause_menu.visible:
 		if event.is_action_pressed("ui_pause"):
 			get_tree().paused = true
-			main_menu.visible = true
+			pause_menu.visible = true
 			set_physics_process(false)
 			paused = true
 			
@@ -43,12 +43,9 @@ func input_move():
 
 func _on_resume_pressed():
 	print("resume")
-	#hide pause menu
-	main_menu.visible = false
-	#set pauses state to be false
+	pause_menu.visible = false
 	get_tree().paused = false
 	paused = false
-	#accept movement and input
 	set_process_input(true)
 	set_physics_process(true)
 

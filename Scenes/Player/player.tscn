@@ -264,11 +264,11 @@ anim_player = NodePath("../anim")
 parameters/Idle/blend_position = Vector2(0, 0.00550628)
 parameters/Move/blend_position = Vector2(0, 0)
 
-[node name="MainMenu" type="CanvasLayer" parent="."]
+[node name="PauseMenu" type="CanvasLayer" parent="."]
 process_mode = 2
 visible = false
 
-[node name="Menu" type="ColorRect" parent="MainMenu"]
+[node name="Menu" type="ColorRect" parent="PauseMenu"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -276,7 +276,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.211765, 0.337255, 0.333333, 1)
 
-[node name="Inventory" type="Button" parent="MainMenu/Menu"]
+[node name="Inventory" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -294,7 +294,7 @@ theme_override_font_sizes/font_size = 20
 text = "INVENTORY
 "
 
-[node name="Information" type="Button" parent="MainMenu/Menu"]
+[node name="Information" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -312,7 +312,7 @@ theme_override_font_sizes/font_size = 20
 text = "INFORMATION
 "
 
-[node name="Resume" type="Button" parent="MainMenu/Menu"]
+[node name="Resume" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -330,7 +330,7 @@ theme_override_font_sizes/font_size = 20
 text = "RESUME
 "
 
-[node name="Configuration" type="Button" parent="MainMenu/Menu"]
+[node name="Configuration" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -348,7 +348,7 @@ theme_override_font_sizes/font_size = 20
 text = "CONFIGURATION
 "
 
-[node name="Quit" type="Button" parent="MainMenu/Menu"]
+[node name="Quit" type="Button" parent="PauseMenu/Menu"]
 y_sort_enabled = true
 layout_mode = 1
 anchors_preset = 8
@@ -366,7 +366,7 @@ theme_override_fonts/font = SubResource("SystemFont_etw5c")
 theme_override_font_sizes/font_size = 20
 text = "QUIT GAME"
 
-[node name="Help" type="Button" parent="MainMenu/Menu"]
+[node name="Help" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -384,9 +384,9 @@ theme_override_font_sizes/font_size = 20
 text = "HELP
 "
 
-[connection signal="pressed" from="MainMenu/Menu/Inventory" to="." method="_on_inventory_pressed"]
-[connection signal="pressed" from="MainMenu/Menu/Information" to="." method="_on_information_pressed"]
-[connection signal="pressed" from="MainMenu/Menu/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="MainMenu/Menu/Configuration" to="." method="_on_configuration_pressed"]
-[connection signal="pressed" from="MainMenu/Menu/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="MainMenu/Menu/Help" to="." method="_on_help_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Inventory" to="." method="_on_inventory_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Information" to="." method="_on_information_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Configuration" to="." method="_on_configuration_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PauseMenu/Menu/Help" to="." method="_on_help_pressed"]
