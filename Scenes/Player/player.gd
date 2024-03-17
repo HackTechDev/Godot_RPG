@@ -49,28 +49,10 @@ func _on_resume_pressed():
 	set_process_input(true)
 	set_physics_process(true)
 
-
-
-func _on_information_pressed():
-	print("Information")
-	pass # Replace with function body.
-
-
-func _on_configuration_pressed():
-	print("Configuration")
-	pass # Replace with function body.
-
+func _on_settings_pressed():
+	print("Settings")
 
 func _on_quit_pressed():
 	print("Quit")
-	pass # Replace with function body.
+	get_tree().quit()
 
-
-func _on_help_pressed():
-	print("Help")
-	pass # Replace with function body.
-
-
-func _on_inventory_pressed():
-	print("Inventory")
-	pass # Replace with function body.

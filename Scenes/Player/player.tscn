@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_76lnb"]
 [ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_gwmam"]
+[ext_resource type="Texture2D" uid="uid://b08m8kgk1qfs3" path="res://Textures/mise-plat-surface-metallique.jpg" id="3_g0o2g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
 size = Vector2(32, 50)
@@ -226,8 +227,6 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 
 [sub_resource type="SystemFont" id="SystemFont_nirn5"]
 
-[sub_resource type="SystemFont" id="SystemFont_yrlwt"]
-
 [sub_resource type="SystemFont" id="SystemFont_etw5c"]
 
 [node name="Player" type="CharacterBody2D"]
@@ -268,87 +267,52 @@ parameters/Move/blend_position = Vector2(0, 0)
 process_mode = 2
 visible = false
 
-[node name="Menu" type="ColorRect" parent="PauseMenu"]
+[node name="TextureRect" type="TextureRect" parent="PauseMenu"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.211765, 0.337255, 0.333333, 1)
+texture = ExtResource("3_g0o2g")
+expand_mode = 1
 
-[node name="Inventory" type="Button" parent="PauseMenu/Menu"]
+[node name="Resume" type="Button" parent="PauseMenu/TextureRect"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -496.0
-offset_top = -188.0
-offset_right = -316.0
-offset_bottom = -152.0
+offset_left = -120.0
+offset_top = -100.0
+offset_right = 60.0
+offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = SubResource("SystemFont_nirn5")
 theme_override_font_sizes/font_size = 20
-text = "INVENTORY
+text = "Resume
 "
 
-[node name="Information" type="Button" parent="PauseMenu/Menu"]
+[node name="Settings" type="Button" parent="PauseMenu/TextureRect"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -248.0
-offset_top = -188.0
-offset_right = -68.0
-offset_bottom = -152.0
+offset_left = -120.0
+offset_top = -28.0
+offset_right = 60.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = SubResource("SystemFont_nirn5")
 theme_override_font_sizes/font_size = 20
-text = "INFORMATION
+text = "Settings
 "
 
-[node name="Resume" type="Button" parent="PauseMenu/Menu"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -520.0
-offset_top = -300.0
-offset_right = -340.0
-offset_bottom = -264.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_nirn5")
-theme_override_font_sizes/font_size = 20
-text = "RESUME
-"
-
-[node name="Configuration" type="Button" parent="PauseMenu/Menu"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -300.0
-offset_right = -76.0
-offset_bottom = -264.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_yrlwt")
-theme_override_font_sizes/font_size = 20
-text = "CONFIGURATION
-"
-
-[node name="Quit" type="Button" parent="PauseMenu/Menu"]
+[node name="Quit" type="Button" parent="PauseMenu/TextureRect"]
 y_sort_enabled = true
 layout_mode = 1
 anchors_preset = 8
@@ -356,37 +320,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 352.0
-offset_top = -292.0
-offset_right = 532.0
-offset_bottom = -256.0
+offset_left = -120.0
+offset_top = 52.0
+offset_right = 60.0
+offset_bottom = 88.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = SubResource("SystemFont_etw5c")
 theme_override_font_sizes/font_size = 20
-text = "QUIT GAME"
+text = "Quit"
 
-[node name="Help" type="Button" parent="PauseMenu/Menu"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 56.0
-offset_top = -300.0
-offset_right = 236.0
-offset_bottom = -264.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_nirn5")
-theme_override_font_sizes/font_size = 20
-text = "HELP
-"
-
-[connection signal="pressed" from="PauseMenu/Menu/Inventory" to="." method="_on_inventory_pressed"]
-[connection signal="pressed" from="PauseMenu/Menu/Information" to="." method="_on_information_pressed"]
-[connection signal="pressed" from="PauseMenu/Menu/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="PauseMenu/Menu/Configuration" to="." method="_on_configuration_pressed"]
-[connection signal="pressed" from="PauseMenu/Menu/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="PauseMenu/Menu/Help" to="." method="_on_help_pressed"]
+[connection signal="pressed" from="PauseMenu/TextureRect/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/TextureRect/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="PauseMenu/TextureRect/Quit" to="." method="_on_quit_pressed"]
