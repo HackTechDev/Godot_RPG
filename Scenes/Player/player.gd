@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
 @onready var pause_menu = $PauseMenu
+@onready var settings_menu = $SettingsMenu
 
 var speed = 70
 var input_movement = Vector2.ZERO
@@ -50,9 +51,18 @@ func _on_resume_pressed():
 	set_physics_process(true)
 
 func _on_settings_pressed():
+	pause_menu.visible = false
+	settings_menu.visible = true
 	print("Settings")
 
 func _on_quit_pressed():
 	print("Quit")
 	get_tree().quit()
 
+func _on_back_pressed():
+	pause_menu.visible = true
+	settings_menu.visible = false
+	print("Back")
+
+	
+	pass # Replace with function body.

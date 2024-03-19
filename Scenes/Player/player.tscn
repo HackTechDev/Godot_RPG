@@ -330,6 +330,29 @@ theme_override_fonts/font = SubResource("SystemFont_etw5c")
 theme_override_font_sizes/font_size = 20
 text = "Quit"
 
+[node name="SettingsMenu" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="SettingsMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_g0o2g")
+expand_mode = 1
+
+[node name="Back" type="Button" parent="SettingsMenu/TextureRect"]
+y_sort_enabled = true
+layout_mode = 0
+offset_left = 536.0
+offset_top = 288.0
+offset_right = 581.0
+offset_bottom = 319.0
+text = "Back"
+
 [connection signal="pressed" from="PauseMenu/TextureRect/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="SettingsMenu/TextureRect/Back" to="." method="_on_back_pressed"]
