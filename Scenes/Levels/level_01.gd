@@ -4,7 +4,8 @@ extends Node2D
 @onready var spawnpoint_level_01_start = $spawnpoint_level_01_start
 
 func _ready():
-
+	print(self.name)
+	
 	if Player_data.player_previous_scene == '':
 		player.position = spawnpoint_level_01_start.position
 	else:

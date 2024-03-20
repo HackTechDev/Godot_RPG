@@ -57,6 +57,14 @@ func _on_settings_pressed():
 
 func _on_quit_pressed():
 	print("Quit")
+	print(data_to_save())
+	var json = JSON.new()
+	var to_json = json.stringify(data_to_save())
+	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
+	var file = FileAccess.open(Player_data.save_path, FileAccess.WRITE)
+	file.store_line(to_json)
+	file.close()
+			
 	get_tree().quit()
 
 func _on_back_pressed():
@@ -64,5 +72,8 @@ func _on_back_pressed():
 	settings_menu.visible = false
 	print("Back")
 
-	
-	pass # Replace with function body.
+func data_to_save():
+	return {
+		"player_position" : [position.x, position.y],
+		"scene": Player_data.player_previous_scene
+	}
