@@ -3,7 +3,24 @@ extends CanvasLayer
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
 
+func load_game():
+	if FileAccess.file_exists(Player_data.save_path):
+		print("Save file found!")
+		var file = FileAccess.open(Player_data.save_path, FileAccess.READ)
+		var data = JSON.parse_string(file.get_as_text())
+		file.close()
+		# Load the saved scene
+		#Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % data["scene"]
+		#Player_data.player_spawnpoint_position_x = data["player_position"][0]
+		#Player_data.player_spawnpoint_position_y = data["player_position"][1]
+		#print(Player_data.scene_path + " " + Player_data.player_spawnpoint_position_x + " " + Player_data.player_spawnpoint_position_y)
+		
+	else:
+		print("Save file not found!")
+	
 func _on_button_play_pressed():
+	print("loading...")
+	load_game()
 	get_tree().change_scene_to_file("res://Scenes/Levels/level_01.tscn")
 
 func _on_button_settings_pressed():
