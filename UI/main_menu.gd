@@ -36,3 +36,14 @@ func _on_button_quit_pressed():
 func _on_button_settings_back_pressed():
 	main.visible = true
 	settings.visible = false
+
+
+func _on_reinitialize_pressed():
+	print("Reinitialize")
+	match OS.get_name():
+		"Linux":
+			print("Linux platform")
+			DirAccess.remove_absolute(Player_data.save_path)
+		_:
+			print("Other platform")
+	

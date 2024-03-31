@@ -148,6 +148,11 @@ text = "Compatibility"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Reinitialize"
+
 [node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -156,4 +161,5 @@ text = "Back"
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonQuit" to="MainMenuLayer" method="_on_button_quit_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Reinitialize" to="MainMenuLayer" method="_on_reinitialize_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack" to="MainMenuLayer" method="_on_button_settings_back_pressed"]
