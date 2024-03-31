@@ -1,7 +1,8 @@
 extends Node2D
 
 @onready var player = $Player
-
+@onready var computer_scene = preload("res://Objects/Computers/computer.tscn")
+	
 func _ready():
 	print("Scene: " + self.name)
 	
@@ -18,3 +19,9 @@ func _ready():
 			player.position.y = get_node(node_name).position.y + Player_data.player_spawnpoint_position_y 
 
 	Player_data.player_previous_scene = self.name
+
+	# Add computer
+	var computer = computer_scene.instantiate()
+	computer.position.x = -128
+	computer.position.y = 440
+	add_child(computer)

@@ -17,3 +17,5 @@ static var player_spawnpoint_position_y = 0
 static var save_path = "user://rpg.json"
 
 static var scene_path = ""
+
+static var computer = 0
