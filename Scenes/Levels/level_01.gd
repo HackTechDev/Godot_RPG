@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var player = $Player
-@onready var spawnpoint_level_01_start = $spawnpoint_level_01_start
 
 func _ready():
 	print("Scene: " + self.name)
