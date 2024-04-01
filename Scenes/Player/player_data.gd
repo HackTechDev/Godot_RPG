@@ -19,3 +19,4 @@ static var save_path = "user://rpg.json"
 static var scene_path = ""
 
 static var computer = 0
+static var robot = 0
