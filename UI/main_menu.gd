@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+var liblevel = preload("res://Lib/liblevel.gd").new()
+
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
 
@@ -47,3 +49,6 @@ func _on_reinitialize_pressed():
 		_:
 			print("Other platform")
 	
+func _ready():
+	print("Init Game")
+	print(liblevel.displayVersion())
