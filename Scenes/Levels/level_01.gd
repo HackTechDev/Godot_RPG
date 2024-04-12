@@ -21,30 +21,30 @@ func _ready():
 
 	Player_data.player_previous_scene = self.name
 
-	# Add computer
-	var computers = []
-	computers.append({"x": -128, "y": 440})
-	computers.append({"x": -100, "y": 480})
 
-	var robots = []
-	robots.append({"x": -150, "y": 480})
-	
-	var computer
-	var robot
-	
-	print(computers)
-	
-	for i in computers.size():
-		print(computers[i])
-		computer = computer_scene.instantiate()
-		computer.position.x = computers[i].x
-		computer.position.y = computers[i].y
-		add_child(computer)
-	
-	for i in robots.size():
-		print(robots[i])
-		robot = robot_scene.instantiate()
-		robot.position.x = robots[i].x
-		robot.position.y = robots[i].y
-		add_child(robot)
 
+	#var objects = []
+	#objects.append({"id": 1, "type": "computer", "x": -128, "y": 440})
+	#objects.append({"id": 2, "type": "computer", "x": -100, "y": 480})
+	#objects.append({"id": 1, "type": "robot","x": -150, "y": 480})
+	#
+	#print(objects)
+	#
+	#var json = JSON.new()
+	#var to_json = json.stringify(objects)
+	#
+	# ~/.local/share/godot/app_userdata/rpg_v1/level_01.json
+	#var file = FileAccess.open( "user://level_01.json", FileAccess.WRITE)
+	#file.store_line(to_json)
+	#file.close()
+		#
+	#var object
+	#for i in objects.size():
+		#if objects[i].type == "computer":
+			#object = computer_scene.instantiate()
+		#if objects[i].type == "robot":
+			#object = robot_scene.instantiate()
+	#
+		#object.position.x = objects[i].x
+		#object.position.y = objects[i].y
+		#add_child(object)
