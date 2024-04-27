@@ -8,7 +8,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 func load_game():
 	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 	if FileAccess.file_exists(Player_data.save_path):
-		print("Save file found!")
+		print("Character file found")
 		var file = FileAccess.open(Player_data.save_path, FileAccess.READ)
 		var data = JSON.parse_string(file.get_as_text())
 		file.close()

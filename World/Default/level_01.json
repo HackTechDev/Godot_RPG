@@ -1,1 +1,3 @@
-{"scene":"level_01", "object":[-161.757598876953,442.591491699219]}
+{"1": {"scene":"level_01", "object":"computer", "position": [-128, 440]},
+"2":{"scene":"level_01", "object":"computer", "position": [-100, 480]},
+"3": {"scene":"level_01", "object":"robot", "position": [-150, 480]}}

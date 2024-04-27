@@ -20,31 +20,22 @@ func _ready():
 			player.position.y = get_node(node_name).position.y + Player_data.player_spawnpoint_position_y 
 
 	Player_data.player_previous_scene = self.name
-
-
-
-	#var objects = []
-	#objects.append({"id": 1, "type": "computer", "x": -128, "y": 440})
-	#objects.append({"id": 2, "type": "computer", "x": -100, "y": 480})
-	#objects.append({"id": 1, "type": "robot","x": -150, "y": 480})
-	#
-	#print(objects)
-	#
-	#var json = JSON.new()
-	#var to_json = json.stringify(objects)
-	#
+	
+	print("Load all objects")
+	var datas
 	# ~/.local/share/godot/app_userdata/rpg_v1/level_01.json
-	#var file = FileAccess.open( "user://level_01.json", FileAccess.WRITE)
-	#file.store_line(to_json)
-	#file.close()
-		#
-	#var object
-	#for i in objects.size():
-		#if objects[i].type == "computer":
-			#object = computer_scene.instantiate()
-		#if objects[i].type == "robot":
-			#object = robot_scene.instantiate()
-	#
-		#object.position.x = objects[i].x
-		#object.position.y = objects[i].y
-		#add_child(object)
+	if FileAccess.file_exists("user://level_01.json"):
+		var file = FileAccess.open("user://level_01.json", FileAccess.READ)
+		datas = JSON.parse_string(file.get_as_text())
+		file.close()
+	
+	var data
+	for key in datas:
+		if datas[key].object == "computer":
+			data = computer_scene.instantiate()
+		if datas[key].object == "robot":
+			data = robot_scene.instantiate()
+
+		data.position.x = datas[key].position.x
+		data.position.y = datas[key].position.y
+		add_child(data)
