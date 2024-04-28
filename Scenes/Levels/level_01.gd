@@ -33,8 +33,10 @@ func _ready():
 	for key in datas:
 		if datas[key].object == "computer":
 			data = computer_scene.instantiate()
+			data.add_to_group("computer")
 		if datas[key].object == "robot":
 			data = robot_scene.instantiate()
+			data.add_to_group("robot")
 
 		data.position.x = datas[key].position.x
 		data.position.y = datas[key].position.y
