@@ -82,3 +82,15 @@ func data_to_save():
 		"player_position" : [position.x, position.y],
 		"scene": Player_data.player_previous_scene
 	}
+
+func _on_button_reinitialize_pressed():
+	print("Reinitialize")
+	match OS.get_name():
+		"Linux":
+			print("Linux platform")
+			liblevel.reinitializePlayer()
+			liblevel.reinitializeLevel()
+			get_tree().quit()
+		_:
+			print("Other platform")
+	
