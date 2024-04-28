@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+var liblevel = preload("res://Lib/liblevel.gd").new()
+
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
 @onready var pause_menu = $PauseMenu
@@ -67,44 +69,11 @@ func _on_quit_pressed():
 
 	
 	# Save alls object of the current scene
-	var all_json_data = {}
-	
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
 	var current_scene = get_tree().get_current_scene().get_name()
-	print(current_scene)
-	var i = 1
-	for computer in computers:
-		var json_data = {
-			"scene": current_scene,
-			"object": "computer",
-			"position": {
-				"x": computer.position.x,
-				"y": computer.position.y
-			}	
-		}
-		all_json_data["computer" + str(i)] = json_data
-		i = i + 1
-		
-	
-	for robot in robots:
-		var json_data = {
-			"scene": current_scene,
-			"object": "robot",
-			"position": {
-				"x": robot.position.x,
-				"y": robot.position.y
-			}	
-		}
-		all_json_data["computer" + str(i)] = json_data
-		i = i + 1
-				
-	var objects_to_save = JSON.stringify(all_json_data)
-	
-	file = FileAccess.open("user://" + current_scene + ".json", FileAccess.WRITE)
-	file.store_line(objects_to_save)
-	file.close()
-	
+
+	liblevel.saveAllObjects(current_scene, computers, robots )
 			
 	get_tree().quit()
 
