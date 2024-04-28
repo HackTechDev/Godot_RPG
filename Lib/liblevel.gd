@@ -54,3 +54,21 @@ func reinitializeLevel():
 
 func reinitializePlayer():
 	DirAccess.remove_absolute(Player_data.save_path)
+
+func load_game():
+	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
+	if FileAccess.file_exists(Player_data.save_path):
+		print("Character file found")
+		var file = FileAccess.open(Player_data.save_path, FileAccess.READ)
+		var data = JSON.parse_string(file.get_as_text())
+		file.close()
+		# Load the saved scene
+		Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % data["scene"]
+		Player_data.player_spawnpoint_position_x = data["player_position"][0]
+		Player_data.player_spawnpoint_position_y = data["player_position"][1]
+		
+	else:
+		print("Save file not found!")
+		Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % Player_data_default.scene_start
+		Player_data.player_spawnpoint_position_x = Player_data_default.spawnpoint_position_x
+		Player_data.player_spawnpoint_position_y = Player_data_default.spawnpoint_position_y
