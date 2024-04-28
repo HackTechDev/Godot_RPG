@@ -33,9 +33,6 @@ func _on_button_settings_pressed():
 	settings.visible = true
 
 func _on_button_quit_pressed():
-	
-	
-	
 	get_tree().quit()
 
 func _on_button_settings_back_pressed():
@@ -49,6 +46,11 @@ func _on_reinitialize_pressed():
 		"Linux":
 			print("Linux platform")
 			DirAccess.remove_absolute(Player_data.save_path)
+			
+			var dir = DirAccess.open("res://World/Default/")
+			print(dir.file_exists("level_01.json"))
+			dir.copy("res://World/Default/level_01.json", "user://level_01.json")
+			
 		_:
 			print("Other platform")
 	
