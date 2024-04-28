@@ -61,13 +61,8 @@ func _on_quit_pressed():
 	print("Quit")
 	
 	# Save the player
-	var to_json = JSON.stringify(data_to_save())
-	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
-	var file = FileAccess.open(Player_data.save_path, FileAccess.WRITE)
-	file.store_line(to_json)
-	file.close()
+	liblevel.savePlayer(data_to_save())
 
-	
 	# Save alls object of the current scene
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
