@@ -343,17 +343,59 @@ grow_vertical = 2
 texture = ExtResource("3_g0o2g")
 expand_mode = 1
 
-[node name="Back" type="Button" parent="SettingsMenu/TextureRect"]
+[node name="Control" type="Control" parent="SettingsMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsMenu/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="SettingsMenu/Control/CenterContainer"]
+custom_minimum_size = Vector2(512, 256)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsMenu/Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonReinitialize" type="Button" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+text = "Reinitialize"
+
+[node name="ButtonBack" type="Button" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 y_sort_enabled = true
-layout_mode = 0
-offset_left = 536.0
-offset_top = 288.0
-offset_right = 581.0
-offset_bottom = 319.0
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 text = "Back"
 
 [connection signal="pressed" from="PauseMenu/TextureRect/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="SettingsMenu/TextureRect/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonBack" to="." method="_on_back_pressed"]
