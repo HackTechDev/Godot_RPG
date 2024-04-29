@@ -1,3 +1,3 @@
 #!/bin/sh
 
-git push -u origin rpg_v1
+git push -u origin rpg_v2
