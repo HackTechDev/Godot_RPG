@@ -82,3 +82,8 @@ func data_to_save():
 		"player_position" : [position.x, position.y],
 		"scene": Player_data.player_previous_scene
 	}
+
+
+func _on_button_reinitialize_pressed():
+	print("reinitialize")
+	pass # Replace with function body.

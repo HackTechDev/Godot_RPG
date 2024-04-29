@@ -398,4 +398,5 @@ text = "Back"
 [connection signal="pressed" from="PauseMenu/TextureRect/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonReinitialize" to="." method="_on_button_reinitialize_pressed"]
 [connection signal="pressed" from="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonBack" to="." method="_on_back_pressed"]
