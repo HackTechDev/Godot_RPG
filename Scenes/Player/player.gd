@@ -21,10 +21,10 @@ var paused
 func _ready():
 	menu_instance = main_menu.instantiate()
 	add_child(menu_instance)		
-	background_menu = menu_instance.get_node("Background")
-
+	background_menu = menu_instance.get_node("Control")
 	background_menu.position = Vector2(-576, -324)
 	background_menu.visible = false
+	background_menu.z_index = 10
 	text_menu = menu_instance.get_node("MainMenuLayer")
 	text_menu.visible = false
 
@@ -40,16 +40,14 @@ func _input(event):
 			paused = true
 		
 	if event.is_action_pressed("ui_h"):
-		print("h key")			
-		background_menu = menu_instance.get_node("Background")
+		background_menu = menu_instance.get_node("Control")
 		background_menu.visible = false
 		
 		text_menu = menu_instance.get_node("MainMenuLayer")
 		text_menu.visible = false
 		
 	if event.is_action_pressed("ui_d"):
-		print("d key")			
-		background_menu = menu_instance.get_node("Background")
+		background_menu = menu_instance.get_node("Control")
 		background_menu.visible = true
 		
 		text_menu = menu_instance.get_node("MainMenuLayer")

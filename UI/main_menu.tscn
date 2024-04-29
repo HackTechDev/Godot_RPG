@@ -5,7 +5,13 @@
 
 [node name="MainMenu" type="Node2D"]
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Background" type="TextureRect" parent="Control"]
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("1_25q57")
