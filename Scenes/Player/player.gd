@@ -15,7 +15,6 @@ var text_menu = null
 var quit_button_menu = null
 var play_button_menu = null
 
-
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -65,7 +64,10 @@ func _input(event):
 			text_menu = menu_instance.get_node("MainMenuLayer")
 			text_menu.visible = false
 			display_menu = false
-		
+
+	if event.is_action_pressed("ui_b"):
+		print("b key: build")
+
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
