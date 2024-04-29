@@ -12,6 +12,10 @@ var menu_instance = null
 var background_menu = null
 var text_menu = null
 
+var quit_button_menu = null
+var play_button_menu = null
+
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -29,6 +33,11 @@ func _ready():
 	background_menu.z_index = 10
 	text_menu = menu_instance.get_node("MainMenuLayer")
 	text_menu.visible = false
+
+	quit_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonQuit")
+	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
+	quit_button_menu.visible = false
+	play_button_menu.visible = false
 
 func _physics_process(_delta):
 	input_move()
