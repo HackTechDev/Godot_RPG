@@ -7,6 +7,11 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var pause_menu = $PauseMenu
 @onready var settings_menu = $SettingsMenu
 
+var main_menu = preload("res://UI/main_menu.tscn")
+var menu_instance = null
+var background_menu = null
+var text_menu = null
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -29,7 +34,27 @@ func _input(event):
 	
 	if event.is_action_pressed("ui_m"):
 		print("m key")		
-				
+		menu_instance = main_menu.instantiate()
+		add_child(menu_instance)		
+		background_menu = menu_instance.get_node("Background")
+		background_menu.position = Vector2(-576, -324)
+	
+	if event.is_action_pressed("ui_h"):
+		print("h key")			
+		background_menu = menu_instance.get_node("Background")
+		background_menu.visible = false
+		
+		text_menu = menu_instance.get_node("MainMenuLayer")
+		text_menu.visible = false
+		
+	if event.is_action_pressed("ui_d"):
+		print("d key")			
+		background_menu = menu_instance.get_node("Background")
+		background_menu.visible = true
+		
+		text_menu = menu_instance.get_node("MainMenuLayer")
+		text_menu.visible = true
+		
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
