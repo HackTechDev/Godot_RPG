@@ -26,7 +26,9 @@ func _input(event):
 			pause_menu.visible = true
 			set_physics_process(false)
 			paused = true
-			
+	
+	if event.is_action_pressed("ui_m"):
+		print("m key")		
 				
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
