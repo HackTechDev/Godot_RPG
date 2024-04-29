@@ -19,7 +19,14 @@ var health = Player_data.player_health
 var paused
 
 func _ready():
-	pass
+	menu_instance = main_menu.instantiate()
+	add_child(menu_instance)		
+	background_menu = menu_instance.get_node("Background")
+
+	background_menu.position = Vector2(-576, -324)
+	background_menu.visible = false
+	text_menu = menu_instance.get_node("MainMenuLayer")
+	text_menu.visible = false
 
 func _physics_process(_delta):
 	input_move()
@@ -31,14 +38,7 @@ func _input(event):
 			pause_menu.visible = true
 			set_physics_process(false)
 			paused = true
-	
-	if event.is_action_pressed("ui_m"):
-		print("m key")		
-		menu_instance = main_menu.instantiate()
-		add_child(menu_instance)		
-		background_menu = menu_instance.get_node("Background")
-		background_menu.position = Vector2(-576, -324)
-	
+		
 	if event.is_action_pressed("ui_h"):
 		print("h key")			
 		background_menu = menu_instance.get_node("Background")
