@@ -23,6 +23,8 @@ var paused
 
 var display_menu = false
 
+var direction = 5
+
 func _ready():
 	menu_instance = main_menu.instantiate()
 	add_child(menu_instance)		
@@ -67,12 +69,21 @@ func _input(event):
 
 	if event.is_action_pressed("ui_b"):
 		print("b key: build")
-		EventBus.build_computer.emit()
+		EventBus.build_computer.emit(direction)
 		
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	if input_movement != Vector2.ZERO:
+		if input_movement == Vector2(0, -1):
+			direction = 8
+		if input_movement == Vector2(0, 1):
+			direction = 2
+		if input_movement == Vector2(-1, 0):
+			direction = 4
+		if input_movement == Vector2(1, 0):
+			direction = 6
+											#
 		anim_tree.set("parameters/Idle/blend_position", input_movement)
 		anim_tree.set("parameters/Move/blend_position", input_movement)
 		anim_state.travel("Move")

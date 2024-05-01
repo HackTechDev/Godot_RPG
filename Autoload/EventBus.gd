@@ -1,3 +1,3 @@
 extends Node
 
-signal build_computer()
+signal build_computer(direction)

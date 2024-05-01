@@ -45,11 +45,26 @@ func _ready():
 	EventBus.build_computer.connect(build_computer)
 	
 	
-func build_computer():
+func build_computer(direction):
 	print("Build Computer")
+	print(str(direction))
 	var data
 	data = computer_scene.instantiate()
 	data.add_to_group("computer")
-	data.position.x = player.position.x + 100
-	data.position.y = player.position.y
+	
+	var shift_x = 0
+	var shift_y = 0
+	
+	if direction == 6:
+		shift_x = 35
+	if direction == 4:
+		shift_x = -35
+	if direction == 8:
+		shift_y = -45
+	if direction == 2:
+		shift_y = 45
+		
+	data.position.x = player.position.x + shift_x
+	data.position.y = player.position.y + shift_y
+
 	add_child(data)
