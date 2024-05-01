@@ -41,3 +41,15 @@ func _ready():
 		data.position.x = datas[key].position.x
 		data.position.y = datas[key].position.y
 		add_child(data)
+
+	EventBus.build_computer.connect(build_computer)
+	
+	
+func build_computer():
+	print("Build Computer")
+	var data
+	data = computer_scene.instantiate()
+	data.add_to_group("computer")
+	data.position.x = player.position.x + 100
+	data.position.y = player.position.y
+	add_child(data)

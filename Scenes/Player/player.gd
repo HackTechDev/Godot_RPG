@@ -67,7 +67,8 @@ func _input(event):
 
 	if event.is_action_pressed("ui_b"):
 		print("b key: build")
-
+		EventBus.build_computer.emit()
+		
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
