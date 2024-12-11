@@ -226,8 +226,10 @@ states/Move/position = Vector2(585, 97)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_xiog5"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_tf3nr"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_lqe3w")]
 
 [sub_resource type="SystemFont" id="SystemFont_nirn5"]
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_etw5c"]
+subpixel_positioning = 0
 
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -255,9 +257,6 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_752pq")
-}
 tree_root = SubResource("AnimationNodeStateMachine_g406o")
 anim_player = NodePath("../anim")
 parameters/Idle/blend_position = Vector2(0, 0.00550628)
