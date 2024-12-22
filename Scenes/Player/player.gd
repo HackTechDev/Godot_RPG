@@ -83,15 +83,13 @@ func input_move():
 		anim_state.travel("Idle")
 		velocity = Vector2.ZERO
 
+	Player_data.player_pos_x = position.x
+	Player_data.player_pos_y = position.y
+
 	move_and_slide()
 
 
 func _on_quit_pressed():
-	print("Quit")
-	
-	# Save the player
-	liblevel.savePlayer(data_to_save())
-
 	# Save alls object of the current scene
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
@@ -100,14 +98,3 @@ func _on_quit_pressed():
 	liblevel.saveAllObjects(current_scene, computers, robots )
 			
 	get_tree().quit()
-
-func data_to_save():
-	return {
-		"player_position" : [position.x, position.y],
-		"scene": Player_data.player_previous_scene
-	}
-
-
-func _on_button_reinitialize_pressed():
-	print("reinitialize")
-	pass # Replace with function body.

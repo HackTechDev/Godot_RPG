@@ -5,9 +5,10 @@ static var version = "1"
 func displayVersion():
 	return "LibLevel version: " + version
 
+# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 func savePlayer(data_to_save):
+	print("SavePlayer")
 	var to_json = JSON.stringify(data_to_save)
-	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 	var file = FileAccess.open(Player_data.save_path, FileAccess.WRITE)
 	file.store_line(to_json)
 	file.close()

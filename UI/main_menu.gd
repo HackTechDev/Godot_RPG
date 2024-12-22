@@ -5,7 +5,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
 @onready var help: Control = $Help
-	
+
 	
 func _on_button_play_pressed():
 	print("loading...")
@@ -23,6 +23,11 @@ func _on_button_help_pressed():
 	help.visible = true
 	
 func _on_button_quit_pressed():
+	print("Quit")
+	
+	# Save the player
+	liblevel.savePlayer(data_to_save())
+	
 	get_tree().quit()
 
 func _on_button_settings_back_pressed():
@@ -49,3 +54,10 @@ func _on_reinitialize_pressed():
 func _ready():
 	print("Init Game")
 	print(liblevel.displayVersion())
+
+
+func data_to_save():	
+	return {
+		"player_position" : [Player_data.player_pos_x, Player_data.player_pos_y],
+		"scene": Player_data.player_previous_scene
+	}
