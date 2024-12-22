@@ -63,7 +63,7 @@ func _input(event):
 		
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	
+
 	if input_movement != Vector2.ZERO:
 		if input_movement == Vector2(0, -1):
 			direction = 8
@@ -73,7 +73,7 @@ func input_move():
 			direction = 4
 		if input_movement == Vector2(1, 0):
 			direction = 6
-											#
+
 		anim_tree.set("parameters/Idle/blend_position", input_movement)
 		anim_tree.set("parameters/Move/blend_position", input_movement)
 		anim_state.travel("Move")
@@ -83,6 +83,7 @@ func input_move():
 		anim_state.travel("Idle")
 		velocity = Vector2.ZERO
 
+	Player_data.player_direction = direction
 	Player_data.player_pos_x = position.x
 	Player_data.player_pos_y = position.y
 

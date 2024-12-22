@@ -5,6 +5,7 @@ class_name Player_data
 static var player_health = 4
 
 static var player_position = Vector2()
+static var player_direction = 0
 
 static var player_pos_x = 0
 static var player_pos_y = 0

@@ -71,5 +71,6 @@ func _ready():
 func data_to_save():	
 	return {
 		"player_position" : [Player_data.player_pos_x, Player_data.player_pos_y],
+		"player_direction" : Player_data.player_direction,
 		"scene": Player_data.player_previous_scene
 	}
