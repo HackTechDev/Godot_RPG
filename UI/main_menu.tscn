@@ -70,6 +70,10 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Settings"
 
+[node name="ButtonHelp" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Help"
+
 [node name="ButtonQuit" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -165,8 +169,50 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Back"
 
+[node name="Help" type="Control" parent="MainMenuLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Help"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Help/CenterContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Help"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "RPG : Version 0.1.1
+Godot : Version 4.3"
+
+[node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelp" to="MainMenuLayer" method="_on_button_help_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonQuit" to="MainMenuLayer" method="_on_button_quit_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Reinitialize" to="MainMenuLayer" method="_on_reinitialize_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack" to="MainMenuLayer" method="_on_button_settings_back_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelpBack" to="MainMenuLayer" method="_on_button_help_back_pressed"]
