@@ -4,6 +4,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
+@onready var footstep = $Footstep
 
 var main_menu = preload("res://UI/main_menu.tscn")
 var menu_instance = null
@@ -37,6 +38,7 @@ func _ready():
 	play_button_menu.visible = false
 
 func _physics_process(_delta):
+		
 	input_move()
 
 func _input(event):
@@ -65,15 +67,20 @@ func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	if input_movement != Vector2.ZERO:
+		movement_sounds()
 		if input_movement == Vector2(0, -1):
 			direction = 8
+			
 		if input_movement == Vector2(0, 1):
 			direction = 2
+			
 		if input_movement == Vector2(-1, 0):
 			direction = 4
+		
 		if input_movement == Vector2(1, 0):
 			direction = 6
-
+		
+			
 		anim_tree.set("parameters/Idle/blend_position", input_movement)
 		anim_tree.set("parameters/Move/blend_position", input_movement)
 		anim_state.travel("Move")
@@ -87,4 +94,17 @@ func input_move():
 	Player_data.player_pos_x = position.x
 	Player_data.player_pos_y = position.y
 
+
+
 	move_and_slide()
+	
+	
+func movement_sounds():
+	var IS_FOOTSTEP_SOUND_PLAYING = false
+	
+	if 	footstep.is_playing():
+		IS_FOOTSTEP_SOUND_PLAYING = true
+		
+	if 	!IS_FOOTSTEP_SOUND_PLAYING:
+		footstep.play()
+		
