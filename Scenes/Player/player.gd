@@ -4,8 +4,6 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
-@onready var pause_menu = $PauseMenu
-@onready var settings_menu = $SettingsMenu
 
 var main_menu = preload("res://UI/main_menu.tscn")
 var menu_instance = null
@@ -28,39 +26,31 @@ var direction = 5
 func _ready():
 	menu_instance = main_menu.instantiate()
 	add_child(menu_instance)		
-	background_menu = menu_instance.get_node("Control")
+	background_menu = menu_instance.get_node("Background")
 	background_menu.position = Vector2(-576, -324)
 	background_menu.visible = false
 	background_menu.z_index = 10
 	text_menu = menu_instance.get_node("MainMenuLayer")
 	text_menu.visible = false
-
-	quit_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonQuit")
+	
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
-	quit_button_menu.visible = false
 	play_button_menu.visible = false
 
 func _physics_process(_delta):
 	input_move()
 
 func _input(event):
-	if !pause_menu.visible:
-		if event.is_action_pressed("ui_pause"):
-			get_tree().paused = true
-			pause_menu.visible = true
-			set_physics_process(false)
-			paused = true
 		
 	if event.is_action_pressed("ui_m"):
 		if display_menu == false:
-			background_menu = menu_instance.get_node("Control")
+			background_menu = menu_instance.get_node("Background")
 			background_menu.visible = true
 			
 			text_menu = menu_instance.get_node("MainMenuLayer")
 			text_menu.visible = true
 			display_menu = true
 		else:
-			background_menu = menu_instance.get_node("Control")
+			background_menu = menu_instance.get_node("Background")
 			background_menu.visible = false
 			
 			text_menu = menu_instance.get_node("MainMenuLayer")
@@ -96,19 +86,6 @@ func input_move():
 	move_and_slide()
 
 
-func _on_resume_pressed():
-	print("resume")
-	pause_menu.visible = false
-	get_tree().paused = false
-	paused = false
-	set_process_input(true)
-	set_physics_process(true)
-
-func _on_settings_pressed():
-	pause_menu.visible = false
-	settings_menu.visible = true
-	print("Settings")
-
 func _on_quit_pressed():
 	print("Quit")
 	
@@ -123,11 +100,6 @@ func _on_quit_pressed():
 	liblevel.saveAllObjects(current_scene, computers, robots )
 			
 	get_tree().quit()
-
-func _on_back_pressed():
-	pause_menu.visible = true
-	settings_menu.visible = false
-	print("Back")
 
 func data_to_save():
 	return {

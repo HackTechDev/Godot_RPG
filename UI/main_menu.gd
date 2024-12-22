@@ -6,6 +6,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var settings: Control = $Settings
 @onready var help: Control = $Help
 	
+	
 func _on_button_play_pressed():
 	print("loading...")
 	liblevel.load_game()

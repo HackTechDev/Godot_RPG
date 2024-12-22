@@ -5,13 +5,13 @@
 
 [node name="MainMenu" type="Node2D"]
 
-[node name="Control" type="Control" parent="."]
+[node name="Background" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Background" type="TextureRect" parent="Control"]
+[node name="Background" type="TextureRect" parent="Background"]
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0

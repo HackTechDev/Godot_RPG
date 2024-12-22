@@ -1,8 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://cakef76kp4kgi"]
+[gd_scene load_steps=28 format=3 uid="uid://cakef76kp4kgi"]
 
 [ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_76lnb"]
 [ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_gwmam"]
-[ext_resource type="Texture2D" uid="uid://b08m8kgk1qfs3" path="res://Textures/mise-plat-surface-metallique.jpg" id="3_g0o2g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
 size = Vector2(32, 50)
@@ -225,12 +224,6 @@ states/Move/node = SubResource("AnimationNodeBlendSpace2D_n0s5w")
 states/Move/position = Vector2(585, 97)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_xiog5"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_tf3nr"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_lqe3w")]
 
-[sub_resource type="SystemFont" id="SystemFont_nirn5"]
-subpixel_positioning = 0
-
-[sub_resource type="SystemFont" id="SystemFont_etw5c"]
-subpixel_positioning = 0
-
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
 script = ExtResource("1_76lnb")
@@ -261,141 +254,3 @@ tree_root = SubResource("AnimationNodeStateMachine_g406o")
 anim_player = NodePath("../anim")
 parameters/Idle/blend_position = Vector2(0, 0.00550628)
 parameters/Move/blend_position = Vector2(0, 0)
-
-[node name="PauseMenu" type="CanvasLayer" parent="."]
-process_mode = 2
-visible = false
-
-[node name="TextureRect" type="TextureRect" parent="PauseMenu"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_g0o2g")
-expand_mode = 1
-
-[node name="Resume" type="Button" parent="PauseMenu/TextureRect"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -100.0
-offset_right = 60.0
-offset_bottom = -64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_nirn5")
-theme_override_font_sizes/font_size = 20
-text = "Resume
-"
-
-[node name="Settings" type="Button" parent="PauseMenu/TextureRect"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -28.0
-offset_right = 60.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_nirn5")
-theme_override_font_sizes/font_size = 20
-text = "Settings
-"
-
-[node name="Quit" type="Button" parent="PauseMenu/TextureRect"]
-y_sort_enabled = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = 52.0
-offset_right = 60.0
-offset_bottom = 88.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_etw5c")
-theme_override_font_sizes/font_size = 20
-text = "Quit"
-
-[node name="SettingsMenu" type="CanvasLayer" parent="."]
-process_mode = 2
-visible = false
-
-[node name="TextureRect" type="TextureRect" parent="SettingsMenu"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_g0o2g")
-expand_mode = 1
-
-[node name="Control" type="Control" parent="SettingsMenu"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="SettingsMenu/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="SettingsMenu/Control/CenterContainer"]
-custom_minimum_size = Vector2(512, 256)
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="SettingsMenu/Control/CenterContainer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Label" type="Label" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 32
-text = "Settings"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ButtonReinitialize" type="Button" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-text = "Reinitialize"
-
-[node name="ButtonBack" type="Button" parent="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-y_sort_enabled = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-text = "Back"
-
-[connection signal="pressed" from="PauseMenu/TextureRect/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="PauseMenu/TextureRect/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="PauseMenu/TextureRect/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonReinitialize" to="." method="_on_button_reinitialize_pressed"]
-[connection signal="pressed" from="SettingsMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonBack" to="." method="_on_back_pressed"]
