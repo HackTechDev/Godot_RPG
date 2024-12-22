@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://jup7dnhdx465"]
+[gd_scene load_steps=4 format=3 uid="uid://jup7dnhdx465"]
 
 [ext_resource type="Texture2D" uid="uid://b08m8kgk1qfs3" path="res://Textures/mise-plat-surface-metallique.jpg" id="1_25q57"]
 [ext_resource type="Script" path="res://UI/main_menu.gd" id="2_kvyff"]
+[ext_resource type="AudioStream" uid="uid://duq1v7na08jwg" path="res://Sounds/music/Neon_Dreams.mp3" id="3_l0t56"]
 
 [node name="MainMenu" type="Node2D"]
 
@@ -208,6 +209,9 @@ Godot : Version 4.3"
 [node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Back"
+
+[node name="Music_Neon_Dream" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_l0t56")
 
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]

@@ -5,6 +5,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
 @onready var help: Control = $Help
+@onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 	
 func _on_button_play_pressed():
@@ -66,7 +67,7 @@ func _on_reinitialize_pressed():
 func _ready():
 	print("Init Game")
 	print(liblevel.displayVersion())
-
+	music_neon_dream.play()
 
 func data_to_save():	
 	return {
