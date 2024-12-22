@@ -87,14 +87,3 @@ func input_move():
 	Player_data.player_pos_y = position.y
 
 	move_and_slide()
-
-
-func _on_quit_pressed():
-	# Save alls object of the current scene
-	var computers = get_tree().get_nodes_in_group("computer")
-	var robots = get_tree().get_nodes_in_group("robot")
-	var current_scene = get_tree().get_current_scene().get_name()
-
-	liblevel.saveAllObjects(current_scene, computers, robots )
-			
-	get_tree().quit()

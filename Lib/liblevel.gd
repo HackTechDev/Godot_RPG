@@ -14,6 +14,7 @@ func savePlayer(data_to_save):
 	file.close()
 	
 func saveAllObjects(current_scene, computers, robots ):
+	print("saveAllObjects")
 	var all_json_data = {}
 	
 	var i = 1
@@ -44,6 +45,7 @@ func saveAllObjects(current_scene, computers, robots ):
 				
 	var objects_to_save = JSON.stringify(all_json_data)
 	
+	print(objects_to_save)
 	var file = FileAccess.open("user://" + current_scene + ".json", FileAccess.WRITE)
 	file.store_line(objects_to_save)
 	file.close()

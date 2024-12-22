@@ -23,11 +23,21 @@ func _on_button_help_pressed():
 	help.visible = true
 	
 func _on_button_quit_pressed():
-	print("Quit")
+	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 	
 	# Save the player
+	print("Save Player")
 	liblevel.savePlayer(data_to_save())
 	
+	# Save all objects of the current scene
+	print("Salle all objects")
+	var computers = get_tree().get_nodes_in_group("computer")
+	var robots = get_tree().get_nodes_in_group("robot")
+	var current_scene = get_tree().get_current_scene().get_name()
+
+	liblevel.saveAllObjects(current_scene, computers, robots)
+	
+	print("Quit")
 	get_tree().quit()
 
 func _on_button_settings_back_pressed():
