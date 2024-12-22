@@ -61,6 +61,8 @@ func _on_reinitialize_pressed():
 		_:
 			print("Other platform")
 	
+	get_tree().quit()
+	
 func _ready():
 	print("Init Game")
 	print(liblevel.displayVersion())

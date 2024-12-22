@@ -57,7 +57,11 @@ func reinitializeLevel():
 
 func reinitializePlayer():
 	print("Reinitialize Player")
-	DirAccess.remove_absolute(Player_data.save_path)
+	#mDirAccess.remove_absolute(Player_data.save_path)
+	
+	var dir = DirAccess.open("res://World/Default/")
+	dir.copy("res://World/Default/rpg.json", "user://rpg.json")
+
 
 func load_game():
 	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
