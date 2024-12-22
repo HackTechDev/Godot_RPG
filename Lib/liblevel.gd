@@ -51,11 +51,12 @@ func saveAllObjects(current_scene, computers, robots ):
 	file.close()
 	
 func reinitializeLevel():
+	print("Reinitialize Level")
 	var dir = DirAccess.open("res://World/Default/")
-	print(dir.file_exists("level_01.json"))
 	dir.copy("res://World/Default/level_01.json", "user://level_01.json")
 
 func reinitializePlayer():
+	print("Reinitialize Player")
 	DirAccess.remove_absolute(Player_data.save_path)
 
 func load_game():
