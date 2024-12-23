@@ -5,12 +5,39 @@
 [ext_resource type="AudioStream" uid="uid://duq1v7na08jwg" path="res://Sounds/music/Neon_Dreams.mp3" id="3_l0t56"]
 
 [node name="MainMenu" type="Node2D"]
+visible = false
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Background2" type="TextureRect" parent="Background"]
+offset_left = -1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_25q57")
+expand_mode = 1
+
+[node name="Background3" type="TextureRect" parent="Background"]
+offset_left = 1152.0
+offset_right = 2304.0
+offset_bottom = 648.0
+texture = ExtResource("1_25q57")
+expand_mode = 1
+
+[node name="Background4" type="TextureRect" parent="Background"]
+offset_top = -648.0
+offset_right = 1152.0
+texture = ExtResource("1_25q57")
+expand_mode = 1
+
+[node name="Background5" type="TextureRect" parent="Background"]
+offset_top = 648.0
+offset_right = 1152.0
+offset_bottom = 1296.0
+texture = ExtResource("1_25q57")
+expand_mode = 1
 
 [node name="Background" type="TextureRect" parent="Background"]
 layout_mode = 0
@@ -21,6 +48,12 @@ expand_mode = 1
 
 [node name="MainMenuLayer" type="CanvasLayer" parent="."]
 script = ExtResource("2_kvyff")
+
+[node name="Background" type="TextureRect" parent="MainMenuLayer"]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_25q57")
+expand_mode = 1
 
 [node name="Main" type="Control" parent="MainMenuLayer"]
 layout_mode = 3
@@ -163,7 +196,7 @@ vertical_alignment = 1
 [node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Reinitialize"
+text = "Reinitialize & Quit"
 
 [node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -212,6 +245,7 @@ text = "Back"
 
 [node name="Music_Neon_Dream" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_l0t56")
+parameters/looping = true
 
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]

@@ -21,6 +21,7 @@ func _ready():
 
 	Player_data.player_previous_scene = self.name
 	
+	
 	print("Load all objects")
 	var datas
 	# ~/.local/share/godot/app_userdata/rpg_v1/level_01.json
@@ -42,10 +43,10 @@ func _ready():
 		data.position.y = datas[key].position.y
 		add_child(data)
 
-	EventBus.build_computer.connect(build_computer)
+	EventBus.build_computer.connect(build_computer_event)
 	
 	
-func build_computer(direction):
+func build_computer_event(direction):
 	print("Build Computer")
 	print(str(direction))
 	var data

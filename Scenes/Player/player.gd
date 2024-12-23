@@ -37,6 +37,8 @@ func _ready():
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
 	play_button_menu.visible = false
 
+	print("evet")
+
 func _physics_process(_delta):
 		
 	input_move()
@@ -90,10 +92,9 @@ func input_move():
 		anim_state.travel("Idle")
 		velocity = Vector2.ZERO
 
-	Player_data.player_direction = direction
+	Player_data.player_facing = direction
 	Player_data.player_pos_x = position.x
 	Player_data.player_pos_y = position.y
-
 
 
 	move_and_slide()

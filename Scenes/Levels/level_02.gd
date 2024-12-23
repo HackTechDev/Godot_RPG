@@ -19,4 +19,5 @@ func _ready():
 		player.position.x = get_node(node_name).position.x + Player_data.player_spawnpoint_position_x 
 		player.position.y = get_node(node_name).position.y + Player_data.player_spawnpoint_position_y - 8
 
+
 	add_child(player)

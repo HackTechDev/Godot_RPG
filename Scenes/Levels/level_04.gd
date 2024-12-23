@@ -4,6 +4,7 @@ extends Node2D
 @onready var player_scene = preload("res://Scenes/Player/player.tscn")
 
 func _ready():
+	print("-------")
 	print(self.name)
 		
 	Player_data.player_previous_scene = self.name
