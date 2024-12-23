@@ -67,6 +67,9 @@ func _on_reinitialize_pressed():
 func _ready():
 	print("Init Game")
 	print(liblevel.displayVersion())
+	
+	get_tree().set_auto_accept_quit(false)
+	
 	music_neon_dream.play()
 
 func data_to_save():	
@@ -75,3 +78,7 @@ func data_to_save():
 		"player_facing" : Player_data.player_facing,
 		"scene": Player_data.player_previous_scene
 	}
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		print("You must quit via the quit button")
