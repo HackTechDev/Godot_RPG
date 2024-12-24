@@ -14,12 +14,14 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Background2" type="TextureRect" parent="Background"]
+layout_mode = 0
 offset_left = -1152.0
 offset_bottom = 648.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
 [node name="Background3" type="TextureRect" parent="Background"]
+layout_mode = 0
 offset_left = 1152.0
 offset_right = 2304.0
 offset_bottom = 648.0
@@ -27,12 +29,14 @@ texture = ExtResource("1_25q57")
 expand_mode = 1
 
 [node name="Background4" type="TextureRect" parent="Background"]
+layout_mode = 0
 offset_top = -648.0
 offset_right = 1152.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
 [node name="Background5" type="TextureRect" parent="Background"]
+layout_mode = 0
 offset_top = 648.0
 offset_right = 1152.0
 offset_bottom = 1296.0
