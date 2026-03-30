@@ -30,6 +30,9 @@ func _ready():
 		datas = JSON.parse_string(file.get_as_text())
 		file.close()
 	
+	if datas == null:
+		datas = {}
+
 	var data
 	for key in datas:
 		if datas[key].object == "computer":

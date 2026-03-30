@@ -40,7 +40,7 @@ func saveAllObjects(current_scene, computers, robots ):
 				"y": robot.position.y
 			}	
 		}
-		all_json_data["computer" + str(i)] = json_data
+		all_json_data["robot" + str(i)] = json_data
 		i = i + 1
 				
 	var objects_to_save = JSON.stringify(all_json_data)

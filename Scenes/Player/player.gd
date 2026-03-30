@@ -46,20 +46,9 @@ func _physics_process(_delta):
 func _input(event):
 		
 	if event.is_action_pressed("ui_m"):
-		if display_menu == false:
-			background_menu = menu_instance.get_node("Background")
-			background_menu.visible = true
-			
-			text_menu = menu_instance.get_node("MainMenuLayer")
-			text_menu.visible = true
-			display_menu = true
-		else:
-			background_menu = menu_instance.get_node("Background")
-			background_menu.visible = false
-			
-			text_menu = menu_instance.get_node("MainMenuLayer")
-			text_menu.visible = false
-			display_menu = false
+		display_menu = !display_menu
+		background_menu.visible = display_menu
+		text_menu.visible = display_menu
 
 	if event.is_action_pressed("ui_b"):
 		print("b key: build")
