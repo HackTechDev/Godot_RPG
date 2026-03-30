@@ -1,26 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://jup7dnhdx465"]
+[gd_scene format=3 uid="uid://jup7dnhdx465"]
 
 [ext_resource type="Texture2D" uid="uid://b08m8kgk1qfs3" path="res://Textures/mise-plat-surface-metallique.jpg" id="1_25q57"]
-[ext_resource type="Script" path="res://UI/main_menu.gd" id="2_kvyff"]
+[ext_resource type="Script" uid="uid://dpcan3mgbm4cn" path="res://UI/main_menu.gd" id="2_kvyff"]
 [ext_resource type="AudioStream" uid="uid://duq1v7na08jwg" path="res://Sounds/music/Neon_Dreams.mp3" id="3_l0t56"]
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Node2D" unique_id=1061102833]
 visible = false
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" type="Control" parent="." unique_id=1279232074]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Background2" type="TextureRect" parent="Background"]
+[node name="Background2" type="TextureRect" parent="Background" unique_id=2025176653]
 layout_mode = 0
 offset_left = -1152.0
 offset_bottom = 648.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="Background3" type="TextureRect" parent="Background"]
+[node name="Background3" type="TextureRect" parent="Background" unique_id=1874307281]
 layout_mode = 0
 offset_left = 1152.0
 offset_right = 2304.0
@@ -28,14 +28,14 @@ offset_bottom = 648.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="Background4" type="TextureRect" parent="Background"]
+[node name="Background4" type="TextureRect" parent="Background" unique_id=1368371779]
 layout_mode = 0
 offset_top = -648.0
 offset_right = 1152.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="Background5" type="TextureRect" parent="Background"]
+[node name="Background5" type="TextureRect" parent="Background" unique_id=1142070034]
 layout_mode = 0
 offset_top = 648.0
 offset_right = 1152.0
@@ -43,23 +43,23 @@ offset_bottom = 1296.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="Background" type="TextureRect" parent="Background"]
+[node name="Background" type="TextureRect" parent="Background" unique_id=1592219386]
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="MainMenuLayer" type="CanvasLayer" parent="."]
+[node name="MainMenuLayer" type="CanvasLayer" parent="." unique_id=376045302]
 script = ExtResource("2_kvyff")
 
-[node name="Background" type="TextureRect" parent="MainMenuLayer"]
+[node name="Background" type="TextureRect" parent="MainMenuLayer" unique_id=386675396]
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("1_25q57")
 expand_mode = 1
 
-[node name="Main" type="Control" parent="MainMenuLayer"]
+[node name="Main" type="Control" parent="MainMenuLayer" unique_id=2118308844]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,7 +67,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Main"]
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Main" unique_id=1455404316]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,22 +75,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Main/CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Main/CenterContainer" unique_id=107814755]
 custom_minimum_size = Vector2(512, 256)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Main/CenterContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Main/CenterContainer/PanelContainer" unique_id=557418503]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer" unique_id=612974340]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2080230541]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
@@ -98,26 +98,26 @@ text = "Commando Zombi"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonPlay" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonPlay" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1018241128]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Play"
 
-[node name="ButtonSettings" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonSettings" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=806568808]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Settings"
 
-[node name="ButtonHelp" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonHelp" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=500073050]
 layout_mode = 2
 text = "Help"
 
-[node name="ButtonQuit" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonQuit" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=169991404]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Quit"
 
-[node name="Settings" type="Control" parent="MainMenuLayer"]
+[node name="Settings" type="Control" parent="MainMenuLayer" unique_id=677344004]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -126,7 +126,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Settings"]
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Settings" unique_id=18911438]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,22 +134,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Settings/CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Settings/CenterContainer" unique_id=282559544]
 custom_minimum_size = Vector2(512, 256)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer" unique_id=1395567106]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer" unique_id=1488098924]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1389934730]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
@@ -157,7 +157,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Audio" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Audio" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=657806275]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
@@ -165,7 +165,7 @@ text = "Audio"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Video" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Video" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1146480439]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
@@ -173,7 +173,7 @@ text = "Video"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Controls" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Controls" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1383968741]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
@@ -181,7 +181,7 @@ text = "Controls"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Network" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Network" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=619515010]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
@@ -189,7 +189,7 @@ text = "Network"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Compatibility" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Compatibility" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=639313706]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
@@ -197,17 +197,17 @@ text = "Compatibility"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=181122789]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Reinitialize & Quit"
 
-[node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=134033988]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Back"
 
-[node name="Help" type="Control" parent="MainMenuLayer"]
+[node name="Help" type="Control" parent="MainMenuLayer" unique_id=64381400]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -216,7 +216,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Help"]
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/Help" unique_id=354373825]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -224,30 +224,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Help/CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/Help/CenterContainer" unique_id=1822972323]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer" unique_id=1565481695]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer" unique_id=850936403]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=513865787]
 layout_mode = 2
 text = "Help"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=214057657]
 layout_mode = 2
-text = "RPG : Version 0.1.1
-Godot : Version 4.3"
+text = "RPG : Version 0.0.4
+Godot : Version 4.6.1"
 
-[node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1669289607]
 layout_mode = 2
 text = "Back"
 
-[node name="Music_Neon_Dream" type="AudioStreamPlayer" parent="."]
+[node name="Music_Neon_Dream" type="AudioStreamPlayer" parent="." unique_id=1030122907]
 stream = ExtResource("3_l0t56")
 parameters/looping = true
 
