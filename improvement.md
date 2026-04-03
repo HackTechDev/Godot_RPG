@@ -7,15 +7,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ## Gameplay
 
 ### Système de santé fonctionnel
-- `player_health` existe dans `Player_data` mais n'est jamais modifiée
 - Ajouter des zones de dégâts (pièges, sols radioactifs) qui réduisent la santé au contact
-- Sauvegarder `player_health` dans `rpg.json` (actuellement absent)
-
-### Robots ennemis
-- Créer un type `RobotEnemy` (`CharacterBody2D`) distinct des robots collectables
-- IA simple : détection du joueur dans un rayon, déplacement vers lui
-- Inflige des dégâts au contact avec un cooldown pour éviter les dégâts répétés
-- Chargeable depuis `level_01.json` avec le type `"robot_enemy"`
+- La santé est réduite par les `RobotEnemy` mais le HUD ne change pas de couleur / aucune réaction visuelle côté joueur
 
 ### Objets de soin
 - Nouveau type d'objet collectable (`health_item`) qui restaure 1 point de santé
@@ -36,16 +29,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Interface utilisateur
 
-### Page Contrôles dans Settings
-- La page "Controls" dans Settings affiche uniquement un label vide
-- La remplir avec le tableau complet des touches du jeu :
-  - Déplacement : Flèches / ZQSD
-  - Menu : M
-  - Fiche personnage : P
-  - Ramasser : T
-  - Pousser : R
-  - Construire : B
-
 ### Minimap
 - Petite carte en coin d'écran montrant la position du joueur dans le niveau
 - Peut être générée dynamiquement depuis les données de la TileMap
@@ -62,11 +45,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ---
 
 ## Sauvegarde
-
-### Sauvegarde de la santé
-- Ajouter `"player_health"` dans `data_to_save()` (`main_menu.gd`)
-- Lire et restaurer la valeur dans `load_game()` (`liblevel.gd`)
-- Mettre à jour `World/Default/rpg.json` avec `"player_health": 4`
 
 ### Plusieurs slots de sauvegarde
 - 3 profils indépendants : `rpg_slot1.json`, `rpg_slot2.json`, `rpg_slot3.json`
@@ -91,7 +69,3 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Ajouter des personnages non-joueurs avec lesquels interagir (touche T)
 - Boîte de dialogue simple avec texte et bouton "Suivant"
 
-### Nettoyage du code
-- `level_01.gd` n'étend pas `base_level.gd` contrairement aux autres niveaux — à unifier
-- Le `print("evet")` dans `player.gd` est à supprimer
-- La variable `paused` dans `player.gd` est déclarée mais jamais utilisée (remplacée par `display_menu`)

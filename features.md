@@ -125,3 +125,46 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Boutons : "Quitter" (confirme et sauvegarde) / "Annuler"
 - La sauvegarde n'est déclenchée qu'en cas de confirmation
 - **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`
+
+---
+
+## Nettoyage de code
+
+- `level_01.gd` unifié avec les autres niveaux : étend désormais `base_level.gd` via `super._ready()`
+- Le nœud `Player` supprimé de `level_01.tscn` (instancié dynamiquement par `base_level`)
+- `build_computer_event` récupère le joueur via `get_tree().get_first_node_in_group("player")`
+- `print("evet")` supprimé de `player.gd`
+- Variable `paused` inutilisée supprimée de `player.gd`
+- **Fichiers :** `Scenes/Levels/level_01.gd`, `Scenes/Levels/level_01.tscn`, `Scenes/Player/player.gd`
+
+---
+
+## Page Contrôles dans Settings
+
+- Accessible depuis **Settings → Controls**
+- Tableau complet des touches affiché dans un `GridContainer` (2 colonnes)
+- Touches listées : Déplacement (Flèches/ZQSD), Menu (M), Fiche personnage (P), Ramasser (T), Pousser (R), Construire (B)
+- Bouton "Retour" pour revenir aux Settings
+- **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`
+
+---
+
+## Sauvegarde de la santé
+
+- `player_health` inclus dans `data_to_save()` et sauvegardé dans `user://rpg.json`
+- Restauré au chargement via `load_game()` avec fallback sur la valeur par défaut
+- `World/Default/rpg.json` mis à jour avec `"player_health": 4`
+- **Fichiers :** `UI/main_menu.gd`, `Lib/liblevel.gd`, `World/Default/rpg.json`
+
+---
+
+## Robots ennemis
+
+- Nouveau type `RobotEnemy` (`CharacterBody2D`) distinct des robots collectables
+- Graphismes du joueur (`player_without_sword.png`) avec teinte rouge (`modulate`)
+- AnimationTree identique au joueur : animations directionnelles idle/move 4 directions
+- IA : détection du joueur dans un rayon de 120 px, déplacement à 35 px/s vers lui
+- Inflige 1 point de dégât au contact (rayon 30 px) avec cooldown de 1,5 s
+- Chargeable depuis `level_01.json` avec le type `"robot_enemy"`
+- Positions sauvegardées dans `user://level_01.json` à chaque auto-save
+- **Fichiers :** `Objects/RobotEnemy/robot_enemy.gd`, `Objects/RobotEnemy/robot_enemy.tscn`, `Scenes/Levels/level_01.gd`, `Lib/liblevel.gd`, `Scenes/Player/player.gd`, `UI/main_menu.gd`, `World/Default/level_01.json`
