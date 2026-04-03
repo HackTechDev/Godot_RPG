@@ -313,6 +313,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retour"
 
+[node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer"]
+title = "Quitter"
+dialog_text = "Voulez-vous vraiment quitter ?"
+ok_button_text = "Quitter"
+cancel_button_text = "Annuler"
+size = Vector2(300, 120)
+
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelp" to="MainMenuLayer" method="_on_button_help_pressed"]
@@ -324,3 +331,4 @@ text = "Retour"
 [connection signal="pressed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonAudioBack" to="MainMenuLayer" method="_on_button_audio_back_pressed"]
 [connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic" to="MainMenuLayer" method="_on_check_music_toggled"]
 [connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume" to="MainMenuLayer" method="_on_slider_volume_value_changed"]
+[connection signal="confirmed" from="MainMenuLayer/QuitDialog" to="MainMenuLayer" method="_on_quit_dialog_confirmed"]

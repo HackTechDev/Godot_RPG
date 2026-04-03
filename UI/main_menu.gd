@@ -10,6 +10,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var audio_settings: Control = $AudioSettings
 @onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
+@onready var quit_dialog: ConfirmationDialog = $QuitDialog
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 	
@@ -29,20 +30,18 @@ func _on_button_help_pressed():
 	help.visible = true
 	
 func _on_button_quit_pressed():
-	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
-	
-	# Save the player
+	quit_dialog.popup_centered()
+
+func _on_quit_dialog_confirmed():
 	print("Save Player")
 	liblevel.savePlayer(data_to_save())
-	
-	# Save all objects of the current scene
-	print("Salle all objects")
+
+	print("Save all objects")
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
 	var current_scene = get_tree().get_current_scene().get_name()
-
 	liblevel.saveAllObjects(current_scene, computers, robots)
-	
+
 	print("Quit")
 	get_tree().quit()
 
