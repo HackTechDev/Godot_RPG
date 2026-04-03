@@ -5,6 +5,7 @@ extends Node2D
 func _ready():
 	print("Scene: " + self.name)
 	Player_data.player_previous_scene = self.name
+	SceneTransition.fade_in()
 
 	var player = player_scene.instantiate()
 	_place_player(player)

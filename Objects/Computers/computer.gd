@@ -3,12 +3,12 @@ extends RigidBody2D
 @onready var interaction_label = $InteractionLabel
 
 func _on_interaction_area_body_entered(body):
-	if body.name == "Player":
+	if body.is_in_group("player"):
 		Player_data.contact_object = self
 		interaction_label.visible = true
 
 func _on_interaction_area_body_exited(body):
-	if body.name == "Player":
+	if body.is_in_group("player"):
 		if Player_data.contact_object == self:
 			Player_data.contact_object = null
 		interaction_label.visible = false
@@ -16,5 +16,5 @@ func _on_interaction_area_body_exited(body):
 func collect():
 	Player_data.computer += 1
 	Player_data.inventory.append({"type": "computer", "label": "Ordinateur"})
-	print("Computer collected :", Player_data.computer)
+	EventBus.item_collected.emit("Ordinateur collecté !")
 	queue_free()

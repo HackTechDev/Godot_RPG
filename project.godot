@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventBus="*res://Autoload/EventBus.gd"
+SceneTransition="*res://Autoload/scene_transition.gd"
 
 [display]
 

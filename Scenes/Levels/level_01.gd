@@ -6,6 +6,7 @@ extends Node2D
 	
 func _ready():
 	print("Scene: " + self.name)
+	SceneTransition.fade_in()
 	
 	if Player_data.player_previous_scene == '':
 			player.position.x = Player_data.player_spawnpoint_position_x

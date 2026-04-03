@@ -17,7 +17,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 func _on_button_play_pressed():
 	print("loading...")
 	liblevel.load_game()
-	get_tree().change_scene_to_file(Player_data.scene_path)
+	SceneTransition.change_scene(Player_data.scene_path)
 
 func _on_button_settings_pressed():
 	main.visible = false
@@ -110,7 +110,7 @@ func _on_reinitialize_pressed():
 	Player_data.inventory = []
 	Player_data.contact_object = null
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://UI/main_menu.tscn")
+	SceneTransition.change_scene("res://UI/main_menu.tscn")
 	
 func _ready():
 	print("Init Game")
@@ -120,6 +120,7 @@ func _ready():
 	
 	music_neon_dream.play()
 	_load_audio_settings()
+	SceneTransition.fade_in()
 
 func data_to_save():	
 	return {

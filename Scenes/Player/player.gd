@@ -20,6 +20,9 @@ var character_sheet_instance = null
 var hud_scene = preload("res://UI/hud.tscn")
 var hud_instance = null
 
+var notification_scene = preload("res://UI/notification.tscn")
+var notification_instance = null
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -30,6 +33,7 @@ var direction = 5
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group("player")
 
 	menu_instance = main_menu.instantiate()
 	add_child(menu_instance)
@@ -48,6 +52,11 @@ func _ready():
 
 	hud_instance = hud_scene.instantiate()
 	add_child(hud_instance)
+
+	notification_instance = notification_scene.instantiate()
+	add_child(notification_instance)
+
+	SceneTransition.fade_in()
 
 	print("evet")
 
