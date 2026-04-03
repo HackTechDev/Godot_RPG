@@ -5,6 +5,9 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
 @onready var help: Control = $Help
+@onready var audio_settings: Control = $AudioSettings
+@onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
+@onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 	
@@ -41,10 +44,27 @@ func _on_button_quit_pressed():
 	print("Quit")
 	get_tree().quit()
 
+func _on_button_audio_pressed():
+	settings.visible = false
+	audio_settings.visible = true
+	check_music.button_pressed = !music_neon_dream.stream_paused
+	slider_volume.value = db_to_linear(music_neon_dream.volume_db) * 100.0
+
+func _on_button_audio_back_pressed():
+	audio_settings.visible = false
+	settings.visible = true
+
+func _on_check_music_toggled(toggled_on: bool):
+	music_neon_dream.stream_paused = !toggled_on
+
+func _on_slider_volume_value_changed(value: float):
+	music_neon_dream.volume_db = linear_to_db(maxf(value, 0.01) / 100.0)
+
 func _on_button_settings_back_pressed():
 	main.visible = true
 	settings.visible = false
 	help.visible = false
+	audio_settings.visible = false
 
 func _on_button_help_back_pressed() -> void:
 	main.visible = true

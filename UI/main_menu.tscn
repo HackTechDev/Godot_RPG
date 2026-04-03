@@ -157,13 +157,11 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Audio" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=657806275]
+[node name="Audio" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=657806275]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 text = "Audio"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Video" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1146480439]
 layout_mode = 2
@@ -251,6 +249,70 @@ text = "Back"
 stream = ExtResource("3_l0t56")
 parameters/looping = true
 
+[node name="AudioSettings" type="Control" parent="MainMenuLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/AudioSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/AudioSettings/CenterContainer"]
+custom_minimum_size = Vector2(400, 280)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Audio"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckMusic" type="CheckButton" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+button_pressed = true
+text = "Musique"
+
+[node name="LabelVolume" type="Label" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Volume"
+
+[node name="SliderVolume" type="HSlider" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+value = 80.0
+
+[node name="ButtonAudioBack" type="Button" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Retour"
+
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelp" to="MainMenuLayer" method="_on_button_help_pressed"]
@@ -258,3 +320,7 @@ parameters/looping = true
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Reinitialize" to="MainMenuLayer" method="_on_reinitialize_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack" to="MainMenuLayer" method="_on_button_settings_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelpBack" to="MainMenuLayer" method="_on_button_help_back_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Audio" to="MainMenuLayer" method="_on_button_audio_pressed"]
+[connection signal="pressed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonAudioBack" to="MainMenuLayer" method="_on_button_audio_back_pressed"]
+[connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic" to="MainMenuLayer" method="_on_check_music_toggled"]
+[connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume" to="MainMenuLayer" method="_on_slider_volume_value_changed"]
