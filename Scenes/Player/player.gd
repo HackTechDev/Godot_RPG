@@ -14,6 +14,9 @@ var text_menu = null
 var quit_button_menu = null
 var play_button_menu = null
 
+var character_sheet_scene = preload("res://UI/character_sheet.tscn")
+var character_sheet_instance = null
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -37,6 +40,9 @@ func _ready():
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
 	play_button_menu.visible = false
 
+	character_sheet_instance = character_sheet_scene.instantiate()
+	add_child(character_sheet_instance)
+
 	print("evet")
 
 func _physics_process(_delta):
@@ -53,6 +59,11 @@ func _input(event):
 	if event.is_action_pressed("ui_b"):
 		print("b key: build")
 		EventBus.build_computer.emit(direction)
+
+	if event.is_action_pressed("ui_p"):
+		character_sheet_instance.visible = !character_sheet_instance.visible
+		if character_sheet_instance.visible:
+			character_sheet_instance.refresh()
 		
 func input_move():
 	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
