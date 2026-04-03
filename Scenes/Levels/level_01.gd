@@ -2,6 +2,7 @@ extends "res://Scenes/Levels/base_level.gd"
 
 @onready var computer_scene = preload("res://Objects/Computers/computer.tscn")
 @onready var robot_scene = preload("res://Objects/Robots/robot.tscn")
+@onready var robot_enemy_scene = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
 
 func _ready():
 	super._ready()
@@ -25,6 +26,9 @@ func _ready():
 		if datas[key].object == "robot":
 			data = robot_scene.instantiate()
 			data.add_to_group("robot")
+		if datas[key].object == "robot_enemy":
+			data = robot_enemy_scene.instantiate()
+			data.add_to_group("robot_enemy")
 
 		data.position.x = datas[key].position.x
 		data.position.y = datas[key].position.y

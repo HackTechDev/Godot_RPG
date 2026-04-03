@@ -13,10 +13,10 @@ func savePlayer(data_to_save):
 	file.store_line(to_json)
 	file.close()
 	
-func saveAllObjects(current_scene, computers, robots ):
+func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 	print("saveAllObjects")
 	var all_json_data = {}
-	
+
 	var i = 1
 	for computer in computers:
 		var json_data = {
@@ -25,12 +25,11 @@ func saveAllObjects(current_scene, computers, robots ):
 			"position": {
 				"x": computer.position.x,
 				"y": computer.position.y
-			}	
+			}
 		}
 		all_json_data["computer" + str(i)] = json_data
 		i = i + 1
-		
-	
+
 	for robot in robots:
 		var json_data = {
 			"scene": current_scene,
@@ -38,9 +37,21 @@ func saveAllObjects(current_scene, computers, robots ):
 			"position": {
 				"x": robot.position.x,
 				"y": robot.position.y
-			}	
+			}
 		}
 		all_json_data["robot" + str(i)] = json_data
+		i = i + 1
+
+	for enemy in robot_enemies:
+		var json_data = {
+			"scene": current_scene,
+			"object": "robot_enemy",
+			"position": {
+				"x": enemy.position.x,
+				"y": enemy.position.y
+			}
+		}
+		all_json_data["robot_enemy" + str(i)] = json_data
 		i = i + 1
 				
 	var objects_to_save = JSON.stringify(all_json_data)

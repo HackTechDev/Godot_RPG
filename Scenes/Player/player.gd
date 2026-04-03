@@ -123,8 +123,9 @@ func input_move():
 func _auto_save_objects():
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
+	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
 	var current_scene = get_tree().get_current_scene().get_name()
-	liblevel.saveAllObjects(current_scene, computers, robots)
+	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies)
 
 func _facing_to_vector() -> Vector2:
 	match direction:
