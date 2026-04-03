@@ -74,6 +74,7 @@ func load_game():
 		Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % data["scene"]
 		Player_data.player_spawnpoint_position_x = data["player_position"][0]
 		Player_data.player_spawnpoint_position_y = data["player_position"][1]
+		Player_data.player_health = data.get("player_health", Player_data.player_health)
 		
 	else:
 		print("Save file not found!")

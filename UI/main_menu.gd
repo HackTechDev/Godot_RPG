@@ -132,11 +132,12 @@ func _ready():
 	_load_audio_settings()
 	SceneTransition.fade_in()
 
-func data_to_save():	
+func data_to_save():
 	return {
 		"player_position" : [Player_data.player_pos_x, Player_data.player_pos_y],
 		"player_facing" : Player_data.player_facing,
-		"scene": Player_data.player_previous_scene
+		"scene": Player_data.player_previous_scene,
+		"player_health": Player_data.player_health
 	}
 
 func _notification(what):
