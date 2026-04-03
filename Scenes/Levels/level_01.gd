@@ -1,28 +1,11 @@
-extends Node2D
+extends "res://Scenes/Levels/base_level.gd"
 
-@onready var player = $Player
 @onready var computer_scene = preload("res://Objects/Computers/computer.tscn")
 @onready var robot_scene = preload("res://Objects/Robots/robot.tscn")
-	
-func _ready():
-	print("Scene: " + self.name)
-	SceneTransition.fade_in()
-	
-	if Player_data.player_previous_scene == '':
-			player.position.x = Player_data.player_spawnpoint_position_x
-			player.position.y = Player_data.player_spawnpoint_position_y
-	else:
-		if Player_data.spawnpoint_next == "":
-			player.position.x = Player_data.player_spawnpoint_position_x
-			player.position.y = Player_data.player_spawnpoint_position_y
-		else:
-			var node_name =  "/root/level_01/spawnpoint_level_01_" + Player_data.spawnpoint_next + "_begin"
-			player.position.x = get_node(node_name).position.x + Player_data.player_spawnpoint_position_x
-			player.position.y = get_node(node_name).position.y + Player_data.player_spawnpoint_position_y 
 
-	Player_data.player_previous_scene = self.name
-	
-	
+func _ready():
+	super._ready()
+
 	print("Load all objects")
 	var datas
 	# ~/.local/share/godot/app_userdata/rpg_v1/level_01.json
@@ -69,6 +52,7 @@ func build_computer_event(direction):
 	if direction == 2:
 		shift_y = 45
 		
+	var player = get_tree().get_first_node_in_group("player")
 	data.position.x = player.position.x + shift_x
 	data.position.y = player.position.y + shift_y
 

@@ -27,7 +27,6 @@ var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
 
-var paused
 var display_menu = false
 var direction = 5
 
@@ -57,8 +56,6 @@ func _ready():
 	add_child(notification_instance)
 
 	SceneTransition.fade_in()
-
-	print("evet")
 
 func _physics_process(_delta):
 	input_move()
