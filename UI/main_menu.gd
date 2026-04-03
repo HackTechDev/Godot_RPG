@@ -8,6 +8,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var settings: Control = $Settings
 @onready var help: Control = $Help
 @onready var audio_settings: Control = $AudioSettings
+@onready var controls_settings: Control = $ControlsSettings
 @onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
@@ -55,6 +56,14 @@ func _on_button_audio_back_pressed():
 	audio_settings.visible = false
 	settings.visible = true
 
+func _on_button_controls_pressed():
+	settings.visible = false
+	controls_settings.visible = true
+
+func _on_button_controls_back_pressed():
+	controls_settings.visible = false
+	settings.visible = true
+
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
 	_save_audio_settings()
@@ -88,6 +97,7 @@ func _on_button_settings_back_pressed():
 	settings.visible = false
 	help.visible = false
 	audio_settings.visible = false
+	controls_settings.visible = false
 
 func _on_button_help_back_pressed() -> void:
 	main.visible = true

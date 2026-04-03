@@ -171,13 +171,11 @@ text = "Video"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Controls" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1383968741]
+[node name="Controls" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1383968741]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 text = "Controls"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Network" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=619515010]
 layout_mode = 2
@@ -313,6 +311,118 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retour"
 
+[node name="ControlsSettings" type="Control" parent="MainMenuLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/ControlsSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer"]
+custom_minimum_size = Vector2(420, 320)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Contrôles"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="L1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Déplacement"
+
+[node name="K1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Flèches / ZQSD"
+
+[node name="L2" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Menu"
+
+[node name="K2" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "M"
+
+[node name="L3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Fiche personnage"
+
+[node name="K3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "P"
+
+[node name="L4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Ramasser"
+
+[node name="K4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "T"
+
+[node name="L5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Pousser"
+
+[node name="K5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "R"
+
+[node name="L6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Construire"
+
+[node name="K6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "B"
+
+[node name="ButtonControlsBack" type="Button" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Retour"
+
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer"]
 title = "Quitter"
 dialog_text = "Voulez-vous vraiment quitter ?"
@@ -332,3 +442,5 @@ size = Vector2(300, 120)
 [connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic" to="MainMenuLayer" method="_on_check_music_toggled"]
 [connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume" to="MainMenuLayer" method="_on_slider_volume_value_changed"]
 [connection signal="confirmed" from="MainMenuLayer/QuitDialog" to="MainMenuLayer" method="_on_quit_dialog_confirmed"]
+[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Controls" to="MainMenuLayer" method="_on_button_controls_pressed"]
+[connection signal="pressed" from="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonControlsBack" to="MainMenuLayer" method="_on_button_controls_back_pressed"]
