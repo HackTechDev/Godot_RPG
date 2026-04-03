@@ -60,6 +60,14 @@ func _input(event):
 		print("b key: build")
 		EventBus.build_computer.emit(direction)
 
+	if event.is_action_pressed("ui_t"):
+		if Player_data.contact_object != null:
+			Player_data.contact_object.collect()
+
+	if event.is_action_pressed("ui_r"):
+		if Player_data.contact_object != null:
+			Player_data.contact_object.apply_central_impulse(_facing_to_vector() * 180.0)
+
 	if event.is_action_pressed("ui_p"):
 		character_sheet_instance.visible = !character_sheet_instance.visible
 		if character_sheet_instance.visible:
@@ -100,6 +108,14 @@ func input_move():
 	move_and_slide()
 	
 	
+func _facing_to_vector() -> Vector2:
+	match direction:
+		2: return Vector2(0, 1)
+		4: return Vector2(-1, 0)
+		6: return Vector2(1, 0)
+		8: return Vector2(0, -1)
+	return Vector2.ZERO
+
 func movement_sounds():
 	var IS_FOOTSTEP_SOUND_PLAYING = false
 	

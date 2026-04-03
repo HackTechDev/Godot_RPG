@@ -1,7 +1,15 @@
-extends Area2D
+extends RigidBody2D
 
-func _on_body_entered(body):
+func _on_interaction_area_body_entered(body):
 	if body.name == "Player":
-		Player_data.robot += 1
-		print("Robot collected :", Player_data.robot)
-		queue_free()
+		Player_data.contact_object = self
+
+func _on_interaction_area_body_exited(body):
+	if body.name == "Player":
+		if Player_data.contact_object == self:
+			Player_data.contact_object = null
+
+func collect():
+	Player_data.robot += 1
+	print("Robot collected :", Player_data.robot)
+	queue_free()

@@ -1,18 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://5olfbacjobub"]
+[gd_scene load_steps=5 format=3 uid="uid://5olfbacjobub"]
 
 [ext_resource type="Texture2D" uid="uid://bp432v1mlgld" path="res://Sprites/Decor/Individual_PNGs/decor_4.png" id="1_6ihvb"]
 [ext_resource type="Script" path="res://Objects/Computers/computer.gd" id="1_q2wkd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8nwi7"]
 
-[node name="Computer" type="Area2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 16.0
+
+[node name="Computer" type="RigidBody2D"]
 y_sort_enabled = true
+gravity_scale = 0.0
+linear_damp = 8.0
+freeze_rotation = true
 script = ExtResource("1_q2wkd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_8nwi7")
 
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="InteractionShape" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_interact")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_6ihvb")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
