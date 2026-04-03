@@ -25,4 +25,6 @@ static var scene_path = ""
 static var computer = 0
 static var robot = 0
 
+static var inventory: Array = []
+
 static var contact_object = null

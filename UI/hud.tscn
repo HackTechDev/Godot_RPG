@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://hud_overlay"]
+
+[ext_resource type="Script" path="res://UI/hud.gd" id="1_hudgd"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hudgd")
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_right = 180.0
+offset_bottom = 88.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="LabelHealth" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Santé: 4"
+
+[node name="LabelComputers" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Ordinateurs: 0"
+
+[node name="LabelRobots" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Robots: 0"
+
+[node name="LabelZone" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Zone: "

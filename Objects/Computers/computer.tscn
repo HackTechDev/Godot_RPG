@@ -26,5 +26,13 @@ shape = SubResource("CircleShape2D_interact")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_6ihvb")
 
+[node name="InteractionLabel" type="Label" parent="."]
+position = Vector2(-50.0, -36.0)
+z_index = 1
+theme_override_font_sizes/font_size = 10
+text = "T: Prendre
+R: Pousser"
+visible = false
+
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

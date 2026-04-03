@@ -23,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="Main/CenterContainer"]
-custom_minimum_size = Vector2(400, 300)
+custom_minimum_size = Vector2(400, 380)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Main/CenterContainer/PanelContainer"]
@@ -67,6 +67,20 @@ text = "Robots : 0"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Zone : "
+
+[node name="SeparatorInventory" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelInventoryTitle" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Inventaire"
+
+[node name="LabelInventory" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "(vide)"
+autowrap_mode = 3
 
 [node name="Spacer" type="Control" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const SETTINGS_PATH = "user://settings.json"
+
 var liblevel = preload("res://Lib/liblevel.gd").new()
 
 @onready var main: Control = $Main
@@ -56,9 +58,31 @@ func _on_button_audio_back_pressed():
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
+	_save_audio_settings()
 
 func _on_slider_volume_value_changed(value: float):
 	music_neon_dream.volume_db = linear_to_db(maxf(value, 0.01) / 100.0)
+	_save_audio_settings()
+
+func _save_audio_settings():
+	var data = {
+		"music_paused": music_neon_dream.stream_paused,
+		"volume_linear": db_to_linear(music_neon_dream.volume_db)
+	}
+	var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
+	file.store_line(JSON.stringify(data))
+	file.close()
+
+func _load_audio_settings():
+	if not FileAccess.file_exists(SETTINGS_PATH):
+		return
+	var file = FileAccess.open(SETTINGS_PATH, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	file.close()
+	if data == null:
+		return
+	music_neon_dream.stream_paused = data.get("music_paused", false)
+	music_neon_dream.volume_db = linear_to_db(maxf(data.get("volume_linear", 0.8), 0.01))
 
 func _on_button_settings_back_pressed():
 	main.visible = true
@@ -76,6 +100,17 @@ func _on_reinitialize_pressed():
 	print("Reinitialize")
 	liblevel.reinitializePlayer()
 	liblevel.reinitializeLevel()
+	Player_data.player_previous_scene = ""
+	Player_data.spawnpoint_current = ""
+	Player_data.spawnpoint_next = ""
+	Player_data.scene_path = ""
+	Player_data.player_pos_x = 0
+	Player_data.player_pos_y = 0
+	Player_data.computer = 0
+	Player_data.robot = 0
+	Player_data.inventory = []
+	Player_data.contact_object = null
+	get_tree().paused = false
 	get_tree().change_scene_to_file("res://UI/main_menu.tscn")
 	
 func _ready():
@@ -85,6 +120,7 @@ func _ready():
 	get_tree().set_auto_accept_quit(false)
 	
 	music_neon_dream.play()
+	_load_audio_settings()
 
 func data_to_save():	
 	return {
