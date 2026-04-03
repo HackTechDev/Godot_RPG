@@ -198,7 +198,7 @@ vertical_alignment = 1
 [node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=181122789]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Reinitialize & Quit"
+text = "Reinitialize"
 
 [node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=134033988]
 layout_mode = 2

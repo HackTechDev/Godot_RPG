@@ -74,15 +74,9 @@ func _on_button_help_back_pressed() -> void:
 	
 func _on_reinitialize_pressed():
 	print("Reinitialize")
-	match OS.get_name():
-		"Linux":
-			print("Linux platform")
-			liblevel.reinitializePlayer()
-			liblevel.reinitializeLevel()
-		_:
-			print("Other platform")
-	
-	get_tree().quit()
+	liblevel.reinitializePlayer()
+	liblevel.reinitializeLevel()
+	get_tree().change_scene_to_file("res://UI/main_menu.tscn")
 	
 func _ready():
 	print("Init Game")
