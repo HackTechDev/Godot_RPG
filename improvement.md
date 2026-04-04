@@ -16,9 +16,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Max santé : 4 (valeur de `player_health` par défaut)
 
 ### Écran Game Over
-- Déclenchement quand `player_health <= 0` (actuellement la santé peut descendre en négatif sans effet)
-- Panneau overlay avec message, bouton "Recommencer" et bouton "Quitter"
-- "Recommencer" réinitialise `Player_data` et retourne au menu principal
+- ~~Implémenté~~ — voir `features.md`
 
 ### Objectifs / quêtes simples
 - Définir des objectifs par niveau (ex. : "Collecter 3 ordinateurs")

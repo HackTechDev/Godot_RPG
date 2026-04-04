@@ -23,6 +23,10 @@ var hud_instance = null
 var notification_scene = preload("res://UI/notification.tscn")
 var notification_instance = null
 
+var game_over_scene = preload("res://UI/game_over.tscn")
+var game_over_instance = null
+var _game_over_shown = false
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -59,6 +63,9 @@ func _ready():
 	notification_instance = notification_scene.instantiate()
 	add_child(notification_instance)
 
+	game_over_instance = game_over_scene.instantiate()
+	add_child(game_over_instance)
+
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
 	player_combat_label.visible = false
@@ -77,6 +84,11 @@ func _physics_process(_delta):
 func _process(_delta):
 	if in_combat and is_instance_valid(combat_enemy):
 		_update_combat_label_positions()
+	if not _game_over_shown and Player_data.player_health <= 0:
+		_game_over_shown = true
+		if in_combat:
+			_end_combat()
+		game_over_instance.show_game_over()
 
 func _input(event):
 	if event.is_action_pressed("ui_m"):

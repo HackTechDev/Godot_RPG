@@ -205,6 +205,18 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Écran Game Over
+
+- Déclenché quand `Player_data.player_health <= 0` (détecté dans `_process` du joueur)
+- Overlay semi-transparent noir + panneau centré avec titre rouge "GAME OVER"
+- Bouton **Recommencer** : réinitialise toutes les variables `Player_data`, copie les fichiers par défaut, retourne au menu principal
+- Bouton **Quitter** : ferme le jeu
+- Le jeu est mis en pause (`get_tree().paused = true`) pendant l'affichage
+- Le combat en cours est interrompu proprement avant l'affichage
+- **Fichiers :** `UI/game_over.tscn`, `UI/game_over.gd`, `Scenes/Player/player.gd`
+
+---
+
 ## Stats de combat dans la fiche de personnage
 
 - Attaque et Défense affichées dans la fiche (touche P) après la Santé
