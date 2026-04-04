@@ -64,7 +64,8 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 func reinitializeLevel():
 	print("Reinitialize Level")
 	var dir = DirAccess.open("res://World/Default/")
-	dir.copy("res://World/Default/level_01.json", "user://level_01.json")
+	for level in ["level_01", "level_02", "level_03", "level_04"]:
+		dir.copy("res://World/Default/%s.json" % level, "user://%s.json" % level)
 
 func reinitializePlayer():
 	print("Reinitialize Player")
