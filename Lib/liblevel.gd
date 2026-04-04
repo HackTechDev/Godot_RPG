@@ -82,13 +82,16 @@ func load_game():
 		var data = JSON.parse_string(file.get_as_text())
 		file.close()
 		# Load the saved scene
-		Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % data["scene"]
+		var saved_scene = data.get("scene", "")
+		if saved_scene == "":
+			saved_scene = Player_data_default.scene_start
+		Player_data.scene_path = "res://Scenes/Levels/%s.tscn" % saved_scene
 		Player_data.player_spawnpoint_position_x = data["player_position"][0]
 		Player_data.player_spawnpoint_position_y = data["player_position"][1]
 		Player_data.player_health = data.get("player_health", Player_data.player_health)
 		
 	else:
 		print("Save file not found!")
-		Player_data.scene_path = "res://Scenes//Levels/%s.tscn" % Player_data_default.scene_start
+		Player_data.scene_path = "res://Scenes/Levels/%s.tscn" % Player_data_default.scene_start
 		Player_data.player_spawnpoint_position_x = Player_data_default.spawnpoint_position_x
 		Player_data.player_spawnpoint_position_y = Player_data_default.spawnpoint_position_y

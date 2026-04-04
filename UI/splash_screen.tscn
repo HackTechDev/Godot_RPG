@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://splash_screen_001"]
+
+[ext_resource type="Script" uid="uid://splash_screen_gd_001" path="res://UI/splash_screen.gd" id="1_splash"]
+
+[node name="SplashScreen" type="Node2D"]
+script = ExtResource("1_splash")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="CanvasLayer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(1, 0.9, 0.1, 1)
+text = "Commando Zombi"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CanvasLayer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Mercenary RPG"
+horizontal_alignment = 1
+vertical_alignment = 1
