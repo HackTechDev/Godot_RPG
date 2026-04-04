@@ -246,4 +246,15 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Crédits : Le Sanglier des Ardennes — lesanglierdesardennes@gmail.com
 - Appuyer sur n'importe quelle touche quitte immédiatement
 - Le jeu ferme automatiquement quand tout le texte a défilé
+- `get_tree().paused = false` forcé au démarrage pour fonctionner depuis le menu in-game (pause active)
 - **Fichiers :** `UI/credits.tscn`, `UI/credits.gd`, `UI/main_menu.gd`
+
+---
+
+## Menu in-game amélioré (touche M et bouton Home)
+
+- Le bouton "Play" est remplacé par **"Back to the game"** quand le menu est ouvert en cours de partie
+- Cliquer "Back to the game" ferme le menu et reprend la partie (auto-save inclus), sans recharger la scène
+- Le signal `.tscn` du bouton est déconnecté et rebranché sur `_close_menu()` dans `player.gd`
+- Le bouton **Home** du HUD ouvre désormais le menu in-game (panneau principal) au lieu de retourner directement au menu principal
+- **Fichiers :** `Scenes/Player/player.gd`
