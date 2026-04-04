@@ -17,11 +17,15 @@ func _on_body_entered(body):
 
 		var computers = get_tree().get_nodes_in_group("computer")
 		var robots = get_tree().get_nodes_in_group("robot")
-		liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots)
+		var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
+		liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies)
 		liblevel.savePlayer({
 			"player_position": [Player_data.player_pos_x, Player_data.player_pos_y],
 			"player_facing": Player_data.player_facing,
-			"scene": Player_data.player_previous_scene
+			"scene": Player_data.player_previous_scene,
+			"player_health": Player_data.player_health,
+			"player_attack": Player_data.player_attack,
+			"player_defense": Player_data.player_defense
 		})
 
 		SceneTransition.change_scene("res://Scenes/Levels/level_" + scene_next + ".tscn")
