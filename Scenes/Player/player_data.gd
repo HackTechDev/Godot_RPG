@@ -3,6 +3,8 @@ extends Node
 class_name Player_data
 
 static var player_health = 4
+static var player_attack: int = 15
+static var player_defense: int = 15
 
 static var player_position = Vector2()
 static var player_facing = 0
@@ -28,3 +30,4 @@ static var robot = 0
 static var inventory: Array = []
 
 static var contact_object = null
+static var contact_enemy = null

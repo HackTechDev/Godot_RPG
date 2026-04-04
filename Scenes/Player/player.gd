@@ -30,6 +30,10 @@ var health = Player_data.player_health
 var display_menu = false
 var direction = 5
 
+var in_combat: bool = false
+var combat_enemy = null
+var player_combat_label: Label = null
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_to_group("player")
@@ -54,6 +58,16 @@ func _ready():
 
 	notification_instance = notification_scene.instantiate()
 	add_child(notification_instance)
+
+	player_combat_label = Label.new()
+	player_combat_label.position = Vector2(-55, -78)
+	player_combat_label.visible = false
+	player_combat_label.z_index = 10
+	player_combat_label.add_theme_font_size_override("font_size", 11)
+	player_combat_label.add_theme_constant_override("outline_size", 2)
+	player_combat_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	player_combat_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4))
+	add_child(player_combat_label)
 
 	SceneTransition.fade_in()
 
@@ -86,8 +100,20 @@ func _input(event):
 		if character_sheet_instance.visible:
 			character_sheet_instance.refresh()
 
+	if event.is_action_pressed("ui_c"):
+		print("C pressed | in_combat=", in_combat, " | contact_enemy=", Player_data.contact_enemy)
+		if in_combat:
+			_end_combat()
+		elif is_instance_valid(Player_data.contact_enemy):
+			_start_combat(Player_data.contact_enemy)
+		else:
+			print("C: pas d'ennemi à portée")
+
+	if event.is_action_pressed("ui_a"):
+		_on_attack_key()
+
 func input_move():
-	if display_menu:
+	if display_menu or in_combat:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -141,3 +167,80 @@ func movement_sounds():
 		IS_FOOTSTEP_SOUND_PLAYING = true
 	if !IS_FOOTSTEP_SOUND_PLAYING:
 		footstep.play()
+
+# --- Combat ---
+
+func _start_combat(enemy):
+	combat_enemy = enemy
+	in_combat = true
+	enemy.start_combat()
+	_refresh_player_label()
+
+func _end_combat():
+	in_combat = false
+	if is_instance_valid(combat_enemy):
+		combat_enemy.end_combat()
+	player_combat_label.visible = false
+	combat_enemy = null
+
+func _refresh_player_label():
+	player_combat_label.text = "ATK:%d DEF:%d HP:%d" % [
+		Player_data.player_attack,
+		Player_data.player_defense,
+		Player_data.player_health
+	]
+	player_combat_label.visible = true
+
+func _on_attack_key():
+	if not in_combat or not is_instance_valid(combat_enemy):
+		return
+
+	var player_roll = randi_range(10, 20)
+
+	if player_roll <= Player_data.player_attack:
+		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nRoll:%d → HIT!" % [
+			Player_data.player_attack, Player_data.player_defense,
+			Player_data.player_health, player_roll
+		]
+		_resolve_robot_defense()
+	else:
+		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nRoll:%d → MISS" % [
+			Player_data.player_attack, Player_data.player_defense,
+			Player_data.player_health, player_roll
+		]
+		_resolve_robot_attack()
+
+func _resolve_robot_defense():
+	if not is_instance_valid(combat_enemy):
+		return
+	var def_roll = randi_range(10, 20)
+	if def_roll <= combat_enemy.enemy_defense:
+		# Robot bloque → contre-attaque
+		var atk_roll = randi_range(10, 20)
+		var hit = atk_roll <= combat_enemy.enemy_attack
+		if hit:
+			Player_data.player_health -= 1
+			_refresh_player_label()
+		combat_enemy.update_label("DEF:%d→BLK | ATK:%d→%s" % [
+			def_roll, atk_roll, "HIT!" if hit else "MISS"
+		])
+	else:
+		# Robot échoue → perd 1 HP
+		combat_enemy.enemy_health -= 1
+		if combat_enemy.enemy_health <= 0:
+			combat_enemy.update_label("DEF:%d→FAIL → KO!" % def_roll)
+			var dead = combat_enemy
+			_end_combat()
+			dead.die()
+		else:
+			combat_enemy.update_label("DEF:%d→FAIL HP:%d" % [def_roll, combat_enemy.enemy_health])
+
+func _resolve_robot_attack():
+	if not is_instance_valid(combat_enemy):
+		return
+	var atk_roll = randi_range(10, 20)
+	var hit = atk_roll <= combat_enemy.enemy_attack
+	if hit:
+		Player_data.player_health -= 1
+		_refresh_player_label()
+	combat_enemy.update_label("ATK:%d → %s" % [atk_roll, "HIT!" if hit else "MISS"])

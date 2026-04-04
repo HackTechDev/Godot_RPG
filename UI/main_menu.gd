@@ -120,6 +120,9 @@ func _on_reinitialize_pressed():
 	Player_data.robot = 0
 	Player_data.inventory = []
 	Player_data.contact_object = null
+	Player_data.contact_enemy = null
+	Player_data.player_attack = randi_range(10, 20)
+	Player_data.player_defense = randi_range(10, 20)
 	get_tree().paused = false
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 	
@@ -138,7 +141,9 @@ func data_to_save():
 		"player_position" : [Player_data.player_pos_x, Player_data.player_pos_y],
 		"player_facing" : Player_data.player_facing,
 		"scene": Player_data.player_previous_scene,
-		"player_health": Player_data.player_health
+		"player_health": Player_data.player_health,
+		"player_attack": Player_data.player_attack,
+		"player_defense": Player_data.player_defense
 	}
 
 func _notification(what):
