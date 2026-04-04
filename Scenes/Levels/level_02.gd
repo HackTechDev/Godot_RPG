@@ -26,6 +26,10 @@ func _load_objects():
 		data.position.x = datas[key].position.x
 		data.position.y = datas[key].position.y
 		add_child(data)
+		if datas[key].object == "robot_enemy" and datas[key].has("attack"):
+			data.enemy_attack = int(datas[key].attack)
+			data.enemy_defense = int(datas[key].defense)
+			data.enemy_health = int(datas[key].health)
 
 func _read_level_json(save_path: String, default_path: String) -> Dictionary:
 	for path in [save_path, default_path]:

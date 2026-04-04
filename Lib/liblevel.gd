@@ -49,7 +49,10 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 			"position": {
 				"x": enemy.position.x,
 				"y": enemy.position.y
-			}
+			},
+			"attack": enemy.enemy_attack,
+			"defense": enemy.enemy_defense,
+			"health": enemy.enemy_health
 		}
 		all_json_data["robot_enemy" + str(i)] = json_data
 		i = i + 1

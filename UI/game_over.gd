@@ -3,6 +3,7 @@ extends CanvasLayer
 var liblevel = preload("res://Lib/liblevel.gd").new()
 
 func show_game_over():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = true
 	get_tree().paused = true
 

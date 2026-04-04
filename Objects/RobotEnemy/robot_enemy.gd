@@ -97,6 +97,18 @@ func update_label(line2: String):
 	combat_label.text = "ATK:%d DEF:%d HP:%d\n%s" % [enemy_attack, enemy_defense, enemy_health, line2]
 	combat_label.visible = true
 
+func flash_hit(attacker_pos: Vector2):
+	var sprite = $Sprite2D
+	var origin_mod = sprite.modulate
+	var t1 = create_tween()
+	t1.tween_property(sprite, "modulate", Color.WHITE, 0.08)
+	t1.tween_property(sprite, "modulate", origin_mod, 0.15)
+	var knock_dir = (global_position - attacker_pos).normalized()
+	var origin_pos = position
+	var t2 = create_tween()
+	t2.tween_property(self, "position", position + knock_dir * 6.0, 0.08)
+	t2.tween_property(self, "position", origin_pos, 0.12)
+
 func die():
 	if Player_data.contact_enemy == self:
 		Player_data.contact_enemy = null

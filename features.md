@@ -184,15 +184,17 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ## Système de combat au tour par tour (touches C et A)
 
-- **C** — engage/quitte le combat avec le robot ennemi à portée (rayon 70 px)
-- **A** — attaque pendant le combat (mouvement bloqué)
-- Joueur : statistiques `player_attack` et `player_defense` (10–20, générées aléatoirement à la réinitialisation)
-- Robot ennemi : statistiques `enemy_attack`, `enemy_defense` (10–20), `enemy_health` (2–3) générées aléatoirement à l'instanciation
-- Résolution : tirage attaque/défense en [10,20] comparé à la stat correspondante
-- Labels flottants au-dessus de chaque combattant (vert pour le joueur, rouge pour l'ennemi)
-- Labels positionnés dynamiquement selon la direction relative joueur ↔ ennemi
-- Auto-damage passif du robot suspendu pendant le combat
-- **Fichiers :** `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Objects/RobotEnemy/robot_enemy.gd`, `project.godot`
+- **C** — engage le combat (ennemi à rayon 70 px) ou tente une fuite (50 % de chance, basée sur la vitesse)
+- **A** — attaque pendant le combat (mouvement bloqué, anti-spam avec délai de 0,8 s entre rounds)
+- Joueur : statistiques `player_attack` et `player_defense` (10–20, aléatoires à la réinitialisation)
+- Robot ennemi : `enemy_attack`, `enemy_defense` (10–20), `enemy_health` (2–3) aléatoires, persistés dans le JSON de niveau
+- Résolution : tirage en [10,20] comparé à la stat → HIT/MISS/BLOCK
+- **Fuite** : tirage [1–10] > 5 → échappement, sinon le robot contre-attaque
+- **Flash + recul** : sprite du joueur flashe rouge, sprite du robot flashe blanc, les deux reculent de 6 px lors d'un coup reçu
+- Labels flottants positionnés dynamiquement selon la direction relative joueur ↔ ennemi
+- Auto-damage passif suspendu pendant le combat
+- C et A ajoutés dans Settings → Controls
+- **Fichiers :** `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Objects/RobotEnemy/robot_enemy.gd`, `Lib/liblevel.gd`, `Scenes/Levels/level_0[1-4].gd`, `UI/main_menu.tscn`, `project.godot`
 
 ---
 

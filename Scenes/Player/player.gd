@@ -37,6 +37,7 @@ var direction = 5
 var in_combat: bool = false
 var combat_enemy = null
 var player_combat_label: Label = null
+var _combat_busy: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -119,7 +120,7 @@ func _input(event):
 	if event.is_action_pressed("ui_c"):
 		print("C pressed | in_combat=", in_combat, " | contact_enemy=", Player_data.contact_enemy)
 		if in_combat:
-			_end_combat()
+			_attempt_flee()
 		elif is_instance_valid(Player_data.contact_enemy):
 			_start_combat(Player_data.contact_enemy)
 		else:
@@ -223,10 +224,19 @@ func _start_combat(enemy):
 
 func _end_combat():
 	in_combat = false
+	_combat_busy = false
 	if is_instance_valid(combat_enemy):
 		combat_enemy.end_combat()
 	player_combat_label.visible = false
 	combat_enemy = null
+
+func _end_combat_kill(dead_enemy):
+	in_combat = false
+	_combat_busy = false
+	player_combat_label.visible = false
+	combat_enemy = null
+	dead_enemy.in_combat = false
+	dead_enemy.die()
 
 func _refresh_player_label():
 	player_combat_label.text = "ATK:%d DEF:%d HP:%d" % [
@@ -236,12 +246,24 @@ func _refresh_player_label():
 	]
 	player_combat_label.visible = true
 
+func _flash_player_hit():
+	var sprite = $Sprite2D
+	var t1 = create_tween()
+	t1.tween_property(sprite, "modulate", Color(1.0, 0.2, 0.2, 1.0), 0.08)
+	t1.tween_property(sprite, "modulate", Color.WHITE, 0.15)
+	if is_instance_valid(combat_enemy):
+		var knock_dir = (global_position - combat_enemy.global_position).normalized()
+		var origin_pos = position
+		var t2 = create_tween()
+		t2.tween_property(self, "position", position + knock_dir * 6.0, 0.08)
+		t2.tween_property(self, "position", origin_pos, 0.12)
+
 func _on_attack_key():
-	if not in_combat or not is_instance_valid(combat_enemy):
+	if not in_combat or not is_instance_valid(combat_enemy) or _combat_busy:
 		return
+	_combat_busy = true
 
 	var player_roll = randi_range(10, 20)
-
 	if player_roll <= Player_data.player_attack:
 		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nRoll:%d → HIT!" % [
 			Player_data.player_attack, Player_data.player_defense,
@@ -255,28 +277,52 @@ func _on_attack_key():
 		]
 		_resolve_robot_attack()
 
+	await get_tree().create_timer(0.8).timeout
+	_combat_busy = false
+
+func _attempt_flee():
+	if _combat_busy:
+		return
+	_combat_busy = true
+	# Joueur (70px/s) vs robot (35px/s) → 50% de chance de fuite
+	var flee_roll = randi_range(1, 10)
+	if flee_roll > 5:
+		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nFuite:%d → ECHAP!" % [
+			Player_data.player_attack, Player_data.player_defense,
+			Player_data.player_health, flee_roll
+		]
+		await get_tree().create_timer(0.8).timeout
+		_end_combat()
+	else:
+		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nFuite:%d → RATÉ" % [
+			Player_data.player_attack, Player_data.player_defense,
+			Player_data.player_health, flee_roll
+		]
+		if is_instance_valid(combat_enemy):
+			_resolve_robot_attack()
+		await get_tree().create_timer(0.8).timeout
+		_combat_busy = false
+
 func _resolve_robot_defense():
 	if not is_instance_valid(combat_enemy):
 		return
 	var def_roll = randi_range(10, 20)
 	if def_roll <= combat_enemy.enemy_defense:
-		# Robot bloque → contre-attaque
 		var atk_roll = randi_range(10, 20)
 		var hit = atk_roll <= combat_enemy.enemy_attack
 		if hit:
 			Player_data.player_health -= 1
+			_flash_player_hit()
 			_refresh_player_label()
 		combat_enemy.update_label("DEF:%d→BLK | ATK:%d→%s" % [
 			def_roll, atk_roll, "HIT!" if hit else "MISS"
 		])
 	else:
-		# Robot échoue → perd 1 HP
+		combat_enemy.flash_hit(global_position)
 		combat_enemy.enemy_health -= 1
 		if combat_enemy.enemy_health <= 0:
 			combat_enemy.update_label("DEF:%d→FAIL → KO!" % def_roll)
-			var dead = combat_enemy
-			_end_combat()
-			dead.die()
+			_end_combat_kill(combat_enemy)
 		else:
 			combat_enemy.update_label("DEF:%d→FAIL HP:%d" % [def_roll, combat_enemy.enemy_health])
 
@@ -287,5 +333,6 @@ func _resolve_robot_attack():
 	var hit = atk_roll <= combat_enemy.enemy_attack
 	if hit:
 		Player_data.player_health -= 1
+		_flash_player_hit()
 		_refresh_player_label()
 	combat_enemy.update_label("ATK:%d → %s" % [atk_roll, "HIT!" if hit else "MISS"])

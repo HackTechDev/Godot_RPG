@@ -329,7 +329,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer"]
-custom_minimum_size = Vector2(420, 320)
+custom_minimum_size = Vector2(420, 400)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer"]
@@ -417,6 +417,26 @@ text = "Construire"
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "B"
+
+[node name="L7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Combat / Fuite"
+
+[node name="K7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "C"
+
+[node name="L8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Attaque"
+
+[node name="K8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "A"
 
 [node name="ButtonControlsBack" type="Button" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
