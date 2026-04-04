@@ -53,7 +53,9 @@ func _ready():
 	text_menu.visible = false
 
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
-	play_button_menu.visible = false
+	play_button_menu.text = "Back to the game"
+	play_button_menu.pressed.disconnect(text_menu._on_button_play_pressed)
+	play_button_menu.pressed.connect(_close_menu)
 
 	character_sheet_instance = character_sheet_scene.instantiate()
 	add_child(character_sheet_instance)
@@ -166,6 +168,13 @@ func input_move():
 
 	move_and_slide()
 
+func _close_menu():
+	display_menu = false
+	background_menu.visible = false
+	text_menu.visible = false
+	get_tree().paused = false
+	_auto_save_objects()
+
 func _auto_save_objects():
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
@@ -201,16 +210,13 @@ func _on_hud_setting_requested():
 		text_menu._on_button_settings_pressed()
 
 func _on_hud_home_requested():
-	_auto_save_objects()
-	liblevel.savePlayer({
-		"player_position": [Player_data.player_pos_x, Player_data.player_pos_y],
-		"player_facing": Player_data.player_facing,
-		"scene": Player_data.player_previous_scene,
-		"player_health": Player_data.player_health,
-		"player_attack": Player_data.player_attack,
-		"player_defense": Player_data.player_defense
-	})
-	SceneTransition.change_scene("res://UI/main_menu.tscn")
+	display_menu = true
+	background_menu.visible = true
+	text_menu.visible = true
+	text_menu.main.visible = true
+	text_menu.settings.visible = false
+	text_menu.help.visible = false
+	get_tree().paused = true
 
 func movement_sounds():
 	var IS_FOOTSTEP_SOUND_PLAYING = false

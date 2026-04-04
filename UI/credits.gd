@@ -5,6 +5,7 @@ const SCROLL_SPEED = 55.0
 @onready var credits_panel: VBoxContainer = $CreditsPanel
 
 func _ready():
+	get_tree().paused = false
 	SceneTransition.fade_in()
 	await get_tree().process_frame
 	credits_panel.position.y = get_viewport().get_visible_rect().size.y
