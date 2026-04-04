@@ -44,8 +44,8 @@ func _on_quit_dialog_confirmed():
 	var current_scene = get_tree().get_current_scene().get_name()
 	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies)
 
-	print("Quit")
-	get_tree().quit()
+	print("Credits")
+	SceneTransition.change_scene("res://UI/credits.tscn")
 
 func _on_button_audio_pressed():
 	settings.visible = false

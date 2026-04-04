@@ -235,3 +235,15 @@ Récapitulatif de toutes les modifications apportées au projet.
 - `reinitializeLevel()` copie désormais les 4 fichiers de niveau
 - Sauvegarde au changement de zone inclut les `robot_enemy`
 - **Fichiers :** `Scenes/Levels/level_02.gd`, `Scenes/Levels/level_03.gd`, `Scenes/Levels/level_04.gd`, `World/Default/level_02.json`, `World/Default/level_03.json`, `World/Default/level_04.json`, `Lib/liblevel.gd`, `Scenes/Levels/entrance_x_2.gd`, `Scenes/Levels/entrance_y_2.gd`
+
+---
+
+## Écran de crédits au moment de quitter
+
+- Affiché automatiquement après confirmation de quitter (à la place du `quit()` direct)
+- Fond noir, texte défilant vers le haut (style cinéma, 55 px/s)
+- Sections : titre du jeu (doré), Développement, Musique, Moteur de jeu, remerciements, version
+- Crédits : Le Sanglier des Ardennes — lesanglierdesardennes@gmail.com
+- Appuyer sur n'importe quelle touche quitte immédiatement
+- Le jeu ferme automatiquement quand tout le texte a défilé
+- **Fichiers :** `UI/credits.tscn`, `UI/credits.gd`, `UI/main_menu.gd`

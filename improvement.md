@@ -76,3 +76,4 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### ~~Fuite du combat~~ — Implémenté
 ### ~~Touches de combat dans la page Contrôles~~ — Implémenté
 ### ~~Persistance des stats de robot ennemi~~ — Implémenté
+### ~~Écran de crédits au moment de quitter~~ — Implémenté
