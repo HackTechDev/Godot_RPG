@@ -258,3 +258,43 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Le signal `.tscn` du bouton est déconnecté et rebranché sur `_close_menu()` dans `player.gd`
 - Le bouton **Home** du HUD ouvre désormais le menu in-game (panneau principal) au lieu de retourner directement au menu principal
 - **Fichiers :** `Scenes/Player/player.gd`
+
+---
+
+## Système de combat CQB avec dés (refonte complète)
+
+- **C** près d'un ennemi → engage le combat ET lance immédiatement la séquence d'attaque
+- **Échap** → quitte le combat immédiatement, annule toute attente en cours
+- Overlay centré (`CombatUI`) affiché pendant tout le combat : message, animation de dé, résultat, prompt
+- Dé animé : défilement de valeurs aléatoires (1–20) qui ralentit avant d'afficher le résultat final
+- **Espace** requis pour lancer les dés du joueur (attaque et défense) ; les dés du robot sont automatiques
+- Résultat réussi si valeur obtenue **strictement inférieure** à la statistique concernée (plage 1–20)
+- Points d'attaque et défense : **10–15** (aléatoires) pour le joueur et les robots
+- Chaque message de résultat reste affiché jusqu'à ce que le joueur appuie sur **Espace** pour continuer
+- **Enchaînements automatiques :**
+  - Attaque réussie du joueur → robot défend → si défense réussie → robot attaque
+  - Attaque réussie du joueur → robot défend → si défense échouée et robot vivant → joueur attaque à nouveau
+  - Robot attaque → si attaque réussie → joueur défend → si défense réussie → joueur contre-attaque
+  - Robot attaque → si attaque réussie → joueur défend → si défense échouée → robot attaque à nouveau
+  - Robot rate son attaque → joueur contre-attaque
+- **Game Over in-combat** : si le joueur perd son dernier PV, l'overlay affiche "GAME OVER" + "[ ESPACE ] Recommencer" ; réinitialisation complète et retour au menu principal
+- Label flottant du robot masqué à sa mort
+- **Fichiers :** `UI/combat_ui.gd`, `UI/combat_ui.tscn`, `Scenes/Player/player.gd`, `Objects/RobotEnemy/robot_enemy.gd`
+
+---
+
+## Indicateurs visuels de spawnpoints (bleu)
+
+- Chaque Marker2D nommé `spawnpoint_*` dans un niveau affiche automatiquement un carré bleu semi-transparent (32×32 px) à son emplacement
+- Rendu en jeu via `_draw()` (remplissage + bordure bleue)
+- Appliqué à tous les niveaux sans modification des `.tscn`, via `base_level.gd`
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `Scenes/Levels/spawnpoint_indicator.gd`
+
+---
+
+## Documentation technique
+
+- `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)
+- `level_transition_system.md` — analyse du système de transition et de spawn entre niveaux
+- `procedure_creation_level.md` — procédure pas à pas pour créer un nouveau niveau avec transitions
+- **Fichiers :** `cqb_system_combat.md`, `level_transition_system.md`, `procedure_creation_level.md`

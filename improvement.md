@@ -77,3 +77,14 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### ~~Touches de combat dans la page Contrôles~~ — Implémenté
 ### ~~Persistance des stats de robot ennemi~~ — Implémenté
 ### ~~Écran de crédits au moment de quitter~~ — Implémenté
+### ~~Système de dés avec animation et interaction Espace~~ — Implémenté
+### ~~Game Over intégré dans le flux de combat~~ — Implémenté
+
+### Fuite avec dés
+- La fuite (touche C en combat) utilise encore un tirage interne sans overlay CombatUI
+- À améliorer pour afficher le dé de fuite dans l'overlay et attendre Espace
+
+### Équilibrage du combat
+- La plage 10–15 pour attaque/défense avec dés 1–20 donne un taux de réussite de 45–70 %
+- Envisager une plage dynamique selon le niveau ou l'expérience du joueur
+
