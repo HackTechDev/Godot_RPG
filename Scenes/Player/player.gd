@@ -27,6 +27,9 @@ var game_over_scene = preload("res://UI/game_over.tscn")
 var game_over_instance = null
 var _game_over_shown = false
 
+var combat_ui_scene = preload("res://UI/combat_ui.tscn")
+var combat_ui_instance = null
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -72,6 +75,9 @@ func _ready():
 	game_over_instance = game_over_scene.instantiate()
 	add_child(game_over_instance)
 
+	combat_ui_instance = combat_ui_scene.instantiate()
+	add_child(combat_ui_instance)
+
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
 	player_combat_label.visible = false
@@ -97,6 +103,12 @@ func _process(_delta):
 		game_over_instance.show_game_over()
 
 func _input(event):
+	if event.is_action_pressed("ui_pause"):
+		if in_combat:
+			combat_ui_instance.cancel()
+			_end_combat()
+			return
+
 	if event.is_action_pressed("ui_m"):
 		display_menu = !display_menu
 		background_menu.visible = display_menu
@@ -123,13 +135,11 @@ func _input(event):
 			character_sheet_instance.refresh()
 
 	if event.is_action_pressed("ui_c"):
-		print("C pressed | in_combat=", in_combat, " | contact_enemy=", Player_data.contact_enemy)
 		if in_combat:
 			_attempt_flee()
 		elif is_instance_valid(Player_data.contact_enemy):
 			_start_combat(Player_data.contact_enemy)
-		else:
-			print("C: pas d'ennemi à portée")
+			_on_attack_key()
 
 	if event.is_action_pressed("ui_a"):
 		_on_attack_key()
@@ -268,12 +278,14 @@ func _end_combat():
 	if is_instance_valid(combat_enemy):
 		combat_enemy.end_combat()
 	player_combat_label.visible = false
+	combat_ui_instance.hide_ui()
 	combat_enemy = null
 
 func _end_combat_kill(dead_enemy):
 	in_combat = false
 	_combat_busy = false
 	player_combat_label.visible = false
+	combat_ui_instance.hide_ui()
 	combat_enemy = null
 	dead_enemy.in_combat = false
 	dead_enemy.die()
@@ -302,22 +314,34 @@ func _on_attack_key():
 	if not in_combat or not is_instance_valid(combat_enemy) or _combat_busy:
 		return
 	_combat_busy = true
+	_refresh_player_label()
 
-	var player_roll = randi_range(10, 20)
-	if player_roll <= Player_data.player_attack:
-		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nRoll:%d → HIT!" % [
-			Player_data.player_attack, Player_data.player_defense,
-			Player_data.player_health, player_roll
-		]
-		_resolve_robot_defense()
+	# Lancer du joueur
+	var player_roll = await combat_ui_instance.prompt_player_roll("Le joueur attaque !")
+	if not in_combat:
+		_combat_busy = false
+		return
+	var attack_success = player_roll < Player_data.player_attack
+	if attack_success:
+		combat_ui_instance.show_result("Résultat : %d — Attaque réussie !" % player_roll, true)
 	else:
-		player_combat_label.text = "ATK:%d DEF:%d HP:%d\nRoll:%d → MISS" % [
-			Player_data.player_attack, Player_data.player_defense,
-			Player_data.player_health, player_roll
-		]
-		_resolve_robot_attack()
+		combat_ui_instance.show_result("Résultat : %d — Attaque ratée !" % player_roll, false)
+	await combat_ui_instance.wait_for_continue()
+	if not in_combat:
+		_combat_busy = false
+		return
 
-	await get_tree().create_timer(0.8).timeout
+	if not is_instance_valid(combat_enemy):
+		combat_ui_instance.hide_ui()
+		_combat_busy = false
+		return
+
+	if attack_success:
+		await _robot_defends()
+	else:
+		await _robot_attacks_player()
+
+	combat_ui_instance.hide_ui()
 	_combat_busy = false
 
 func _attempt_flee():
@@ -339,40 +363,139 @@ func _attempt_flee():
 			Player_data.player_health, flee_roll
 		]
 		if is_instance_valid(combat_enemy):
-			_resolve_robot_attack()
-		await get_tree().create_timer(0.8).timeout
+			await _robot_attacks_player()
+		combat_ui_instance.hide_ui()
 		_combat_busy = false
 
-func _resolve_robot_defense():
-	if not is_instance_valid(combat_enemy):
+# Le robot tente de bloquer l'attaque du joueur
+func _robot_defends():
+	if not in_combat or not is_instance_valid(combat_enemy):
 		return
-	var def_roll = randi_range(10, 20)
-	if def_roll <= combat_enemy.enemy_defense:
-		var atk_roll = randi_range(10, 20)
-		var hit = atk_roll <= combat_enemy.enemy_attack
-		if hit:
-			Player_data.player_health -= 1
-			_flash_player_hit()
-			_refresh_player_label()
-		combat_enemy.update_label("DEF:%d→BLK | ATK:%d→%s" % [
-			def_roll, atk_roll, "HIT!" if hit else "MISS"
-		])
+
+	var def_roll = await combat_ui_instance.auto_roll("Le robot tente de se défendre...")
+	if not in_combat:
+		return
+	var defense_success = def_roll < combat_enemy.enemy_defense
+
+	if defense_success:
+		combat_ui_instance.show_result("Résultat : %d — Défense réussie ! Attaque bloquée." % def_roll, true)
+		combat_enemy.update_label("DEF:%d → BLK" % def_roll)
+		await combat_ui_instance.wait_for_continue()
+		if not in_combat:
+			return
+		await _robot_attacks_player()
 	else:
+		combat_ui_instance.show_result("Résultat : %d — Défense échouée ! Le robot perd 1 PV." % def_roll, false)
 		combat_enemy.flash_hit(global_position)
 		combat_enemy.enemy_health -= 1
 		if combat_enemy.enemy_health <= 0:
-			combat_enemy.update_label("DEF:%d→FAIL → KO!" % def_roll)
+			combat_enemy.update_label("DEF:%d → KO!" % def_roll)
+			await combat_ui_instance.wait_for_continue()
+			if not in_combat:
+				return
 			_end_combat_kill(combat_enemy)
 		else:
-			combat_enemy.update_label("DEF:%d→FAIL HP:%d" % [def_roll, combat_enemy.enemy_health])
+			combat_enemy.update_label("DEF:%d → FAIL HP:%d" % [def_roll, combat_enemy.enemy_health])
+			await combat_ui_instance.wait_for_continue()
+			if not in_combat:
+				return
+			await _player_attacks_after_defense()
 
-func _resolve_robot_attack():
+# Le robot attaque, le joueur tente de se défendre
+func _robot_attacks_player():
+	if not in_combat or not is_instance_valid(combat_enemy):
+		return
+
+	var atk_roll = await combat_ui_instance.auto_roll("Le robot attaque !")
+	if not in_combat:
+		return
+	var robot_atk_success = atk_roll < combat_enemy.enemy_attack
+
+	if robot_atk_success:
+		combat_ui_instance.show_result("Résultat : %d — Le robot a visé !" % atk_roll, false)
+	else:
+		combat_ui_instance.show_result("Résultat : %d — Attaque du robot ratée !" % atk_roll, true)
+	await combat_ui_instance.wait_for_continue()
+	if not in_combat:
+		return
+
 	if not is_instance_valid(combat_enemy):
 		return
-	var atk_roll = randi_range(10, 20)
-	var hit = atk_roll <= combat_enemy.enemy_attack
-	if hit:
+	if not robot_atk_success:
+		await _player_attacks_after_defense()
+		return
+
+	# Lancer de défense du joueur
+	var def_roll = await combat_ui_instance.prompt_player_roll("Le joueur tente de se défendre...")
+	if not in_combat:
+		return
+	var defense_success = def_roll < Player_data.player_defense
+
+	if defense_success:
+		combat_ui_instance.show_result("Résultat : %d — Défense réussie !" % def_roll, true)
+		combat_enemy.update_label("ATK:%d | DEF:%d → BLK" % [atk_roll, def_roll])
+		await combat_ui_instance.wait_for_continue()
+		if not in_combat:
+			return
+		await _player_attacks_after_defense()
+	else:
+		combat_ui_instance.show_result("Résultat : %d — Défense échouée ! Le joueur perd 1 PV." % def_roll, false)
 		Player_data.player_health -= 1
 		_flash_player_hit()
 		_refresh_player_label()
-	combat_enemy.update_label("ATK:%d → %s" % [atk_roll, "HIT!" if hit else "MISS"])
+		if Player_data.player_health <= 0:
+			combat_enemy.update_label("ATK:%d | DEF:%d → KO!" % [atk_roll, def_roll])
+			_game_over_shown = true
+			_end_combat()
+			await combat_ui_instance.show_game_over_screen()
+			_restart_game()
+			return
+		combat_enemy.update_label("ATK:%d | DEF:%d → HIT" % [atk_roll, def_roll])
+		await combat_ui_instance.wait_for_continue()
+		if not in_combat:
+			return
+		await _robot_attacks_player()
+		return
+	await combat_ui_instance.wait_for_continue()
+
+# Le joueur contre-attaque après une défense réussie
+func _player_attacks_after_defense():
+	if not in_combat or not is_instance_valid(combat_enemy):
+		return
+
+	var player_roll = await combat_ui_instance.prompt_player_roll("Le joueur contre-attaque !")
+	if not in_combat:
+		return
+	var attack_success = player_roll < Player_data.player_attack
+	if attack_success:
+		combat_ui_instance.show_result("Résultat : %d — Attaque réussie !" % player_roll, true)
+	else:
+		combat_ui_instance.show_result("Résultat : %d — Attaque ratée !" % player_roll, false)
+	await combat_ui_instance.wait_for_continue()
+	if not in_combat:
+		return
+
+	if not is_instance_valid(combat_enemy):
+		return
+
+	if attack_success:
+		await _robot_defends()
+
+func _restart_game():
+	liblevel.reinitializePlayer()
+	liblevel.reinitializeLevel()
+	Player_data.player_previous_scene = ""
+	Player_data.spawnpoint_current = ""
+	Player_data.spawnpoint_next = ""
+	Player_data.scene_path = ""
+	Player_data.player_pos_x = 0
+	Player_data.player_pos_y = 0
+	Player_data.player_health = 4
+	Player_data.player_attack = randi_range(10, 15)
+	Player_data.player_defense = randi_range(10, 15)
+	Player_data.computer = 0
+	Player_data.robot = 0
+	Player_data.inventory = []
+	Player_data.contact_object = null
+	Player_data.contact_enemy = null
+	SceneTransition.change_scene("res://UI/main_menu.tscn")

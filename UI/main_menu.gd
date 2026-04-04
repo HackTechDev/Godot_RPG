@@ -121,8 +121,8 @@ func _on_reinitialize_pressed():
 	Player_data.inventory = []
 	Player_data.contact_object = null
 	Player_data.contact_enemy = null
-	Player_data.player_attack = randi_range(10, 20)
-	Player_data.player_defense = randi_range(10, 20)
+	Player_data.player_attack = randi_range(10, 15)
+	Player_data.player_defense = randi_range(10, 15)
 	get_tree().paused = false
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 	

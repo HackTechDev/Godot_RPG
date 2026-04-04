@@ -21,8 +21,8 @@ var combat_label: Label
 
 func _ready():
 	add_to_group("robot_enemy")
-	enemy_attack = randi_range(10, 20)
-	enemy_defense = randi_range(10, 20)
+	enemy_attack = randi_range(10, 15)
+	enemy_defense = randi_range(10, 15)
 	enemy_health = randi_range(2, 3)
 	_create_combat_label()
 
@@ -115,6 +115,7 @@ func die():
 	if Player_data.contact_enemy == self:
 		Player_data.contact_enemy = null
 	is_dead = true
+	combat_label.visible = false
 	death_rotation = PI / 2.0 * (1 if randi_range(0, 1) == 0 else -1)
 	$CollisionShape2D.disabled = true
 	set_physics_process(false)
@@ -127,6 +128,7 @@ func apply_dead_state():
 	if Player_data.contact_enemy == self:
 		Player_data.contact_enemy = null
 	is_dead = true
+	combat_label.visible = false
 	$CollisionShape2D.disabled = true
 	set_physics_process(false)
 	velocity = Vector2.ZERO

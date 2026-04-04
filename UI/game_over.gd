@@ -18,8 +18,8 @@ func _on_restart_pressed():
 	Player_data.player_pos_x = 0
 	Player_data.player_pos_y = 0
 	Player_data.player_health = 4
-	Player_data.player_attack = randi_range(10, 20)
-	Player_data.player_defense = randi_range(10, 20)
+	Player_data.player_attack = randi_range(10, 15)
+	Player_data.player_defense = randi_range(10, 15)
 	Player_data.computer = 0
 	Player_data.robot = 0
 	Player_data.inventory = []
