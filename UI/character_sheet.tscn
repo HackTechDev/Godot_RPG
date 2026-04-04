@@ -53,6 +53,16 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Santé : 4"
 
+[node name="LabelAttack" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Attaque : 15"
+
+[node name="LabelDefense" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Défense : 15"
+
 [node name="LabelComputers" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20

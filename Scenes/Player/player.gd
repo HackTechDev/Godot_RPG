@@ -74,6 +74,10 @@ func _ready():
 func _physics_process(_delta):
 	input_move()
 
+func _process(_delta):
+	if in_combat and is_instance_valid(combat_enemy):
+		_update_combat_label_positions()
+
 func _input(event):
 	if event.is_action_pressed("ui_m"):
 		display_menu = !display_menu
@@ -170,11 +174,40 @@ func movement_sounds():
 
 # --- Combat ---
 
+func _update_combat_label_positions():
+	var diff = global_position - combat_enemy.global_position
+	var player_pos: Vector2
+	var enemy_pos: Vector2
+
+	if abs(diff.x) >= abs(diff.y):
+		if diff.x < 0:
+			# Joueur à gauche
+			player_pos = Vector2(-120, -20)
+			enemy_pos  = Vector2(40,   -20)
+		else:
+			# Joueur à droite
+			player_pos = Vector2(40,   -20)
+			enemy_pos  = Vector2(-120, -20)
+	else:
+		if diff.y < 0:
+			# Joueur en haut
+			player_pos = Vector2(-55, -90)
+			enemy_pos  = Vector2(-55,  50)
+		else:
+			# Joueur en bas
+			player_pos = Vector2(-55,  50)
+			enemy_pos  = Vector2(-55, -90)
+
+	player_combat_label.position = player_pos
+	combat_enemy.combat_label.position = enemy_pos
+
+
 func _start_combat(enemy):
 	combat_enemy = enemy
 	in_combat = true
 	enemy.start_combat()
 	_refresh_player_label()
+	_update_combat_label_positions()
 
 func _end_combat():
 	in_combat = false
