@@ -30,6 +30,9 @@ func _load_objects():
 			data.enemy_attack = int(datas[key].attack)
 			data.enemy_defense = int(datas[key].defense)
 			data.enemy_health = int(datas[key].health)
+			if datas[key].get("dead", false):
+				data.death_rotation = float(datas[key].get("death_rotation", PI / 2.0))
+				data.apply_dead_state()
 
 func _read_level_json(save_path: String, default_path: String) -> Dictionary:
 	for path in [save_path, default_path]:

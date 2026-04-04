@@ -15,6 +15,8 @@ var enemy_attack: int
 var enemy_defense: int
 var enemy_health: int
 var in_combat: bool = false
+var is_dead: bool = false
+var death_rotation: float = 0.0
 var combat_label: Label
 
 func _ready():
@@ -112,4 +114,21 @@ func flash_hit(attacker_pos: Vector2):
 func die():
 	if Player_data.contact_enemy == self:
 		Player_data.contact_enemy = null
-	queue_free()
+	is_dead = true
+	death_rotation = PI / 2.0 * (1 if randi_range(0, 1) == 0 else -1)
+	$CollisionShape2D.disabled = true
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	in_combat = false
+	var tween = create_tween()
+	tween.tween_property($Sprite2D, "rotation", death_rotation, 0.3)
+
+func apply_dead_state():
+	if Player_data.contact_enemy == self:
+		Player_data.contact_enemy = null
+	is_dead = true
+	$CollisionShape2D.disabled = true
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	in_combat = false
+	$Sprite2D.rotation = death_rotation

@@ -38,6 +38,9 @@ func _ready():
 			data.enemy_attack = int(datas[key].attack)
 			data.enemy_defense = int(datas[key].defense)
 			data.enemy_health = int(datas[key].health)
+			if datas[key].get("dead", false):
+				data.death_rotation = float(datas[key].get("death_rotation", PI / 2.0))
+				data.apply_dead_state()
 
 	EventBus.build_computer.connect(build_computer_event)
 	
