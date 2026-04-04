@@ -60,6 +60,9 @@ func _ready():
 
 	hud_instance = hud_scene.instantiate()
 	add_child(hud_instance)
+	hud_instance.sheet_requested.connect(_on_hud_sheet_requested)
+	hud_instance.setting_requested.connect(_on_hud_setting_requested)
+	hud_instance.home_requested.connect(_on_hud_home_requested)
 
 	notification_instance = notification_scene.instantiate()
 	add_child(notification_instance)
@@ -177,6 +180,37 @@ func _facing_to_vector() -> Vector2:
 		6: return Vector2(1, 0)
 		8: return Vector2(0, -1)
 	return Vector2.ZERO
+
+func _on_hud_sheet_requested():
+	character_sheet_instance.visible = !character_sheet_instance.visible
+	if character_sheet_instance.visible:
+		character_sheet_instance.refresh()
+
+func _on_hud_setting_requested():
+	if display_menu:
+		display_menu = false
+		background_menu.visible = false
+		text_menu.visible = false
+		get_tree().paused = false
+		_auto_save_objects()
+	else:
+		display_menu = true
+		background_menu.visible = true
+		text_menu.visible = true
+		get_tree().paused = true
+		text_menu._on_button_settings_pressed()
+
+func _on_hud_home_requested():
+	_auto_save_objects()
+	liblevel.savePlayer({
+		"player_position": [Player_data.player_pos_x, Player_data.player_pos_y],
+		"player_facing": Player_data.player_facing,
+		"scene": Player_data.player_previous_scene,
+		"player_health": Player_data.player_health,
+		"player_attack": Player_data.player_attack,
+		"player_defense": Player_data.player_defense
+	})
+	SceneTransition.change_scene("res://UI/main_menu.tscn")
 
 func movement_sounds():
 	var IS_FOOTSTEP_SOUND_PLAYING = false
