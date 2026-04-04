@@ -16,7 +16,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Max santé : 4 (valeur de `player_health` par défaut)
 
 ### Écran Game Over
-- Déclenchement quand `player_health <= 0`
+- Déclenchement quand `player_health <= 0` (actuellement la santé peut descendre en négatif sans effet)
 - Panneau overlay avec message, bouton "Recommencer" et bouton "Quitter"
 - "Recommencer" réinitialise `Player_data` et retourne au menu principal
 
@@ -69,3 +69,25 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Ajouter des personnages non-joueurs avec lesquels interagir (touche T)
 - Boîte de dialogue simple avec texte et bouton "Suivant"
 
+---
+
+## Combat
+
+### Retour visuel sur les dégâts
+- Flash rouge sur le sprite du joueur ou du robot lors d'un coup reçu
+- Petite animation de recul (`tween` sur la position)
+
+### Délai entre les rounds
+- Ajouter un court délai (0,5–1 s) entre l'affichage du résultat et le prochain tour
+- Permet au joueur de lire le résultat avant que les labels ne changent
+
+### Fuite du combat
+- Permettre au joueur de quitter le combat avec un tirage de chance (ex. : touche C pendant le combat)
+- Chance de fuite basée sur la différence de vitesse joueur/robot
+
+### Touches de combat dans la page Contrôles
+- Ajouter **C** (Combat) et **A** (Attaque) au tableau des contrôles dans Settings → Controls
+
+### Persistance des stats de robot ennemi
+- Actuellement les stats ATK/DEF/HP du robot ennemi sont regénérées à chaque chargement de scène
+- Sauvegarder ces valeurs dans le JSON de niveau pour une cohérence entre sessions

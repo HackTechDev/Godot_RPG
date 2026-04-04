@@ -165,6 +165,59 @@ Récapitulatif de toutes les modifications apportées au projet.
 - AnimationTree identique au joueur : animations directionnelles idle/move 4 directions
 - IA : détection du joueur dans un rayon de 120 px, déplacement à 35 px/s vers lui
 - Inflige 1 point de dégât au contact (rayon 30 px) avec cooldown de 1,5 s
-- Chargeable depuis `level_01.json` avec le type `"robot_enemy"`
-- Positions sauvegardées dans `user://level_01.json` à chaque auto-save
-- **Fichiers :** `Objects/RobotEnemy/robot_enemy.gd`, `Objects/RobotEnemy/robot_enemy.tscn`, `Scenes/Levels/level_01.gd`, `Lib/liblevel.gd`, `Scenes/Player/player.gd`, `UI/main_menu.gd`, `World/Default/level_01.json`
+- Chargeable depuis les JSON de niveau avec le type `"robot_enemy"`
+- Positions sauvegardées dans `user://levelXX.json` à chaque auto-save et changement de zone
+- 3 robot ennemis par niveau dans les fichiers JSON par défaut
+- **Fichiers :** `Objects/RobotEnemy/robot_enemy.gd`, `Objects/RobotEnemy/robot_enemy.tscn`, `Scenes/Levels/level_0[1-4].gd`, `Lib/liblevel.gd`, `Scenes/Player/player.gd`, `UI/main_menu.gd`, `World/Default/level_0[1-4].json`
+
+---
+
+## Splash screen
+
+- Écran d'introduction avant le menu principal
+- Affiche le titre **"Commando Zombi"** (fondu, 1,2 s) puis le sous-titre **"Mercenary RPG"** (fondu, 1,0 s)
+- Transition automatique vers le menu principal après 3 s
+- Peut être passé avec `Entrée` ou `Echap`
+- **Fichiers :** `UI/splash_screen.tscn`, `UI/splash_screen.gd`, `project.godot`
+
+---
+
+## Système de combat au tour par tour (touches C et A)
+
+- **C** — engage/quitte le combat avec le robot ennemi à portée (rayon 70 px)
+- **A** — attaque pendant le combat (mouvement bloqué)
+- Joueur : statistiques `player_attack` et `player_defense` (10–20, générées aléatoirement à la réinitialisation)
+- Robot ennemi : statistiques `enemy_attack`, `enemy_defense` (10–20), `enemy_health` (2–3) générées aléatoirement à l'instanciation
+- Résolution : tirage attaque/défense en [10,20] comparé à la stat correspondante
+- Labels flottants au-dessus de chaque combattant (vert pour le joueur, rouge pour l'ennemi)
+- Labels positionnés dynamiquement selon la direction relative joueur ↔ ennemi
+- Auto-damage passif du robot suspendu pendant le combat
+- **Fichiers :** `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Objects/RobotEnemy/robot_enemy.gd`, `project.godot`
+
+---
+
+## Sauvegarde des stats de combat
+
+- `player_attack` et `player_defense` inclus dans `data_to_save()` et `savePlayer()`
+- Sauvegardés à la fermeture du jeu, à l'ouverture du menu M, et au changement de zone
+- Restaurés au chargement via `load_game()` avec génération aléatoire si absent
+- **Fichiers :** `UI/main_menu.gd`, `Lib/liblevel.gd`, `Scenes/Levels/entrance_x_2.gd`, `Scenes/Levels/entrance_y_2.gd`
+
+---
+
+## Stats de combat dans la fiche de personnage
+
+- Attaque et Défense affichées dans la fiche (touche P) après la Santé
+- Mis à jour à chaque ouverture via `refresh()`
+- **Fichiers :** `UI/character_sheet.tscn`, `UI/character_sheet.gd`
+
+---
+
+## Objets et sauvegarde pour les niveaux 02–04
+
+- 2 ordinateurs, 2 robots et 3 robot ennemis par niveau (02, 03, 04)
+- Fichiers JSON par défaut créés dans `World/Default/`
+- Scripts de niveau réécrits : chargement depuis `user://levelXX.json` (fallback sur le défaut)
+- `reinitializeLevel()` copie désormais les 4 fichiers de niveau
+- Sauvegarde au changement de zone inclut les `robot_enemy`
+- **Fichiers :** `Scenes/Levels/level_02.gd`, `Scenes/Levels/level_03.gd`, `Scenes/Levels/level_04.gd`, `World/Default/level_02.json`, `World/Default/level_03.json`, `World/Default/level_04.json`, `Lib/liblevel.gd`, `Scenes/Levels/entrance_x_2.gd`, `Scenes/Levels/entrance_y_2.gd`
