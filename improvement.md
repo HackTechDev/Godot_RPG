@@ -57,6 +57,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Technique
 
+### ~~Fuite mémoire à la fermeture~~ — Corrigé
+- `liblevel.gd` passé à `extends RefCounted` — plus de nœuds orphelins
+
 ### Sons d'effets
 - Son de collecte quand T est pressé sur un objet
 - Son de poussée quand R est pressé

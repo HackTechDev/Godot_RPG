@@ -355,6 +355,16 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Correction fuite mémoire à la fermeture
+
+- `liblevel.gd` passé de `extends Node` à `extends RefCounted`
+- Les instances créées avec `.new()` dans 5 scripts (`player.gd`, `main_menu.gd`, `game_over.gd`, `entrance_x_2.gd`, `entrance_y_2.gd`) étaient des nœuds orphelins non libérés à la fermeture
+- Avec `RefCounted`, chaque instance est libérée automatiquement dès que son script parent est détruit
+- Supprime les warnings `ObjectDB instances leaked at exit` et `resources still in use at exit` à l'export Linux
+- **Fichiers :** `Lib/liblevel.gd`
+
+---
+
 ## Documentation technique
 
 - `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)
