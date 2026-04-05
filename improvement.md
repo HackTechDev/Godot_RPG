@@ -54,8 +54,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Afficher des bulles d'aide contextuelles (ex. : "Appuyez sur T pour ramasser")
 - Disparaissent après la première utilisation de chaque action
 
-### Splashscreen — indication visuelle
-- Ajouter un texte "Press any key" sur le splashscreen pour indiquer au joueur qu'il doit appuyer sur une touche
+### ~~Splashscreen — indication visuelle~~ — Implémenté
+- Label "Press any key" ajouté en bas de l'écran, avec apparition en fondu puis clignotement en boucle
 
 ### Indicateur de santé visuel
 - Le HUD change de couleur (vert → orange → rouge) selon les PV restants
@@ -128,4 +128,3 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Équilibrage du combat
 - La plage 10–15 pour attaque/défense avec dés 1–20 donne un taux de réussite de 45–70 %
 - Envisager une plage dynamique selon le niveau ou l'expérience du joueur
-
