@@ -124,7 +124,8 @@ func _input(event):
 			_auto_save_objects()
 
 	if event.is_action_pressed("ui_b"):
-		print("b key: build")
+		if GameConfig.DEBUG:
+			print("b key: build")
 		EventBus.build_computer.emit(direction)
 
 	if event.is_action_pressed("ui_z"):

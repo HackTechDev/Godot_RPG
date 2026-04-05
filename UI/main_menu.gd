@@ -16,7 +16,8 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 
 	
 func _on_button_play_pressed():
-	print("loading...")
+	if GameConfig.DEBUG:
+		print("loading...")
 	liblevel.load_game()
 	SceneTransition.change_scene(Player_data.scene_path)
 
@@ -34,17 +35,20 @@ func _on_button_quit_pressed():
 	quit_dialog.popup_centered()
 
 func _on_quit_dialog_confirmed():
-	print("Save Player")
+	if GameConfig.DEBUG:
+		print("Save Player")
 	liblevel.savePlayer(data_to_save())
 
-	print("Save all objects")
+	if GameConfig.DEBUG:
+		print("Save all objects")
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
 	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
 	var current_scene = get_tree().get_current_scene().get_name()
 	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies)
 
-	print("Credits")
+	if GameConfig.DEBUG:
+		print("Credits")
 	SceneTransition.change_scene("res://UI/credits.tscn")
 
 func _on_button_audio_pressed():
@@ -107,7 +111,8 @@ func _on_button_help_back_pressed() -> void:
 	
 	
 func _on_reinitialize_pressed():
-	print("Reinitialize")
+	if GameConfig.DEBUG:
+		print("Reinitialize")
 	liblevel.reinitializePlayer()
 	liblevel.reinitializeLevel()
 	Player_data.player_previous_scene = ""
@@ -127,8 +132,10 @@ func _on_reinitialize_pressed():
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 	
 func _ready():
-	print("Init Game")
-	print(liblevel.displayVersion())
+	if GameConfig.DEBUG:
+		print("Init Game")
+	if GameConfig.DEBUG:
+		print(liblevel.displayVersion())
 	
 	get_tree().set_auto_accept_quit(false)
 	
@@ -148,4 +155,5 @@ func data_to_save():
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		print("You must quit via the quit button")
+		if GameConfig.DEBUG:
+			print("You must quit via the quit button")

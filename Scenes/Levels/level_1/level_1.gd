@@ -8,7 +8,8 @@ var npc_scene = preload("res://Objects/NPC/npc.tscn")
 func _ready():
 	super._ready()
 
-	print("Load all objects")
+	if GameConfig.DEBUG:
+		print("Load all objects")
 	var datas
 	# ~/.local/share/godot/app_userdata/rpg_v1/level_1.json
 	if FileAccess.file_exists("user://level_1/level_1.json"):
@@ -71,8 +72,8 @@ func _load_npcs() -> void:
 	
 	
 func build_computer_event(direction):
-	print("Build Computer")
-	print(str(direction))
+	if GameConfig.DEBUG:
+		print("Build Computer: " + str(direction))
 	var data
 	data = computer_scene.instantiate()
 	data.add_to_group("computer")

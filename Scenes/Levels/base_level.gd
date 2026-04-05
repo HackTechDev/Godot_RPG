@@ -4,7 +4,8 @@ extends Node2D
 var _indicator_script = preload("res://Scenes/Levels/spawnpoint_indicator.gd")
 
 func _ready():
-	print("Scene: " + self.name)
+	if GameConfig.DEBUG:
+		print("Scene: " + self.name)
 	Player_data.player_previous_scene = self.name
 	SceneTransition.fade_in()
 	_add_spawnpoint_visuals()

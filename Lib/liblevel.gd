@@ -7,14 +7,16 @@ func displayVersion():
 
 # ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 func savePlayer(data_to_save):
-	print("SavePlayer")
+	if GameConfig.DEBUG:
+		print("SavePlayer")
 	var to_json = JSON.stringify(data_to_save)
 	var file = FileAccess.open(Player_data.save_path, FileAccess.WRITE)
 	file.store_line(to_json)
 	file.close()
 	
 func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
-	print("saveAllObjects")
+	if GameConfig.DEBUG:
+		print("saveAllObjects")
 	var all_json_data = {}
 
 	var i = 1
@@ -61,7 +63,8 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 				
 	var objects_to_save = JSON.stringify(all_json_data)
 	
-	print(objects_to_save)
+	if GameConfig.DEBUG:
+		print(objects_to_save)
 	var save_dir = DirAccess.open("user://")
 	if save_dir:
 		save_dir.make_dir(current_scene)
@@ -70,7 +73,8 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 	file.close()
 	
 func reinitializeLevel():
-	print("Reinitialize Level")
+	if GameConfig.DEBUG:
+		print("Reinitialize Level")
 	var dir = DirAccess.open("res://World/Default/")
 	var user_dir = DirAccess.open("user://")
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
@@ -79,7 +83,8 @@ func reinitializeLevel():
 		dir.copy("res://World/Default/%s/%s.json" % [level, level], "user://%s/%s.json" % [level, level])
 
 func reinitializePlayer():
-	print("Reinitialize Player")
+	if GameConfig.DEBUG:
+		print("Reinitialize Player")
 	#mDirAccess.remove_absolute(Player_data.save_path)
 	
 	var dir = DirAccess.open("res://World/Default/")
@@ -89,7 +94,8 @@ func reinitializePlayer():
 func load_game():
 	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
 	if FileAccess.file_exists(Player_data.save_path):
-		print("Character file found")
+		if GameConfig.DEBUG:
+			print("Character file found")
 		var file = FileAccess.open(Player_data.save_path, FileAccess.READ)
 		var data = JSON.parse_string(file.get_as_text())
 		file.close()
@@ -105,7 +111,8 @@ func load_game():
 		Player_data.player_defense = data.get("player_defense", randi_range(10, 15))
 
 	else:
-		print("Save file not found!")
+		if GameConfig.DEBUG:
+			print("Save file not found!")
 		Player_data.scene_path = "res://Scenes/Levels/%s/%s.tscn" % [Player_data_default.scene_start, Player_data_default.scene_start]
 		Player_data.player_spawnpoint_position_x = Player_data_default.spawnpoint_position_x
 		Player_data.player_spawnpoint_position_y = Player_data_default.spawnpoint_position_y
