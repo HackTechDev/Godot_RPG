@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://b0t2m85evvkke"]
 
 [ext_resource type="Script" uid="uid://creditsscript01" path="res://UI/credits.gd" id="1_cred"]
+[ext_resource type="AudioStream" uid="uid://c8rtkgmrt5gr3" path="res://Sounds/music/les_commandos.mp3" id="2_music"]
 
 [node name="Credits" type="CanvasLayer"]
 script = ExtResource("1_cred")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_music")
+autoplay = true
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 3
