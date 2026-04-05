@@ -40,6 +40,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Afficher des bulles d'aide contextuelles (ex. : "Appuyez sur T pour ramasser")
 - Disparaissent après la première utilisation de chaque action
 
+### Splashscreen — indication visuelle
+- Ajouter un texte "Press any key" sur le splashscreen pour indiquer au joueur qu'il doit appuyer sur une touche
+
 ---
 
 ## Sauvegarde

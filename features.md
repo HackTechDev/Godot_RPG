@@ -321,6 +321,40 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Musique de fond sur le Splashscreen et les Crédits
+
+- Le fichier `Sounds/music/les_commandos.mp3` joue automatiquement en fond sur le splashscreen et la page de crédits
+- `AudioStreamPlayer` avec `autoplay = true` ajouté dans les deux scènes
+- **Fichiers :** `UI/splash_screen.tscn`, `UI/credits.tscn`
+
+---
+
+## Image de fond sur le Splashscreen et les Crédits
+
+- L'image `Images/special-forces-film.jpg` remplace le fond noir sur les deux pages
+- Implémentée via un `TextureRect` (`expand_mode = 3`, `stretch_mode = 6`) en premier enfant du `CanvasLayer`
+- Le `TextureRect` doit être enfant du `CanvasLayer` (pas du `Node2D` racine) pour que les ancres fonctionnent
+- **Fichiers :** `UI/splash_screen.tscn`, `UI/credits.tscn`
+
+---
+
+## Splashscreen — transition sur pression d'une touche uniquement
+
+- Le splashscreen ne passe plus au menu principal automatiquement après un délai
+- La transition est déclenchée uniquement par `InputEventKey` (n'importe quelle touche)
+- Le tween affiche le titre et le sous-titre en fondu, puis attend l'action du joueur
+- **Fichiers :** `UI/splash_screen.gd`
+
+---
+
+## Traduction anglaise de l'interface
+
+- Tous les textes français du menu principal traduits en anglais
+- Concerné : page Audio (Music), page Controls (Movement, Arrows, Character sheet, Pick up, Push, Build, Combat / Flee, Attack, Talk to NPC), boutons Back, boîte de confirmation Quit
+- **Fichiers :** `UI/main_menu.tscn`
+
+---
+
 ## Documentation technique
 
 - `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)
