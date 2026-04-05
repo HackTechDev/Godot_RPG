@@ -62,15 +62,21 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 	var objects_to_save = JSON.stringify(all_json_data)
 	
 	print(objects_to_save)
-	var file = FileAccess.open("user://" + current_scene + ".json", FileAccess.WRITE)
+	var save_dir = DirAccess.open("user://")
+	if save_dir:
+		save_dir.make_dir(current_scene)
+	var file = FileAccess.open("user://" + current_scene + "/" + current_scene + ".json", FileAccess.WRITE)
 	file.store_line(objects_to_save)
 	file.close()
 	
 func reinitializeLevel():
 	print("Reinitialize Level")
 	var dir = DirAccess.open("res://World/Default/")
+	var user_dir = DirAccess.open("user://")
 	for level in ["level_01", "level_02", "level_03", "level_04"]:
-		dir.copy("res://World/Default/%s.json" % level, "user://%s.json" % level)
+		if user_dir:
+			user_dir.make_dir(level)
+		dir.copy("res://World/Default/%s/%s.json" % [level, level], "user://%s/%s.json" % [level, level])
 
 func reinitializePlayer():
 	print("Reinitialize Player")
@@ -91,7 +97,7 @@ func load_game():
 		var saved_scene = data.get("scene", "")
 		if saved_scene == "":
 			saved_scene = Player_data_default.scene_start
-		Player_data.scene_path = "res://Scenes/Levels/%s.tscn" % saved_scene
+		Player_data.scene_path = "res://Scenes/Levels/%s/%s.tscn" % [saved_scene, saved_scene]
 		Player_data.player_spawnpoint_position_x = data["player_position"][0]
 		Player_data.player_spawnpoint_position_y = data["player_position"][1]
 		Player_data.player_health = data.get("player_health", Player_data.player_health)
@@ -100,7 +106,7 @@ func load_game():
 
 	else:
 		print("Save file not found!")
-		Player_data.scene_path = "res://Scenes/Levels/%s.tscn" % Player_data_default.scene_start
+		Player_data.scene_path = "res://Scenes/Levels/%s/%s.tscn" % [Player_data_default.scene_start, Player_data_default.scene_start]
 		Player_data.player_spawnpoint_position_x = Player_data_default.spawnpoint_position_x
 		Player_data.player_spawnpoint_position_y = Player_data_default.spawnpoint_position_y
 		Player_data.player_attack = randi_range(10, 15)

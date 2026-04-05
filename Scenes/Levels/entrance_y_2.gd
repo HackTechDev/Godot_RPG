@@ -28,4 +28,4 @@ func _on_body_entered(body):
 			"player_defense": Player_data.player_defense
 		})
 
-		SceneTransition.change_scene("res://Scenes/Levels/level_" + scene_next + ".tscn")
+		SceneTransition.change_scene("res://Scenes/Levels/level_" + scene_next + "/level_" + scene_next + ".tscn")
