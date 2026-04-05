@@ -63,9 +63,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Animation d'apparition pour les objets spawnés (scale de 0 à 1)
 - Animation de disparition avant `queue_free()` lors de la collecte
 
-### Système de dialogue / PNJ
-- Ajouter des personnages non-joueurs avec lesquels interagir (touche T)
-- Boîte de dialogue simple avec texte et bouton "Suivant"
+### ~~Système de dialogue / PNJ~~ — Implémenté
+- PNJ avec sprite vert, nom flottant, touche Z, arbre de dialogue — voir `features.md`
+- À étendre : animations du PNJ, conditions de dialogue selon l'état du joueur, dialogues persistants (mémoriser les choix)
 
 ---
 

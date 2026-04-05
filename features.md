@@ -292,6 +292,35 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Réorganisation des répertoires de niveaux
+
+- Chaque niveau possède désormais son propre sous-répertoire : `Scenes/Levels/level_X/`
+- Les fichiers `.gd` et `.tscn` de chaque niveau sont regroupés dans leur dossier respectif
+- Les fichiers JSON par défaut sont également déplacés dans `World/Default/level_X/`
+- Les fichiers de sauvegarde `user://` suivent la même structure : `user://level_X/level_X.json`
+- Nommage sans zéro superflu : `level_1`, `level_2`, `level_3`, `level_4`
+- Tous les chemins `res://` et `user://` mis à jour dans les scripts et scènes
+- **Fichiers :** `Scenes/Levels/level_X/`, `World/Default/level_X/`, `Lib/liblevel.gd`, `Scenes/Levels/entrance_x_2.gd`, `Scenes/Levels/entrance_y_2.gd`
+
+---
+
+## Système de PNJ (NPC) avec dialogues
+
+- Personnages non-joueurs identifiés par `npc_X` (ex. : `npc_1`, `npc_7`)
+- Graphismes du joueur (`player_without_sword.png`) avec teinte verte (`modulate`)
+- Nom du PNJ affiché en vert au-dessus du personnage
+- Label "Z : Parler" visible à portée du joueur
+- Touche **Z** déclenche l'ouverture de la boîte de dialogue
+- Boîte de dialogue en bas d'écran : nom du PNJ, texte, choix multiples ou bouton "Suivant"
+- Système d'arbre de dialogue : chaque nœud contient un texte et une liste de choix pointant vers le nœud suivant (`null` = fin)
+- Configuration JSON par niveau : `Scenes/Levels/level_X/npc_X.json` (chargement automatique de tous les `npc_*.json` du répertoire)
+- Mouvement du joueur bloqué pendant le dialogue (`get_tree().paused = true`)
+- `Player_data.contact_npc` stocke la référence au PNJ en contact
+- Premier PNJ : "Commandant Dubois" dans `level_1` avec 3 branches de dialogue
+- **Fichiers :** `Objects/NPC/npc.gd`, `Objects/NPC/npc.tscn`, `UI/dialogue_box.gd`, `UI/dialogue_box.tscn`, `Scenes/Levels/level_1/npc_1.json`, `Scenes/Levels/level_1/level_1.gd`, `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `project.godot`
+
+---
+
 ## Documentation technique
 
 - `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)

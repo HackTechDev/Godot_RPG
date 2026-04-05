@@ -292,7 +292,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 button_pressed = true
-text = "Musique"
+text = "Music"
 
 [node name="LabelVolume" type="Label" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -309,7 +309,7 @@ value = 80.0
 [node name="ButtonAudioBack" type="Button" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Retour"
+text = "Back"
 
 [node name="ControlsSettings" type="Control" parent="MainMenuLayer"]
 visible = false
@@ -346,7 +346,7 @@ theme_override_constants/separation = 12
 [node name="Title" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "Contrôles"
+text = "Controls"
 horizontal_alignment = 1
 
 [node name="Separator" type="HSeparator" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
@@ -361,12 +361,12 @@ columns = 2
 [node name="L1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Déplacement"
+text = "Movement"
 
 [node name="K1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Flèches / ZQSD"
+text = "Arrows"
 
 [node name="L2" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -381,7 +381,7 @@ text = "M"
 [node name="L3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Fiche personnage"
+text = "Character sheet"
 
 [node name="K3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -391,7 +391,7 @@ text = "P"
 [node name="L4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Ramasser"
+text = "Pick up"
 
 [node name="K4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -401,7 +401,7 @@ text = "T"
 [node name="L5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Pousser"
+text = "Push"
 
 [node name="K5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -411,7 +411,7 @@ text = "R"
 [node name="L6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Construire"
+text = "Build"
 
 [node name="K6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -421,7 +421,7 @@ text = "B"
 [node name="L7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Combat / Fuite"
+text = "Combat / Flee"
 
 [node name="K7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
@@ -431,23 +431,33 @@ text = "C"
 [node name="L8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Attaque"
+text = "Attack"
 
 [node name="K8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "A"
 
+[node name="L9" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Talk to NPC"
+
+[node name="K9" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Z"
+
 [node name="ButtonControlsBack" type="Button" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Retour"
+text = "Back"
 
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer"]
 title = "Quitter"
-dialog_text = "Voulez-vous vraiment quitter ?"
-ok_button_text = "Quitter"
-cancel_button_text = "Annuler"
+dialog_text = "Are you sure you want to quit?"
+ok_button_text = "Quit"
+cancel_button_text = "Cancel"
 size = Vector2(300, 120)
 
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
