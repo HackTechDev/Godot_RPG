@@ -85,3 +85,19 @@ Implemented in **`Lib/liblevel.gd`**:
 
 - Inventory menu system (not yet implemented)
 - Player position initialization improvements
+
+## Workflow Git
+
+Après chaque modification significative, fais un commit git avec :
+- Un titre court et descriptif (format : `type(scope): description`)
+  - Types valides : `feat`, `fix`, `refactor`, `docs`, `chore`, `style`
+- Un corps de message détaillant les changements effectués
+
+Exemple :
+```
+feat(auth): ajouter la validation du token JWT
+
+- Ajout de la vérification de l'expiration du token
+- Gestion des erreurs 401 avec message explicite
+- Mise à jour des tests unitaires correspondants
+```
