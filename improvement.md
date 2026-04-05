@@ -23,6 +23,20 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Afficher la progression dans le HUD
 - Déclencher un événement (ouverture de porte, passage vers la zone suivante) à la complétion
 
+### Portes et clés
+- Ajouter des objets `door` bloquant le passage entre zones
+- Une clé (`key_item`) collectée via T déverrouille la porte correspondante
+- État ouvert/fermé persisté dans le JSON du niveau
+
+### Expérience et niveaux du joueur
+- Gagner des XP en tuant des robots ennemis
+- Seuils de niveau : augmentent `player_attack` ou `player_defense` automatiquement
+- Affiché dans la fiche de personnage (touche P)
+
+### Dialogues persistants
+- Mémoriser les choix déjà faits pour chaque PNJ (`user://npc_state.json`)
+- Permettre à un PNJ de donner un objet ou d'ouvrir une porte selon les réponses du joueur
+
 ---
 
 ## Interface utilisateur
@@ -42,6 +56,14 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ### Splashscreen — indication visuelle
 - Ajouter un texte "Press any key" sur le splashscreen pour indiquer au joueur qu'il doit appuyer sur une touche
+
+### Indicateur de santé visuel
+- Le HUD change de couleur (vert → orange → rouge) selon les PV restants
+- Flash rouge sur les bords de l'écran quand le joueur prend un coup
+
+### Journal de quête
+- Panneau accessible depuis le HUD listant les objectifs actifs et complétés
+- Alimenté par un fichier JSON de quête par niveau
 
 ---
 
@@ -68,6 +90,19 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Animations des objets
 - Animation d'apparition pour les objets spawnés (scale de 0 à 1)
 - Animation de disparition avant `queue_free()` lors de la collecte
+
+### Musique par niveau
+- Chaque niveau joue une piste musicale différente
+- Transition en fondu entre les pistes au changement de zone
+- Le volume respecte le slider de la page Audio
+
+### Pool d'objets pour les ennemis
+- Au lieu de `queue_free()` + `instantiate()`, recycler les instances de `RobotEnemy`
+- Améliore les performances sur les niveaux avec beaucoup d'ennemis
+
+### Logs de debug désactivables
+- Les `print()` dans le code (saveAllObjects, load game, etc.) conditionnés à une constante `DEBUG = false`
+- Améliore les performances et la lisibilité des logs à l'export
 
 ### ~~Système de dialogue / PNJ~~ — Implémenté
 - PNJ avec sprite vert, nom flottant, touche Z, arbre de dialogue — voir `features.md`
