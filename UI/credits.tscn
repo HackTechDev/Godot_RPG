@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://creditsscript01" path="res://UI/credits.gd" id="1_cred"]
 [ext_resource type="AudioStream" uid="uid://c8rtkgmrt5gr3" path="res://Sounds/music/les_commandos.mp3" id="2_music"]
+[ext_resource type="Texture2D" uid="uid://csiv02rrxrcu8" path="res://Images/special-forces-film.jpg" id="3_bg"]
 
 [node name="Credits" type="CanvasLayer"]
 script = ExtResource("1_cred")
@@ -10,14 +11,16 @@ script = ExtResource("1_cred")
 stream = ExtResource("2_music")
 autoplay = true
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+texture = ExtResource("3_bg")
+expand_mode = 3
+stretch_mode = 6
 
 [node name="CreditsPanel" type="VBoxContainer" parent="."]
 layout_mode = 0

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://splash_screen_gd_001" path="res://UI/splash_screen.gd" id="1_splash"]
 [ext_resource type="AudioStream" uid="uid://c8rtkgmrt5gr3" path="res://Sounds/music/les_commandos.mp3" id="2_music"]
+[ext_resource type="Texture2D" uid="uid://csiv02rrxrcu8" path="res://Images/special-forces-film.jpg" id="3_bg"]
 
 [node name="SplashScreen" type="Node2D"]
 script = ExtResource("1_splash")
@@ -10,13 +11,17 @@ script = ExtResource("1_splash")
 stream = ExtResource("2_music")
 autoplay = true
 
-[node name="Background" type="ColorRect" parent="."]
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
-color = Color(0, 0, 0, 1)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bg")
+expand_mode = 3
+stretch_mode = 6
 
 [node name="VBox" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 15
