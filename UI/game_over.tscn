@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://game_over_scene_001"]
 
-[ext_resource type="Script" uid="uid://game_over_gd_001" path="res://UI/game_over.gd" id="1_go"]
+[ext_resource type="Script" uid="uid://dg41tn45qp6xc" path="res://UI/game_over.gd" id="1_go"]
 
 [node name="GameOver" type="CanvasLayer"]
 layer = 20

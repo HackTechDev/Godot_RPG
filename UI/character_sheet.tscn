@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cs_character_sheet"]
 
-[ext_resource type="Script" uid="uid://cs_character_sheet_gd" path="res://UI/character_sheet.gd" id="1_csscript"]
+[ext_resource type="Script" uid="uid://d35yspo3hrbq8" path="res://UI/character_sheet.gd" id="1_csscript"]
 
 [node name="CharacterSheet" type="CanvasLayer"]
 script = ExtResource("1_csscript")
