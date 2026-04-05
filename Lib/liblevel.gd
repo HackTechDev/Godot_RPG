@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 
 static var version = "1"
 
