@@ -3,6 +3,7 @@ extends "res://Scenes/Levels/base_level.gd"
 @onready var computer_scene = preload("res://Objects/Computers/computer.tscn")
 @onready var robot_scene = preload("res://Objects/Robots/robot.tscn")
 @onready var robot_enemy_scene = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
+var npc_scene = preload("res://Objects/NPC/npc.tscn")
 
 func _ready():
 	super._ready()
@@ -43,6 +44,30 @@ func _ready():
 				data.apply_dead_state()
 
 	EventBus.build_computer.connect(build_computer_event)
+	_load_npcs()
+
+
+func _load_npcs() -> void:
+	var npc_dir = "res://Scenes/Levels/level_1/"
+	var dir = DirAccess.open(npc_dir)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if file_name.begins_with("npc_") and file_name.ends_with(".json"):
+			var path = npc_dir + file_name
+			var file = FileAccess.open(path, FileAccess.READ)
+			if file:
+				var config = JSON.parse_string(file.get_as_text())
+				file.close()
+				if config is Dictionary:
+					var npc = npc_scene.instantiate()
+					npc.position = Vector2(config.position.x, config.position.y)
+					add_child(npc)
+					npc.setup(config)
+		file_name = dir.get_next()
+	dir.list_dir_end()
 	
 	
 func build_computer_event(direction):

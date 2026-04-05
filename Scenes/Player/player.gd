@@ -30,6 +30,9 @@ var _game_over_shown = false
 var combat_ui_scene = preload("res://UI/combat_ui.tscn")
 var combat_ui_instance = null
 
+var dialogue_box_scene = preload("res://UI/dialogue_box.tscn")
+var dialogue_box_instance = null
+
 var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
@@ -78,6 +81,9 @@ func _ready():
 	combat_ui_instance = combat_ui_scene.instantiate()
 	add_child(combat_ui_instance)
 
+	dialogue_box_instance = dialogue_box_scene.instantiate()
+	add_child(dialogue_box_instance)
+
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
 	player_combat_label.visible = false
@@ -121,6 +127,10 @@ func _input(event):
 		print("b key: build")
 		EventBus.build_computer.emit(direction)
 
+	if event.is_action_pressed("ui_z"):
+		if is_instance_valid(Player_data.contact_npc):
+			dialogue_box_instance.open(Player_data.contact_npc.npc_name, Player_data.contact_npc.dialogue)
+
 	if event.is_action_pressed("ui_t"):
 		if is_instance_valid(Player_data.contact_object):
 			Player_data.contact_object.collect()
@@ -145,7 +155,7 @@ func _input(event):
 		_on_attack_key()
 
 func input_move():
-	if display_menu or in_combat:
+	if display_menu or in_combat or (dialogue_box_instance and dialogue_box_instance.visible):
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return

@@ -31,3 +31,4 @@ static var inventory: Array = []
 
 static var contact_object = null
 static var contact_enemy = null
+static var contact_npc = null
