@@ -9,7 +9,7 @@ func _ready():
 	_load_objects()
 
 func _load_objects():
-	var datas = _read_level_json("user://level_04/level_04.json", "res://World/Default/level_04/level_04.json")
+	var datas = _read_level_json("user://level_4/level_4.json", "res://World/Default/level_4/level_4.json")
 	for key in datas:
 		var data
 		if datas[key].object == "computer":

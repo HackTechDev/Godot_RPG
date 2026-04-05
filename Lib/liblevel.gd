@@ -73,7 +73,7 @@ func reinitializeLevel():
 	print("Reinitialize Level")
 	var dir = DirAccess.open("res://World/Default/")
 	var user_dir = DirAccess.open("user://")
-	for level in ["level_01", "level_02", "level_03", "level_04"]:
+	for level in ["level_1", "level_2", "level_3", "level_4"]:
 		if user_dir:
 			user_dir.make_dir(level)
 		dir.copy("res://World/Default/%s/%s.json" % [level, level], "user://%s/%s.json" % [level, level])
