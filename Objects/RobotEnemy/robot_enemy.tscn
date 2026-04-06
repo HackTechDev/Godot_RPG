@@ -1,7 +1,7 @@
 [gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://Objects/RobotEnemy/robot_enemy.gd" id="1_enemy"]
-[ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_enemy"]
+[ext_resource type="Texture2D" uid="uid://dnxhqt47hoiv0" path="res://Sprites/NPC/robot_enemy_1.png" id="2_enemy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
 size = Vector2(32, 50)
@@ -229,10 +229,9 @@ y_sort_enabled = true
 script = ExtResource("1_enemy")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(1, 0.4, 0.4, 1)
 texture = ExtResource("2_enemy")
 hframes = 13
-vframes = 21
+vframes = 54
 frame = 130
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
