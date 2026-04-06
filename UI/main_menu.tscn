@@ -476,7 +476,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer"]
-custom_minimum_size = Vector2(700, 520)
+custom_minimum_size = Vector2(760, 540)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer"]
@@ -496,7 +496,7 @@ theme_override_constants/separation = 10
 [node name="Title1" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Création du personnage — 1/3 : Identité"
+text = "Création du personnage — 1/4 : Identité"
 horizontal_alignment = 1
 
 [node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
@@ -546,6 +546,227 @@ custom_minimum_size = Vector2(120, 0)
 theme_override_font_sizes/font_size = 18
 text = "Suivant >"
 
+[node name="PageAppearance" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleA" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Création du personnage — 2/4 : Apparence"
+horizontal_alignment = 1
+
+[node name="SepA1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
+layout_mode = 2
+
+[node name="ContentRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="PreviewPanel" type="PanelContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(210, 0)
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="PreviewCenter" type="CenterContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CharPreview" type="SubViewportContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter"]
+layout_mode = 2
+custom_minimum_size = Vector2(192, 192)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch = true
+
+[node name="PreviewViewport" type="SubViewport" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview"]
+transparent_bg = true
+size = Vector2i(64, 64)
+
+[node name="SpriteBody" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 10
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteLegs" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 20
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteFeet" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 25
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteShoulders" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 60
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteTorso" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 61
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteArms" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 62
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteBracers" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 70
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteGloves" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 71
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteHead" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 100
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteFace" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 101
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteHair" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 120
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="SpriteHeadwear" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+position = Vector2(32, 32)
+z_index = 130
+hframes = 13
+vframes = 54
+frame = 104
+
+[node name="OptionsScroll" type="ScrollContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OptionsVBox" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="LabelBody" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Corps :"
+
+[node name="BodyOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelHair" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Cheveux :"
+
+[node name="HairOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelHeadwear" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Casque :"
+
+[node name="HeadwearOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelArms" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Bras :"
+
+[node name="ArmsOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelTorso" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Torse :"
+
+[node name="TorsoOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelLegs" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Jambes :"
+
+[node name="LegsOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelFeet" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Pieds :"
+
+[node name="FeetOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SepA2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
+layout_mode = 2
+
+[node name="ButtonsRowA" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BackButtonA" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_font_sizes/font_size = 18
+text = "< Retour"
+
+[node name="SpacerA" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextButtonA" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+theme_override_font_sizes/font_size = 18
+text = "Suivant >"
+
 [node name="PageMilitary" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -554,7 +775,7 @@ theme_override_constants/separation = 8
 [node name="Title2" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Création du personnage — 2/3 : Profil militaire"
+text = "Création du personnage — 3/4 : Profil militaire"
 horizontal_alignment = 1
 
 [node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
@@ -638,7 +859,7 @@ theme_override_constants/separation = 10
 [node name="Title3" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Création du personnage — 3/3 : Statistiques"
+text = "Création du personnage — 4/4 : Statistiques"
 horizontal_alignment = 1
 
 [node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
@@ -751,6 +972,15 @@ size = Vector2(300, 120)
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonCreateCharacter" to="MainMenuLayer" method="_on_button_create_character_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/NextButton1" to="MainMenuLayer" method="_on_cc_next1_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA/BackButtonA" to="MainMenuLayer" method="_on_cc_back_appearance_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA/NextButtonA" to="MainMenuLayer" method="_on_cc_next_appearance_pressed"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/BodyOption" to="MainMenuLayer" method="_on_cc_body_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HairOption" to="MainMenuLayer" method="_on_cc_hair_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HeadwearOption" to="MainMenuLayer" method="_on_cc_headwear_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/ArmsOption" to="MainMenuLayer" method="_on_cc_arms_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/TorsoOption" to="MainMenuLayer" method="_on_cc_torso_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/LegsOption" to="MainMenuLayer" method="_on_cc_legs_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/FeetOption" to="MainMenuLayer" method="_on_cc_feet_selected"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/BackButton2" to="MainMenuLayer" method="_on_cc_back2_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/NextButton2" to="MainMenuLayer" method="_on_cc_next2_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow/SpecList" to="MainMenuLayer" method="_on_cc_spec_selected"]

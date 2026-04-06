@@ -17,9 +17,12 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
-@onready var cc_page_identity: VBoxContainer = get_node(_CC_BASE + "/PageIdentity")
-@onready var cc_page_military: VBoxContainer = get_node(_CC_BASE + "/PageMilitary")
-@onready var cc_page_stats:    VBoxContainer = get_node(_CC_BASE + "/PageStats")
+const _CC_PA   = _CC_BASE + "/PageAppearance/ContentRow"
+
+@onready var cc_page_identity:   VBoxContainer = get_node(_CC_BASE + "/PageIdentity")
+@onready var cc_page_appearance: VBoxContainer = get_node(_CC_BASE + "/PageAppearance")
+@onready var cc_page_military:   VBoxContainer = get_node(_CC_BASE + "/PageMilitary")
+@onready var cc_page_stats:      VBoxContainer = get_node(_CC_BASE + "/PageStats")
 
 @onready var cc_nickname:  LineEdit      = get_node(_CC_BASE + "/PageIdentity/NicknameEdit")
 @onready var cc_biography: TextEdit      = get_node(_CC_BASE + "/PageIdentity/BiographyEdit")
@@ -30,6 +33,67 @@ const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContain
 @onready var cc_attack:    SpinBox       = get_node(_CC_BASE + "/PageStats/StatsContainer/AttackRow/AttackSpinBox")
 @onready var cc_defense:   SpinBox       = get_node(_CC_BASE + "/PageStats/StatsContainer/DefenseRow/DefenseSpinBox")
 @onready var cc_remaining: Label         = get_node(_CC_BASE + "/PageStats/LabelRemaining")
+
+# Appearance page option buttons
+@onready var cc_body_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/BodyOption")
+@onready var cc_hair_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/HairOption")
+@onready var cc_headwear_opt: OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/HeadwearOption")
+@onready var cc_arms_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/ArmsOption")
+@onready var cc_torso_opt:    OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/TorsoOption")
+@onready var cc_legs_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/LegsOption")
+@onready var cc_feet_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/FeetOption")
+
+# Appearance preview sprites
+@onready var cc_spr_body:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteBody")
+@onready var cc_spr_legs:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteLegs")
+@onready var cc_spr_feet:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteFeet")
+@onready var cc_spr_shoulders:Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteShoulders")
+@onready var cc_spr_torso:    Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteTorso")
+@onready var cc_spr_arms:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteArms")
+@onready var cc_spr_bracers:  Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteBracers")
+@onready var cc_spr_gloves:   Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteGloves")
+@onready var cc_spr_head:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteHead")
+@onready var cc_spr_face:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteFace")
+@onready var cc_spr_hair:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteHair")
+@onready var cc_spr_headwear: Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteHeadwear")
+
+# LPC Spritesheet frame: walk south (row 8), first frame (col 0) = 8*13+0 = 104
+const CC_PREVIEW_FRAME = 104
+const CC_SPR_HFRAMES   = 13
+const CC_SPR_VFRAMES   = 54
+
+# Appearance options: key → {label, file}
+# File paths relative to res://Sprites/Player/items/
+# For optional slots, key "" means "Aucun" (none)
+const CC_BODY_OPTIONS: Array = [
+	{"key": "body_light", "label": "Carnation claire", "file": "010 body_color__light_.png"}
+]
+const CC_HAIR_OPTIONS: Array = [
+	{"key": "",            "label": "Aucun",           "file": ""},
+	{"key": "bangs_black", "label": "Frange (noir)",   "file": "120 bangs__black_.png"}
+]
+const CC_HEADWEAR_OPTIONS: Array = [
+	{"key": "",           "label": "Aucun",           "file": ""},
+	{"key": "armet_iron", "label": "Armet (fer)",     "file": "130 armet__iron_.png"}
+]
+const CC_ARMS_OPTIONS: Array = [
+	{"key": "",                  "label": "Aucun",                  "file": ""},
+	{"key": "armour_steel",      "label": "Armure (acier)",         "file": "060 armour__steel_.png"},
+	{"key": "bracers_steel",     "label": "Brassards (acier)",      "file": "070 bracers__steel_.png"},
+	{"key": "gloves_black",      "label": "Gants (noir)",           "file": "070 gloves__black_.png"}
+]
+const CC_TORSO_OPTIONS: Array = [
+	{"key": "",               "label": "Aucun",              "file": ""},
+	{"key": "leather_forest", "label": "Cuir (forêt)",       "file": "060 leather__forest_.png"}
+]
+const CC_LEGS_OPTIONS: Array = [
+	{"key": "",               "label": "Aucun",              "file": ""},
+	{"key": "armour_ceramic", "label": "Armure (céramique)", "file": "020 armour__ceramic_.png"}
+]
+const CC_FEET_OPTIONS: Array = [
+	{"key": "",             "label": "Aucun",              "file": ""},
+	{"key": "boots_black",  "label": "Bottes (noir)",      "file": "025 basic_boots__black_.png"}
+]
 
 const CC_RANKS: Array = [
 	"Militaires du rang",
@@ -110,19 +174,89 @@ func _on_button_create_character_pressed():
 	_cc_show_page(1)
 
 func _cc_show_page(page: int):
-	cc_page_identity.visible = page == 1
-	cc_page_military.visible = page == 2
-	cc_page_stats.visible    = page == 3
+	cc_page_identity.visible   = page == 1
+	cc_page_appearance.visible = page == 2
+	cc_page_military.visible   = page == 3
+	cc_page_stats.visible      = page == 4
 	if page == 1:
 		cc_nickname.text  = ""
 		cc_biography.text = ""
 	elif page == 2:
-		_cc_init_military()
+		_cc_init_appearance()
 	elif page == 3:
+		_cc_init_military()
+	elif page == 4:
 		cc_health.value  = 10
 		cc_attack.value  = 10
 		cc_defense.value = 10
 		_cc_update_remaining()
+
+func _cc_init_appearance():
+	_cc_populate_option(cc_body_opt,     CC_BODY_OPTIONS)
+	_cc_populate_option(cc_hair_opt,     CC_HAIR_OPTIONS)
+	_cc_populate_option(cc_headwear_opt, CC_HEADWEAR_OPTIONS)
+	_cc_populate_option(cc_arms_opt,     CC_ARMS_OPTIONS)
+	_cc_populate_option(cc_torso_opt,    CC_TORSO_OPTIONS)
+	_cc_populate_option(cc_legs_opt,     CC_LEGS_OPTIONS)
+	_cc_populate_option(cc_feet_opt,     CC_FEET_OPTIONS)
+	_cc_refresh_preview()
+
+func _cc_populate_option(btn: OptionButton, options: Array):
+	if btn.item_count > 0:
+		return
+	for opt in options:
+		btn.add_item(opt["label"])
+
+func _cc_refresh_preview():
+	_cc_set_sprite(cc_spr_body,     _cc_get_selected_file(cc_body_opt,     CC_BODY_OPTIONS))
+	_cc_set_sprite(cc_spr_hair,     _cc_get_selected_file(cc_hair_opt,     CC_HAIR_OPTIONS))
+	_cc_set_sprite(cc_spr_headwear, _cc_get_selected_file(cc_headwear_opt, CC_HEADWEAR_OPTIONS))
+	_cc_set_sprite(cc_spr_torso,    _cc_get_selected_file(cc_torso_opt,    CC_TORSO_OPTIONS))
+	_cc_set_sprite(cc_spr_legs,     _cc_get_selected_file(cc_legs_opt,     CC_LEGS_OPTIONS))
+	_cc_set_sprite(cc_spr_feet,     _cc_get_selected_file(cc_feet_opt,     CC_FEET_OPTIONS))
+	# Arms: show armour OR bracers/gloves based on selection
+	var arms_file = _cc_get_selected_file(cc_arms_opt, CC_ARMS_OPTIONS)
+	var is_bracers = arms_file == "070 bracers__steel_.png"
+	var is_gloves  = arms_file == "070 gloves__black_.png"
+	var is_armour  = arms_file == "060 armour__steel_.png"
+	_cc_set_sprite(cc_spr_arms,    "060 armour__steel_.png" if is_armour else "")
+	_cc_set_sprite(cc_spr_bracers, "070 bracers__steel_.png" if is_bracers else "")
+	_cc_set_sprite(cc_spr_gloves,  "070 gloves__black_.png" if is_gloves else "")
+	# Always show base head + face
+	_cc_set_sprite(cc_spr_head, "100 human_male__light_.png")
+	_cc_set_sprite(cc_spr_face, "101 neutral__light_.png")
+	cc_spr_shoulders.texture = null
+
+func _cc_get_selected_file(btn: OptionButton, options: Array) -> String:
+	var idx = btn.selected
+	if idx < 0 or idx >= options.size():
+		return ""
+	return options[idx]["file"]
+
+func _cc_set_sprite(spr: Sprite2D, file: String):
+	if file == "":
+		spr.texture = null
+		return
+	var path = "res://Sprites/Player/items/" + file
+	var tex = load(path)
+	spr.texture   = tex
+	spr.hframes   = CC_SPR_HFRAMES
+	spr.vframes   = CC_SPR_VFRAMES
+	spr.frame     = CC_PREVIEW_FRAME
+
+func _on_cc_body_selected(_idx: int):     _cc_refresh_preview()
+func _on_cc_hair_selected(_idx: int):     _cc_refresh_preview()
+func _on_cc_headwear_selected(_idx: int): _cc_refresh_preview()
+func _on_cc_arms_selected(_idx: int):     _cc_refresh_preview()
+func _on_cc_torso_selected(_idx: int):    _cc_refresh_preview()
+func _on_cc_legs_selected(_idx: int):     _cc_refresh_preview()
+func _on_cc_feet_selected(_idx: int):     _cc_refresh_preview()
+
+func _cc_get_appearance_key(btn: OptionButton, options: Array) -> String:
+	var idx = btn.selected
+	if idx < 0 or idx >= options.size():
+		return ""
+	return options[idx]["key"]
 
 func _cc_init_military():
 	if cc_rank.item_count == 0:
@@ -140,14 +274,20 @@ func _on_cc_cancel_pressed():
 func _on_cc_next1_pressed():
 	_cc_show_page(2)
 
-func _on_cc_back2_pressed():
+func _on_cc_back_appearance_pressed():
 	_cc_show_page(1)
 
-func _on_cc_next2_pressed():
+func _on_cc_next_appearance_pressed():
 	_cc_show_page(3)
 
-func _on_cc_back3_pressed():
+func _on_cc_back2_pressed():
 	_cc_show_page(2)
+
+func _on_cc_next2_pressed():
+	_cc_show_page(4)
+
+func _on_cc_back3_pressed():
+	_cc_show_page(3)
 
 func _on_cc_spec_selected(index: int):
 	var spec_name = cc_spec_list.get_item_text(index)
@@ -185,6 +325,13 @@ func _on_cc_create_pressed():
 	Player_data.player_health_base   = int(cc_health.value)
 	Player_data.player_attack        = int(cc_attack.value)
 	Player_data.player_defense       = int(cc_defense.value)
+	Player_data.appearance_body      = _cc_get_appearance_key(cc_body_opt,     CC_BODY_OPTIONS)
+	Player_data.appearance_hair      = _cc_get_appearance_key(cc_hair_opt,     CC_HAIR_OPTIONS)
+	Player_data.appearance_headwear  = _cc_get_appearance_key(cc_headwear_opt, CC_HEADWEAR_OPTIONS)
+	Player_data.appearance_arms      = _cc_get_appearance_key(cc_arms_opt,     CC_ARMS_OPTIONS)
+	Player_data.appearance_torso     = _cc_get_appearance_key(cc_torso_opt,    CC_TORSO_OPTIONS)
+	Player_data.appearance_legs      = _cc_get_appearance_key(cc_legs_opt,     CC_LEGS_OPTIONS)
+	Player_data.appearance_feet      = _cc_get_appearance_key(cc_feet_opt,     CC_FEET_OPTIONS)
 	liblevel.savePlayer({
 		"player_position":      [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
 		"player_facing":        0,
@@ -196,7 +343,14 @@ func _on_cc_create_pressed():
 		"player_nickname":      Player_data.player_nickname,
 		"player_biography":     Player_data.player_biography,
 		"player_rank":          Player_data.player_rank,
-		"player_specialization": Player_data.player_specialization
+		"player_specialization": Player_data.player_specialization,
+		"appearance_body":      Player_data.appearance_body,
+		"appearance_hair":      Player_data.appearance_hair,
+		"appearance_headwear":  Player_data.appearance_headwear,
+		"appearance_arms":      Player_data.appearance_arms,
+		"appearance_torso":     Player_data.appearance_torso,
+		"appearance_legs":      Player_data.appearance_legs,
+		"appearance_feet":      Player_data.appearance_feet
 	})
 	liblevel.reinitializeLevel()
 	liblevel.load_game()
@@ -289,7 +443,14 @@ func data_to_save():
 		"player_nickname":       Player_data.player_nickname,
 		"player_biography":      Player_data.player_biography,
 		"player_rank":           Player_data.player_rank,
-		"player_specialization": Player_data.player_specialization
+		"player_specialization": Player_data.player_specialization,
+		"appearance_body":       Player_data.appearance_body,
+		"appearance_hair":       Player_data.appearance_hair,
+		"appearance_headwear":   Player_data.appearance_headwear,
+		"appearance_arms":       Player_data.appearance_arms,
+		"appearance_torso":      Player_data.appearance_torso,
+		"appearance_legs":       Player_data.appearance_legs,
+		"appearance_feet":       Player_data.appearance_feet
 	}
 
 func _notification(what):

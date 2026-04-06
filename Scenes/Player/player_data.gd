@@ -37,3 +37,12 @@ static var inventory: Array = []
 static var contact_object = null
 static var contact_enemy = null
 static var contact_npc = null
+
+# Appearance (LPC spritesheet layer keys)
+static var appearance_body: String = "body_light"
+static var appearance_hair: String = ""
+static var appearance_headwear: String = ""
+static var appearance_arms: String = ""
+static var appearance_torso: String = ""
+static var appearance_legs: String = ""
+static var appearance_feet: String = ""
