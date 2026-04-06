@@ -212,11 +212,18 @@ func _facing_to_vector() -> Vector2:
 	return Vector2.ZERO
 
 func _on_hud_sheet_requested():
+	if display_menu:
+		display_menu = false
+		background_menu.visible = false
+		text_menu.visible = false
+		get_tree().paused = false
+		_auto_save_objects()
 	character_sheet_instance.visible = !character_sheet_instance.visible
 	if character_sheet_instance.visible:
 		character_sheet_instance.refresh()
 
 func _on_hud_setting_requested():
+	character_sheet_instance.visible = false
 	if display_menu:
 		display_menu = false
 		background_menu.visible = false
