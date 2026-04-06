@@ -61,7 +61,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Fiche de personnage enrichie
 - Afficher le grade, la spécialisation et la biographie dans la fiche (touche P)
 - La biographie pourrait apparaître dans un onglet ou un panneau dédié
-- Afficher un aperçu du sprite LPC du personnage dans la fiche (touche P)
+- ~~Aperçu du sprite LPC dans la fiche personnage~~ — Implémenté
 
 ### ~~Splashscreen — indication visuelle~~ — Implémenté
 - Label "Press any key" ajouté en bas de l'écran, avec apparition en fondu puis clignotement en boucle
