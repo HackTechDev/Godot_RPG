@@ -238,6 +238,7 @@ func _on_hud_setting_requested():
 		text_menu._on_button_settings_pressed()
 
 func _on_hud_home_requested():
+	character_sheet_instance.visible = false
 	display_menu = true
 	background_menu.visible = true
 	text_menu.visible = true
