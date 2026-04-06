@@ -198,8 +198,10 @@ func _on_cc_create_pressed():
 		"player_rank":          Player_data.player_rank,
 		"player_specialization": Player_data.player_specialization
 	})
-	character_creation.visible = false
-	main.visible = true
+	liblevel.reinitializeLevel()
+	liblevel.load_game()
+	get_tree().paused = false
+	SceneTransition.change_scene(Player_data.scene_path)
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
