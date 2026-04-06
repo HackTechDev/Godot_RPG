@@ -7,6 +7,9 @@ static var player_health_base: int = 4
 static var player_attack: int = 10
 static var player_defense: int = 10
 static var player_nickname: String = ""
+static var player_biography: String = ""
+static var player_rank: String = ""
+static var player_specialization: String = ""
 
 static var player_position = Vector2()
 static var player_facing = 0

@@ -111,6 +111,9 @@ func load_game():
 		Player_data.player_attack = data.get("player_attack", randi_range(10, 15))
 		Player_data.player_defense = data.get("player_defense", randi_range(10, 15))
 		Player_data.player_nickname = data.get("player_nickname", "")
+		Player_data.player_biography = data.get("player_biography", "")
+		Player_data.player_rank = data.get("player_rank", "")
+		Player_data.player_specialization = data.get("player_specialization", "")
 
 	else:
 		if GameConfig.DEBUG:

@@ -476,7 +476,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer"]
-custom_minimum_size = Vector2(480, 440)
+custom_minimum_size = Vector2(700, 520)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer"]
@@ -488,109 +488,244 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PageIdentity" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Create Character Sheet"
+theme_override_constants/separation = 10
+
+[node name="Title1" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Création du personnage — 1/3 : Identité"
 horizontal_alignment = 1
 
-[node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
 
-[node name="LabelNickname" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LabelNickname" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Nickname:"
+text = "Surnom :"
 
-[node name="NicknameEdit" type="LineEdit" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="NicknameEdit" type="LineEdit" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
-placeholder_text = "Enter your nickname..."
+placeholder_text = "Entrez votre surnom..."
 max_length = 20
 
-[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="LabelPoints" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LabelBio" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Distribute 30 points:"
+text = "Biographie :"
 
-[node name="StatsContainer" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BiographyEdit" type="TextEdit" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 140)
+size_flags_vertical = 3
+placeholder_text = "Décrivez brièvement votre personnage..."
+
+[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
+layout_mode = 2
+
+[node name="ButtonsRow1" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HealthRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer"]
+[node name="CancelButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
 layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_font_sizes/font_size = 18
+text = "Annuler"
 
-[node name="LabelHealth" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/HealthRow"]
+[node name="Spacer1" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "Health (Santé)"
 
-[node name="HealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/HealthRow"]
+[node name="NextButton1" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
 layout_mode = 2
-min_value = 0.0
-max_value = 30.0
-value = 10.0
+custom_minimum_size = Vector2(120, 0)
+theme_override_font_sizes/font_size = 18
+text = "Suivant >"
 
-[node name="AttackRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer"]
+[node name="PageMilitary" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="LabelAttack" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackRow"]
+[node name="Title2" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "Attack (Attaque)"
-
-[node name="AttackSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackRow"]
-layout_mode = 2
-min_value = 0.0
-max_value = 30.0
-value = 10.0
-
-[node name="DefenseRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer"]
-layout_mode = 2
-
-[node name="LabelDefense" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/DefenseRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "Defense (Défense)"
-
-[node name="DefenseSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/DefenseRow"]
-layout_mode = 2
-min_value = 0.0
-max_value = 30.0
-value = 10.0
-
-[node name="LabelRemaining" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Points restants: 0"
+theme_override_font_sizes/font_size = 20
+text = "Création du personnage — 2/3 : Profil militaire"
 horizontal_alignment = 1
 
-[node name="Sep3" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
 layout_mode = 2
 
-[node name="ButtonsRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LabelRank" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Grade :"
+
+[node name="RankOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+
+[node name="LabelSpec" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Spécialisation :"
+
+[node name="SpecRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="SpecList" type="ItemList" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(210, 200)
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="SpecDescPanel" type="PanelContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SpecDescMargin" type="MarginContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow/SpecDescPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SpecDesc" type="RichTextLabel" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow/SpecDescPanel/SpecDescMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]Sélectionnez une spécialisation...[/i]"
+
+[node name="Sep3" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
+layout_mode = 2
+
+[node name="ButtonsRow2" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
 layout_mode = 2
 theme_override_constants/separation = 8
-alignment = 1
 
-[node name="CancelButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow"]
+[node name="BackButton2" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_font_sizes/font_size = 18
+text = "< Retour"
+
+[node name="Spacer2" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextButton2" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
 layout_mode = 2
 custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 20
-text = "Cancel"
+theme_override_font_sizes/font_size = 18
+text = "Suivant >"
 
-[node name="CreateButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow"]
+[node name="PageStats" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
+theme_override_constants/separation = 10
+
+[node name="Title3" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Create"
+text = "Création du personnage — 3/3 : Statistiques"
+horizontal_alignment = 1
+
+[node name="Sep1" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+
+[node name="LabelPointsInfo" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Répartis 30 points entre tes caractéristiques :"
+
+[node name="StatsContainer" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HealthRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer"]
+layout_mode = 2
+
+[node name="LabelHealth" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Santé (Health)"
+
+[node name="HealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow"]
+layout_mode = 2
+min_value = 0.0
+max_value = 30.0
+value = 10.0
+
+[node name="AttackRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer"]
+layout_mode = 2
+
+[node name="LabelAttack" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Attaque (Attack)"
+
+[node name="AttackSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow"]
+layout_mode = 2
+min_value = 0.0
+max_value = 30.0
+value = 10.0
+
+[node name="DefenseRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer"]
+layout_mode = 2
+
+[node name="LabelDefense" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Défense (Defense)"
+
+[node name="DefenseSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow"]
+layout_mode = 2
+min_value = 0.0
+max_value = 30.0
+value = 10.0
+
+[node name="LabelRemaining" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Points restants : 0"
+horizontal_alignment = 1
+
+[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+
+[node name="ButtonsRow3" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BackButton3" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_font_sizes/font_size = 18
+text = "< Retour"
+
+[node name="Spacer3" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CreateButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+theme_override_font_sizes/font_size = 18
+text = "Créer le personnage"
 
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer"]
 title = "Quitter"
@@ -614,8 +749,13 @@ size = Vector2(300, 120)
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Controls" to="MainMenuLayer" method="_on_button_controls_pressed"]
 [connection signal="pressed" from="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonControlsBack" to="MainMenuLayer" method="_on_button_controls_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonCreateCharacter" to="MainMenuLayer" method="_on_button_create_character_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]
-[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/HealthRow/HealthSpinBox" to="MainMenuLayer" method="_on_cc_health_changed"]
-[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackRow/AttackSpinBox" to="MainMenuLayer" method="_on_cc_attack_changed"]
-[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/DefenseRow/DefenseSpinBox" to="MainMenuLayer" method="_on_cc_defense_changed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/NextButton1" to="MainMenuLayer" method="_on_cc_next1_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/BackButton2" to="MainMenuLayer" method="_on_cc_back2_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/NextButton2" to="MainMenuLayer" method="_on_cc_next2_pressed"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow/SpecList" to="MainMenuLayer" method="_on_cc_spec_selected"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3/BackButton3" to="MainMenuLayer" method="_on_cc_back3_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]
+[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow/HealthSpinBox" to="MainMenuLayer" method="_on_cc_health_changed"]
+[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow/AttackSpinBox" to="MainMenuLayer" method="_on_cc_attack_changed"]
+[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow/DefenseSpinBox" to="MainMenuLayer" method="_on_cc_defense_changed"]
