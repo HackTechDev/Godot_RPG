@@ -488,10 +488,13 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="PageIdentity" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 10
+
 
 [node name="Title1" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
 layout_mode = 2
@@ -523,33 +526,12 @@ custom_minimum_size = Vector2(0, 140)
 size_flags_vertical = 3
 placeholder_text = "Décrivez brièvement votre personnage..."
 
-[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
-layout_mode = 2
-
-[node name="ButtonsRow1" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="CancelButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
-layout_mode = 2
-custom_minimum_size = Vector2(100, 0)
-theme_override_font_sizes/font_size = 18
-text = "Annuler"
-
-[node name="Spacer1" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NextButton1" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 18
-text = "Suivant >"
-
 [node name="PageAppearance" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 8
+
 
 [node name="TitleA" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
 layout_mode = 2
@@ -757,39 +739,12 @@ text = "Pieds :"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SepA2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
-layout_mode = 2
-
-[node name="ButtonsRowA" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="CancelButtonA" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
-layout_mode = 2
-custom_minimum_size = Vector2(100, 0)
-theme_override_font_sizes/font_size = 18
-text = "Annuler"
-
-[node name="SpacerA" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="BackButtonA" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 18
-text = "< Précédent"
-
-[node name="NextButtonA" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 18
-text = "Suivant >"
-
 [node name="PageMilitary" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 8
+
 
 [node name="Title2" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
 layout_mode = 2
@@ -847,39 +802,12 @@ size_flags_vertical = 3
 bbcode_enabled = true
 text = "[i]Sélectionnez une spécialisation...[/i]"
 
-[node name="Sep3" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
-layout_mode = 2
-
-[node name="ButtonsRow2" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="CancelButton2" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
-layout_mode = 2
-custom_minimum_size = Vector2(100, 0)
-theme_override_font_sizes/font_size = 18
-text = "Annuler"
-
-[node name="Spacer2" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="BackButton2" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 18
-text = "< Précédent"
-
-[node name="NextButton2" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 0)
-theme_override_font_sizes/font_size = 18
-text = "Suivant >"
-
 [node name="PageStats" type="VBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 10
+
 
 [node name="Title3" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
 layout_mode = 2
@@ -950,32 +878,40 @@ theme_override_font_sizes/font_size = 16
 text = "Points restants : 0"
 horizontal_alignment = 1
 
-[node name="Sep2" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+[node name="SepBottom" type="HSeparator" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="ButtonsRow3" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats"]
+[node name="ButtonsRowShared" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="CancelButton3" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+[node name="CancelButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared"]
 layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 theme_override_font_sizes/font_size = 18
 text = "Annuler"
 
-[node name="Spacer3" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+[node name="SpacerShared" type="Control" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BackButton3" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+[node name="BackButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared"]
 layout_mode = 2
+visible = false
 custom_minimum_size = Vector2(120, 0)
 theme_override_font_sizes/font_size = 18
 text = "< Précédent"
 
-[node name="CreateButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3"]
+[node name="NextButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared"]
 layout_mode = 2
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(120, 0)
+theme_override_font_sizes/font_size = 18
+text = "Suivant >"
+
+[node name="CreateButton" type="Button" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared"]
+layout_mode = 2
+visible = false
+custom_minimum_size = Vector2(180, 0)
 theme_override_font_sizes/font_size = 18
 text = "Créer le personnage"
 
@@ -1001,11 +937,6 @@ size = Vector2(300, 120)
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Controls" to="MainMenuLayer" method="_on_button_controls_pressed"]
 [connection signal="pressed" from="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonControlsBack" to="MainMenuLayer" method="_on_button_controls_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonCreateCharacter" to="MainMenuLayer" method="_on_button_create_character_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageIdentity/ButtonsRow1/NextButton1" to="MainMenuLayer" method="_on_cc_next1_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA/CancelButtonA" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA/BackButtonA" to="MainMenuLayer" method="_on_cc_back_appearance_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ButtonsRowA/NextButtonA" to="MainMenuLayer" method="_on_cc_next_appearance_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/BodyOption" to="MainMenuLayer" method="_on_cc_body_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HairOption" to="MainMenuLayer" method="_on_cc_hair_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HeadwearOption" to="MainMenuLayer" method="_on_cc_headwear_selected"]
@@ -1014,13 +945,11 @@ size = Vector2(300, 120)
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/TorsoOption" to="MainMenuLayer" method="_on_cc_torso_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/LegsOption" to="MainMenuLayer" method="_on_cc_legs_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/FeetOption" to="MainMenuLayer" method="_on_cc_feet_selected"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/CancelButton2" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/BackButton2" to="MainMenuLayer" method="_on_cc_back2_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/ButtonsRow2/NextButton2" to="MainMenuLayer" method="_on_cc_next2_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageMilitary/SpecRow/SpecList" to="MainMenuLayer" method="_on_cc_spec_selected"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3/CancelButton3" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3/BackButton3" to="MainMenuLayer" method="_on_cc_back3_pressed"]
-[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/ButtonsRow3/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow/HealthSpinBox" to="MainMenuLayer" method="_on_cc_health_changed"]
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow/AttackSpinBox" to="MainMenuLayer" method="_on_cc_attack_changed"]
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow/DefenseSpinBox" to="MainMenuLayer" method="_on_cc_defense_changed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/BackButton" to="MainMenuLayer" method="_on_cc_back_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/NextButton" to="MainMenuLayer" method="_on_cc_next_pressed"]
+[connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]

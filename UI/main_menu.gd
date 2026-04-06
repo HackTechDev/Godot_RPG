@@ -24,6 +24,12 @@ const _CC_PA   = _CC_BASE + "/PageAppearance/ContentRow"
 @onready var cc_page_military:   VBoxContainer = get_node(_CC_BASE + "/PageMilitary")
 @onready var cc_page_stats:      VBoxContainer = get_node(_CC_BASE + "/PageStats")
 
+@onready var cc_btn_back:   Button = get_node(_CC_BASE + "/ButtonsRowShared/BackButton")
+@onready var cc_btn_next:   Button = get_node(_CC_BASE + "/ButtonsRowShared/NextButton")
+@onready var cc_btn_create: Button = get_node(_CC_BASE + "/ButtonsRowShared/CreateButton")
+
+var _cc_current_page: int = 1
+
 @onready var cc_nickname:  LineEdit      = get_node(_CC_BASE + "/PageIdentity/NicknameEdit")
 @onready var cc_biography: TextEdit      = get_node(_CC_BASE + "/PageIdentity/BiographyEdit")
 @onready var cc_rank:      OptionButton  = get_node(_CC_BASE + "/PageMilitary/RankOption")
@@ -183,10 +189,14 @@ func _on_button_create_character_pressed():
 	_cc_show_page(1)
 
 func _cc_show_page(page: int):
+	_cc_current_page           = page
 	cc_page_identity.visible   = page == 1
 	cc_page_appearance.visible = page == 2
 	cc_page_military.visible   = page == 3
 	cc_page_stats.visible      = page == 4
+	cc_btn_back.visible        = page > 1
+	cc_btn_next.visible        = page < 4
+	cc_btn_create.visible      = page == 4
 	if page == 1:
 		cc_nickname.text  = ""
 		cc_biography.text = ""
@@ -281,23 +291,11 @@ func _on_cc_cancel_pressed():
 	character_creation.visible = false
 	main.visible = true
 
-func _on_cc_next1_pressed():
-	_cc_show_page(2)
+func _on_cc_back_pressed():
+	_cc_show_page(_cc_current_page - 1)
 
-func _on_cc_back_appearance_pressed():
-	_cc_show_page(1)
-
-func _on_cc_next_appearance_pressed():
-	_cc_show_page(3)
-
-func _on_cc_back2_pressed():
-	_cc_show_page(2)
-
-func _on_cc_next2_pressed():
-	_cc_show_page(4)
-
-func _on_cc_back3_pressed():
-	_cc_show_page(3)
+func _on_cc_next_pressed():
+	_cc_show_page(_cc_current_page + 1)
 
 func _on_cc_spec_selected(index: int):
 	var spec_name = cc_spec_list.get_item_text(index)
