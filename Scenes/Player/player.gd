@@ -24,12 +24,17 @@ const _APP_FILES: Dictionary = {
 	"body_light":     "res://Sprites/Player/items/010 body_color__light_.png",
 	"bangs_black":    "res://Sprites/Player/items/120 bangs__black_.png",
 	"armet_iron":     "res://Sprites/Player/items/130 armet__iron_.png",
+	"xeon_steel":     "res://Sprites/Player/items/130 xeon_helmet__steel_.png",
 	"armour_steel":   "res://Sprites/Player/items/060 armour__steel_.png",
+	"armour_iron":    "res://Sprites/Player/items/060 armour__iron_.png",
 	"bracers_steel":  "res://Sprites/Player/items/070 bracers__steel_.png",
 	"gloves_black":   "res://Sprites/Player/items/070 gloves__black_.png",
+	"gloves_brown":   "res://Sprites/Player/items/070 gloves__brown_.png",
 	"leather_forest": "res://Sprites/Player/items/060 leather__forest_.png",
+	"plate_silver":   "res://Sprites/Player/items/060 plate__silver_.png",
 	"armour_ceramic": "res://Sprites/Player/items/020 armour__ceramic_.png",
 	"boots_black":    "res://Sprites/Player/items/025 basic_boots__black_.png",
+	"boots_charcoal": "res://Sprites/Player/items/025 basic_boots__charcoal_.png",
 }
 const _HEAD_FILE = "res://Sprites/Player/items/100 human_male__light_.png"
 const _FACE_FILE = "res://Sprites/Player/items/101 neutral__light_.png"
@@ -537,10 +542,11 @@ func _apply_appearance():
 	_spr_load(_lyr_feet,     Player_data.appearance_feet)
 	_spr_none(_lyr_shoulders)
 	_spr_load(_lyr_torso,    Player_data.appearance_torso)
-	if Player_data.appearance_arms == "armour_steel":
-		_spr_load(_lyr_arms,    "armour_steel")
+	var arms = Player_data.appearance_arms
+	if arms in ["armour_steel", "armour_iron"]:
+		_spr_load(_lyr_arms,    arms)
 		_spr_none(_lyr_bracers)
-	elif Player_data.appearance_arms == "bracers_steel":
+	elif arms == "bracers_steel":
 		_spr_none(_lyr_arms)
 		_spr_load(_lyr_bracers, "bracers_steel")
 	else:

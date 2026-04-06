@@ -74,29 +74,34 @@ const CC_HAIR_OPTIONS: Array = [
 	{"key": "bangs_black", "label": "Frange (noir)",   "file": "120 bangs__black_.png"}
 ]
 const CC_HEADWEAR_OPTIONS: Array = [
-	{"key": "",           "label": "Aucun",           "file": ""},
-	{"key": "armet_iron", "label": "Armet (fer)",     "file": "130 armet__iron_.png"}
+	{"key": "",                 "label": "Aucun",               "file": ""},
+	{"key": "armet_iron",       "label": "Armet (fer)",         "file": "130 armet__iron_.png"},
+	{"key": "xeon_steel",       "label": "Casque Xeon (acier)", "file": "130 xeon_helmet__steel_.png"}
 ]
 const CC_ARMS_OPTIONS: Array = [
 	{"key": "",              "label": "Aucun",             "file": ""},
 	{"key": "armour_steel",  "label": "Armure (acier)",    "file": "060 armour__steel_.png"},
+	{"key": "armour_iron",   "label": "Armure (fer)",      "file": "060 armour__iron_.png"},
 	{"key": "bracers_steel", "label": "Brassards (acier)", "file": "070 bracers__steel_.png"}
 ]
 const CC_HANDS_OPTIONS: Array = [
-	{"key": "",             "label": "Aucun",        "file": ""},
-	{"key": "gloves_black", "label": "Gants (noir)", "file": "070 gloves__black_.png"}
+	{"key": "",              "label": "Aucun",          "file": ""},
+	{"key": "gloves_black",  "label": "Gants (noir)",   "file": "070 gloves__black_.png"},
+	{"key": "gloves_brown",  "label": "Gants (marron)", "file": "070 gloves__brown_.png"}
 ]
 const CC_TORSO_OPTIONS: Array = [
 	{"key": "",               "label": "Aucun",              "file": ""},
-	{"key": "leather_forest", "label": "Cuir (forêt)",       "file": "060 leather__forest_.png"}
+	{"key": "leather_forest", "label": "Cuir (forêt)",       "file": "060 leather__forest_.png"},
+	{"key": "plate_silver",   "label": "Plaque (argent)",    "file": "060 plate__silver_.png"}
 ]
 const CC_LEGS_OPTIONS: Array = [
 	{"key": "",               "label": "Aucun",              "file": ""},
 	{"key": "armour_ceramic", "label": "Armure (céramique)", "file": "020 armour__ceramic_.png"}
 ]
 const CC_FEET_OPTIONS: Array = [
-	{"key": "",             "label": "Aucun",              "file": ""},
-	{"key": "boots_black",  "label": "Bottes (noir)",      "file": "025 basic_boots__black_.png"}
+	{"key": "",                  "label": "Aucun",              "file": ""},
+	{"key": "boots_black",       "label": "Bottes (noir)",      "file": "025 basic_boots__black_.png"},
+	{"key": "boots_charcoal",    "label": "Bottes (charbon)",   "file": "025 basic_boots__charcoal_.png"}
 ]
 
 const CC_RANKS: Array = [
@@ -220,10 +225,12 @@ func _cc_refresh_preview():
 	_cc_set_sprite(cc_spr_legs,     _cc_get_selected_file(cc_legs_opt,     CC_LEGS_OPTIONS))
 	_cc_set_sprite(cc_spr_feet,     _cc_get_selected_file(cc_feet_opt,     CC_FEET_OPTIONS))
 	_cc_set_sprite(cc_spr_gloves,   _cc_get_selected_file(cc_hands_opt,    CC_HANDS_OPTIONS))
-	# Arms: show armour OR bracers based on selection (gloves moved to Mains slot)
+	# Arms: armure (acier/fer) ou brassards
 	var arms_file = _cc_get_selected_file(cc_arms_opt, CC_ARMS_OPTIONS)
-	_cc_set_sprite(cc_spr_arms,    arms_file if arms_file == "060 armour__steel_.png" else "")
-	_cc_set_sprite(cc_spr_bracers, arms_file if arms_file == "070 bracers__steel_.png" else "")
+	var is_armour  = arms_file in ["060 armour__steel_.png", "060 armour__iron_.png"]
+	var is_bracers = arms_file == "070 bracers__steel_.png"
+	_cc_set_sprite(cc_spr_arms,    arms_file if is_armour else "")
+	_cc_set_sprite(cc_spr_bracers, arms_file if is_bracers else "")
 	# Always show base head + face
 	_cc_set_sprite(cc_spr_head, "100 human_male__light_.png")
 	_cc_set_sprite(cc_spr_face, "101 neutral__light_.png")
