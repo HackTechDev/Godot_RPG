@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const SETTINGS_PATH = "user://settings.json"
+const TOTAL_POINTS = 30
 
 var liblevel = preload("res://Lib/liblevel.gd").new()
 
@@ -9,10 +10,17 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var help: Control = $Help
 @onready var audio_settings: Control = $AudioSettings
 @onready var controls_settings: Control = $ControlsSettings
+@onready var character_creation: Control = $CharacterCreation
 @onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
+
+@onready var cc_nickname: LineEdit = $CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/NicknameEdit
+@onready var cc_health: SpinBox = $CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/HealthRow/HealthSpinBox
+@onready var cc_attack: SpinBox = $CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackRow/AttackSpinBox
+@onready var cc_defense: SpinBox = $CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsContainer/DefenseRow/DefenseSpinBox
+@onready var cc_remaining: Label = $CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LabelRemaining
 
 	
 func _on_button_play_pressed():
@@ -68,6 +76,49 @@ func _on_button_controls_pressed():
 func _on_button_controls_back_pressed():
 	controls_settings.visible = false
 	settings.visible = true
+
+func _on_button_create_character_pressed():
+	main.visible = false
+	character_creation.visible = true
+	cc_nickname.text = ""
+	cc_health.value = 10
+	cc_attack.value = 10
+	cc_defense.value = 10
+	_cc_update_remaining()
+
+func _cc_update_remaining():
+	var remaining = TOTAL_POINTS - int(cc_health.value) - int(cc_attack.value) - int(cc_defense.value)
+	cc_remaining.text = "Points restants: " + str(remaining)
+
+func _on_cc_health_changed(value: float):
+	var others = int(cc_attack.value) + int(cc_defense.value)
+	if int(value) + others > TOTAL_POINTS:
+		cc_health.set_value_no_signal(TOTAL_POINTS - others)
+	_cc_update_remaining()
+
+func _on_cc_attack_changed(value: float):
+	var others = int(cc_health.value) + int(cc_defense.value)
+	if int(value) + others > TOTAL_POINTS:
+		cc_attack.set_value_no_signal(TOTAL_POINTS - others)
+	_cc_update_remaining()
+
+func _on_cc_defense_changed(value: float):
+	var others = int(cc_health.value) + int(cc_attack.value)
+	if int(value) + others > TOTAL_POINTS:
+		cc_defense.set_value_no_signal(TOTAL_POINTS - others)
+	_cc_update_remaining()
+
+func _on_cc_cancel_pressed():
+	character_creation.visible = false
+	main.visible = true
+
+func _on_cc_create_pressed():
+	Player_data.player_nickname = cc_nickname.text.strip_edges()
+	Player_data.player_health = int(cc_health.value)
+	Player_data.player_attack = int(cc_attack.value)
+	Player_data.player_defense = int(cc_defense.value)
+	character_creation.visible = false
+	main.visible = true
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on

@@ -5,6 +5,7 @@ class_name Player_data
 static var player_health = 4
 static var player_attack: int = 10
 static var player_defense: int = 10
+static var player_nickname: String = ""
 
 static var player_position = Vector2()
 static var player_facing = 0
