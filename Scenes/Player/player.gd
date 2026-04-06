@@ -2,9 +2,37 @@ extends CharacterBody2D
 
 var liblevel = preload("res://Lib/liblevel.gd").new()
 
-@onready var anim_tree = $AnimationTree
-@onready var anim_state = anim_tree.get("parameters/playback")
-@onready var footstep = $Footstep
+@onready var anim_tree        = $AnimationTree
+@onready var anim_state       = anim_tree.get("parameters/playback")
+@onready var footstep         = $Footstep
+@onready var master_sprite    = $Sprite2D
+@onready var appearance_layers = $AppearanceLayers
+@onready var _lyr_body        = $AppearanceLayers/SpriteBody
+@onready var _lyr_legs        = $AppearanceLayers/SpriteLegs
+@onready var _lyr_feet        = $AppearanceLayers/SpriteFeet
+@onready var _lyr_shoulders   = $AppearanceLayers/SpriteShoulders
+@onready var _lyr_torso       = $AppearanceLayers/SpriteTorso
+@onready var _lyr_arms        = $AppearanceLayers/SpriteArms
+@onready var _lyr_bracers     = $AppearanceLayers/SpriteBracers
+@onready var _lyr_gloves      = $AppearanceLayers/SpriteGloves
+@onready var _lyr_head        = $AppearanceLayers/SpriteHead
+@onready var _lyr_face        = $AppearanceLayers/SpriteFace
+@onready var _lyr_hair        = $AppearanceLayers/SpriteHair
+@onready var _lyr_headwear    = $AppearanceLayers/SpriteHeadwear
+
+const _APP_FILES: Dictionary = {
+	"body_light":     "res://Sprites/Player/items/010 body_color__light_.png",
+	"bangs_black":    "res://Sprites/Player/items/120 bangs__black_.png",
+	"armet_iron":     "res://Sprites/Player/items/130 armet__iron_.png",
+	"armour_steel":   "res://Sprites/Player/items/060 armour__steel_.png",
+	"bracers_steel":  "res://Sprites/Player/items/070 bracers__steel_.png",
+	"gloves_black":   "res://Sprites/Player/items/070 gloves__black_.png",
+	"leather_forest": "res://Sprites/Player/items/060 leather__forest_.png",
+	"armour_ceramic": "res://Sprites/Player/items/020 armour__ceramic_.png",
+	"boots_black":    "res://Sprites/Player/items/025 basic_boots__black_.png",
+}
+const _HEAD_FILE = "res://Sprites/Player/items/100 human_male__light_.png"
+const _FACE_FILE = "res://Sprites/Player/items/101 neutral__light_.png"
 
 var main_menu = preload("res://UI/main_menu.tscn")
 var menu_instance = null
@@ -94,6 +122,7 @@ func _ready():
 	player_combat_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4))
 	add_child(player_combat_label)
 
+	_apply_appearance()
 	SceneTransition.fade_in()
 
 func _physics_process(_delta):
@@ -107,6 +136,12 @@ func _process(_delta):
 		if in_combat:
 			_end_combat()
 		game_over_instance.show_game_over()
+	# Sync LPC layers to the animation frame driven by AnimationPlayer
+	if appearance_layers.visible:
+		var f = master_sprite.frame
+		for child in appearance_layers.get_children():
+			if child is Sprite2D and child.visible:
+				child.frame = f
 
 func _input(event):
 	if event.is_action_pressed("ui_pause"):
@@ -310,10 +345,10 @@ func _refresh_player_label():
 	player_combat_label.visible = true
 
 func _flash_player_hit():
-	var sprite = $Sprite2D
+	var flash_target: CanvasItem = appearance_layers if appearance_layers.visible else master_sprite
 	var t1 = create_tween()
-	t1.tween_property(sprite, "modulate", Color(1.0, 0.2, 0.2, 1.0), 0.08)
-	t1.tween_property(sprite, "modulate", Color.WHITE, 0.15)
+	t1.tween_property(flash_target, "modulate", Color(1.0, 0.2, 0.2, 1.0), 0.08)
+	t1.tween_property(flash_target, "modulate", Color.WHITE, 0.15)
 	if is_instance_valid(combat_enemy):
 		var knock_dir = (global_position - combat_enemy.global_position).normalized()
 		var origin_pos = position
@@ -492,6 +527,59 @@ func _player_attacks_after_defense():
 	if attack_success:
 		await _robot_defends()
 
+func _apply_appearance():
+	if Player_data.appearance_body == "":
+		appearance_layers.visible = false
+		master_sprite.visible = true
+		return
+	_spr_load(_lyr_body,     Player_data.appearance_body)
+	_spr_load(_lyr_legs,     Player_data.appearance_legs)
+	_spr_load(_lyr_feet,     Player_data.appearance_feet)
+	_spr_none(_lyr_shoulders)
+	_spr_load(_lyr_torso,    Player_data.appearance_torso)
+	if Player_data.appearance_arms == "armour_steel":
+		_spr_load(_lyr_arms,    "armour_steel")
+		_spr_none(_lyr_bracers)
+	elif Player_data.appearance_arms == "bracers_steel":
+		_spr_none(_lyr_arms)
+		_spr_load(_lyr_bracers, "bracers_steel")
+	else:
+		_spr_none(_lyr_arms)
+		_spr_none(_lyr_bracers)
+	_spr_load(_lyr_gloves,   Player_data.appearance_hands)
+	_spr_file(_lyr_head,     _HEAD_FILE)
+	_spr_file(_lyr_face,     _FACE_FILE)
+	_spr_load(_lyr_hair,     Player_data.appearance_hair)
+	_spr_load(_lyr_headwear, Player_data.appearance_headwear)
+	var f = master_sprite.frame
+	for child in appearance_layers.get_children():
+		if child is Sprite2D:
+			child.frame = f
+	appearance_layers.visible = true
+	master_sprite.visible = false
+
+func _spr_load(spr: Sprite2D, key: String):
+	if key == "":
+		spr.visible = false
+		return
+	var path = _APP_FILES.get(key, "")
+	if path == "":
+		spr.visible = false
+		return
+	spr.texture = load(path)
+	spr.hframes = 13
+	spr.vframes = 54
+	spr.visible = true
+
+func _spr_file(spr: Sprite2D, path: String):
+	spr.texture = load(path)
+	spr.hframes = 13
+	spr.vframes = 54
+	spr.visible = true
+
+func _spr_none(spr: Sprite2D):
+	spr.visible = false
+
 func _restart_game():
 	liblevel.reinitializeLevel()
 	Player_data.player_previous_scene = ""
@@ -507,13 +595,24 @@ func _restart_game():
 	Player_data.contact_object = null
 	Player_data.contact_enemy = null
 	liblevel.savePlayer({
-		"player_position": [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
-		"player_facing": 0,
-		"scene": "",
-		"player_health": Player_data.player_health,
+		"player_position":    [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
+		"player_facing":      0,
+		"scene":              "",
+		"player_health":      Player_data.player_health,
 		"player_health_base": Player_data.player_health_base,
-		"player_attack": Player_data.player_attack,
-		"player_defense": Player_data.player_defense,
-		"player_nickname": Player_data.player_nickname
+		"player_attack":      Player_data.player_attack,
+		"player_defense":     Player_data.player_defense,
+		"player_nickname":    Player_data.player_nickname,
+		"player_biography":   Player_data.player_biography,
+		"player_rank":        Player_data.player_rank,
+		"player_specialization": Player_data.player_specialization,
+		"appearance_body":    Player_data.appearance_body,
+		"appearance_hair":    Player_data.appearance_hair,
+		"appearance_headwear": Player_data.appearance_headwear,
+		"appearance_arms":    Player_data.appearance_arms,
+		"appearance_hands":   Player_data.appearance_hands,
+		"appearance_torso":   Player_data.appearance_torso,
+		"appearance_legs":    Player_data.appearance_legs,
+		"appearance_feet":    Player_data.appearance_feet,
 	})
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
