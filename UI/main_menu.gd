@@ -39,6 +39,7 @@ const _CC_PA   = _CC_BASE + "/PageAppearance/ContentRow"
 @onready var cc_hair_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/HairOption")
 @onready var cc_headwear_opt: OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/HeadwearOption")
 @onready var cc_arms_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/ArmsOption")
+@onready var cc_hands_opt:    OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/HandsOption")
 @onready var cc_torso_opt:    OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/TorsoOption")
 @onready var cc_legs_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/LegsOption")
 @onready var cc_feet_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/FeetOption")
@@ -57,8 +58,8 @@ const _CC_PA   = _CC_BASE + "/PageAppearance/ContentRow"
 @onready var cc_spr_hair:     Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteHair")
 @onready var cc_spr_headwear: Sprite2D = get_node(_CC_PA + "/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport/SpriteHeadwear")
 
-# LPC Spritesheet frame: walk south (row 8), first frame (col 0) = 8*13+0 = 104
-const CC_PREVIEW_FRAME = 104
+# LPC Spritesheet frame: walk south/de face (row 10), first frame (col 0) = 10*13+0 = 130
+const CC_PREVIEW_FRAME = 130
 const CC_SPR_HFRAMES   = 13
 const CC_SPR_VFRAMES   = 54
 
@@ -77,10 +78,13 @@ const CC_HEADWEAR_OPTIONS: Array = [
 	{"key": "armet_iron", "label": "Armet (fer)",     "file": "130 armet__iron_.png"}
 ]
 const CC_ARMS_OPTIONS: Array = [
-	{"key": "",                  "label": "Aucun",                  "file": ""},
-	{"key": "armour_steel",      "label": "Armure (acier)",         "file": "060 armour__steel_.png"},
-	{"key": "bracers_steel",     "label": "Brassards (acier)",      "file": "070 bracers__steel_.png"},
-	{"key": "gloves_black",      "label": "Gants (noir)",           "file": "070 gloves__black_.png"}
+	{"key": "",              "label": "Aucun",             "file": ""},
+	{"key": "armour_steel",  "label": "Armure (acier)",    "file": "060 armour__steel_.png"},
+	{"key": "bracers_steel", "label": "Brassards (acier)", "file": "070 bracers__steel_.png"}
+]
+const CC_HANDS_OPTIONS: Array = [
+	{"key": "",             "label": "Aucun",        "file": ""},
+	{"key": "gloves_black", "label": "Gants (noir)", "file": "070 gloves__black_.png"}
 ]
 const CC_TORSO_OPTIONS: Array = [
 	{"key": "",               "label": "Aucun",              "file": ""},
@@ -196,6 +200,7 @@ func _cc_init_appearance():
 	_cc_populate_option(cc_hair_opt,     CC_HAIR_OPTIONS)
 	_cc_populate_option(cc_headwear_opt, CC_HEADWEAR_OPTIONS)
 	_cc_populate_option(cc_arms_opt,     CC_ARMS_OPTIONS)
+	_cc_populate_option(cc_hands_opt,    CC_HANDS_OPTIONS)
 	_cc_populate_option(cc_torso_opt,    CC_TORSO_OPTIONS)
 	_cc_populate_option(cc_legs_opt,     CC_LEGS_OPTIONS)
 	_cc_populate_option(cc_feet_opt,     CC_FEET_OPTIONS)
@@ -214,14 +219,11 @@ func _cc_refresh_preview():
 	_cc_set_sprite(cc_spr_torso,    _cc_get_selected_file(cc_torso_opt,    CC_TORSO_OPTIONS))
 	_cc_set_sprite(cc_spr_legs,     _cc_get_selected_file(cc_legs_opt,     CC_LEGS_OPTIONS))
 	_cc_set_sprite(cc_spr_feet,     _cc_get_selected_file(cc_feet_opt,     CC_FEET_OPTIONS))
-	# Arms: show armour OR bracers/gloves based on selection
+	_cc_set_sprite(cc_spr_gloves,   _cc_get_selected_file(cc_hands_opt,    CC_HANDS_OPTIONS))
+	# Arms: show armour OR bracers based on selection (gloves moved to Mains slot)
 	var arms_file = _cc_get_selected_file(cc_arms_opt, CC_ARMS_OPTIONS)
-	var is_bracers = arms_file == "070 bracers__steel_.png"
-	var is_gloves  = arms_file == "070 gloves__black_.png"
-	var is_armour  = arms_file == "060 armour__steel_.png"
-	_cc_set_sprite(cc_spr_arms,    "060 armour__steel_.png" if is_armour else "")
-	_cc_set_sprite(cc_spr_bracers, "070 bracers__steel_.png" if is_bracers else "")
-	_cc_set_sprite(cc_spr_gloves,  "070 gloves__black_.png" if is_gloves else "")
+	_cc_set_sprite(cc_spr_arms,    arms_file if arms_file == "060 armour__steel_.png" else "")
+	_cc_set_sprite(cc_spr_bracers, arms_file if arms_file == "070 bracers__steel_.png" else "")
 	# Always show base head + face
 	_cc_set_sprite(cc_spr_head, "100 human_male__light_.png")
 	_cc_set_sprite(cc_spr_face, "101 neutral__light_.png")
@@ -248,6 +250,7 @@ func _on_cc_body_selected(_idx: int):     _cc_refresh_preview()
 func _on_cc_hair_selected(_idx: int):     _cc_refresh_preview()
 func _on_cc_headwear_selected(_idx: int): _cc_refresh_preview()
 func _on_cc_arms_selected(_idx: int):     _cc_refresh_preview()
+func _on_cc_hands_selected(_idx: int):    _cc_refresh_preview()
 func _on_cc_torso_selected(_idx: int):    _cc_refresh_preview()
 func _on_cc_legs_selected(_idx: int):     _cc_refresh_preview()
 func _on_cc_feet_selected(_idx: int):     _cc_refresh_preview()
@@ -329,6 +332,7 @@ func _on_cc_create_pressed():
 	Player_data.appearance_hair      = _cc_get_appearance_key(cc_hair_opt,     CC_HAIR_OPTIONS)
 	Player_data.appearance_headwear  = _cc_get_appearance_key(cc_headwear_opt, CC_HEADWEAR_OPTIONS)
 	Player_data.appearance_arms      = _cc_get_appearance_key(cc_arms_opt,     CC_ARMS_OPTIONS)
+	Player_data.appearance_hands     = _cc_get_appearance_key(cc_hands_opt,    CC_HANDS_OPTIONS)
 	Player_data.appearance_torso     = _cc_get_appearance_key(cc_torso_opt,    CC_TORSO_OPTIONS)
 	Player_data.appearance_legs      = _cc_get_appearance_key(cc_legs_opt,     CC_LEGS_OPTIONS)
 	Player_data.appearance_feet      = _cc_get_appearance_key(cc_feet_opt,     CC_FEET_OPTIONS)
@@ -348,6 +352,7 @@ func _on_cc_create_pressed():
 		"appearance_hair":      Player_data.appearance_hair,
 		"appearance_headwear":  Player_data.appearance_headwear,
 		"appearance_arms":      Player_data.appearance_arms,
+		"appearance_hands":     Player_data.appearance_hands,
 		"appearance_torso":     Player_data.appearance_torso,
 		"appearance_legs":      Player_data.appearance_legs,
 		"appearance_feet":      Player_data.appearance_feet
@@ -448,6 +453,7 @@ func data_to_save():
 		"appearance_hair":       Player_data.appearance_hair,
 		"appearance_headwear":   Player_data.appearance_headwear,
 		"appearance_arms":       Player_data.appearance_arms,
+		"appearance_hands":      Player_data.appearance_hands,
 		"appearance_torso":      Player_data.appearance_torso,
 		"appearance_legs":       Player_data.appearance_legs,
 		"appearance_feet":       Player_data.appearance_feet

@@ -118,6 +118,7 @@ func load_game():
 		Player_data.appearance_hair     = data.get("appearance_hair", "")
 		Player_data.appearance_headwear = data.get("appearance_headwear", "")
 		Player_data.appearance_arms     = data.get("appearance_arms", "")
+		Player_data.appearance_hands    = data.get("appearance_hands", "")
 		Player_data.appearance_torso    = data.get("appearance_torso", "")
 		Player_data.appearance_legs     = data.get("appearance_legs", "")
 		Player_data.appearance_feet     = data.get("appearance_feet", "")

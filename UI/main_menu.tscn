@@ -717,6 +717,15 @@ text = "Bras :"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="LabelHands" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Mains :"
+
+[node name="HandsOption" type="OptionButton" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="LabelTorso" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
@@ -978,6 +987,7 @@ size = Vector2(300, 120)
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HairOption" to="MainMenuLayer" method="_on_cc_hair_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HeadwearOption" to="MainMenuLayer" method="_on_cc_headwear_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/ArmsOption" to="MainMenuLayer" method="_on_cc_arms_selected"]
+[connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/HandsOption" to="MainMenuLayer" method="_on_cc_hands_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/TorsoOption" to="MainMenuLayer" method="_on_cc_torso_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/LegsOption" to="MainMenuLayer" method="_on_cc_legs_selected"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/FeetOption" to="MainMenuLayer" method="_on_cc_feet_selected"]
