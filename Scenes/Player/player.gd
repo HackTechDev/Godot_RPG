@@ -115,14 +115,6 @@ func _input(event):
 			_end_combat()
 			return
 
-	if event.is_action_pressed("ui_m"):
-		display_menu = !display_menu
-		background_menu.visible = display_menu
-		text_menu.visible = display_menu
-		get_tree().paused = display_menu
-		if not display_menu:
-			_auto_save_objects()
-
 	if event.is_action_pressed("ui_b"):
 		if GameConfig.DEBUG:
 			print("b key: build")
