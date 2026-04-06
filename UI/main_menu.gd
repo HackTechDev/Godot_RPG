@@ -115,8 +115,19 @@ func _on_cc_cancel_pressed():
 func _on_cc_create_pressed():
 	Player_data.player_nickname = cc_nickname.text.strip_edges()
 	Player_data.player_health = int(cc_health.value)
+	Player_data.player_health_base = int(cc_health.value)
 	Player_data.player_attack = int(cc_attack.value)
 	Player_data.player_defense = int(cc_defense.value)
+	liblevel.savePlayer({
+		"player_position": [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
+		"player_facing": 0,
+		"scene": "",
+		"player_health": Player_data.player_health,
+		"player_health_base": Player_data.player_health_base,
+		"player_attack": Player_data.player_attack,
+		"player_defense": Player_data.player_defense,
+		"player_nickname": Player_data.player_nickname
+	})
 	character_creation.visible = false
 	main.visible = true
 
@@ -200,8 +211,10 @@ func data_to_save():
 		"player_facing" : Player_data.player_facing,
 		"scene": Player_data.player_previous_scene,
 		"player_health": Player_data.player_health,
+		"player_health_base": Player_data.player_health_base,
 		"player_attack": Player_data.player_attack,
-		"player_defense": Player_data.player_defense
+		"player_defense": Player_data.player_defense,
+		"player_nickname": Player_data.player_nickname
 	}
 
 func _notification(what):

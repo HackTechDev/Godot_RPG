@@ -3,6 +3,7 @@ extends Node
 class_name Player_data
 
 static var player_health = 4
+static var player_health_base: int = 4
 static var player_attack: int = 10
 static var player_defense: int = 10
 static var player_nickname: String = ""

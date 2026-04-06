@@ -493,7 +493,6 @@ func _player_attacks_after_defense():
 		await _robot_defends()
 
 func _restart_game():
-	liblevel.reinitializePlayer()
 	liblevel.reinitializeLevel()
 	Player_data.player_previous_scene = ""
 	Player_data.spawnpoint_current = ""
@@ -501,12 +500,20 @@ func _restart_game():
 	Player_data.scene_path = ""
 	Player_data.player_pos_x = 0
 	Player_data.player_pos_y = 0
-	Player_data.player_health = 4
-	Player_data.player_attack = randi_range(10, 15)
-	Player_data.player_defense = randi_range(10, 15)
+	Player_data.player_health = Player_data.player_health_base
 	Player_data.computer = 0
 	Player_data.robot = 0
 	Player_data.inventory = []
 	Player_data.contact_object = null
 	Player_data.contact_enemy = null
+	liblevel.savePlayer({
+		"player_position": [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
+		"player_facing": 0,
+		"scene": "",
+		"player_health": Player_data.player_health,
+		"player_health_base": Player_data.player_health_base,
+		"player_attack": Player_data.player_attack,
+		"player_defense": Player_data.player_defense,
+		"player_nickname": Player_data.player_nickname
+	})
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
