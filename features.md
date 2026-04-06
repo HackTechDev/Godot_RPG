@@ -365,19 +365,39 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
-## Création de personnage en wizard 3 pages
+## Création de personnage en wizard 4 pages
 
 - Accessible depuis le menu principal via le bouton **"Create Character Sheet"**
 - **Page 1 — Identité** : saisie du surnom (max 20 caractères) et d'une biographie libre (TextEdit multi-lignes)
-- **Page 2 — Profil militaire** :
+- **Page 2 — Apparence** :
+  - Zone de prévisualisation (fond blanc, 192×192 px, zoom ×3) rendue via `SubViewport` avec 12 `Sprite2D` empilées par `z_index`
+  - Prévisualisation mise à jour en temps réel à chaque changement d'option
+  - 8 slots configurables : Corps, Cheveux, Casque, Bras, Mains, Torse, Jambes, Pieds
+  - Sprites LPC (Liberated Pixel Cup) 832×3456 px, 13×54 frames, format universel
+  - Options disponibles : carnation claire, frange noire, armet fer, armure/brassards acier, gants noirs, cuir forêt, armure céramique, bottes noires
+  - Personnage affiché de face (row 10, frame 130 = walk south)
+- **Page 3 — Profil militaire** :
   - Menu déroulant Grade : Militaires du rang / Sous-officiers / Officiers / Officiers généraux
   - Liste de 8 spécialisations (ItemList) : Opérateur FS, Tireur de précision, Transmetteur, Démineur/EOD, Médecin de combat, Renseignement, Spéc. insertion, Spéc. appuis
   - Panneau description BBCode à droite, mis à jour en temps réel à la sélection
-- **Page 3 — Statistiques** : répartition de 30 points entre Santé, Attaque et Défense via SpinBoxes ; compteur de points restants en temps réel
+- **Page 4 — Statistiques** : répartition de 30 points entre Santé, Attaque et Défense via SpinBoxes ; compteur de points restants en temps réel
 - À la validation ("Créer le personnage") : données sauvegardées dans `user://rpg.json`, niveaux réinitialisés depuis les défauts, jeu lancé directement sur `level_1`
-- Données persistées dans `Player_data` et `rpg.json` : `player_nickname`, `player_biography`, `player_rank`, `player_specialization`, `player_health`, `player_health_base`, `player_attack`, `player_defense`
+- Données persistées dans `Player_data` et `rpg.json` : `player_nickname`, `player_biography`, `player_rank`, `player_specialization`, `player_health`, `player_health_base`, `player_attack`, `player_defense`, `appearance_body/hair/headwear/arms/hands/torso/legs/feet`
 - Le surnom est affiché en temps réel dans le panneau HUD gauche ("Pseudo : …")
 - **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `UI/hud.tscn`, `UI/hud.gd`
+
+---
+
+## Sprite LPC du personnage en jeu
+
+- Le joueur affiche son sprite LPC composé de couches si une apparence a été configurée lors de la création ; sinon, le sprite par défaut (`player_without_sword.png`) est utilisé
+- `AppearanceLayers` (Node2D) ajouté dans `player.tscn` avec 12 `Sprite2D` enfants (SpriteBody, SpriteLegs, SpriteFeet, SpriteShoulders, SpriteTorso, SpriteArms, SpriteBracers, SpriteGloves, SpriteHead, SpriteFace, SpriteHair, SpriteHeadwear)
+- Compatibilité directe avec l'AnimationPlayer existant : les sheets LPC (13×54) partagent les mêmes numéros de frames 104–151 (rows 8–11 = walk 4 directions) que la sheet originale (13×21)
+- `_apply_appearance()` appelé dans `_ready()` : charge les textures depuis `Player_data.appearance_*`, masque le sprite original
+- `_process()` : synchronise le `frame` de chaque layer avec le `Sprite2D` master piloté par l'AnimationTree
+- Flash de combat (`_flash_player_hit`) : applique le `modulate` rouge sur `AppearanceLayers` ou `Sprite2D` selon le mode actif
+- Sprites stockés dans `Sprites/Player/items/` (12 fichiers PNG LPC)
+- **Fichiers :** `Scenes/Player/player.tscn`, `Scenes/Player/player.gd`, `Sprites/Player/items/`
 
 ---
 

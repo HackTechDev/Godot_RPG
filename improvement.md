@@ -61,6 +61,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Fiche de personnage enrichie
 - Afficher le grade, la spécialisation et la biographie dans la fiche (touche P)
 - La biographie pourrait apparaître dans un onglet ou un panneau dédié
+- Afficher un aperçu du sprite LPC du personnage dans la fiche (touche P)
 
 ### ~~Splashscreen — indication visuelle~~ — Implémenté
 - Label "Press any key" ajouté en bas de l'écran, avec apparition en fondu puis clignotement en boucle
@@ -137,3 +138,19 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Avec le wizard de création, le joueur peut allouer 0–30 points en attaque/défense — la plage effective est donc beaucoup plus large qu'avant (anciennement 10–15 fixe)
 - Envisager des valeurs minimales par stat (ex. : min 5) pour éviter un personnage déséquilibré (tout en santé, 0 en attaque)
 - Calibrer la difficulté des ennemis en fonction des nouvelles plages possibles
+
+---
+
+## Apparence du personnage
+
+### Éditeur d'apparence en cours de partie
+- Permettre de modifier l'apparence depuis la fiche de personnage (touche P) ou le menu in-game
+- Les changements sont sauvegardés dans `rpg.json` et appliqués immédiatement via `_apply_appearance()`
+
+### Sprites LPC supplémentaires
+- Enrichir les options de chaque slot au fil des imports (nouvelles couleurs de peau, coiffures, armures…)
+- Les sheets LPC sont standardisées : tout fichier 832×3456 compatible peut être ajouté dans `Sprites/Player/items/` et déclaré dans `CC_*_OPTIONS`
+
+### Sprite LPC pour les PNJ et ennemis
+- Utiliser le même système de layers LPC pour habiller les PNJ et les `RobotEnemy`
+- Permet une variété visuelle sans créer de nouvelles textures manuellement
