@@ -97,18 +97,20 @@ func _load(spr: Sprite2D, key: String):
 	if path == "":
 		spr.visible = false
 		return
-	spr.texture = load(path)
-	spr.hframes = 13
-	spr.vframes = 54
-	spr.frame   = 130
-	spr.visible = true
+	spr.texture  = load(path)
+	spr.hframes  = 13
+	spr.vframes  = 54
+	spr.frame    = 130
+	spr.position = Vector2(32, 32)
+	spr.visible  = true
 
 func _file(spr: Sprite2D, path: String):
-	spr.texture = load(path)
-	spr.hframes = 13
-	spr.vframes = 54
-	spr.frame   = 130
-	spr.visible = true
+	spr.texture  = load(path)
+	spr.hframes  = 13
+	spr.vframes  = 54
+	spr.frame    = 130
+	spr.position = Vector2(32, 32)
+	spr.visible  = true
 
 func _none(spr: Sprite2D):
 	spr.visible = false
