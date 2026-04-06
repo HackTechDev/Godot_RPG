@@ -365,6 +365,32 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Création de personnage en wizard 3 pages
+
+- Accessible depuis le menu principal via le bouton **"Create Character Sheet"**
+- **Page 1 — Identité** : saisie du surnom (max 20 caractères) et d'une biographie libre (TextEdit multi-lignes)
+- **Page 2 — Profil militaire** :
+  - Menu déroulant Grade : Militaires du rang / Sous-officiers / Officiers / Officiers généraux
+  - Liste de 8 spécialisations (ItemList) : Opérateur FS, Tireur de précision, Transmetteur, Démineur/EOD, Médecin de combat, Renseignement, Spéc. insertion, Spéc. appuis
+  - Panneau description BBCode à droite, mis à jour en temps réel à la sélection
+- **Page 3 — Statistiques** : répartition de 30 points entre Santé, Attaque et Défense via SpinBoxes ; compteur de points restants en temps réel
+- À la validation ("Créer le personnage") : données sauvegardées dans `user://rpg.json`, niveaux réinitialisés depuis les défauts, jeu lancé directement sur `level_1`
+- Données persistées dans `Player_data` et `rpg.json` : `player_nickname`, `player_biography`, `player_rank`, `player_specialization`, `player_health`, `player_health_base`, `player_attack`, `player_defense`
+- Le surnom est affiché en temps réel dans le panneau HUD gauche ("Pseudo : …")
+- **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `UI/hud.tscn`, `UI/hud.gd`
+
+---
+
+## Exclusivité des panneaux HUD (Sheet / Settings / Home)
+
+- Les trois boutons du HUD (Sheet, Setting, Home) sont mutuellement exclusifs :
+  - Clic **Sheet** : ferme le menu Settings s'il est ouvert, puis toggle la fiche de personnage
+  - Clic **Setting** : ferme la fiche si elle est visible, puis ouvre/ferme le menu
+  - Clic **Home** : ferme la fiche si elle est visible, puis ouvre le menu principal
+- **Fichiers :** `Scenes/Player/player.gd`
+
+---
+
 ## Documentation technique
 
 - `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)

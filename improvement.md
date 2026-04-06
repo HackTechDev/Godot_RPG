@@ -13,7 +13,11 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Objets de soin
 - Nouveau type d'objet collectable (`health_item`) qui restaure 1 point de santé
 - Même système d'interaction que les ordinateurs et robots (T pour ramasser)
-- Max santé : 4 (valeur de `player_health` par défaut)
+- Max santé : utiliser `player_health_base` comme plafond (valeur définie à la création du personnage)
+
+### Effets de spécialisation sur le gameplay
+- La spécialisation choisie à la création pourrait modifier les stats ou débloquer des capacités
+- Exemples : Médecin de combat → récupère +1 PV après un combat gagné ; Tireur de précision → bonus d'attaque à distance
 
 ### Écran Game Over
 - ~~Implémenté~~ — voir `features.md`
@@ -53,6 +57,10 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Détecter si c'est la première partie (`user://rpg.json` absent)
 - Afficher des bulles d'aide contextuelles (ex. : "Appuyez sur T pour ramasser")
 - Disparaissent après la première utilisation de chaque action
+
+### Fiche de personnage enrichie
+- Afficher le grade, la spécialisation et la biographie dans la fiche (touche P)
+- La biographie pourrait apparaître dans un onglet ou un panneau dédié
 
 ### ~~Splashscreen — indication visuelle~~ — Implémenté
 - Label "Press any key" ajouté en bas de l'écran, avec apparition en fondu puis clignotement en boucle
@@ -126,5 +134,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - À améliorer pour afficher le dé de fuite dans l'overlay et attendre Espace
 
 ### Équilibrage du combat
-- La plage 10–15 pour attaque/défense avec dés 1–20 donne un taux de réussite de 45–70 %
-- Envisager une plage dynamique selon le niveau ou l'expérience du joueur
+- Avec le wizard de création, le joueur peut allouer 0–30 points en attaque/défense — la plage effective est donc beaucoup plus large qu'avant (anciennement 10–15 fixe)
+- Envisager des valeurs minimales par stat (ex. : min 5) pour éviter un personnage déséquilibré (tout en santé, 0 en attaque)
+- Calibrer la difficulté des ennemis en fonction des nouvelles plages possibles
