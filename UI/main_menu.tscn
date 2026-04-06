@@ -584,8 +584,12 @@ size_flags_vertical = 0
 stretch = true
 
 [node name="PreviewViewport" type="SubViewport" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview"]
-transparent_bg = true
+transparent_bg = false
 size = Vector2i(64, 64)
+
+[node name="PreviewBg" type="ColorRect" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
+color = Color(1, 1, 1, 1)
+size = Vector2(64, 64)
 
 [node name="SpriteBody" type="Sprite2D" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"]
 position = Vector2(32, 32)
