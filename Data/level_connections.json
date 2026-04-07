@@ -1,0 +1,17 @@
+{
+  "connections": [
+    {
+      "id": "exemple_level1_vers_level2",
+      "a": {
+        "scene":   "res://Scenes/Levels/level_1/level_1.tscn",
+        "trigger": { "x": 320, "y": -736, "w": 128, "h": 16 },
+        "spawn":   { "x": 320, "y": -640 }
+      },
+      "b": {
+        "scene":   "res://Scenes/Levels/level_2/level_2.tscn",
+        "trigger": { "x": 576, "y": 688, "w": 128, "h": 16 },
+        "spawn":   { "x": 512, "y": 620 }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4vwmqe8yj3xd"]
+
+[ext_resource type="Script" uid="uid://csxd6rxejn8mk" path="res://Scenes/Levels/level_door.gd" id="1_level_door"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_leveldoor"]
+size = Vector2(64, 64)
+
+[node name="LevelDoor" type="Area2D"]
+collision_layer = 2
+script = ExtResource("1_level_door")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_leveldoor")
+debug_color = Color(0.2, 0.6, 1.0, 0.42)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
