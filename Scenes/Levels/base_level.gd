@@ -7,7 +7,7 @@ var _liblevel = preload("res://Lib/liblevel.gd").new()
 # Empêche les zones JSON de se déclencher immédiatement après un spawn
 var _transition_cooldown := false
 
-const _CONNECTIONS_PATH = "res://Data/level_connections.json"
+# Chemin construit dynamiquement dans _setup_json_transitions()
 
 
 func _ready() -> void:
@@ -56,13 +56,14 @@ func _place_player(player: Node2D) -> void:
 # ---------------------------------------------------------------------------
 
 func _setup_json_transitions() -> void:
-	if not FileAccess.file_exists(_CONNECTIONS_PATH):
+	var path := "res://Scenes/Levels/%s/level_connections.json" % name
+	if not FileAccess.file_exists(path):
 		return
 
-	var file = FileAccess.open(_CONNECTIONS_PATH, FileAccess.READ)
+	var file = FileAccess.open(path, FileAccess.READ)
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != OK:
-		push_error("base_level: level_connections.json invalide.")
+		push_error("base_level: level_connections.json invalide dans " + name)
 		file.close()
 		return
 	file.close()
@@ -74,22 +75,18 @@ func _setup_json_transitions() -> void:
 			func() -> void: _transition_cooldown = false
 		)
 
-	var my_scene := "res://Scenes/Levels/%s/%s.tscn" % [name, name]
 	for conn in json.data.get("connections", []):
-		for side in ["from", "to"]:
-			var me: Dictionary    = conn.get(side, {})
-			var other: Dictionary = conn.get("to" if side == "from" else "from", {})
-			if me.get("scene", "") == my_scene:
-				_create_json_trigger(me, other)
+		_create_json_trigger(conn)
 
 
-func _create_json_trigger(me: Dictionary, other: Dictionary) -> void:
-	var t:      Dictionary = me.get("trigger", {})
-	var spawn:  Dictionary = other.get("spawn", {})
-	var target: String     = other.get("scene", "")
+func _create_json_trigger(conn: Dictionary) -> void:
+	var t:      Dictionary = conn.get("trigger", {})
+	var to:     Dictionary = conn.get("to", {})
+	var spawn:  Dictionary = to.get("spawn", {})
+	var target: String     = to.get("scene", "")
 
 	if target == "" or t.is_empty() or spawn.is_empty():
-		push_warning("base_level: connexion JSON incomplète, ignorée.")
+		push_warning("base_level: connexion JSON incomplète dans " + name + ", ignorée.")
 		return
 
 	var area := Area2D.new()
