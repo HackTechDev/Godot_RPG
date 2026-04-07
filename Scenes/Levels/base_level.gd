@@ -40,10 +40,15 @@ func _place_player(player: Node2D) -> void:
 		player.position.y = Player_data.player_spawnpoint_position_y
 	else:
 		var node_name = "/root/%s/spawnpoint_%s_%s_begin" % [self.name, self.name, Player_data.spawnpoint_next]
-		player.position = get_node(node_name).position + Vector2(
-			Player_data.player_spawnpoint_position_x,
-			Player_data.player_spawnpoint_position_y
-		)
+		var spawn_node := get_node_or_null(node_name)
+		if spawn_node == null:
+			push_error("base_level: spawnpoint introuvable : " + node_name)
+			player.position = Vector2(Player_data.player_spawnpoint_position_x, Player_data.player_spawnpoint_position_y)
+		else:
+			player.position = spawn_node.position + Vector2(
+				Player_data.player_spawnpoint_position_x,
+				Player_data.player_spawnpoint_position_y
+			)
 
 
 # ---------------------------------------------------------------------------
