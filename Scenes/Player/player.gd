@@ -525,15 +525,10 @@ func _apply_appearance():
 	_spr_none(_lyr_shoulders)
 	_spr_load(_lyr_torso,    Player_data.appearance_torso)
 	var arms = Player_data.appearance_arms
-	if arms in ["armour_steel", "armour_iron"]:
-		_spr_load(_lyr_arms,    arms)
-		_spr_none(_lyr_bracers)
-	elif arms == "bracers_steel":
-		_spr_none(_lyr_arms)
-		_spr_load(_lyr_bracers, "bracers_steel")
-	else:
-		_spr_none(_lyr_arms)
-		_spr_none(_lyr_bracers)
+	match SpriteLibrary.get_item_layer(arms):
+		"arms":    _spr_load(_lyr_arms, arms);    _spr_none(_lyr_bracers)
+		"bracers": _spr_none(_lyr_arms);           _spr_load(_lyr_bracers, arms)
+		_:         _spr_none(_lyr_arms);           _spr_none(_lyr_bracers)
 	_spr_load(_lyr_gloves,   Player_data.appearance_hands)
 	SpriteLibrary.apply_head_sprite(_lyr_head)
 	SpriteLibrary.apply_face_sprite(_lyr_face)

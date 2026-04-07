@@ -39,7 +39,7 @@ static var contact_enemy = null
 static var contact_npc = null
 
 # Appearance (LPC spritesheet layer keys)
-static var appearance_body: String = "body_light"
+static var appearance_body: String = ""
 static var appearance_hair: String = ""
 static var appearance_headwear: String = ""
 static var appearance_arms: String = ""

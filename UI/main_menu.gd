@@ -192,10 +192,9 @@ func _cc_refresh_preview():
 	_cc_set_sprite(cc_spr_gloves,   _cc_get_selected_key(cc_hands_opt,    "hands"))
 	# Arms: armure (acier/fer) ou brassards
 	var arms_key   = _cc_get_selected_key(cc_arms_opt, "arms")
-	var is_armour  = arms_key in ["armour_steel", "armour_iron"]
-	var is_bracers = arms_key == "bracers_steel"
-	_cc_set_sprite(cc_spr_arms,    arms_key if is_armour else "")
-	_cc_set_sprite(cc_spr_bracers, arms_key if is_bracers else "")
+	var arms_layer = SpriteLibrary.get_item_layer(arms_key)
+	_cc_set_sprite(cc_spr_arms,    arms_key if arms_layer == "arms"    else "")
+	_cc_set_sprite(cc_spr_bracers, arms_key if arms_layer == "bracers" else "")
 	# Tête et visage de base (fixes)
 	SpriteLibrary.apply_head_preview(cc_spr_head)
 	SpriteLibrary.apply_face_preview(cc_spr_face)

@@ -56,15 +56,10 @@ func _refresh_preview():
 	_none(_spr_shoulders)
 	_load(_spr_torso,   Player_data.appearance_torso)
 	var arms = Player_data.appearance_arms
-	if arms in ["armour_steel", "armour_iron"]:
-		_load(_spr_arms,    arms)
-		_none(_spr_bracers)
-	elif arms == "bracers_steel":
-		_none(_spr_arms)
-		_load(_spr_bracers, "bracers_steel")
-	else:
-		_none(_spr_arms)
-		_none(_spr_bracers)
+	match SpriteLibrary.get_item_layer(arms):
+		"arms":    _load(_spr_arms, arms); _none(_spr_bracers)
+		"bracers": _none(_spr_arms);       _load(_spr_bracers, arms)
+		_:         _none(_spr_arms);       _none(_spr_bracers)
 	_load(_spr_gloves,  Player_data.appearance_hands)
 	SpriteLibrary.apply_head_preview(_spr_head)
 	SpriteLibrary.apply_face_preview(_spr_face)
