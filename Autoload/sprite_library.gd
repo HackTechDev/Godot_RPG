@@ -1,65 +1,61 @@
 extends Node
-## SpriteLibrary — chargement générique des sprite sheets au démarrage.
+## SpriteLibrary — catalogue des sprite sheets LPC, chargé au démarrage.
 ##
-## Lit Data/sprite_sheets.json et précharge toutes les textures en cache.
-## Expose des fonctions génériques pour appliquer un sprite à un Sprite2D,
-## et pour récupérer les options de chaque slot d'apparence.
+## Toute la configuration est déclarée ici en constantes GDScript.
+## Pour ajouter un sprite : 1) ajouter l'entrée dans _ITEMS,
+##                           2) ajouter la clé dans le bon slot de _SLOTS.
+## Les libellés UI sont déduits automatiquement des clés.
 
-const _DATA_PATH = "res://Data/sprite_sheets.json"
+const _BASE_PATH     = "res://Sprites/Player/items/"
+const _HFRAMES       = 13
+const _VFRAMES       = 54
+const _PREVIEW_FRAME = 130
+const _HEAD          = "100 human_male__light_.png"
+const _FACE          = "101 neutral__light_.png"
 
-var _base_path:     String = ""
-var _hframes:       int    = 13
-var _vframes:       int    = 54
-var _preview_frame: int    = 130
-var _head_file:     String = ""
-var _face_file:     String = ""
+# clé → nom de fichier relatif (dans _BASE_PATH)
+const _ITEMS: Dictionary = {
+	"body_light":     "010 body_color__light_.png",
+	"bangs_black":    "120 bangs__black_.png",
+	"armet_iron":     "130 armet__iron_.png",
+	"xeon_steel":     "130 xeon_helmet__steel_.png",
+	"armour_steel":   "060 armour__steel_.png",
+	"armour_iron":    "060 armour__iron_.png",
+	"bracers_steel":  "070 bracers__steel_.png",
+	"gloves_black":   "070 gloves__black_.png",
+	"gloves_brown":   "070 gloves__brown_.png",
+	"leather_forest": "060 leather__forest_.png",
+	"plate_silver":   "060 plate__silver_.png",
+	"armour_ceramic": "020 armour__ceramic_.png",
+	"boots_black":    "025 basic_boots__black_.png",
+	"boots_charcoal": "025 basic_boots__charcoal_.png",
+}
 
-# clé → chemin de fichier relatif (ex: "body_light" → "010 body_color__light_.png")
-var _items: Dictionary = {}
-# slot → Array[{key, label}]  (ex: "body" → [{key:"body_light", label:"Carnation claire"}])
-var _slots: Dictionary = {}
-# chemin absolu res:// → Texture2D (cache)
+# slot → liste ordonnée de clés ("" = aucun)
+const _SLOTS: Dictionary = {
+	"body":     ["body_light"],
+	"hair":     ["", "bangs_black"],
+	"headwear": ["", "armet_iron", "xeon_steel"],
+	"arms":     ["", "armour_steel", "armour_iron", "bracers_steel"],
+	"hands":    ["", "gloves_black", "gloves_brown"],
+	"torso":    ["", "leather_forest", "plate_silver"],
+	"legs":     ["", "armour_ceramic"],
+	"feet":     ["", "boots_black", "boots_charcoal"],
+}
+
+# cache chemin absolu → Texture2D
 var _textures: Dictionary = {}
 
 
 func _ready() -> void:
-	_load_config()
-
-
-func _load_config() -> void:
-	var file = FileAccess.open(_DATA_PATH, FileAccess.READ)
-	if file == null:
-		push_error("SpriteLibrary: impossible de lire " + _DATA_PATH)
-		return
-
-	var json = JSON.new()
-	var err  = json.parse(file.get_as_text())
-	file.close()
-
-	if err != OK:
-		push_error("SpriteLibrary: erreur JSON ligne %d : %s" % [json.get_error_line(), json.get_error_message()])
-		return
-
-	var data: Dictionary = json.data.get("sprite_sheets", {})
-	_base_path     = data.get("base_path",     "res://Sprites/Player/items/")
-	_hframes       = data.get("hframes",       13)
-	_vframes       = data.get("vframes",       54)
-	_preview_frame = data.get("preview_frame", 130)
-	_head_file     = data.get("head",          "")
-	_face_file     = data.get("face",          "")
-	_items         = data.get("items",         {})
-	_slots         = data.get("slots",         {})
-
-	# Préchargement de toutes les textures déclarées
-	_cache_texture(_base_path + _head_file)
-	_cache_texture(_base_path + _face_file)
-	for key in _items:
-		if _items[key] != "":
-			_cache_texture(_base_path + _items[key])
+	_cache_texture(_BASE_PATH + _HEAD)
+	_cache_texture(_BASE_PATH + _FACE)
+	for key in _ITEMS:
+		_cache_texture(_BASE_PATH + _ITEMS[key])
 
 
 func _cache_texture(path: String) -> void:
-	if path == "" or _textures.has(path):
+	if _textures.has(path):
 		return
 	if ResourceLoader.exists(path):
 		_textures[path] = load(path)
@@ -68,62 +64,66 @@ func _cache_texture(path: String) -> void:
 
 
 # ---------------------------------------------------------------------------
-# API publique — récupération de textures
+# API publique — textures
 # ---------------------------------------------------------------------------
 
-## Retourne la texture associée à une clé d'item (ex: "body_light").
-## Retourne null si la clé est vide ou inconnue.
 func get_texture(key: String) -> Texture2D:
 	if key == "":
 		return null
-	var file: String = _items.get(key, "")
+	var file: String = _ITEMS.get(key, "")
 	if file == "":
 		push_warning("SpriteLibrary: clé inconnue : " + key)
 		return null
-	return _textures.get(_base_path + file, null)
+	return _textures.get(_BASE_PATH + file, null)
 
-## Retourne la texture de tête de base.
 func get_head_texture() -> Texture2D:
-	return _textures.get(_base_path + _head_file, null)
+	return _textures.get(_BASE_PATH + _HEAD, null)
 
-## Retourne la texture de visage de base.
 func get_face_texture() -> Texture2D:
-	return _textures.get(_base_path + _face_file, null)
+	return _textures.get(_BASE_PATH + _FACE, null)
 
-## Retourne les options d'un slot (ex: "body", "hair", "headwear"…).
-## Chaque élément est un Dictionary {key, label}.
+
+# ---------------------------------------------------------------------------
+# API publique — options de slot
+# Retourne Array[{key, label}] ; le libellé est généré depuis la clé.
+# ---------------------------------------------------------------------------
+
 func get_slot_options(slot: String) -> Array:
-	return _slots.get(slot, [])
+	var result: Array = []
+	for key in _SLOTS.get(slot, []):
+		result.append({"key": key, "label": _key_to_label(key)})
+	return result
+
+func _key_to_label(key: String) -> String:
+	if key == "":
+		return "—"
+	return key.replace("_", " ").capitalize()
 
 
 # ---------------------------------------------------------------------------
-# API publique — application sur Sprite2D (mode joueur, frame géré par AnimationTree)
+# API publique — application sur Sprite2D (mode joueur, frame via AnimationTree)
 # ---------------------------------------------------------------------------
 
-## Applique la texture d'un item (par clé) au Sprite2D.
-## Cache le sprite si la clé est vide ou inconnue.
 func apply_sprite(spr: Sprite2D, key: String) -> void:
 	var tex := get_texture(key)
 	if tex == null:
 		spr.visible = false
 		return
 	spr.texture = tex
-	spr.hframes = _hframes
-	spr.vframes = _vframes
+	spr.hframes = _HFRAMES
+	spr.vframes = _VFRAMES
 	spr.visible = true
 
-## Applique la texture de tête de base au Sprite2D (mode joueur).
 func apply_head_sprite(spr: Sprite2D) -> void:
 	spr.texture = get_head_texture()
-	spr.hframes = _hframes
-	spr.vframes = _vframes
+	spr.hframes = _HFRAMES
+	spr.vframes = _VFRAMES
 	spr.visible = true
 
-## Applique la texture de visage de base au Sprite2D (mode joueur).
 func apply_face_sprite(spr: Sprite2D) -> void:
 	spr.texture = get_face_texture()
-	spr.hframes = _hframes
-	spr.vframes = _vframes
+	spr.hframes = _HFRAMES
+	spr.vframes = _VFRAMES
 	spr.visible = true
 
 
@@ -131,45 +131,40 @@ func apply_face_sprite(spr: Sprite2D) -> void:
 # API publique — application sur Sprite2D (mode prévisualisation, frame fixe)
 # ---------------------------------------------------------------------------
 
-## Applique la texture d'un item (par clé) en mode prévisualisation.
-## Cache le sprite si la clé est vide ou inconnue.
 func apply_preview_sprite(spr: Sprite2D, key: String) -> void:
 	var tex := get_texture(key)
 	if tex == null:
 		spr.texture = null
 		return
 	spr.texture = tex
-	spr.hframes = _hframes
-	spr.vframes = _vframes
-	spr.frame   = _preview_frame
+	spr.hframes = _HFRAMES
+	spr.vframes = _VFRAMES
+	spr.frame   = _PREVIEW_FRAME
 
-## Applique la texture de tête de base en mode prévisualisation.
-func apply_head_preview(spr: Sprite2D) -> void:
-	spr.texture  = get_head_texture()
-	spr.hframes  = _hframes
-	spr.vframes  = _vframes
-	spr.frame    = _preview_frame
-	spr.position = Vector2(32, 32)
-	spr.visible  = true
-
-## Applique la texture de visage de base en mode prévisualisation.
-func apply_face_preview(spr: Sprite2D) -> void:
-	spr.texture  = get_face_texture()
-	spr.hframes  = _hframes
-	spr.vframes  = _vframes
-	spr.frame    = _preview_frame
-	spr.position = Vector2(32, 32)
-	spr.visible  = true
-
-## Applique la texture d'un item en mode prévisualisation avec position centrée.
 func apply_preview_sprite_centered(spr: Sprite2D, key: String) -> void:
 	var tex := get_texture(key)
 	if tex == null:
 		spr.texture = null
 		return
 	spr.texture  = tex
-	spr.hframes  = _hframes
-	spr.vframes  = _vframes
-	spr.frame    = _preview_frame
+	spr.hframes  = _HFRAMES
+	spr.vframes  = _VFRAMES
+	spr.frame    = _PREVIEW_FRAME
+	spr.position = Vector2(32, 32)
+	spr.visible  = true
+
+func apply_head_preview(spr: Sprite2D) -> void:
+	spr.texture  = get_head_texture()
+	spr.hframes  = _HFRAMES
+	spr.vframes  = _VFRAMES
+	spr.frame    = _PREVIEW_FRAME
+	spr.position = Vector2(32, 32)
+	spr.visible  = true
+
+func apply_face_preview(spr: Sprite2D) -> void:
+	spr.texture  = get_face_texture()
+	spr.hframes  = _HFRAMES
+	spr.vframes  = _VFRAMES
+	spr.frame    = _PREVIEW_FRAME
 	spr.position = Vector2(32, 32)
 	spr.visible  = true
