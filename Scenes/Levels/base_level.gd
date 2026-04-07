@@ -7,6 +7,9 @@ var _liblevel = preload("res://Lib/liblevel.gd").new()
 # Empêche les zones JSON de se déclencher immédiatement après un spawn
 var _transition_cooldown := false
 
+# Trigger JSON dans lequel le joueur se trouve actuellement (vide = aucun)
+var _pending_trigger: Dictionary = {}
+
 # Chemin construit dynamiquement dans _setup_json_transitions()
 
 
@@ -116,19 +119,29 @@ func _create_json_trigger(conn: Dictionary) -> void:
 	var spawn_pos := Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
 	area.body_entered.connect(
 		func(body: Node2D) -> void:
-			_on_json_trigger_entered(body, target, spawn_pos)
+			if not _transition_cooldown and body.is_in_group("player"):
+				_pending_trigger = {"target": target, "spawn": spawn_pos}
+	)
+	area.body_exited.connect(
+		func(body: Node2D) -> void:
+			if body.is_in_group("player"):
+				_pending_trigger = {}
 	)
 	add_child(area)
 
 
-func _on_json_trigger_entered(body: Node2D, target_scene: String, spawn_pos: Vector2) -> void:
-	if _transition_cooldown or not body.is_in_group("player"):
-		return
-	_save_transition_state(body)
-	Player_data.use_json_spawn  = true
-	Player_data.json_spawn      = spawn_pos
-	Player_data.spawnpoint_next = ""
-	SceneTransition.change_scene(target_scene)
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_space") and not _pending_trigger.is_empty():
+		var target: String    = _pending_trigger["target"]
+		var spawn_pos: Vector2 = _pending_trigger["spawn"]
+		_pending_trigger = {}
+		var player := get_tree().get_first_node_in_group("player")
+		if player:
+			_save_transition_state(player)
+		Player_data.use_json_spawn  = true
+		Player_data.json_spawn      = spawn_pos
+		Player_data.spawnpoint_next = ""
+		SceneTransition.change_scene(target)
 
 
 # ---------------------------------------------------------------------------
