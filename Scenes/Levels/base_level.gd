@@ -81,9 +81,9 @@ func _setup_json_transitions() -> void:
 
 	var my_scene := "res://Scenes/Levels/%s/%s.tscn" % [name, name]
 	for conn in json.data.get("connections", []):
-		for side in ["a", "b"]:
-			var me: Dictionary  = conn.get(side, {})
-			var other: Dictionary = conn.get("b" if side == "a" else "a", {})
+		for side in ["from", "to"]:
+			var me: Dictionary    = conn.get(side, {})
+			var other: Dictionary = conn.get("to" if side == "from" else "from", {})
 			if me.get("scene", "") == my_scene:
 				_create_json_trigger(me, other)
 
