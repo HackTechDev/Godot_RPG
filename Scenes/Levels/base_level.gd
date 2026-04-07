@@ -91,11 +91,24 @@ func _create_json_trigger(me: Dictionary, other: Dictionary) -> void:
 	area.position      = Vector2(t.get("x", 0.0), t.get("y", 0.0))
 	area.collision_layer = 2
 
+	var w: float = t.get("w", 64.0)
+	var h: float = t.get("h", 64.0)
+
 	var col  := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(t.get("w", 64.0), t.get("h", 64.0))
+	rect.size = Vector2(w, h)
 	col.shape = rect
 	area.add_child(col)
+
+	var poly := Polygon2D.new()
+	poly.polygon = PackedVector2Array([
+		Vector2(-w * 0.5, -h * 0.5),
+		Vector2( w * 0.5, -h * 0.5),
+		Vector2( w * 0.5,  h * 0.5),
+		Vector2(-w * 0.5,  h * 0.5),
+	])
+	poly.color = Color(1.0, 0.6, 0.0, 0.35)
+	area.add_child(poly)
 
 	var spawn_pos := Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
 	area.body_entered.connect(
