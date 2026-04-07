@@ -89,9 +89,9 @@ func _setup_json_transitions() -> void:
 
 
 func _create_json_trigger(me: Dictionary, other: Dictionary) -> void:
-	var t      := me.get("trigger", {})
-	var spawn  := other.get("spawn", {})
-	var target := other.get("scene", "")
+	var t:      Dictionary = me.get("trigger", {})
+	var spawn:  Dictionary = other.get("spawn", {})
+	var target: String     = other.get("scene", "")
 
 	if target == "" or t.is_empty() or spawn.is_empty():
 		push_warning("base_level: connexion JSON incomplète, ignorée.")
