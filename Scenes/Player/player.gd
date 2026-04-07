@@ -20,24 +20,6 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var _lyr_hair        = $AppearanceLayers/SpriteHair
 @onready var _lyr_headwear    = $AppearanceLayers/SpriteHeadwear
 
-const _APP_FILES: Dictionary = {
-	"body_light":     "res://Sprites/Player/items/010 body_color__light_.png",
-	"bangs_black":    "res://Sprites/Player/items/120 bangs__black_.png",
-	"armet_iron":     "res://Sprites/Player/items/130 armet__iron_.png",
-	"xeon_steel":     "res://Sprites/Player/items/130 xeon_helmet__steel_.png",
-	"armour_steel":   "res://Sprites/Player/items/060 armour__steel_.png",
-	"armour_iron":    "res://Sprites/Player/items/060 armour__iron_.png",
-	"bracers_steel":  "res://Sprites/Player/items/070 bracers__steel_.png",
-	"gloves_black":   "res://Sprites/Player/items/070 gloves__black_.png",
-	"gloves_brown":   "res://Sprites/Player/items/070 gloves__brown_.png",
-	"leather_forest": "res://Sprites/Player/items/060 leather__forest_.png",
-	"plate_silver":   "res://Sprites/Player/items/060 plate__silver_.png",
-	"armour_ceramic": "res://Sprites/Player/items/020 armour__ceramic_.png",
-	"boots_black":    "res://Sprites/Player/items/025 basic_boots__black_.png",
-	"boots_charcoal": "res://Sprites/Player/items/025 basic_boots__charcoal_.png",
-}
-const _HEAD_FILE = "res://Sprites/Player/items/100 human_male__light_.png"
-const _FACE_FILE = "res://Sprites/Player/items/101 neutral__light_.png"
 
 var main_menu = preload("res://UI/main_menu.tscn")
 var menu_instance = null
@@ -553,8 +535,8 @@ func _apply_appearance():
 		_spr_none(_lyr_arms)
 		_spr_none(_lyr_bracers)
 	_spr_load(_lyr_gloves,   Player_data.appearance_hands)
-	_spr_file(_lyr_head,     _HEAD_FILE)
-	_spr_file(_lyr_face,     _FACE_FILE)
+	SpriteLibrary.apply_head_sprite(_lyr_head)
+	SpriteLibrary.apply_face_sprite(_lyr_face)
 	_spr_load(_lyr_hair,     Player_data.appearance_hair)
 	_spr_load(_lyr_headwear, Player_data.appearance_headwear)
 	var f = master_sprite.frame
@@ -564,26 +546,10 @@ func _apply_appearance():
 	appearance_layers.visible = true
 	master_sprite.visible = false
 
-func _spr_load(spr: Sprite2D, key: String):
-	if key == "":
-		spr.visible = false
-		return
-	var path = _APP_FILES.get(key, "")
-	if path == "":
-		spr.visible = false
-		return
-	spr.texture = load(path)
-	spr.hframes = 13
-	spr.vframes = 54
-	spr.visible = true
+func _spr_load(spr: Sprite2D, key: String) -> void:
+	SpriteLibrary.apply_sprite(spr, key)
 
-func _spr_file(spr: Sprite2D, path: String):
-	spr.texture = load(path)
-	spr.hframes = 13
-	spr.vframes = 54
-	spr.visible = true
-
-func _spr_none(spr: Sprite2D):
+func _spr_none(spr: Sprite2D) -> void:
 	spr.visible = false
 
 func _restart_game():

@@ -26,24 +26,6 @@ const _VP   = _BASE + "/ContentRow/PreviewPanel/PreviewCenter/CharPreview/Previe
 @onready var _spr_hair       = get_node(_VP + "/SpriteHair")
 @onready var _spr_headwear   = get_node(_VP + "/SpriteHeadwear")
 
-const _APP_FILES: Dictionary = {
-	"body_light":     "res://Sprites/Player/items/010 body_color__light_.png",
-	"bangs_black":    "res://Sprites/Player/items/120 bangs__black_.png",
-	"armet_iron":     "res://Sprites/Player/items/130 armet__iron_.png",
-	"xeon_steel":     "res://Sprites/Player/items/130 xeon_helmet__steel_.png",
-	"armour_steel":   "res://Sprites/Player/items/060 armour__steel_.png",
-	"armour_iron":    "res://Sprites/Player/items/060 armour__iron_.png",
-	"bracers_steel":  "res://Sprites/Player/items/070 bracers__steel_.png",
-	"gloves_black":   "res://Sprites/Player/items/070 gloves__black_.png",
-	"gloves_brown":   "res://Sprites/Player/items/070 gloves__brown_.png",
-	"leather_forest": "res://Sprites/Player/items/060 leather__forest_.png",
-	"plate_silver":   "res://Sprites/Player/items/060 plate__silver_.png",
-	"armour_ceramic": "res://Sprites/Player/items/020 armour__ceramic_.png",
-	"boots_black":    "res://Sprites/Player/items/025 basic_boots__black_.png",
-	"boots_charcoal": "res://Sprites/Player/items/025 basic_boots__charcoal_.png",
-}
-const _HEAD_FILE = "res://Sprites/Player/items/100 human_male__light_.png"
-const _FACE_FILE = "res://Sprites/Player/items/101 neutral__light_.png"
 
 func refresh():
 	label_health.text    = "Santé : "       + str(Player_data.player_health)
@@ -84,35 +66,15 @@ func _refresh_preview():
 		_none(_spr_arms)
 		_none(_spr_bracers)
 	_load(_spr_gloves,  Player_data.appearance_hands)
-	_file(_spr_head,    _HEAD_FILE)
-	_file(_spr_face,    _FACE_FILE)
+	SpriteLibrary.apply_head_preview(_spr_head)
+	SpriteLibrary.apply_face_preview(_spr_face)
 	_load(_spr_hair,    Player_data.appearance_hair)
 	_load(_spr_headwear, Player_data.appearance_headwear)
 
-func _load(spr: Sprite2D, key: String):
-	if key == "":
-		spr.visible = false
-		return
-	var path = _APP_FILES.get(key, "")
-	if path == "":
-		spr.visible = false
-		return
-	spr.texture  = load(path)
-	spr.hframes  = 13
-	spr.vframes  = 54
-	spr.frame    = 130
-	spr.position = Vector2(32, 32)
-	spr.visible  = true
+func _load(spr: Sprite2D, key: String) -> void:
+	SpriteLibrary.apply_preview_sprite_centered(spr, key)
 
-func _file(spr: Sprite2D, path: String):
-	spr.texture  = load(path)
-	spr.hframes  = 13
-	spr.vframes  = 54
-	spr.frame    = 130
-	spr.position = Vector2(32, 32)
-	spr.visible  = true
-
-func _none(spr: Sprite2D):
+func _none(spr: Sprite2D) -> void:
 	spr.visible = false
 
 func _on_button_close_pressed():
