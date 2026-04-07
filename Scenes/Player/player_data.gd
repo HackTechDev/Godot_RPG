@@ -38,9 +38,6 @@ static var contact_object = null
 static var contact_enemy = null
 static var contact_npc = null
 
-# Spawn — système LevelDoor (nom de la porte destination)
-static var next_door: String = ""
-
 # Spawn — système JSON (position absolue dans la scène destination)
 static var use_json_spawn: bool = false
 static var json_spawn: Vector2 = Vector2.ZERO

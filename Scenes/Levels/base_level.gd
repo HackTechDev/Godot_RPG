@@ -34,17 +34,7 @@ func _place_player(player: Node2D) -> void:
 		Player_data.use_json_spawn = false
 		return
 
-	# Priorité 2 : système LevelDoor (porte nommée dans la scène destination)
-	if Player_data.next_door != "":
-		for door in get_tree().get_nodes_in_group("level_door"):
-			if door.name == Player_data.next_door:
-				player.global_position = door.global_position
-				Player_data.next_door = ""
-				return
-		push_warning("base_level: LevelDoor '%s' introuvable." % Player_data.next_door)
-		Player_data.next_door = ""
-
-	# Priorité 3 : système historique (spawnpoints nommés + offset)
+	# Priorité 2 : système historique (spawnpoints nommés + offset)
 	if Player_data.spawnpoint_next == "":
 		player.position.x = Player_data.player_spawnpoint_position_x
 		player.position.y = Player_data.player_spawnpoint_position_y
@@ -122,7 +112,6 @@ func _on_json_trigger_entered(body: Node2D, target_scene: String, spawn_pos: Vec
 	Player_data.use_json_spawn  = true
 	Player_data.json_spawn      = spawn_pos
 	Player_data.spawnpoint_next = ""
-	Player_data.next_door       = ""
 	SceneTransition.change_scene(target_scene)
 
 

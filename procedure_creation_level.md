@@ -42,38 +42,38 @@ extends "res://Scenes/Levels/base_level.gd"
 @onready var robot_enemy_scene = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
 
 func _ready():
-    super._ready()
-    _load_objects()
+	super._ready()
+	_load_objects()
 
 func _load_objects():
-    var datas = _read_level_json("user://level_XX.json", "res://World/Default/level_XX.json")
-    for key in datas:
-        var data
-        if datas[key].object == "robot_enemy":
-            data = robot_enemy_scene.instantiate()
-            data.add_to_group("robot_enemy")
-        else:
-            continue
-        data.position.x = datas[key].position.x
-        data.position.y = datas[key].position.y
-        add_child(data)
-        if datas[key].has("attack"):
-            data.enemy_attack = int(datas[key].attack)
-            data.enemy_defense = int(datas[key].defense)
-            data.enemy_health = int(datas[key].health)
-            if datas[key].get("dead", false):
-                data.death_rotation = float(datas[key].get("death_rotation", PI / 2.0))
-                data.apply_dead_state()
+	var datas = _read_level_json("user://level_XX.json", "res://World/Default/level_XX.json")
+	for key in datas:
+		var data
+		if datas[key].object == "robot_enemy":
+			data = robot_enemy_scene.instantiate()
+			data.add_to_group("robot_enemy")
+		else:
+			continue
+		data.position.x = datas[key].position.x
+		data.position.y = datas[key].position.y
+		add_child(data)
+		if datas[key].has("attack"):
+			data.enemy_attack = int(datas[key].attack)
+			data.enemy_defense = int(datas[key].defense)
+			data.enemy_health = int(datas[key].health)
+			if datas[key].get("dead", false):
+				data.death_rotation = float(datas[key].get("death_rotation", PI / 2.0))
+				data.apply_dead_state()
 
 func _read_level_json(save_path: String, default_path: String) -> Dictionary:
-    for path in [save_path, default_path]:
-        if FileAccess.file_exists(path):
-            var file = FileAccess.open(path, FileAccess.READ)
-            var datas = JSON.parse_string(file.get_as_text())
-            file.close()
-            if datas != null:
-                return datas
-    return {}
+	for path in [save_path, default_path]:
+		if FileAccess.file_exists(path):
+			var file = FileAccess.open(path, FileAccess.READ)
+			var datas = JSON.parse_string(file.get_as_text())
+			file.close()
+			if datas != null:
+				return datas
+	return {}
 ```
 
 Remplacer `XX` par le numéro du niveau.
@@ -180,14 +180,14 @@ Ou pré-peupler avec des objets :
 ```json
 {
   "robot_enemy1": {
-    "scene": "level_XX",
-    "object": "robot_enemy",
-    "position": { "x": 320, "y": 320 },
-    "attack": 12,
-    "defense": 11,
-    "health": 2,
-    "dead": false,
-    "death_rotation": 0.0
+	"scene": "level_XX",
+	"object": "robot_enemy",
+	"position": { "x": 320, "y": 320 },
+	"attack": 12,
+	"defense": 11,
+	"health": 2,
+	"dead": false,
+	"death_rotation": 0.0
   }
 }
 ```
@@ -200,7 +200,7 @@ Dans `Lib/liblevel.gd`, fonction `reinitializeLevel()`, ajouter `"level_XX"` à 
 
 ```gdscript
 for level in ["level_01", "level_02", "level_03", "level_04", "level_05", "level_XX"]:
-    dir.copy("res://World/Default/%s.json" % level, "user://%s.json" % level)
+	dir.copy("res://World/Default/%s.json" % level, "user://%s.json" % level)
 ```
 
 ---
