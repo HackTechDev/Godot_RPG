@@ -45,6 +45,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Zone: "
 
+[node name="LabelPosition" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Pos: "
+
 [node name="TopBar" type="PanelContainer" parent="."]
 offset_left = 820.0
 offset_top = 4.0
