@@ -119,7 +119,7 @@ func _create_json_trigger(conn: Dictionary) -> void:
 	var spawn_pos := Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
 	area.body_entered.connect(
 		func(body: Node2D) -> void:
-			if not _transition_cooldown and body.is_in_group("player"):
+			if body.is_in_group("player"):
 				_pending_trigger = {"target": target, "spawn": spawn_pos}
 	)
 	area.body_exited.connect(
@@ -131,7 +131,7 @@ func _create_json_trigger(conn: Dictionary) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_space") and not _pending_trigger.is_empty():
+	if event.is_action_pressed("ui_space") and not _pending_trigger.is_empty() and not _transition_cooldown:
 		var target: String    = _pending_trigger["target"]
 		var spawn_pos: Vector2 = _pending_trigger["spawn"]
 		_pending_trigger = {}
