@@ -110,6 +110,7 @@ func _create_json_trigger(conn: Dictionary) -> void:
 		Vector2(-w * 0.5,  h * 0.5),
 	])
 	poly.color = Color(1.0, 0.6, 0.0, 0.35)
+	poly.z_index = 10
 	area.add_child(poly)
 
 	var spawn_pos := Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
