@@ -1,35 +1,35 @@
 [
   {
-    "id": "npc_1",
-    "name": "Commandant Dubois",
-    "x": 520,
-    "y": 300,
-    "dialogue": {
-      "start": {
-        "text": "Bonjour soldat ! Quelle est ta mission aujourd'hui ?",
-        "choices": [
-          { "text": "Je traque les zombies.", "next": "zombies" },
-          { "text": "Je suis un peu perdu.", "next": "lost" }
-        ]
-      },
-      "zombies": {
-        "text": "Excellent ! Les zombies se concentrent au nord-est du secteur. Reste sur tes gardes.",
-        "choices": [
-          { "text": "Merci pour le renseignement.", "next": "goodbye" }
-        ]
-      },
-      "lost": {
-        "text": "Ne reste pas ici sans savoir où tu vas ! La base principale est au sud. Tu y trouveras de l'aide.",
-        "choices": [
-          { "text": "Compris, je file au sud.", "next": "goodbye" }
-        ]
-      },
-      "goodbye": {
-        "text": "Bonne chance, soldat. Et méfie-toi des ombres.",
-        "choices": [
-          { "text": "À bientôt.", "next": null }
-        ]
-      }
-    }
+	"id": "npc_1",
+	"name": "Commandant Dubois",
+	"x": 520,
+	"y": 300,
+	"dialogue": {
+	  "start": {
+		"text": "Bonjour soldat ! Quelle est ta mission aujourd'hui ?",
+		"choices": [
+		  { "text": "Je traque les zombies.", "next": "zombies" },
+		  { "text": "Je suis un peu perdu.", "next": "lost" }
+		]
+	  },
+	  "zombies": {
+		"text": "Excellent ! Les zombies se concentrent au nord-est du secteur. Reste sur tes gardes.",
+		"choices": [
+		  { "text": "Merci pour le renseignement.", "next": "goodbye" }
+		]
+	  },
+	  "lost": {
+		"text": "Ne reste pas ici sans savoir où tu vas ! La base principale est au sud. Tu y trouveras de l'aide.",
+		"choices": [
+		  { "text": "Compris, je file au sud.", "next": "goodbye" }
+		]
+	  },
+	  "goodbye": {
+		"text": "Bonne chance, soldat. Et méfie-toi des ombres.",
+		"choices": [
+		  { "text": "À bientôt.", "next": null }
+		]
+	  }
+	}
   }
 ]
