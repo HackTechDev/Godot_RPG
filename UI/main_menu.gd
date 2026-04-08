@@ -366,8 +366,9 @@ func _on_reinitialize_pressed():
 	Player_data.player_attack = randi_range(10, 15)
 	Player_data.player_defense = randi_range(10, 15)
 	get_tree().paused = false
+	Player_data.goto_character_creation = true
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
-	
+
 func _ready():
 	if GameConfig.DEBUG:
 		print("Init Game")
@@ -375,10 +376,14 @@ func _ready():
 		print(liblevel.displayVersion())
 	
 	get_tree().set_auto_accept_quit(false)
-	
+
 	music_neon_dream.play()
 	_load_audio_settings()
 	SceneTransition.fade_in()
+
+	if Player_data.goto_character_creation:
+		Player_data.goto_character_creation = false
+		_on_button_create_character_pressed()
 
 func data_to_save():
 	return {

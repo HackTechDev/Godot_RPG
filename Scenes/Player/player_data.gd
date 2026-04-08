@@ -42,6 +42,9 @@ static var json_spawn: Vector2 = Vector2.ZERO
 # Frame du sprite au moment de la dernière transition
 static var player_sprite_frame: int = 0
 
+# Indique au menu principal d'ouvrir directement la création de personnage
+static var goto_character_creation: bool = false
+
 # Appearance (LPC spritesheet layer keys)
 static var appearance_body: String = ""
 static var appearance_hair: String = ""

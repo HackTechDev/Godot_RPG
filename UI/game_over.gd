@@ -23,6 +23,7 @@ func _on_restart_pressed():
 	Player_data.inventory = []
 	Player_data.contact_object = null
 	Player_data.contact_enemy = null
+	Player_data.goto_character_creation = true
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 
 func _on_quit_pressed():
