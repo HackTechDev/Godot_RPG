@@ -2,7 +2,7 @@
   "connections": [
 	{
 	  "id": "level_1_vers_level_2",
-	  "trigger": { "x": 120, "y": 370, "w": 128, "h": 4 },
+	  "trigger": { "x": 120, "y": 370, "w": 128, "h": 32 },
 	  "to": {
 		"scene": "res://Scenes/Levels/level_2/level_2.tscn",
 		"spawn": { "x": 193, "y": 297 }
