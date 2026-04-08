@@ -117,6 +117,16 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - PNJ avec sprite vert, nom flottant, touche Z, arbre de dialogue — voir `features.md`
 - À étendre : animations du PNJ, conditions de dialogue selon l'état du joueur, dialogues persistants (mémoriser les choix)
 
+### ~~Chargement automatique des sprites LPC~~ — Implémenté
+- `SpriteLibrary` scanne les archives ZIP LPC au démarrage — aucun chemin codé en dur
+
+### ~~Système de transitions par JSON~~ — Implémenté
+- `level_connections.json` par niveau, déclenchement par Espace, visualisation orange — voir `features.md`
+- L'ancien système `entrance_x_2` / `entrance_y_2` a été supprimé
+
+### ~~Indicateurs visuels de spawnpoints~~ — Remplacé
+- `spawnpoint_indicator.gd` supprimé ; les zones de transition sont désormais visualisées par le Polygon2D orange des triggers JSON
+
 ---
 
 ## Combat
@@ -149,7 +159,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ### Sprites LPC supplémentaires
 - Enrichir les options de chaque slot au fil des imports (nouvelles couleurs de peau, coiffures, armures…)
-- Les sheets LPC sont standardisées : tout fichier 832×3456 compatible peut être ajouté dans `Sprites/Player/items/` et déclaré dans `CC_*_OPTIONS`
+- Ajouter un ZIP LPC dans `res://Sprites/Player/` suffit — `SpriteLibrary` le découvre automatiquement au démarrage
 
 ### Sprite LPC pour les PNJ et ennemis
 - Utiliser le même système de layers LPC pour habiller les PNJ et les `RobotEnemy`

@@ -414,6 +414,83 @@ Récapitulatif de toutes les modifications apportées au projet.
 ## Documentation technique
 
 - `cqb_system_combat.md` — règles complètes du système de combat (dés, enchaînements, contrôles)
-- `level_transition_system.md` — analyse du système de transition et de spawn entre niveaux
-- `procedure_creation_level.md` — procédure pas à pas pour créer un nouveau niveau avec transitions
+- `level_transition_system.md` — analyse du système de transition et de spawn entre niveaux *(décrit l'ancien système entrance_x/y_2, remplacé)*
+- `procedure_creation_level.md` — procédure pas à pas pour créer un nouveau niveau *(à mettre à jour : ancien système)*
 - **Fichiers :** `cqb_system_combat.md`, `level_transition_system.md`, `procedure_creation_level.md`
+
+---
+
+## Chargement automatique des sprite sheets LPC (SpriteLibrary)
+
+- Les sprite sheets ne sont plus codées en dur dans les scripts
+- Au démarrage, `SpriteLibrary` scanne `res://Sprites/Player/*.zip` et charge chaque archive
+- Pour chaque ZIP : lecture de `character.json` (format générateur LPC), correspondance automatique zPos → fichier PNG
+- API exposée : `apply_sprite()`, `apply_preview_sprite_centered()`, `apply_head_sprite()`, `apply_face_sprite()`, `get_slot_options()`, `get_item_layer()`, `get_texture()`
+- Ajouter un nouveau sprite = déposer un ZIP LPC dans `res://Sprites/Player/`, aucune modification de code
+- **Fichiers :** `Autoload/sprite_library.gd`, `project.godot`
+
+---
+
+## Système de transitions de niveaux par fichier JSON
+
+- Remplace entièrement l'ancien système `entrance_x_2` / `entrance_y_2`
+- Les connexions entre niveaux sont définies dans `Scenes/Levels/<level>/level_connections.json`
+- Format : tableau de connexions avec `trigger` (zone rectangulaire x/y/w/h) et `to` (scène cible + position de spawn)
+- Chaque niveau gère uniquement ses propres sorties — la scène destination gère ses entrées dans son propre fichier
+- Chargement automatique au démarrage du niveau depuis `base_level.gd`
+- Zone trigger visualisée en orange semi-transparent (`Polygon2D`, `z_index = 10`) dans la scène en jeu
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `Scenes/Levels/level_X/level_connections.json`
+
+---
+
+## Transition déclenchée par la touche Espace
+
+- La transition entre niveaux ne se déclenche plus automatiquement à l'entrée dans la zone
+- Le joueur doit appuyer sur **Espace** alors qu'il est dans la zone trigger
+- Le **sprite entier** (CollisionShape2D) doit être contenu dans la zone ; une présence partielle est ignorée
+- Cooldown de 0,5 s après l'arrivée dans un nouveau niveau pour éviter le re-déclenchement immédiat
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `project.godot`
+
+---
+
+## Restauration du sprite après une transition
+
+- La direction d'animation et le frame du sprite sont mémorisés avant chaque transition (`Player_data.player_sprite_frame`, `Player_data.player_facing`)
+- À l'arrivée dans le nouveau niveau, `_restore_sprite_state()` restitue les `blend_position` de l'AnimationTree et le frame exact du sprite
+- Évite le flash du frame par défaut (idle bas) à l'arrivée
+- **Fichiers :** `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Scenes/Levels/base_level.gd`
+
+---
+
+## Configuration des objets, ennemis et NPC par fichier JSON de niveau
+
+- Chaque niveau possède ses propres fichiers de configuration dans `Scenes/Levels/<level>/` :
+  - `objects.json` — computers et robots collectibles (type, x, y)
+  - `enemies.json` — robots ennemis (x, y, attack, defense, health)
+  - `npcs.json` — tous les PNJ du niveau (id, name, x, y, dialogue)
+- Chargement centralisé dans `base_level.gd` via `_load_objects()`, `_load_enemies()`, `_load_npcs()`
+- Priorité de chargement : `user://<level>/objects.json` (sauvegarde runtime) → fichier de config du niveau
+- Les NPCs rechargent toujours depuis `npcs.json` (pas de sauvegarde runtime)
+- `liblevel.saveAllObjects()` écrit désormais `user://<level>/objects.json` et `user://<level>/enemies.json` séparément
+- `reinitializeLevel()` supprime les sauvegardes `user://` ; le jeu retombe automatiquement sur les configs
+- `level_X.gd` réduits à `super._ready()` (level_1 conserve `build_computer_event`)
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `Scenes/Levels/level_X/*.json`, `Lib/liblevel.gd`
+
+---
+
+## Suppression du système de transition entrance_x_2 / entrance_y_2
+
+- `entrance_x_2.gd/tscn` et `entrance_y_2.gd/tscn` supprimés
+- `spawnpoint_indicator.gd` supprimé
+- Tous les nœuds `entrance_*` et `spawnpoint_level_*` retirés des quatre `.tscn` de niveau
+- `Player_data.spawnpoint_current` et `spawnpoint_next` supprimés
+- `_place_player()` simplifié : spawn JSON → position sauvegardée
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `Scenes/Player/player_data.gd`, `Scenes/Player/player.gd`, `UI/main_menu.gd`, `UI/game_over.gd`, tous les `level_X.tscn`
+
+---
+
+## Position du joueur dans le HUD
+
+- Le panneau en haut à gauche affiche en temps réel la position `x, y` du joueur
+- Mis à jour à chaque frame dans `_process()`
+- **Fichiers :** `UI/hud.tscn`, `UI/hud.gd`
