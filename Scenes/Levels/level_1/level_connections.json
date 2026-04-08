@@ -1,20 +1,18 @@
 {
   "connections": [
-	{
-	  "id": "level_1_vers_level_2",
-	  "trigger": { "x": 120, "y": 370, "w": 128, "h": 20 },
-	  "to": {
-		"scene": "res://Scenes/Levels/level_2/level_2.tscn",
-		"spawn": { "x": 193, "y": 316 }
-	  }
-	},
-	{
-	  "id": "level_1_vers_level_4",
-	  "trigger": { "x": 607, "y": 60, "w": 32, "h": 128 },
-	  "to": {
-		"scene": "res://Scenes/Levels/level_4/level_4.tscn",
-		"spawn": { "x": -415, "y": 373 }
-	  }
-	}
+    {
+      "id": "level_1_vers_level_2",
+      "trigger": { "x": 120, "y": 370, "w": 128, "h": 20 },
+      "to": {
+        "scene": "res://Scenes/Levels/level_2/level_2.tscn"
+      }
+    },
+    {
+      "id": "level_1_vers_level_4",
+      "trigger": { "x": 607, "y": 60, "w": 32, "h": 128 },
+      "to": {
+        "scene": "res://Scenes/Levels/level_4/level_4.tscn"
+      }
+    }
   ]
 }

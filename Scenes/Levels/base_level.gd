@@ -81,10 +81,9 @@ func _setup_json_transitions() -> void:
 func _create_json_trigger(conn: Dictionary) -> void:
 	var t:      Dictionary = conn.get("trigger", {})
 	var to:     Dictionary = conn.get("to", {})
-	var spawn:  Dictionary = to.get("spawn", {})
 	var target: String     = to.get("scene", "")
 
-	if target == "" or t.is_empty() or spawn.is_empty():
+	if target == "" or t.is_empty():
 		push_warning("base_level: connexion JSON incomplète dans " + name + ", ignorée.")
 		return
 
@@ -112,11 +111,14 @@ func _create_json_trigger(conn: Dictionary) -> void:
 	poly.z_index = 10
 	area.add_child(poly)
 
-	var spawn_pos := Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
+	var trigger_rect := Rect2(
+		area.position - Vector2(w * 0.5, h * 0.5),
+		Vector2(w, h)
+	)
 	area.body_entered.connect(
 		func(body: Node2D) -> void:
 			if body.is_in_group("player"):
-				_pending_trigger = {"target": target, "spawn": spawn_pos}
+				_pending_trigger = {"target": target, "rect": trigger_rect}
 	)
 	area.body_exited.connect(
 		func(body: Node2D) -> void:
@@ -127,16 +129,57 @@ func _create_json_trigger(conn: Dictionary) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_space") and not _pending_trigger.is_empty() and not _transition_cooldown:
-		var target: String    = _pending_trigger["target"]
-		var spawn_pos: Vector2 = _pending_trigger["spawn"]
-		_pending_trigger = {}
-		var player := get_tree().get_first_node_in_group("player")
-		if player:
-			_save_transition_state(player)
-		Player_data.use_json_spawn = true
-		Player_data.json_spawn     = spawn_pos
-		SceneTransition.change_scene(target)
+	if not event.is_action_pressed("ui_space") or _pending_trigger.is_empty() or _transition_cooldown:
+		return
+
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		return
+
+	# Le CollisionShape2D doit être entièrement dans la zone trigger
+	var col_shape := player.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col_shape and col_shape.shape is RectangleShape2D:
+		var half := (col_shape.shape as RectangleShape2D).size / 2.0
+		var player_rect := Rect2(
+			player.global_position + col_shape.position - half,
+			(col_shape.shape as RectangleShape2D).size
+		)
+		if not (_pending_trigger["rect"] as Rect2).encloses(player_rect):
+			return
+
+	var target: String   = _pending_trigger["target"]
+	var src_rect: Rect2  = _pending_trigger["rect"]
+	_pending_trigger = {}
+
+	# Offset du joueur par rapport au centre du trigger source
+	var offset := player.global_position - src_rect.get_center()
+
+	_save_transition_state(player)
+	Player_data.use_json_spawn = true
+	Player_data.json_spawn     = _compute_arrival_spawn(target, offset)
+	SceneTransition.change_scene(target)
+
+
+# Trouve le trigger de destination qui pointe vers cette scène et y applique l'offset.
+func _compute_arrival_spawn(target_scene: String, offset: Vector2) -> Vector2:
+	var dest_name := target_scene.get_basename().split("/")[-1]
+	var dest_json := "res://Scenes/Levels/%s/level_connections.json" % dest_name
+
+	if FileAccess.file_exists(dest_json):
+		var file := FileAccess.open(dest_json, FileAccess.READ)
+		var data  := JSON.parse_string(file.get_as_text())
+		file.close()
+		if data is Array:
+			var my_scene := "res://Scenes/Levels/%s/%s.tscn" % [name, name]
+			for conn in data:
+				var to: Dictionary = conn.get("to", {})
+				if to.get("scene", "") == my_scene:
+					var t: Dictionary = conn.get("trigger", {})
+					return Vector2(t.get("x", 0.0), t.get("y", 0.0)) + offset
+
+	# Aucun trigger correspondant trouvé — fallback : offset seul
+	push_warning("base_level: aucun trigger retour vers %s dans %s" % [name, dest_name])
+	return offset
 
 
 # ---------------------------------------------------------------------------
