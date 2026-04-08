@@ -239,5 +239,3 @@ func _read_level_json(user_path: String, config_path: String) -> Array:
 			if data is Array:
 				return data
 	return []
-
-
