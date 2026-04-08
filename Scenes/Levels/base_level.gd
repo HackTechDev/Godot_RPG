@@ -163,9 +163,9 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2) -> Vector2:
 		var file := FileAccess.open(dest_json, FileAccess.READ)
 		var data: Variant = JSON.parse_string(file.get_as_text())
 		file.close()
-		if data is Array:
+		if data is Dictionary:
 			var my_scene := "res://Scenes/Levels/%s/%s.tscn" % [name, name]
-			for conn in data:
+			for conn in data.get("connections", []):
 				var to: Dictionary = conn.get("to", {})
 				if to.get("scene", "") == my_scene:
 					var t: Dictionary = conn.get("trigger", {})
