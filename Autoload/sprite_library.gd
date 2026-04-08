@@ -202,16 +202,16 @@ func _load_texture_from_zip(zip: ZIPReader, path: String) -> ImageTexture:
 ## Ex : "010 body_color__light_.png" → "body_color_light"
 ##      "070 bracers__steel_.png"    → "bracers_steel"
 func _filename_to_key(filename: String) -> String:
-	var name := filename.get_basename()
+	var stem := filename.get_basename()
 	# Supprimer le préfixe numérique "NNN "
-	var sp := name.find(" ")
+	var sp := stem.find(" ")
 	if sp >= 0 and sp <= 4:
-		name = name.substr(sp + 1)
+		stem = stem.substr(sp + 1)
 	# Normaliser : __ → _, supprimer le _ final
-	name = name.replace("__", "_")
-	while name.ends_with("_"):
-		name = name.left(name.length() - 1)
-	return name
+	stem = stem.replace("__", "_")
+	while stem.ends_with("_"):
+		stem = stem.left(stem.length() - 1)
+	return stem
 
 
 # ---------------------------------------------------------------------------
