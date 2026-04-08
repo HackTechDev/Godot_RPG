@@ -17,70 +17,43 @@ func savePlayer(data_to_save):
 func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
 	if GameConfig.DEBUG:
 		print("saveAllObjects")
-	var all_json_data = {}
 
-	var i = 1
+	DirAccess.make_dir_absolute("user://" + current_scene)
+
+	# objects.json — computers + robots collectibles
+	var objects_data: Array = []
 	for computer in computers:
-		var json_data = {
-			"scene": current_scene,
-			"object": "computer",
-			"position": {
-				"x": computer.position.x,
-				"y": computer.position.y
-			}
-		}
-		all_json_data["computer" + str(i)] = json_data
-		i = i + 1
-
+		objects_data.append({ "type": "computer", "x": computer.position.x, "y": computer.position.y })
 	for robot in robots:
-		var json_data = {
-			"scene": current_scene,
-			"object": "robot",
-			"position": {
-				"x": robot.position.x,
-				"y": robot.position.y
-			}
-		}
-		all_json_data["robot" + str(i)] = json_data
-		i = i + 1
+		objects_data.append({ "type": "robot", "x": robot.position.x, "y": robot.position.y })
+	var objects_file = FileAccess.open("user://%s/objects.json" % current_scene, FileAccess.WRITE)
+	objects_file.store_line(JSON.stringify(objects_data))
+	objects_file.close()
 
+	# enemies.json — robot enemies
+	var enemies_data: Array = []
 	for enemy in robot_enemies:
-		var json_data = {
-			"scene": current_scene,
-			"object": "robot_enemy",
-			"position": {
-				"x": enemy.position.x,
-				"y": enemy.position.y
-			},
-			"attack": enemy.enemy_attack,
-			"defense": enemy.enemy_defense,
-			"health": enemy.enemy_health,
-			"dead": enemy.is_dead,
+		enemies_data.append({
+			"x": enemy.position.x,
+			"y": enemy.position.y,
+			"attack":         enemy.enemy_attack,
+			"defense":        enemy.enemy_defense,
+			"health":         enemy.enemy_health,
+			"dead":           enemy.is_dead,
 			"death_rotation": enemy.death_rotation
-		}
-		all_json_data["robot_enemy" + str(i)] = json_data
-		i = i + 1
-				
-	var objects_to_save = JSON.stringify(all_json_data)
-	
-	if GameConfig.DEBUG:
-		print(objects_to_save)
-	var save_dir = DirAccess.open("user://")
-	if save_dir:
-		save_dir.make_dir(current_scene)
-	var file = FileAccess.open("user://" + current_scene + "/" + current_scene + ".json", FileAccess.WRITE)
-	file.store_line(objects_to_save)
-	file.close()
+		})
+	var enemies_file = FileAccess.open("user://%s/enemies.json" % current_scene, FileAccess.WRITE)
+	enemies_file.store_line(JSON.stringify(enemies_data))
+	enemies_file.close()
 	
 func reinitializeLevel():
 	if GameConfig.DEBUG:
 		print("Reinitialize Level")
-	var dir = DirAccess.open("res://World/Default/")
-	var user_dir = DirAccess.open("user://")
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
-		if user_dir:
-			user_dir.make_dir(level)
-		dir.copy("res://World/Default/%s/%s.json" % [level, level], "user://%s/%s.json" % [level, level])
+		for file_name in ["objects.json", "enemies.json"]:
+			var path = "user://%s/%s" % [level, file_name]
+			if FileAccess.file_exists(path):
+				DirAccess.remove_absolute(path)
 
 func reinitializePlayer():
 	if GameConfig.DEBUG:

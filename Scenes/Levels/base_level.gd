@@ -4,6 +4,11 @@ extends Node2D
 var _indicator_script = preload("res://Scenes/Levels/spawnpoint_indicator.gd")
 var _liblevel = preload("res://Lib/liblevel.gd").new()
 
+var _computer_scene = preload("res://Objects/Computers/computer.tscn")
+var _robot_scene    = preload("res://Objects/Robots/robot.tscn")
+var _enemy_scene    = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
+var _npc_scene      = preload("res://Objects/NPC/npc.tscn")
+
 # Empêche les zones JSON de se déclencher immédiatement après un spawn
 var _transition_cooldown := false
 
@@ -20,6 +25,9 @@ func _ready() -> void:
 	SceneTransition.fade_in()
 	_add_spawnpoint_visuals()
 	_setup_json_transitions()
+	_load_objects()
+	_load_enemies()
+	_load_npcs()
 
 	var player = player_scene.instantiate()
 	_place_player(player)
@@ -178,6 +186,72 @@ func _save_transition_state(player: Node2D) -> void:
 		"appearance_legs":     Player_data.appearance_legs,
 		"appearance_feet":     Player_data.appearance_feet,
 	})
+
+
+# ---------------------------------------------------------------------------
+# Chargement des objets, ennemis et NPC depuis les fichiers JSON du level
+# ---------------------------------------------------------------------------
+
+func _load_objects() -> void:
+	var entries := _read_level_json(
+		"user://%s/objects.json" % name,
+		"res://Scenes/Levels/%s/objects.json" % name
+	)
+	for entry in entries:
+		var obj: Node2D
+		match entry.get("type", ""):
+			"computer":
+				obj = _computer_scene.instantiate()
+				obj.add_to_group("computer")
+			"robot":
+				obj = _robot_scene.instantiate()
+				obj.add_to_group("robot")
+			_:
+				continue
+		obj.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		add_child(obj)
+
+
+func _load_enemies() -> void:
+	var entries := _read_level_json(
+		"user://%s/enemies.json" % name,
+		"res://Scenes/Levels/%s/enemies.json" % name
+	)
+	for entry in entries:
+		var enemy = _enemy_scene.instantiate()
+		enemy.add_to_group("robot_enemy")
+		enemy.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		add_child(enemy)
+		if entry.has("attack"):
+			enemy.enemy_attack  = int(entry.get("attack",  10))
+			enemy.enemy_defense = int(entry.get("defense", 10))
+			enemy.enemy_health  = int(entry.get("health",   2))
+		if entry.get("dead", false):
+			enemy.death_rotation = float(entry.get("death_rotation", PI / 2.0))
+			enemy.apply_dead_state()
+
+
+func _load_npcs() -> void:
+	var entries := _read_level_json(
+		"",
+		"res://Scenes/Levels/%s/npcs.json" % name
+	)
+	for entry in entries:
+		var npc = _npc_scene.instantiate()
+		npc.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		add_child(npc)
+		npc.setup(entry)
+
+
+func _read_level_json(user_path: String, config_path: String) -> Array:
+	for path in ([user_path] if user_path != "" else []) + [config_path]:
+		if FileAccess.file_exists(path):
+			var file = FileAccess.open(path, FileAccess.READ)
+			var data = JSON.parse_string(file.get_as_text())
+			file.close()
+			if data is Array:
+				return data
+	return []
 
 
 # ---------------------------------------------------------------------------

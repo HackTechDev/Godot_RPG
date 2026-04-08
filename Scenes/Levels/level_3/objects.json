@@ -1,0 +1,6 @@
+[
+  { "type": "computer", "x": 250, "y": 250 },
+  { "type": "computer", "x": 650, "y": 350 },
+  { "type": "robot",    "x": 400, "y": 300 },
+  { "type": "robot",    "x": 550, "y": 200 }
+]
