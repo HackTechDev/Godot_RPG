@@ -132,7 +132,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_space") or _pending_trigger.is_empty() or _transition_cooldown:
 		return
 
-	var player := get_tree().get_first_node_in_group("player")
+	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
 		return
 
