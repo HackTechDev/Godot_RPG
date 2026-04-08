@@ -16,5 +16,6 @@ func _process(delta):
 		get_tree().quit()
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if (event is InputEventKey and event.pressed) or \
+	   (event is InputEventMouseButton and event.pressed):
 		get_tree().quit()

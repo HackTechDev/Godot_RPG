@@ -26,5 +26,6 @@ func _go_to_main_menu():
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if (event is InputEventKey and event.pressed) or \
+	   (event is InputEventMouseButton and event.pressed):
 		_go_to_main_menu()
