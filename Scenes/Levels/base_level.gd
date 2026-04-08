@@ -167,7 +167,7 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2) -> Vector2:
 
 	if FileAccess.file_exists(dest_json):
 		var file := FileAccess.open(dest_json, FileAccess.READ)
-		var data  := JSON.parse_string(file.get_as_text())
+		var data: Variant = JSON.parse_string(file.get_as_text())
 		file.close()
 		if data is Array:
 			var my_scene := "res://Scenes/Levels/%s/%s.tscn" % [name, name]
