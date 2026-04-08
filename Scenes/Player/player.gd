@@ -110,6 +110,7 @@ func _ready():
 	add_child(player_combat_label)
 
 	_apply_appearance()
+	_restore_sprite_state()
 	SceneTransition.fade_in()
 
 func _physics_process(_delta):
@@ -540,6 +541,21 @@ func _apply_appearance():
 			child.frame = f
 	appearance_layers.visible = true
 	master_sprite.visible = false
+
+func _restore_sprite_state() -> void:
+	var facing_vec: Vector2
+	match Player_data.player_facing:
+		2: facing_vec = Vector2(0, 1)
+		4: facing_vec = Vector2(-1, 0)
+		6: facing_vec = Vector2(1, 0)
+		8: facing_vec = Vector2(0, -1)
+		_: facing_vec = Vector2(0, 1)
+	anim_tree.set("parameters/Idle/blend_position", facing_vec)
+	anim_tree.set("parameters/Move/blend_position", facing_vec)
+	master_sprite.frame = Player_data.player_sprite_frame
+	for child in appearance_layers.get_children():
+		if child is Sprite2D:
+			child.frame = Player_data.player_sprite_frame
 
 func _spr_load(spr: Sprite2D, key: String) -> void:
 	SpriteLibrary.apply_sprite(spr, key)

@@ -42,6 +42,9 @@ static var contact_npc = null
 static var use_json_spawn: bool = false
 static var json_spawn: Vector2 = Vector2.ZERO
 
+# Frame du sprite au moment de la dernière transition
+static var player_sprite_frame: int = 0
+
 # Appearance (LPC spritesheet layer keys)
 static var appearance_body: String = ""
 static var appearance_hair: String = ""

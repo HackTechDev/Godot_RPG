@@ -149,6 +149,10 @@ func _unhandled_input(event: InputEvent) -> void:
 # ---------------------------------------------------------------------------
 
 func _save_transition_state(player: Node2D) -> void:
+	var sprite := player.get_node_or_null("Sprite2D")
+	if sprite:
+		Player_data.player_sprite_frame = sprite.frame
+
 	var computers     := get_tree().get_nodes_in_group("computer")
 	var robots        := get_tree().get_nodes_in_group("robot")
 	var robot_enemies := get_tree().get_nodes_in_group("robot_enemy")
