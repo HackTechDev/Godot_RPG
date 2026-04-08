@@ -5,7 +5,7 @@
 	  "trigger": { "x": 200, "y": 330, "w": 128, "h": 32 },
 	  "to": {
 		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-		"spawn": { "x": 122, "y": 337 }
+		"spawn": { "x": 122, "y": 355 }
 	  }
 	}
   ]
