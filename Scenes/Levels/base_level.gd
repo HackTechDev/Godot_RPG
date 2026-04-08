@@ -136,16 +136,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if player == null:
 		return
 
-	# Le CollisionShape2D doit être entièrement dans la zone trigger
-	var col_shape := player.get_node_or_null("CollisionShape2D") as CollisionShape2D
-	if col_shape and col_shape.shape is RectangleShape2D:
-		var half := (col_shape.shape as RectangleShape2D).size / 2.0
-		var player_rect := Rect2(
-			player.global_position + col_shape.position - half,
-			(col_shape.shape as RectangleShape2D).size
-		)
-		if not (_pending_trigger["rect"] as Rect2).encloses(player_rect):
-			return
+	# Le centre du joueur doit être dans la zone trigger
+	var trigger_rect: Rect2 = _pending_trigger["rect"]
+	if not trigger_rect.has_point(player.global_position):
+		return
 
 	var target: String   = _pending_trigger["target"]
 	var src_rect: Rect2  = _pending_trigger["rect"]
