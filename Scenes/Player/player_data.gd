@@ -19,9 +19,6 @@ static var player_pos_y = 0
 
 static var player_previous_scene = ""
 
-static var spawnpoint_current = ""
-static var spawnpoint_next = ""
-
 static var player_spawnpoint_position_x = 0
 static var player_spawnpoint_position_y = 0
 

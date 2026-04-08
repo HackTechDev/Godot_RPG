@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var player_scene = preload("res://Scenes/Player/player.tscn")
-var _indicator_script = preload("res://Scenes/Levels/spawnpoint_indicator.gd")
 var _liblevel = preload("res://Lib/liblevel.gd").new()
 
 var _computer_scene = preload("res://Objects/Computers/computer.tscn")
@@ -23,7 +22,6 @@ func _ready() -> void:
 		print("Scene: " + self.name)
 	Player_data.player_previous_scene = self.name
 	SceneTransition.fade_in()
-	_add_spawnpoint_visuals()
 	_setup_json_transitions()
 	_load_objects()
 	_load_enemies()
@@ -45,21 +43,11 @@ func _place_player(player: Node2D) -> void:
 		Player_data.use_json_spawn = false
 		return
 
-	# Priorité 2 : système historique (spawnpoints nommés + offset)
-	if Player_data.spawnpoint_next == "":
-		player.position.x = Player_data.player_spawnpoint_position_x
-		player.position.y = Player_data.player_spawnpoint_position_y
-	else:
-		var node_name = "/root/%s/spawnpoint_%s_%s_begin" % [self.name, self.name, Player_data.spawnpoint_next]
-		var spawn_node := get_node_or_null(node_name)
-		if spawn_node == null:
-			push_error("base_level: spawnpoint introuvable : " + node_name)
-			player.position = Vector2(Player_data.player_spawnpoint_position_x, Player_data.player_spawnpoint_position_y)
-		else:
-			player.position = spawn_node.position + Vector2(
-				Player_data.player_spawnpoint_position_x,
-				Player_data.player_spawnpoint_position_y
-			)
+	# Priorité 2 : position sauvegardée
+	player.position = Vector2(
+		Player_data.player_spawnpoint_position_x,
+		Player_data.player_spawnpoint_position_y
+	)
 
 
 # ---------------------------------------------------------------------------
@@ -146,9 +134,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var player := get_tree().get_first_node_in_group("player")
 		if player:
 			_save_transition_state(player)
-		Player_data.use_json_spawn  = true
-		Player_data.json_spawn      = spawn_pos
-		Player_data.spawnpoint_next = ""
+		Player_data.use_json_spawn = true
+		Player_data.json_spawn     = spawn_pos
 		SceneTransition.change_scene(target)
 
 
@@ -254,13 +241,3 @@ func _read_level_json(user_path: String, config_path: String) -> Array:
 	return []
 
 
-# ---------------------------------------------------------------------------
-# Visuel de debug des spawnpoints (système historique)
-# ---------------------------------------------------------------------------
-
-func _add_spawnpoint_visuals() -> void:
-	for child in get_children():
-		if child is Marker2D and child.name.begins_with("spawnpoint_"):
-			var indicator := Node2D.new()
-			indicator.set_script(_indicator_script)
-			child.add_child(indicator)

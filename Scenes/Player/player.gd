@@ -566,8 +566,6 @@ func _spr_none(spr: Sprite2D) -> void:
 func _restart_game():
 	liblevel.reinitializeLevel()
 	Player_data.player_previous_scene = ""
-	Player_data.spawnpoint_current = ""
-	Player_data.spawnpoint_next = ""
 	Player_data.scene_path = ""
 	Player_data.player_pos_x = 0
 	Player_data.player_pos_y = 0
