@@ -435,20 +435,21 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - Remplace entièrement l'ancien système `entrance_x_2` / `entrance_y_2`
 - Les connexions entre niveaux sont définies dans `Scenes/Levels/<level>/level_connections.json`
-- Format : tableau de connexions avec `trigger` (zone rectangulaire x/y/w/h) et `to` (scène cible + position de spawn)
-- Chaque niveau gère uniquement ses propres sorties — la scène destination gère ses entrées dans son propre fichier
+- Format : connexions avec `trigger` (zone rectangulaire x/y/w/h) et `to.scene` (scène cible) — pas de spawn codé en dur
+- Chaque niveau gère uniquement ses propres sorties ; la scène destination gère ses entrées dans son propre fichier
 - Chargement automatique au démarrage du niveau depuis `base_level.gd`
 - Zone trigger visualisée en orange semi-transparent (`Polygon2D`, `z_index = 10`) dans la scène en jeu
 - **Fichiers :** `Scenes/Levels/base_level.gd`, `Scenes/Levels/level_X/level_connections.json`
 
 ---
 
-## Transition déclenchée par la touche Espace
+## Transition déclenchée par la touche Espace avec spawn relatif
 
 - La transition entre niveaux ne se déclenche plus automatiquement à l'entrée dans la zone
-- Le joueur doit appuyer sur **Espace** alors qu'il est dans la zone trigger
-- Le **sprite entier** (CollisionShape2D) doit être contenu dans la zone ; une présence partielle est ignorée
+- Le joueur doit appuyer sur **Espace** avec son centre dans la zone trigger
 - Cooldown de 0,5 s après l'arrivée dans un nouveau niveau pour éviter le re-déclenchement immédiat
+- **Spawn relatif** : l'offset du joueur par rapport au centre du trigger source est appliqué au centre du trigger retour dans le niveau destination — la position relative est préservée
+- `_compute_arrival_spawn()` lit le `level_connections.json` du niveau destination, trouve le trigger qui pointe vers le niveau courant et calcule la position d'arrivée
 - **Fichiers :** `Scenes/Levels/base_level.gd`, `project.godot`
 
 ---
@@ -494,3 +495,19 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Le panneau en haut à gauche affiche en temps réel la position `x, y` du joueur
 - Mis à jour à chaque frame dans `_process()`
 - **Fichiers :** `UI/hud.tscn`, `UI/hud.gd`
+
+---
+
+## Réinitialisation → création de personnage directe
+
+- Après **Reinitialize** (menu in-game) ou **Restart** (écran Game Over), le joueur est redirigé directement vers la page de création de personnage
+- `Player_data.goto_character_creation` : flag transmis entre scènes via autoload
+- `main_menu._ready()` détecte le flag et ouvre `CharacterCreation` automatiquement
+- **Fichiers :** `UI/main_menu.gd`, `UI/game_over.gd`, `Scenes/Player/player_data.gd`
+
+---
+
+## Clic souris pour passer le splashscreen et les crédits
+
+- En plus de n'importe quelle touche clavier, un clic souris suffit pour passer le splashscreen et quitter les crédits
+- **Fichiers :** `UI/splash_screen.gd`, `UI/credits.gd`

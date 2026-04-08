@@ -121,7 +121,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - `SpriteLibrary` scanne les archives ZIP LPC au démarrage — aucun chemin codé en dur
 
 ### ~~Système de transitions par JSON~~ — Implémenté
-- `level_connections.json` par niveau, déclenchement par Espace, visualisation orange — voir `features.md`
+- `level_connections.json` par niveau, déclenchement par Espace, spawn relatif au trigger, visualisation orange — voir `features.md`
 - L'ancien système `entrance_x_2` / `entrance_y_2` a été supprimé
 
 ### ~~Indicateurs visuels de spawnpoints~~ — Remplacé
