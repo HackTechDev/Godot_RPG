@@ -9,7 +9,7 @@
 	},
 	{
 	  "id": "level_1_vers_level_4",
-	  "trigger": { "x": 607, "y": 60, "w": 32, "h": 128 },
+	  "trigger": { "x": 607, "y": 60, "w": 12, "h": 128 },
 	  "to": {
 		"scene": "res://Scenes/Levels/level_4/level_4.tscn"
 	  }

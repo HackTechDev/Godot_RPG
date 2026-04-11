@@ -1,5 +1,0 @@
-[
-  { "x": 300, "y": 200, "attack": 10, "defense": 10, "health": 2 },
-  { "x": 550, "y": 350, "attack": 10, "defense": 10, "health": 2 },
-  { "x": 200, "y": 420, "attack": 10, "defense": 10, "health": 2 }
-]
