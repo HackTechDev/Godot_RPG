@@ -13,6 +13,9 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var character_creation: Control = $CharacterCreation
 @onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
+@onready var debug_settings: Control = $DebugSettings
+@onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
+@onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
@@ -136,6 +139,24 @@ func _on_button_controls_pressed():
 
 func _on_button_controls_back_pressed():
 	controls_settings.visible = false
+	settings.visible = true
+
+func _on_button_debug_pressed():
+	settings.visible = false
+	debug_settings.visible = true
+	check_debug_hitbox.button_pressed = GameConfig.debug_show_hitbox
+	check_debug_collision.button_pressed = GameConfig.debug_show_collision
+
+func _on_check_debug_hitbox_toggled(toggled_on: bool):
+	GameConfig.debug_show_hitbox = toggled_on
+	_save_audio_settings()
+
+func _on_check_debug_collision_toggled(toggled_on: bool):
+	GameConfig.debug_show_collision = toggled_on
+	_save_audio_settings()
+
+func _on_button_debug_back_pressed():
+	debug_settings.visible = false
 	settings.visible = true
 
 func _on_button_create_character_pressed():
@@ -319,7 +340,9 @@ func _on_slider_volume_value_changed(value: float):
 func _save_audio_settings():
 	var data = {
 		"music_paused": music_neon_dream.stream_paused,
-		"volume_linear": db_to_linear(music_neon_dream.volume_db)
+		"volume_linear": db_to_linear(music_neon_dream.volume_db),
+		"debug_show_hitbox": GameConfig.debug_show_hitbox,
+		"debug_show_collision": GameConfig.debug_show_collision
 	}
 	var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	file.store_line(JSON.stringify(data))
@@ -335,6 +358,8 @@ func _load_audio_settings():
 		return
 	music_neon_dream.stream_paused = data.get("music_paused", false)
 	music_neon_dream.volume_db = linear_to_db(maxf(data.get("volume_linear", 0.8), 0.01))
+	GameConfig.debug_show_hitbox = data.get("debug_show_hitbox", false)
+	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
 
 func _on_button_settings_back_pressed():
 	main.visible = true

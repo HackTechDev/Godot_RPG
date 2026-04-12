@@ -11,10 +11,14 @@ var _npc_scene      = preload("res://Objects/NPC/npc.tscn")
 # Empêche les zones JSON de se déclencher immédiatement après un spawn
 var _transition_cooldown := false
 
-# Trigger JSON dans lequel le joueur se trouve actuellement (vide = aucun)
-var _pending_trigger: Dictionary = {}
+# Tous les triggers du niveau (détection basée sur le sprite, sans body_entered)
+var _all_triggers: Array[Dictionary] = []
 
-# Chemin construit dynamiquement dans _setup_json_transitions()
+# Marge en pixels : le bord du sprite doit être à ≤ MARGIN px du bord du trigger
+const _TRIGGER_MARGIN := 3.0
+
+# Label de debug affiché quand le bord du sprite touche le bord du trigger
+var _trigger_hint: Label = null
 
 
 func _ready() -> void:
@@ -30,6 +34,20 @@ func _ready() -> void:
 	var player = player_scene.instantiate()
 	_place_player(player)
 	add_child(player)
+
+	_trigger_hint = Label.new()
+	_trigger_hint.text = "Haut du sprite = haut du trigger — appuyez sur Espace"
+	_trigger_hint.visible = false
+	_trigger_hint.add_theme_font_size_override("font_size", 14)
+	_trigger_hint.add_theme_color_override("font_color", Color(0.2, 1.0, 0.2))
+	_trigger_hint.add_theme_constant_override("outline_size", 2)
+	_trigger_hint.add_theme_color_override("font_outline_color", Color.BLACK)
+	_trigger_hint.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_trigger_hint.position = Vector2(-200, -40)
+	var _cl := CanvasLayer.new()
+	_cl.layer = 20
+	_cl.add_child(_trigger_hint)
+	add_child(_cl)
 
 
 # ---------------------------------------------------------------------------
@@ -115,47 +133,111 @@ func _create_json_trigger(conn: Dictionary) -> void:
 		area.position - Vector2(w * 0.5, h * 0.5),
 		Vector2(w, h)
 	)
-	area.body_entered.connect(
-		func(body: Node2D) -> void:
-			if body.is_in_group("player"):
-				_pending_trigger = {"target": target, "rect": trigger_rect}
-	)
-	area.body_exited.connect(
-		func(body: Node2D) -> void:
-			if body.is_in_group("player"):
-				_pending_trigger = {}
-	)
+	# Stocke le trigger pour la détection sprite-bord dans _unhandled_input
+	_all_triggers.append({"target": target, "rect": trigger_rect})
 	add_child(area)
 
 
+func _process(_delta: float) -> void:
+	if _trigger_hint == null or _all_triggers.is_empty():
+		return
+	if not GameConfig.debug_show_collision:
+		_trigger_hint.visible = false
+		return
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player == null:
+		_trigger_hint.visible = false
+		return
+	var master_sprite := player.get_node_or_null("Sprite2D") as Sprite2D
+	if master_sprite == null:
+		_trigger_hint.visible = false
+		return
+	var local_rect: Rect2 = master_sprite.get_rect()
+	var sw := Rect2(player.global_position + local_rect.position, local_rect.size)
+
+	var hint_text := ""
+	for trig in _all_triggers:
+		var tr: Rect2 = trig["rect"]
+		if tr.size.x >= tr.size.y:
+			var x_overlap := sw.end.x > tr.position.x and sw.position.x < tr.end.x
+			if not x_overlap:
+				continue
+			if absf(sw.position.y - tr.position.y) <= _TRIGGER_MARGIN:
+				hint_text = "Haut du sprite = haut du trigger — appuyez sur Espace"
+				break
+			if absf(sw.end.y - tr.end.y) <= _TRIGGER_MARGIN:
+				hint_text = "Bas du sprite = bas du trigger — appuyez sur Espace"
+				break
+		else:
+			var y_overlap := sw.end.y > tr.position.y and sw.position.y < tr.end.y
+			if not y_overlap:
+				continue
+			if absf(sw.position.x - tr.position.x) <= _TRIGGER_MARGIN:
+				hint_text = "Gauche du sprite = gauche du trigger — appuyez sur Espace"
+				break
+			if absf(sw.end.x - tr.end.x) <= _TRIGGER_MARGIN:
+				hint_text = "Droite du sprite = droite du trigger — appuyez sur Espace"
+				break
+
+	if hint_text != "":
+		_trigger_hint.text = hint_text
+		_trigger_hint.visible = true
+	else:
+		_trigger_hint.visible = false
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("ui_space") or _pending_trigger.is_empty() or _transition_cooldown:
+	if not event.is_action_pressed("ui_space") or _transition_cooldown or _all_triggers.is_empty():
 		return
 
 	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
 		return
 
-	# Le centre du joueur doit être dans la zone trigger
-	var trigger_rect: Rect2 = _pending_trigger["rect"]
-	if not trigger_rect.has_point(player.global_position):
+	# Rect du sprite en coordonnées monde (graphisme, pas collision shape)
+	var master_sprite := player.get_node_or_null("Sprite2D") as Sprite2D
+	if master_sprite == null:
+		return
+	var local_rect: Rect2 = master_sprite.get_rect()
+	var sw := Rect2(player.global_position + local_rect.position, local_rect.size)
+
+	for trig in _all_triggers:
+		var tr: Rect2    = trig["rect"]
+		var target: String = trig["target"]
+		var horizontal := tr.size.x >= tr.size.y
+
+		var in_zone: bool
+		if horizontal:
+			var x_overlap := sw.end.x > tr.position.x and sw.position.x < tr.end.x
+			if not x_overlap:
+				continue
+			var at_top    := absf(sw.position.y - tr.position.y) <= _TRIGGER_MARGIN
+			var at_bottom := absf(sw.end.y      - tr.end.y)      <= _TRIGGER_MARGIN
+			in_zone = at_top or at_bottom
+		else:
+			var y_overlap := sw.end.y > tr.position.y and sw.position.y < tr.end.y
+			if not y_overlap:
+				continue
+			var at_left  := absf(sw.position.x - tr.position.x) <= _TRIGGER_MARGIN
+			var at_right := absf(sw.end.x      - tr.end.x)      <= _TRIGGER_MARGIN
+			in_zone = at_left or at_right
+
+		if not in_zone:
+			continue
+
+		# Bord trouvé — déclencher la transition
+		var offset := player.global_position - tr.get_center()
+		_save_transition_state(player)
+		Player_data.use_json_spawn = true
+		Player_data.json_spawn     = _compute_arrival_spawn(target, offset, horizontal)
+		SceneTransition.change_scene(target)
 		return
 
-	var target: String   = _pending_trigger["target"]
-	var src_rect: Rect2  = _pending_trigger["rect"]
-	_pending_trigger = {}
 
-	# Offset du joueur par rapport au centre du trigger source
-	var offset := player.global_position - src_rect.get_center()
-
-	_save_transition_state(player)
-	Player_data.use_json_spawn = true
-	Player_data.json_spawn     = _compute_arrival_spawn(target, offset)
-	SceneTransition.change_scene(target)
-
-
-# Trouve le trigger de destination qui pointe vers cette scène et y applique l'offset.
-func _compute_arrival_spawn(target_scene: String, offset: Vector2) -> Vector2:
+# Trouve le trigger de destination qui pointe vers cette scène et y applique l'offset inversé.
+# Pour un trigger horizontal : entrée par le haut → arrivée en bas, et vice-versa.
+# Pour un trigger vertical   : entrée par la droite → arrivée à gauche, et vice-versa.
+func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizontal: bool) -> Vector2:
 	var dest_name := target_scene.get_basename().split("/")[-1]
 	var dest_json := "res://Scenes/Levels/%s/level_connections.json" % dest_name
 
@@ -169,7 +251,14 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2) -> Vector2:
 				var to: Dictionary = conn.get("to", {})
 				if to.get("scene", "") == my_scene:
 					var t: Dictionary = conn.get("trigger", {})
-					return Vector2(t.get("x", 0.0), t.get("y", 0.0)) + offset
+					var center := Vector2(t.get("x", 0.0), t.get("y", 0.0))
+					# Inversion de l'axe perpendiculaire à la direction de passage
+					var arrival_offset: Vector2
+					if src_horizontal:
+						arrival_offset = Vector2(offset.x, -offset.y)
+					else:
+						arrival_offset = Vector2(-offset.x, offset.y)
+					return center + arrival_offset
 
 	# Aucun trigger correspondant trouvé — fallback : offset seul
 	push_warning("base_level: aucun trigger retour vers %s dans %s" % [name, dest_name])

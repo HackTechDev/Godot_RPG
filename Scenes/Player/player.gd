@@ -130,6 +130,13 @@ func _process(_delta):
 		for child in appearance_layers.get_children():
 			if child is Sprite2D and child.visible:
 				child.frame = f
+	queue_redraw()
+
+func _draw() -> void:
+	if not GameConfig.debug_show_hitbox:
+		return
+	var spr_rect: Rect2 = master_sprite.get_rect()
+	draw_rect(spr_rect, Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
 
 func _input(event):
 	if event.is_action_pressed("ui_pause"):
