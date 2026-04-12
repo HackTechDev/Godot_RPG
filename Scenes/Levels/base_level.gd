@@ -241,7 +241,13 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 						arrival_offset = Vector2(offset.x, -offset.y)
 					else:
 						arrival_offset = Vector2(-offset.x, offset.y)
-					return center + arrival_offset
+					var spawn := center + arrival_offset
+					# Correction du décalage dû aux insets du sprite
+					if src_horizontal:
+						spawn.y -= _SPRITE_TOP_INSET
+					else:
+						spawn.x -= (_SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET) / 2.0
+					return spawn
 
 	# Aucun trigger correspondant trouvé — fallback : offset seul
 	push_warning("base_level: aucun trigger retour vers %s dans %s" % [name, dest_name])
