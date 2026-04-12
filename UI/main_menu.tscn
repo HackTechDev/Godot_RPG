@@ -272,7 +272,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/AudioSettings/CenterContainer" unique_id=2054694139]
-custom_minimum_size = Vector2(400, 280)
+custom_minimum_size = Vector2(400, 420)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer" unique_id=981817862]
@@ -307,6 +307,24 @@ theme_override_font_sizes/font_size = 18
 text = "Volume"
 
 [node name="SliderVolume" type="HSlider" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=725324009]
+layout_mode = 2
+value = 80.0
+
+[node name="SeparatorSfx" type="HSeparator" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560001]
+layout_mode = 2
+
+[node name="CheckSfx" type="CheckButton" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560002]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+button_pressed = true
+text = "Effets sonores"
+
+[node name="LabelSfxVolume" type="Label" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Volume effets"
+
+[node name="SliderSfxVolume" type="HSlider" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560004]
 layout_mode = 2
 value = 80.0
 
@@ -990,6 +1008,8 @@ parameters/looping = true
 [connection signal="pressed" from="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelpBack" to="MainMenuLayer" method="_on_button_help_back_pressed"]
 [connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic" to="MainMenuLayer" method="_on_check_music_toggled"]
 [connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume" to="MainMenuLayer" method="_on_slider_volume_value_changed"]
+[connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckSfx" to="MainMenuLayer" method="_on_check_sfx_toggled"]
+[connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderSfxVolume" to="MainMenuLayer" method="_on_slider_sfx_volume_value_changed"]
 [connection signal="pressed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonAudioBack" to="MainMenuLayer" method="_on_button_audio_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonControlsBack" to="MainMenuLayer" method="_on_button_controls_back_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/BodyOption" to="MainMenuLayer" method="_on_cc_body_selected"]

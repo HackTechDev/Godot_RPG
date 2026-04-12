@@ -270,10 +270,12 @@ func _on_hud_home_requested():
 	get_tree().paused = true
 
 func movement_sounds():
-	var IS_FOOTSTEP_SOUND_PLAYING = false
-	if footstep.is_playing():
-		IS_FOOTSTEP_SOUND_PLAYING = true
-	if !IS_FOOTSTEP_SOUND_PLAYING:
+	if not GameConfig.sfx_enabled:
+		if footstep.is_playing():
+			footstep.stop()
+		return
+	footstep.volume_db = linear_to_db(GameConfig.sfx_volume_linear)
+	if not footstep.is_playing():
 		footstep.play()
 
 # --- Combat ---

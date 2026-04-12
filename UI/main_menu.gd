@@ -13,6 +13,8 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var character_creation: Control = $CharacterCreation
 @onready var check_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
+@onready var check_sfx: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckSfx
+@onready var slider_sfx_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderSfxVolume
 @onready var debug_settings: Control = $DebugSettings
 @onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
@@ -128,6 +130,8 @@ func _on_button_audio_pressed():
 	audio_settings.visible = true
 	check_music.button_pressed = !music_neon_dream.stream_paused
 	slider_volume.value = db_to_linear(music_neon_dream.volume_db) * 100.0
+	check_sfx.button_pressed = GameConfig.sfx_enabled
+	slider_sfx_volume.value = GameConfig.sfx_volume_linear * 100.0
 
 func _on_button_audio_back_pressed():
 	audio_settings.visible = false
@@ -337,10 +341,20 @@ func _on_slider_volume_value_changed(value: float):
 	music_neon_dream.volume_db = linear_to_db(maxf(value, 0.01) / 100.0)
 	_save_audio_settings()
 
+func _on_check_sfx_toggled(toggled_on: bool):
+	GameConfig.sfx_enabled = toggled_on
+	_save_audio_settings()
+
+func _on_slider_sfx_volume_value_changed(value: float):
+	GameConfig.sfx_volume_linear = maxf(value, 0.01) / 100.0
+	_save_audio_settings()
+
 func _save_audio_settings():
 	var data = {
 		"music_paused": music_neon_dream.stream_paused,
 		"volume_linear": db_to_linear(music_neon_dream.volume_db),
+		"sfx_enabled": GameConfig.sfx_enabled,
+		"sfx_volume_linear": GameConfig.sfx_volume_linear,
 		"debug_show_hitbox": GameConfig.debug_show_hitbox,
 		"debug_show_collision": GameConfig.debug_show_collision
 	}
@@ -358,6 +372,8 @@ func _load_audio_settings():
 		return
 	music_neon_dream.stream_paused = data.get("music_paused", false)
 	music_neon_dream.volume_db = linear_to_db(maxf(data.get("volume_linear", 0.8), 0.01))
+	GameConfig.sfx_enabled = data.get("sfx_enabled", true)
+	GameConfig.sfx_volume_linear = maxf(data.get("sfx_volume_linear", 0.8), 0.01)
 	GameConfig.debug_show_hitbox = data.get("debug_show_hitbox", false)
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
 
