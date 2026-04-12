@@ -152,7 +152,7 @@ func _process(_delta: float) -> void:
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
 	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
-	var sw_detect := Rect2(sw.position.x + GameConfig.SPRITE_LEFT_INSET, sw.position.y + GameConfig.SPRITE_TOP_INSET, sw.size.x - GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET, sw.size.y - GameConfig.SPRITE_TOP_INSET - GameConfig.SPRITE_BOTTOM_INSET)
+	var sw_detect := Rect2(sw.position.x + PlayerConfig.SPRITE_LEFT_INSET, sw.position.y + PlayerConfig.SPRITE_TOP_INSET, sw.size.x - PlayerConfig.SPRITE_LEFT_INSET - PlayerConfig.SPRITE_RIGHT_INSET, sw.size.y - PlayerConfig.SPRITE_TOP_INSET - PlayerConfig.SPRITE_BOTTOM_INSET)
 
 	var hint_text := ""
 	for trig in _all_triggers:
@@ -193,7 +193,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
 	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
-	var sw_detect := Rect2(sw.position.x + GameConfig.SPRITE_LEFT_INSET, sw.position.y + GameConfig.SPRITE_TOP_INSET, sw.size.x - GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET, sw.size.y - GameConfig.SPRITE_TOP_INSET - GameConfig.SPRITE_BOTTOM_INSET)
+	var sw_detect := Rect2(sw.position.x + PlayerConfig.SPRITE_LEFT_INSET, sw.position.y + PlayerConfig.SPRITE_TOP_INSET, sw.size.x - PlayerConfig.SPRITE_LEFT_INSET - PlayerConfig.SPRITE_RIGHT_INSET, sw.size.y - PlayerConfig.SPRITE_TOP_INSET - PlayerConfig.SPRITE_BOTTOM_INSET)
 
 	for trig in _all_triggers:
 		var tr: Rect2      = trig["rect"]
@@ -239,9 +239,9 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 					var spawn := center + arrival_offset
 					# Correction du décalage dû aux insets du sprite
 					if src_horizontal:
-						spawn.y -= GameConfig.SPRITE_TOP_INSET
+						spawn.y -= PlayerConfig.SPRITE_TOP_INSET
 					else:
-						spawn.x -= (GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET) / 2.0
+						spawn.x -= (PlayerConfig.SPRITE_LEFT_INSET - PlayerConfig.SPRITE_RIGHT_INSET) / 2.0
 					return spawn
 
 	# Aucun trigger correspondant trouvé — fallback : offset seul
