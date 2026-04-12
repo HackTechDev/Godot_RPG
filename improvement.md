@@ -22,10 +22,18 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Écran Game Over
 - ~~Implémenté~~ — voir `features.md`
 
-### Objectifs / quêtes simples
-- Définir des objectifs par niveau (ex. : "Collecter 3 ordinateurs")
-- Afficher la progression dans le HUD
-- Déclencher un événement (ouverture de porte, passage vers la zone suivante) à la complétion
+### ~~Sélection de mission~~ — Implémenté
+- Page MissionSelect après Play, missions configurées dans `missions.json` — voir `features.md`
+
+### Objectifs de mission intégrés au HUD
+- Afficher les objectifs de la mission active en cours de partie (panneau rétractable ou coin d'écran)
+- Alimenté par `missions.json`, persisté dans `Player_data` ou un autoload dédié
+- Objectifs cochables : déclencher un événement (ouverture de porte, transition) à la complétion
+
+### Progression et état des missions
+- Mémoriser quelle mission est en cours (`user://current_mission.json`)
+- Marquer les missions comme terminées, afficher un récapitulatif en fin de mission
+- Débloquer les missions suivantes selon la progression
 
 ### Portes et clés
 - Ajouter des objets `door` bloquant le passage entre zones
@@ -92,6 +100,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - `liblevel.gd` passé à `extends RefCounted` — plus de nœuds orphelins
 
 ### Sons d'effets
+- ~~Volume et activation des effets sonores (footstep)~~ — Implémenté via `GameConfig.sfx_enabled` / `sfx_volume_linear`
 - Son de collecte quand T est pressé sur un objet
 - Son de poussée quand R est pressé
 - Son de dégâts si un ennemi touche le joueur
@@ -123,6 +132,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### ~~Système de transitions par JSON~~ — Implémenté
 - `level_connections.json` par niveau, déclenchement par Espace, spawn relatif au trigger, visualisation orange — voir `features.md`
 - L'ancien système `entrance_x_2` / `entrance_y_2` a été supprimé
+- Détection par confinement sur l'axe parallèle au trigger pour éviter les déclenchements en coin — voir `features.md`
 
 ### ~~Indicateurs visuels de spawnpoints~~ — Remplacé
 - `spawnpoint_indicator.gd` supprimé ; les zones de transition sont désormais visualisées par le Polygon2D orange des triggers JSON

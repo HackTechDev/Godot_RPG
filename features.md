@@ -511,3 +511,37 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - En plus de n'importe quelle touche clavier, un clic souris suffit pour passer le splashscreen et quitter les crédits
 - **Fichiers :** `UI/splash_screen.gd`, `UI/credits.gd`
+
+---
+
+## Détection de transition par confinement sur l'axe parallèle
+
+- Pour un trigger **horizontal** (sortie haut/bas) : les bords gauche et droit de `sw_detect` doivent être contenus dans la plage X du trigger avant que la transition puisse se déclencher
+- Pour un trigger **vertical** (sortie gauche/droite) : les bords haut et bas de `sw_detect` doivent être contenus dans la plage Y du trigger
+- Évite les déclenchements accidentels quand le joueur effleure un coin de zone de sortie
+- Appliqué dans `_process` (hint visuel) et `_unhandled_input` (déclenchement effectif)
+- **Fichiers :** `Scenes/Levels/base_level.gd`
+
+---
+
+## Contrôle des effets sonores dans les paramètres Audio
+
+- Nouvelle section dans **Settings → Audio** :
+  - `CheckSfx` — activer / désactiver les effets sonores (activé par défaut)
+  - `SliderSfxVolume` — volume des effets (0–100)
+- `sfx_enabled` et `sfx_volume_linear` stockés dans `GameConfig` (autoload) et persistés dans `user://settings.json`
+- `player.gd` applique le volume SFX au footstep à chaque appel de `movement_sounds()` ; coupe le son si les effets sont désactivés
+- **Fichiers :** `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player.gd`
+
+---
+
+## Page de sélection de mission
+
+- Affiché après le bouton **Play** (à la place de l'entrée directe en jeu)
+- Les missions sont définies dans `missions.json` à la racine du projet :
+  - `id`, `title`, `scene` (chemin Godot vers la scène de départ), `description`, `objectives`
+- Interface : `ItemList` des missions disponibles + titre, description, objectifs de la mission sélectionnée
+- Bouton **Accepter** (désactivé tant qu'aucune mission n'est sélectionnée) : charge la sauvegarde et démarre la scène de la mission
+- Bouton **Retour** : revient au menu principal
+- Ajouter une mission = ajouter un objet dans `missions.json`, aucune modification de code
+- **Fichiers :** `missions.json`, `UI/main_menu.tscn`, `UI/main_menu.gd`
