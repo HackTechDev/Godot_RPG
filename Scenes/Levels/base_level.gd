@@ -14,11 +14,6 @@ var _transition_cooldown := false
 # Tous les triggers du niveau (détection basée sur le sprite, sans body_entered)
 var _all_triggers: Array[Dictionary] = []
 
-# Décalage en pixels du frame sprite (transparence LPC) pour la détection
-const _SPRITE_TOP_INSET    := 10
-const _SPRITE_BOTTOM_INSET := 0
-const _SPRITE_LEFT_INSET   := 14
-const _SPRITE_RIGHT_INSET  := 14
 
 # Label de debug affiché quand le bord du sprite touche le bord du trigger
 var _trigger_hint: Label = null
@@ -157,7 +152,7 @@ func _process(_delta: float) -> void:
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
 	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
-	var sw_detect := Rect2(sw.position.x + _SPRITE_LEFT_INSET, sw.position.y + _SPRITE_TOP_INSET, sw.size.x - _SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET, sw.size.y - _SPRITE_TOP_INSET - _SPRITE_BOTTOM_INSET)
+	var sw_detect := Rect2(sw.position.x + GameConfig.SPRITE_LEFT_INSET, sw.position.y + GameConfig.SPRITE_TOP_INSET, sw.size.x - GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET, sw.size.y - GameConfig.SPRITE_TOP_INSET - GameConfig.SPRITE_BOTTOM_INSET)
 
 	var hint_text := ""
 	for trig in _all_triggers:
@@ -198,7 +193,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
 	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
-	var sw_detect := Rect2(sw.position.x + _SPRITE_LEFT_INSET, sw.position.y + _SPRITE_TOP_INSET, sw.size.x - _SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET, sw.size.y - _SPRITE_TOP_INSET - _SPRITE_BOTTOM_INSET)
+	var sw_detect := Rect2(sw.position.x + GameConfig.SPRITE_LEFT_INSET, sw.position.y + GameConfig.SPRITE_TOP_INSET, sw.size.x - GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET, sw.size.y - GameConfig.SPRITE_TOP_INSET - GameConfig.SPRITE_BOTTOM_INSET)
 
 	for trig in _all_triggers:
 		var tr: Rect2      = trig["rect"]
@@ -244,9 +239,9 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 					var spawn := center + arrival_offset
 					# Correction du décalage dû aux insets du sprite
 					if src_horizontal:
-						spawn.y -= _SPRITE_TOP_INSET
+						spawn.y -= GameConfig.SPRITE_TOP_INSET
 					else:
-						spawn.x -= (_SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET) / 2.0
+						spawn.x -= (GameConfig.SPRITE_LEFT_INSET - GameConfig.SPRITE_RIGHT_INSET) / 2.0
 					return spawn
 
 	# Aucun trigger correspondant trouvé — fallback : offset seul
