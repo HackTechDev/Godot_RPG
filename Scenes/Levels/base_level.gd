@@ -162,10 +162,10 @@ func _process(_delta: float) -> void:
 		var horizontal := tr.size.x >= tr.size.y
 		# Vérification de confinement sur l'axe parallèle au trigger
 		if horizontal:
-			if sw_detect.position.x < tr.position.x or (sw_detect.position.x + sw_detect.size.x) > (tr.position.x + tr.size.x):
+			if sw_detect.position.x <= tr.position.x or (sw_detect.position.x + sw_detect.size.x) >= (tr.position.x + tr.size.x):
 				continue
 		else:
-			if sw_detect.position.y < tr.position.y or (sw_detect.position.y + sw_detect.size.y) > (tr.position.y + tr.size.y):
+			if sw_detect.position.y <= tr.position.y or (sw_detect.position.y + sw_detect.size.y) >= (tr.position.y + tr.size.y):
 				continue
 		if horizontal:
 			if sw.get_center().y <= tr.get_center().y:
@@ -212,10 +212,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		# Vérification de confinement sur l'axe parallèle au trigger
 		if horizontal:
-			if sw_detect.position.x < tr.position.x or (sw_detect.position.x + sw_detect.size.x) > (tr.position.x + tr.size.x):
+			if sw_detect.position.x <= tr.position.x or (sw_detect.position.x + sw_detect.size.x) >= (tr.position.x + tr.size.x):
 				continue
 		else:
-			if sw_detect.position.y < tr.position.y or (sw_detect.position.y + sw_detect.size.y) > (tr.position.y + tr.size.y):
+			if sw_detect.position.y <= tr.position.y or (sw_detect.position.y + sw_detect.size.y) >= (tr.position.y + tr.size.y):
 				continue
 
 		# Bord trouvé — déclencher la transition
