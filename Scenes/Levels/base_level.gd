@@ -14,8 +14,11 @@ var _transition_cooldown := false
 # Tous les triggers du niveau (détection basée sur le sprite, sans body_entered)
 var _all_triggers: Array[Dictionary] = []
 
-# Marge en pixels : le bord du sprite doit être à ≤ MARGIN px du bord du trigger
-const _TRIGGER_MARGIN := 1.0
+# Décalage en pixels du frame sprite (transparence LPC) pour la détection
+const _SPRITE_TOP_INSET    := 10
+const _SPRITE_BOTTOM_INSET := 0
+const _SPRITE_LEFT_INSET   := 14
+const _SPRITE_RIGHT_INSET  := 14
 
 # Label de debug affiché quand le bord du sprite touche le bord du trigger
 var _trigger_hint: Label = null
@@ -153,31 +156,26 @@ func _process(_delta: float) -> void:
 		_trigger_hint.visible = false
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
-	var sw := Rect2(player.global_position + local_rect.position, local_rect.size)
+	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
+	var sw_detect := Rect2(sw.position.x + _SPRITE_LEFT_INSET, sw.position.y + _SPRITE_TOP_INSET, sw.size.x - _SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET, sw.size.y - _SPRITE_TOP_INSET - _SPRITE_BOTTOM_INSET)
 
 	var hint_text := ""
 	for trig in _all_triggers:
 		var tr: Rect2 = trig["rect"]
-		if tr.size.x >= tr.size.y:
-			var x_overlap := sw.end.x > tr.position.x and sw.position.x < tr.end.x
-			if not x_overlap:
-				continue
-			if absf(sw.position.y - tr.position.y) <= _TRIGGER_MARGIN:
-				hint_text = "Haut du sprite = haut du trigger — appuyez sur Espace"
-				break
-			if absf(sw.end.y - tr.end.y) <= _TRIGGER_MARGIN:
-				hint_text = "Bas du sprite = bas du trigger — appuyez sur Espace"
-				break
+		if not sw_detect.intersects(tr):
+			continue
+		var horizontal := tr.size.x >= tr.size.y
+		if horizontal:
+			if sw.get_center().y <= tr.get_center().y:
+				hint_text = "Zone de sortie (haut) — appuyez sur Espace"
+			else:
+				hint_text = "Zone de sortie (bas) — appuyez sur Espace"
 		else:
-			var y_overlap := sw.end.y > tr.position.y and sw.position.y < tr.end.y
-			if not y_overlap:
-				continue
-			if absf(sw.position.x - tr.position.x) <= _TRIGGER_MARGIN:
-				hint_text = "Gauche du sprite = gauche du trigger — appuyez sur Espace"
-				break
-			if absf(sw.end.x - tr.end.x) <= _TRIGGER_MARGIN:
-				hint_text = "Droite du sprite = droite du trigger — appuyez sur Espace"
-				break
+			if sw.get_center().x <= tr.get_center().x:
+				hint_text = "Zone de sortie (gauche) — appuyez sur Espace"
+			else:
+				hint_text = "Zone de sortie (droite) — appuyez sur Espace"
+		break
 
 	if hint_text != "":
 		_trigger_hint.text = hint_text
@@ -199,30 +197,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if master_sprite == null:
 		return
 	var local_rect: Rect2 = master_sprite.get_rect()
-	var sw := Rect2(player.global_position + local_rect.position, local_rect.size)
+	var sw := Rect2(master_sprite.global_position + local_rect.position, local_rect.size)
+	var sw_detect := Rect2(sw.position.x + _SPRITE_LEFT_INSET, sw.position.y + _SPRITE_TOP_INSET, sw.size.x - _SPRITE_LEFT_INSET - _SPRITE_RIGHT_INSET, sw.size.y - _SPRITE_TOP_INSET - _SPRITE_BOTTOM_INSET)
 
 	for trig in _all_triggers:
-		var tr: Rect2    = trig["rect"]
+		var tr: Rect2      = trig["rect"]
 		var target: String = trig["target"]
-		var horizontal := tr.size.x >= tr.size.y
+		var horizontal     := tr.size.x >= tr.size.y
 
-		var in_zone: bool
-		if horizontal:
-			var x_overlap := sw.end.x > tr.position.x and sw.position.x < tr.end.x
-			if not x_overlap:
-				continue
-			var at_top    := absf(sw.position.y - tr.position.y) <= _TRIGGER_MARGIN
-			var at_bottom := absf(sw.end.y      - tr.end.y)      <= _TRIGGER_MARGIN
-			in_zone = at_top or at_bottom
-		else:
-			var y_overlap := sw.end.y > tr.position.y and sw.position.y < tr.end.y
-			if not y_overlap:
-				continue
-			var at_left  := absf(sw.position.x - tr.position.x) <= _TRIGGER_MARGIN
-			var at_right := absf(sw.end.x      - tr.end.x)      <= _TRIGGER_MARGIN
-			in_zone = at_left or at_right
-
-		if not in_zone:
+		if not sw_detect.intersects(tr):
 			continue
 
 		# Bord trouvé — déclencher la transition

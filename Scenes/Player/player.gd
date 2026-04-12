@@ -136,7 +136,7 @@ func _draw() -> void:
 	if not GameConfig.debug_show_hitbox:
 		return
 	var spr_rect: Rect2 = master_sprite.get_rect()
-	draw_rect(spr_rect, Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
+	draw_rect(Rect2(master_sprite.position + spr_rect.position, spr_rect.size), Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
 
 func _input(event):
 	if event.is_action_pressed("ui_pause"):

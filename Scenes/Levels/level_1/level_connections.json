@@ -2,14 +2,14 @@
   "connections": [
 	{
 	  "id": "level_1_vers_level_2",
-	  "trigger": { "x": 120, "y": 250, "w": 128, "h": 16 },
+	  "trigger": { "x": 120, "y": 234, "w": 128, "h": 16 },
 	  "to": {
 		"scene": "res://Scenes/Levels/level_2/level_2.tscn"
 	  }
 	},
 	{
 	  "id": "level_1_vers_level_4",
-	  "trigger": { "x": 614, "y": 64, "w": 16, "h": 128 },
+	  "trigger": { "x": 630, "y": 64, "w": 16, "h": 128 },
 	  "to": {
 		"scene": "res://Scenes/Levels/level_4/level_4.tscn"
 	  }
