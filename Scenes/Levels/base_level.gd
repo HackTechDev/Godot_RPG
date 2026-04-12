@@ -160,6 +160,13 @@ func _process(_delta: float) -> void:
 		if not sw_detect.intersects(tr):
 			continue
 		var horizontal := tr.size.x >= tr.size.y
+		# Vérification de confinement sur l'axe parallèle au trigger
+		if horizontal:
+			if sw_detect.position.x < tr.position.x or (sw_detect.position.x + sw_detect.size.x) > (tr.position.x + tr.size.x):
+				continue
+		else:
+			if sw_detect.position.y < tr.position.y or (sw_detect.position.y + sw_detect.size.y) > (tr.position.y + tr.size.y):
+				continue
 		if horizontal:
 			if sw.get_center().y <= tr.get_center().y:
 				hint_text = "Zone de sortie (haut) — appuyez sur Espace"
@@ -202,6 +209,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		if not sw_detect.intersects(tr):
 			continue
+
+		# Vérification de confinement sur l'axe parallèle au trigger
+		if horizontal:
+			if sw_detect.position.x < tr.position.x or (sw_detect.position.x + sw_detect.size.x) > (tr.position.x + tr.size.x):
+				continue
+		else:
+			if sw_detect.position.y < tr.position.y or (sw_detect.position.y + sw_detect.size.y) > (tr.position.y + tr.size.y):
+				continue
 
 		# Bord trouvé — déclencher la transition
 		var offset := player.global_position - tr.get_center()
