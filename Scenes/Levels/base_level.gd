@@ -15,7 +15,7 @@ var _transition_cooldown := false
 var _all_triggers: Array[Dictionary] = []
 
 # Marge en pixels : le bord du sprite doit être à ≤ MARGIN px du bord du trigger
-const _TRIGGER_MARGIN := 3.0
+const _TRIGGER_MARGIN := 1.0
 
 # Label de debug affiché quand le bord du sprite touche le bord du trigger
 var _trigger_hint: Label = null
