@@ -15,10 +15,21 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var slider_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume
 @onready var check_sfx: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckSfx
 @onready var slider_sfx_volume: HSlider = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderSfxVolume
+@onready var mission_select: Control = $MissionSelect
 @onready var debug_settings: Control = $DebugSettings
 @onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
+
+const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
+@onready var ms_list:        ItemList      = get_node(_MS_BASE + "/MissionList")
+@onready var ms_title:       Label         = get_node(_MS_BASE + "/LabelMissionTitle")
+@onready var ms_description: RichTextLabel = get_node(_MS_BASE + "/TextDescription")
+@onready var ms_objectives:  RichTextLabel = get_node(_MS_BASE + "/TextObjectives")
+@onready var ms_btn_accept:  Button        = get_node(_MS_BASE + "/ButtonsRow/ButtonAccept")
+
+var _missions: Array = []
+var _selected_mission: Dictionary = {}
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -90,10 +101,55 @@ const CC_SPECS: Dictionary = {
 
 	
 func _on_button_play_pressed():
+	main.visible = false
+	mission_select.visible = true
+	_load_missions()
+
+func _load_missions() -> void:
+	_missions = []
+	_selected_mission = {}
+	ms_list.clear()
+	ms_title.text = ""
+	ms_description.text = ""
+	ms_objectives.text = ""
+	ms_btn_accept.disabled = true
+	var path := "res://missions.json"
+	if not FileAccess.file_exists(path):
+		push_warning("main_menu: missions.json introuvable")
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not data is Array:
+		push_error("main_menu: missions.json invalide")
+		return
+	_missions = data
+	for m in _missions:
+		ms_list.add_item(m.get("title", "Mission sans titre"))
+
+func _on_mission_list_item_selected(idx: int) -> void:
+	if idx < 0 or idx >= _missions.size():
+		return
+	_selected_mission = _missions[idx]
+	ms_title.text = _selected_mission.get("title", "")
+	ms_description.text = _selected_mission.get("description", "")
+	ms_objectives.text = _selected_mission.get("objectives", "")
+	ms_btn_accept.disabled = false
+
+func _on_button_accept_pressed() -> void:
+	if _selected_mission.is_empty():
+		return
 	if GameConfig.DEBUG:
-		print("loading...")
+		print("Mission acceptée : " + _selected_mission.get("title", ""))
 	liblevel.load_game()
+	var scene: String = _selected_mission.get("scene", "")
+	if scene != "":
+		Player_data.scene_path = scene
 	SceneTransition.change_scene(Player_data.scene_path)
+
+func _on_button_mission_back_pressed() -> void:
+	mission_select.visible = false
+	main.visible = true
 
 func _on_button_settings_pressed():
 	main.visible = false

@@ -982,6 +982,105 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Back"
 
+[node name="MissionSelect" type="Control" parent="MainMenuLayer" unique_id=1234570001]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/MissionSelect" unique_id=1234570002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/MissionSelect/CenterContainer" unique_id=1234570003]
+custom_minimum_size = Vector2(640, 520)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer" unique_id=1234570004]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer" unique_id=1234570005]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleMission" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570006]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Sélection de mission"
+horizontal_alignment = 1
+
+[node name="Sep1" type="HSeparator" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570007]
+layout_mode = 2
+
+[node name="MissionList" type="ItemList" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570008]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 100)
+theme_override_font_sizes/font_size = 18
+
+[node name="Sep2" type="HSeparator" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570009]
+layout_mode = 2
+
+[node name="LabelMissionTitle" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570010]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = ""
+
+[node name="LabelDescHeader" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570011]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Description"
+
+[node name="TextDescription" type="RichTextLabel" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570012]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 70)
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = ""
+scroll_active = true
+
+[node name="LabelObjHeader" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570013]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Objectifs"
+
+[node name="TextObjectives" type="RichTextLabel" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570014]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 70)
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = ""
+scroll_active = true
+
+[node name="ButtonsRow" type="HBoxContainer" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570015]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ButtonMissionBack" type="Button" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow" unique_id=1234570016]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Retour"
+
+[node name="ButtonAccept" type="Button" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow" unique_id=1234570017]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Accepter"
+disabled = true
+
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer" unique_id=1491087152]
 title = "Quitter"
 size = Vector2i(300, 120)
@@ -992,6 +1091,9 @@ dialog_text = "Are you sure you want to quit?"
 stream = ExtResource("3_l0t56")
 parameters/looping = true
 
+[connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
+[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]
+[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonAccept" to="MainMenuLayer" method="_on_button_accept_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelp" to="MainMenuLayer" method="_on_button_help_pressed"]
