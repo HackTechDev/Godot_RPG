@@ -45,6 +45,10 @@ static var player_sprite_frame: int = 0
 # Indique au menu principal d'ouvrir directement la création de personnage
 static var goto_character_creation: bool = false
 
+# Horloge de mission — 1 minute réelle = 1 heure de jeu
+static var mission_start_unix: float = 0.0   # date/heure de début de mission (unix)
+static var mission_real_start: float = 0.0   # temps réel au lancement de la mission (unix)
+
 # Appearance (LPC spritesheet layer keys)
 static var appearance_body: String = ""
 static var appearance_hair: String = ""

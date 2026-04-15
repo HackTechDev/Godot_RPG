@@ -78,6 +78,33 @@ custom_minimum_size = Vector2(90, 0)
 theme_override_font_sizes/font_size = 13
 text = "Home"
 
+[node name="ClockAnchor" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ClockPanel" type="PanelContainer" parent="ClockAnchor"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = -130.0
+offset_top = 4.0
+offset_right = 130.0
+offset_bottom = 36.0
+grow_horizontal = 2
+
+[node name="LabelClock" type="Label" parent="ClockAnchor/ClockPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "--/--/----  --h--"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="TopBar/HBox/BtnSheet" to="." method="_on_btn_sheet_pressed"]
 [connection signal="pressed" from="TopBar/HBox/BtnSetting" to="." method="_on_btn_setting_pressed"]
 [connection signal="pressed" from="TopBar/HBox/BtnHome" to="." method="_on_btn_home_pressed"]

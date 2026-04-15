@@ -4,20 +4,32 @@ signal sheet_requested
 signal setting_requested
 signal home_requested
 
-@onready var label_nickname = $Panel/Margin/VBox/LabelNickname
-@onready var label_health = $Panel/Margin/VBox/LabelHealth
+@onready var label_nickname  = $Panel/Margin/VBox/LabelNickname
+@onready var label_health    = $Panel/Margin/VBox/LabelHealth
 @onready var label_computers = $Panel/Margin/VBox/LabelComputers
-@onready var label_robots = $Panel/Margin/VBox/LabelRobots
-@onready var label_zone     = $Panel/Margin/VBox/LabelZone
-@onready var label_position = $Panel/Margin/VBox/LabelPosition
+@onready var label_robots    = $Panel/Margin/VBox/LabelRobots
+@onready var label_zone      = $Panel/Margin/VBox/LabelZone
+@onready var label_position  = $Panel/Margin/VBox/LabelPosition
+@onready var label_clock: Label = $ClockAnchor/ClockPanel/LabelClock
 
 func _process(_delta):
-	label_nickname.text = "Pseudo: " + Player_data.player_nickname
-	label_health.text = "Santé: " + str(Player_data.player_health)
+	label_nickname.text  = "Pseudo: " + Player_data.player_nickname
+	label_health.text    = "Santé: " + str(Player_data.player_health)
 	label_computers.text = "Ordinateurs: " + str(Player_data.computer)
-	label_robots.text = "Robots: " + str(Player_data.robot)
-	label_zone.text = "Zone: " + Player_data.player_previous_scene
-	label_position.text = "Pos: %d, %d" % [Player_data.player_pos_x, Player_data.player_pos_y]
+	label_robots.text    = "Robots: " + str(Player_data.robot)
+	label_zone.text      = "Zone: " + Player_data.player_previous_scene
+	label_position.text  = "Pos: %d, %d" % [Player_data.player_pos_x, Player_data.player_pos_y]
+	_update_clock()
+
+func _update_clock() -> void:
+	if Player_data.mission_real_start <= 0.0:
+		label_clock.text = "--/--/----  --h--"
+		return
+	var elapsed_real := Time.get_unix_time_from_system() - Player_data.mission_real_start
+	# 1 minute réelle = 1 heure de jeu → 1 seconde réelle = 1 minute de jeu
+	var game_unix := Player_data.mission_start_unix + elapsed_real * 60.0
+	var dt := Time.get_datetime_dict_from_unix_time(int(game_unix))
+	label_clock.text = "%02d/%02d/%04d  %02dh%02d" % [dt.day, dt.month, dt.year, dt.hour, dt.minute]
 
 func _on_btn_sheet_pressed():
 	sheet_requested.emit()
