@@ -248,7 +248,7 @@ horizontal_alignment = 1
 [node name="Label2" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=214057657]
 layout_mode = 2
 text = "RPG : Version 0.0.4
-Godot : Version 4.6.1"
+Godot : Version 4.6.2"
 
 [node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1669289607]
 layout_mode = 2
@@ -1024,8 +1024,8 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="MissionList" type="ItemList" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570008]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 18
 
 [node name="Sep2" type="HSeparator" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570009]
@@ -1034,7 +1034,6 @@ layout_mode = 2
 [node name="LabelMissionTitle" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570010]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = ""
 
 [node name="LabelDescHeader" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570011]
 layout_mode = 2
@@ -1042,13 +1041,11 @@ theme_override_font_sizes/font_size = 14
 text = "Description"
 
 [node name="TextDescription" type="RichTextLabel" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570012]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
-text = ""
-scroll_active = true
 
 [node name="LabelObjHeader" type="Label" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570013]
 layout_mode = 2
@@ -1056,13 +1053,11 @@ theme_override_font_sizes/font_size = 14
 text = "Objectifs"
 
 [node name="TextObjectives" type="RichTextLabel" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570014]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
-text = ""
-scroll_active = true
 
 [node name="ButtonsRow" type="HBoxContainer" parent="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234570015]
 layout_mode = 2
@@ -1078,8 +1073,8 @@ text = "Retour"
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-text = "Accepter"
 disabled = true
+text = "Accepter"
 
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer" unique_id=1491087152]
 title = "Quitter"
@@ -1091,9 +1086,6 @@ dialog_text = "Are you sure you want to quit?"
 stream = ExtResource("3_l0t56")
 parameters/looping = true
 
-[connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
-[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]
-[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonAccept" to="MainMenuLayer" method="_on_button_accept_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay" to="MainMenuLayer" method="_on_button_play_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettings" to="MainMenuLayer" method="_on_button_settings_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelp" to="MainMenuLayer" method="_on_button_help_pressed"]
@@ -1101,11 +1093,8 @@ parameters/looping = true
 [connection signal="pressed" from="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonQuit" to="MainMenuLayer" method="_on_button_quit_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Audio" to="MainMenuLayer" method="_on_button_audio_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Controls" to="MainMenuLayer" method="_on_button_controls_pressed"]
-[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Debug" to="MainMenuLayer" method="_on_button_debug_pressed"]
-[connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox" to="MainMenuLayer" method="_on_check_debug_hitbox_toggled"]
-[connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision" to="MainMenuLayer" method="_on_check_debug_collision_toggled"]
-[connection signal="pressed" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonDebugBack" to="MainMenuLayer" method="_on_button_debug_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Reinitialize" to="MainMenuLayer" method="_on_reinitialize_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Debug" to="MainMenuLayer" method="_on_button_debug_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack" to="MainMenuLayer" method="_on_button_settings_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonHelpBack" to="MainMenuLayer" method="_on_button_help_back_pressed"]
 [connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckMusic" to="MainMenuLayer" method="_on_check_music_toggled"]
@@ -1130,4 +1119,10 @@ parameters/looping = true
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/BackButton" to="MainMenuLayer" method="_on_cc_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/NextButton" to="MainMenuLayer" method="_on_cc_next_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]
+[connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox" to="MainMenuLayer" method="_on_check_debug_hitbox_toggled"]
+[connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision" to="MainMenuLayer" method="_on_check_debug_collision_toggled"]
+[connection signal="pressed" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonDebugBack" to="MainMenuLayer" method="_on_button_debug_back_pressed"]
+[connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
+[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]
+[connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonAccept" to="MainMenuLayer" method="_on_button_accept_pressed"]
 [connection signal="confirmed" from="MainMenuLayer/QuitDialog" to="MainMenuLayer" method="_on_quit_dialog_confirmed"]
