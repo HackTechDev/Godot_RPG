@@ -145,6 +145,10 @@ func _on_button_accept_pressed() -> void:
 	var scene: String = _selected_mission.get("scene", "")
 	if scene != "":
 		Player_data.scene_path = scene
+	var spawn: Dictionary = _selected_mission.get("spawn", {})
+	if not spawn.is_empty():
+		Player_data.json_spawn    = Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
+		Player_data.use_json_spawn = true
 	SceneTransition.change_scene(Player_data.scene_path)
 
 func _on_button_mission_back_pressed() -> void:

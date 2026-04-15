@@ -3,6 +3,7 @@
 	"id": "mission_01",
 	"title": "Opération Aube Rouge",
 	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+	"spawn": { "x": 440, "y": 136 },
 	"description": "Les zombies ont envahi la zone industrielle du secteur nord. Votre équipe est dépêchée pour sécuriser le périmètre et éliminer toute menace avant que la situation ne devienne incontrôlable.",
 	"objectives": "• Atteindre le poste de commandement\n• Neutraliser les zombies présents dans le secteur\n• Récupérer les données sur les ordinateurs"
   },
@@ -10,6 +11,7 @@
 	"id": "mission_02",
 	"title": "Extraction Foxtrot",
 	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+	"spawn": { "x": 440, "y": 136 },
 	"description": "Un agent de renseignement est bloqué dans le district est. La zone est lourdement infestée. Vous devez le localiser et assurer son évacuation.",
 	"objectives": "• Localiser l'agent dans le district est\n• Sécuriser la zone d'extraction\n• Évacuer l'agent sain et sauf"
   },
@@ -17,6 +19,7 @@
 	"id": "mission_03",
 	"title": "Dernier Rempart",
 	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+	"spawn": { "x": 440, "y": 136 },
 	"description": "La dernière ligne de défense est sur le point de céder. Vous êtes envoyé en renfort pour stopper l'avancée des zombies et protéger les civils encore présents dans la zone.",
 	"objectives": "• Rejoindre les forces amies au périmètre\n• Repousser les vagues d'attaque\n• Protéger les points d'évacuation civile"
   }
