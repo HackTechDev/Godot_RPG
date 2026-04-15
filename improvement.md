@@ -19,12 +19,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - La spécialisation choisie à la création pourrait modifier les stats ou débloquer des capacités
 - Exemples : Médecin de combat → récupère +1 PV après un combat gagné ; Tireur de précision → bonus d'attaque à distance
 
-### Écran Game Over
-- ~~Implémenté~~ — voir `features.md`
-
-### ~~Sélection de mission~~ — Implémenté
-- Page MissionSelect après Play, missions configurées dans `missions.json` — voir `features.md`
-
 ### Objectifs de mission intégrés au HUD
 - Afficher les objectifs de la mission active en cours de partie (panneau rétractable ou coin d'écran)
 - Alimenté par `missions.json`, persisté dans `Player_data` ou un autoload dédié
@@ -69,10 +63,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Fiche de personnage enrichie
 - Afficher le grade, la spécialisation et la biographie dans la fiche (touche P)
 - La biographie pourrait apparaître dans un onglet ou un panneau dédié
-- ~~Aperçu du sprite LPC dans la fiche personnage~~ — Implémenté
-
-### ~~Splashscreen — indication visuelle~~ — Implémenté
-- Label "Press any key" ajouté en bas de l'écran, avec apparition en fondu puis clignotement en boucle
 
 ### Indicateur de santé visuel
 - Le HUD change de couleur (vert → orange → rouge) selon les PV restants
@@ -96,11 +86,7 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Technique
 
-### ~~Fuite mémoire à la fermeture~~ — Corrigé
-- `liblevel.gd` passé à `extends RefCounted` — plus de nœuds orphelins
-
 ### Sons d'effets
-- ~~Volume et activation des effets sonores (footstep)~~ — Implémenté via `GameConfig.sfx_enabled` / `sfx_volume_linear`
 - Son de collecte quand T est pressé sur un objet
 - Son de poussée quand R est pressé
 - Son de dégâts si un ennemi touche le joueur
@@ -122,33 +108,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Les `print()` dans le code (saveAllObjects, load game, etc.) conditionnés à une constante `DEBUG = false`
 - Améliore les performances et la lisibilité des logs à l'export
 
-### ~~Système de dialogue / PNJ~~ — Implémenté
-- PNJ avec sprite vert, nom flottant, touche Z, arbre de dialogue — voir `features.md`
-- À étendre : animations du PNJ, conditions de dialogue selon l'état du joueur, dialogues persistants (mémoriser les choix)
-
-### ~~Chargement automatique des sprites LPC~~ — Implémenté
-- `SpriteLibrary` scanne les archives ZIP LPC au démarrage — aucun chemin codé en dur
-
-### ~~Système de transitions par JSON~~ — Implémenté
-- `level_connections.json` par niveau, déclenchement par Espace, spawn relatif au trigger, visualisation orange — voir `features.md`
-- L'ancien système `entrance_x_2` / `entrance_y_2` a été supprimé
-- Détection par confinement sur l'axe parallèle au trigger pour éviter les déclenchements en coin — voir `features.md`
-
-### ~~Indicateurs visuels de spawnpoints~~ — Remplacé
-- `spawnpoint_indicator.gd` supprimé ; les zones de transition sont désormais visualisées par le Polygon2D orange des triggers JSON
-
 ---
 
 ## Combat
-
-### ~~Retour visuel sur les dégâts~~ — Implémenté
-### ~~Délai entre les rounds~~ — Implémenté
-### ~~Fuite du combat~~ — Implémenté
-### ~~Touches de combat dans la page Contrôles~~ — Implémenté
-### ~~Persistance des stats de robot ennemi~~ — Implémenté
-### ~~Écran de crédits au moment de quitter~~ — Implémenté
-### ~~Système de dés avec animation et interaction Espace~~ — Implémenté
-### ~~Game Over intégré dans le flux de combat~~ — Implémenté
 
 ### Fuite avec dés
 - La fuite (touche C en combat) utilise encore un tirage interne sans overlay CombatUI
