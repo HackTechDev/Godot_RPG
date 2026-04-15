@@ -24,6 +24,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
 @onready var ms_list:        ItemList      = get_node(_MS_BASE + "/MissionList")
 @onready var ms_title:       Label         = get_node(_MS_BASE + "/LabelMissionTitle")
+@onready var ms_datetime:    Label         = get_node(_MS_BASE + "/LabelDatetime")
 @onready var ms_description: RichTextLabel = get_node(_MS_BASE + "/TextDescription")
 @onready var ms_objectives:  RichTextLabel = get_node(_MS_BASE + "/TextObjectives")
 @onready var ms_btn_accept:  Button        = get_node(_MS_BASE + "/ButtonsRow/ButtonAccept")
@@ -109,9 +110,10 @@ func _load_missions() -> void:
 	_missions = []
 	_selected_mission = {}
 	ms_list.clear()
-	ms_title.text = ""
+	ms_title.text    = ""
+	ms_datetime.text = ""
 	ms_description.text = ""
-	ms_objectives.text = ""
+	ms_objectives.text  = ""
 	ms_btn_accept.disabled = true
 	var path := "res://missions.json"
 	if not FileAccess.file_exists(path):
@@ -131,9 +133,10 @@ func _on_mission_list_item_selected(idx: int) -> void:
 	if idx < 0 or idx >= _missions.size():
 		return
 	_selected_mission = _missions[idx]
-	ms_title.text = _selected_mission.get("title", "")
+	ms_title.text    = _selected_mission.get("title", "")
+	ms_datetime.text = _format_mission_datetime(_selected_mission.get("start_datetime", ""))
 	ms_description.text = _selected_mission.get("description", "")
-	ms_objectives.text = _selected_mission.get("objectives", "")
+	ms_objectives.text  = _selected_mission.get("objectives", "")
 	ms_btn_accept.disabled = false
 
 func _on_button_accept_pressed() -> void:
@@ -153,6 +156,18 @@ func _on_button_accept_pressed() -> void:
 	Player_data.mission_start_unix = _parse_datetime_to_unix(dt_str)
 	Player_data.mission_real_start = Time.get_unix_time_from_system()
 	SceneTransition.change_scene(Player_data.scene_path)
+
+func _format_mission_datetime(dt_str: String) -> String:
+	if dt_str == "":
+		return ""
+	var parts := dt_str.split(" ")
+	if parts.size() < 2:
+		return dt_str
+	var d := parts[0].split("-")
+	var t := parts[1].split(":")
+	if d.size() < 3 or t.size() < 2:
+		return dt_str
+	return "Début : %s/%s/%s  %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
 func _parse_datetime_to_unix(dt_str: String) -> float:
 	var parts := dt_str.split(" ")
