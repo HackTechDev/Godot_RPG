@@ -323,11 +323,13 @@ func _on_hud_sheet_requested():
 		display_menu = false
 		background_menu.visible = false
 		text_menu.visible = false
-		get_tree().paused = false
 		_auto_save_objects()
 	character_sheet_instance.visible = !character_sheet_instance.visible
 	if character_sheet_instance.visible:
 		character_sheet_instance.refresh()
+		get_tree().paused = true
+	else:
+		get_tree().paused = false
 
 func _on_hud_setting_requested():
 	character_sheet_instance.visible = false

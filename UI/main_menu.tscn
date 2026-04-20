@@ -51,6 +51,7 @@ texture = ExtResource("1_25q57")
 expand_mode = 1
 
 [node name="MainMenuLayer" type="CanvasLayer" parent="." unique_id=376045302]
+layer = 10
 script = ExtResource("2_kvyff")
 
 [node name="Background" type="TextureRect" parent="MainMenuLayer" unique_id=386675396]

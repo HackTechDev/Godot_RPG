@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d35yspo3hrbq8" path="res://UI/character_sheet.gd" id="1_csscript"]
 
 [node name="CharacterSheet" type="CanvasLayer" unique_id=1952824178]
+layer = 10
 visible = false
 script = ExtResource("1_csscript")
 
