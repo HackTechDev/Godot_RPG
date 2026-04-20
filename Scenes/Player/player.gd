@@ -48,9 +48,18 @@ var combat_ui_instance = null
 var dialogue_box_scene = preload("res://UI/dialogue_box.tscn")
 var dialogue_box_instance = null
 
-var speed = 70
+const SPEED_NORMAL  = 70
+const SPEED_SLOW    = 35
+const CONE_LENGTH   = 130.0
+const CONE_FOV_HALF = 45.0   # demi-angle du cône (degrés)
+
+var speed = SPEED_NORMAL
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
+
+# Angles en degrés : 0 = droite, 90 = bas, 180 = gauche, -90 = haut
+var body_angle: float = -90.0   # direction du corps (pavé 4/6)
+var look_angle: float = -90.0   # direction du regard/cône (pavé 7/9)
 
 var display_menu = false
 var direction = 5
@@ -133,10 +142,33 @@ func _process(_delta):
 	queue_redraw()
 
 func _draw() -> void:
-	if not GameConfig.debug_show_hitbox:
-		return
-	var spr_rect: Rect2 = master_sprite.get_rect()
-	draw_rect(Rect2(master_sprite.position + spr_rect.position, spr_rect.size), Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
+	if GameConfig.debug_show_hitbox:
+		var spr_rect: Rect2 = master_sprite.get_rect()
+		draw_rect(Rect2(master_sprite.position + spr_rect.position, spr_rect.size), Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
+
+	# --- Cône de vision ---
+	var look_rad  = deg_to_rad(look_angle)
+	var half_fov  = deg_to_rad(CONE_FOV_HALF)
+	var steps     = 12
+	var pts       = PackedVector2Array([Vector2.ZERO])
+	for i in range(steps + 1):
+		var a = look_rad - half_fov + 2.0 * half_fov * i / steps
+		pts.append(Vector2(cos(a), sin(a)) * CONE_LENGTH)
+	draw_colored_polygon(pts, Color(0.2, 1.0, 0.3, 0.12))
+	draw_line(Vector2.ZERO, Vector2(cos(look_rad - half_fov), sin(look_rad - half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
+	draw_line(Vector2.ZERO, Vector2(cos(look_rad + half_fov), sin(look_rad + half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
+
+	# --- Flèche de direction du corps ---
+	var body_rad  = deg_to_rad(body_angle)
+	var body_dir_vec  = Vector2(cos(body_rad), sin(body_rad))
+	var perp      = Vector2(-sin(body_rad), cos(body_rad))
+	var tip       = body_dir_vec * 28.0
+	var base      = tip - body_dir_vec * 10.0
+	draw_line(Vector2.ZERO, tip, Color(1.0, 0.55, 0.0, 0.85), 2.0)
+	draw_colored_polygon(
+		PackedVector2Array([tip, base + perp * 5.0, base - perp * 5.0]),
+		Color(1.0, 0.55, 0.0, 0.85)
+	)
 
 func _input(event):
 	if event.is_action_pressed("ui_pause"):
@@ -144,6 +176,13 @@ func _input(event):
 			combat_ui_instance.cancel()
 			_end_combat()
 			return
+
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.physical_keycode:
+			KEY_KP_4: _rotate_body(-45.0)
+			KEY_KP_6: _rotate_body(45.0)
+			KEY_KP_7: _rotate_look(-45.0)
+			KEY_KP_9: _rotate_look(45.0)
 
 	if event.is_action_pressed("ui_b"):
 		if GameConfig.DEBUG:
@@ -183,28 +222,35 @@ func input_move():
 		move_and_slide()
 		return
 
-	input_movement = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	# Mouvement via touches fléchées / WASD uniquement (exclut le pavé numérique)
+	input_movement = Vector2.ZERO
+	if Input.is_physical_key_pressed(KEY_LEFT)  or Input.is_physical_key_pressed(KEY_A): input_movement.x -= 1.0
+	if Input.is_physical_key_pressed(KEY_RIGHT) or Input.is_physical_key_pressed(KEY_D): input_movement.x += 1.0
+	if Input.is_physical_key_pressed(KEY_UP)    or Input.is_physical_key_pressed(KEY_W): input_movement.y -= 1.0
+	if Input.is_physical_key_pressed(KEY_DOWN)  or Input.is_physical_key_pressed(KEY_S): input_movement.y += 1.0
+	if input_movement.length() > 1.0:
+		input_movement = input_movement.normalized()
+
+	# L'animation suit toujours la direction du regard
+	var look_vec = _angle_to_vec(look_angle)
+	# Vitesse normale si corps et regard alignés, lente sinon
+	var aligned = abs(_norm_angle(look_angle - body_angle)) < 1.0
+	var current_speed = SPEED_NORMAL if aligned else SPEED_SLOW
 
 	if input_movement != Vector2.ZERO:
 		movement_sounds()
-		if input_movement == Vector2(0, -1):
-			direction = 8
-		if input_movement == Vector2(0, 1):
-			direction = 2
-		if input_movement == Vector2(-1, 0):
-			direction = 4
-		if input_movement == Vector2(1, 0):
-			direction = 6
-
-		anim_tree.set("parameters/Idle/blend_position", input_movement)
-		anim_tree.set("parameters/Move/blend_position", input_movement)
+		anim_tree.set("parameters/Idle/blend_position", look_vec)
+		anim_tree.set("parameters/Move/blend_position", look_vec)
 		anim_state.travel("Move")
-		velocity = input_movement * speed
-
-	if input_movement == Vector2.ZERO:
+		velocity = input_movement * current_speed
+	else:
+		if footstep.is_playing():
+			footstep.stop()
+		anim_tree.set("parameters/Idle/blend_position", look_vec)
 		anim_state.travel("Idle")
 		velocity = Vector2.ZERO
 
+	direction = _angle_to_dir4(body_angle)
 	Player_data.player_facing = direction
 	Player_data.player_pos_x = position.x
 	Player_data.player_pos_y = position.y
@@ -552,19 +598,55 @@ func _apply_appearance():
 	master_sprite.visible = false
 
 func _restore_sprite_state() -> void:
-	var facing_vec: Vector2
-	match Player_data.player_facing:
-		2: facing_vec = Vector2(0, 1)
-		4: facing_vec = Vector2(-1, 0)
-		6: facing_vec = Vector2(1, 0)
-		8: facing_vec = Vector2(0, -1)
-		_: facing_vec = Vector2(0, 1)
-	anim_tree.set("parameters/Idle/blend_position", facing_vec)
-	anim_tree.set("parameters/Move/blend_position", facing_vec)
+	body_angle = _dir_to_angle(Player_data.player_facing)
+	look_angle = body_angle
+	var look_vec = _angle_to_vec(look_angle)
+	anim_tree.set("parameters/Idle/blend_position", look_vec)
+	anim_tree.set("parameters/Move/blend_position", look_vec)
 	master_sprite.frame = Player_data.player_sprite_frame
 	for child in appearance_layers.get_children():
 		if child is Sprite2D:
 			child.frame = Player_data.player_sprite_frame
+
+# --- Helpers angle / direction ---
+
+func _norm_angle(a: float) -> float:
+	a = fmod(a, 360.0)
+	if a > 180.0:   a -= 360.0
+	elif a <= -180.0: a += 360.0
+	return a
+
+func _dir_to_angle(dir: int) -> float:
+	match dir:
+		2: return 90.0
+		4: return 180.0
+		6: return 0.0
+		8: return -90.0
+		_: return -90.0
+
+func _angle_to_dir4(angle_deg: float) -> int:
+	var a = _norm_angle(angle_deg)
+	if a > -45.0  and a <= 45.0:  return 6  # droite
+	if a > 45.0   and a <= 135.0: return 2  # bas
+	if a > -135.0 and a <= -45.0: return 8  # haut
+	return 4                                 # gauche
+
+func _angle_to_vec(angle_deg: float) -> Vector2:
+	var r = deg_to_rad(angle_deg)
+	return Vector2(cos(r), sin(r))
+
+func _rotate_body(delta: float) -> void:
+	body_angle = _norm_angle(body_angle + delta)
+	# Si le regard devient opposé au corps, on le ramène sur le corps
+	if abs(_norm_angle(look_angle - body_angle)) > 135.0:
+		look_angle = body_angle
+
+func _rotate_look(delta: float) -> void:
+	var new_angle = _norm_angle(look_angle + delta)
+	# Le cône ne peut pas pointer à l'opposé du corps (±180°)
+	if abs(_norm_angle(new_angle - body_angle)) > 135.0:
+		return
+	look_angle = new_angle
 
 func _spr_load(spr: Sprite2D, key: String) -> void:
 	SpriteLibrary.apply_sprite(spr, key)
