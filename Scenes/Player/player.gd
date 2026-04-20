@@ -647,13 +647,13 @@ func _angle_to_vec(angle_deg: float) -> Vector2:
 func _rotate_body(delta: float) -> void:
 	body_angle = _norm_angle(body_angle + delta)
 	# Si le regard devient opposé au corps, on le ramène sur le corps
-	if abs(_norm_angle(look_angle - body_angle)) > 90.0:
+	if abs(_norm_angle(look_angle - body_angle)) > 45.0:
 		look_angle = body_angle
 
 func _rotate_look(delta: float) -> void:
 	var new_angle = _norm_angle(look_angle + delta)
 	# Le cône ne peut pas dépasser ±90° par rapport au corps
-	if abs(_norm_angle(new_angle - body_angle)) > 90.0:
+	if abs(_norm_angle(new_angle - body_angle)) > 45.0:
 		return
 	look_angle = new_angle
 
