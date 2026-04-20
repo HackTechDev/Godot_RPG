@@ -43,7 +43,7 @@ func _update_day_night() -> void:
 	var elapsed_real := Time.get_unix_time_from_system() - Player_data.mission_real_start
 	var game_unix    := Player_data.mission_start_unix + elapsed_real * 60.0
 	var dt           := Time.get_datetime_dict_from_unix_time(int(game_unix))
-	var game_hour    := dt.hour + dt.minute / 60.0
+	var game_hour: float = float(dt.hour) + float(dt.minute) / 60.0
 	night_overlay.color.a = _compute_night_alpha(game_hour)
 
 # Retourne l'alpha (0 = jour, MAX_NIGHT_ALPHA = nuit) selon l'heure de jeu.
