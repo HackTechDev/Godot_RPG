@@ -60,6 +60,7 @@ var health = Player_data.player_health
 # Angles en degrés : 0 = droite, 90 = bas, 180 = gauche, -90 = haut
 var body_angle: float = -90.0   # direction du corps (pavé 4/6)
 var look_angle: float = -90.0   # direction du regard/cône (pavé 7/9)
+var _debug_speed: float = SPEED_NORMAL
 
 var display_menu = false
 var direction = 5
@@ -121,6 +122,14 @@ func _ready():
 	_apply_appearance()
 	_restore_sprite_state()
 	SceneTransition.fade_in()
+	Performance.add_custom_monitor("Joueur/regard_angle",  func(): return look_angle)
+	Performance.add_custom_monitor("Joueur/corps_angle",   func(): return body_angle)
+	Performance.add_custom_monitor("Joueur/vitesse",       func(): return _debug_speed)
+
+func _exit_tree():
+	Performance.remove_custom_monitor("Joueur/regard_angle")
+	Performance.remove_custom_monitor("Joueur/corps_angle")
+	Performance.remove_custom_monitor("Joueur/vitesse")
 
 func _physics_process(_delta):
 	input_move()
@@ -237,6 +246,7 @@ func input_move():
 	var aligned = abs(_norm_angle(look_angle - body_angle)) < 1.0
 	var current_speed = SPEED_NORMAL if aligned else SPEED_SLOW
 
+	_debug_speed = current_speed
 	if input_movement != Vector2.ZERO:
 		movement_sounds()
 		anim_tree.set("parameters/Idle/blend_position", look_vec)
