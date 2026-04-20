@@ -48,19 +48,17 @@ var combat_ui_instance = null
 var dialogue_box_scene = preload("res://UI/dialogue_box.tscn")
 var dialogue_box_instance = null
 
-const SPEED_NORMAL  = 70
-const SPEED_SLOW    = 35
 const CONE_LENGTH   = 130.0
 const CONE_FOV_HALF = 45.0   # demi-angle du cône (degrés)
 
-var speed = SPEED_NORMAL
+var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
 
 # Angles en degrés : 0 = droite, 90 = bas, 180 = gauche, -90 = haut
 var body_angle: float = -90.0   # direction du corps (pavé 4/6)
 var look_angle: float = -90.0   # direction du regard/cône (pavé 7/9)
-var _debug_speed: float = SPEED_NORMAL
+var _debug_speed: float = 0.0
 
 var display_menu = false
 var direction = 5
@@ -244,7 +242,7 @@ func input_move():
 	var look_vec = _angle_to_vec(look_angle)
 	# Vitesse normale si corps et regard alignés, lente sinon
 	var aligned = abs(_norm_angle(look_angle - body_angle)) < 1.0
-	var current_speed = SPEED_NORMAL if aligned else SPEED_SLOW
+	var current_speed = GameConfig.player_speed_normal if aligned else GameConfig.player_speed_slow
 
 	_debug_speed = current_speed
 	if input_movement != Vector2.ZERO:
