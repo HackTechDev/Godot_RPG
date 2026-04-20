@@ -49,6 +49,10 @@ static var goto_character_creation: bool = false
 static var mission_start_unix: float = 0.0   # date/heure de début de mission (unix)
 static var mission_real_start: float = 0.0   # temps réel au lancement de la mission (unix)
 
+# Cycle jour/nuit
+static var mission_sunrise_hour: float = 6.0   # heure du lever du soleil (0-24)
+static var mission_sunset_hour:  float = 20.0  # heure du coucher du soleil (0-24)
+
 # Appearance (LPC spritesheet layer keys)
 static var appearance_body: String = ""
 static var appearance_hair: String = ""

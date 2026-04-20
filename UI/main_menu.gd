@@ -153,8 +153,10 @@ func _on_button_accept_pressed() -> void:
 		Player_data.json_spawn     = Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
 		Player_data.use_json_spawn = true
 	var dt_str: String = _selected_mission.get("start_datetime", "2024-01-01 08:00")
-	Player_data.mission_start_unix = _parse_datetime_to_unix(dt_str)
-	Player_data.mission_real_start = Time.get_unix_time_from_system()
+	Player_data.mission_start_unix  = _parse_datetime_to_unix(dt_str)
+	Player_data.mission_real_start  = Time.get_unix_time_from_system()
+	Player_data.mission_sunrise_hour = _parse_time_to_hour(_selected_mission.get("sunrise", "06:00"))
+	Player_data.mission_sunset_hour  = _parse_time_to_hour(_selected_mission.get("sunset",  "20:00"))
 	SceneTransition.change_scene(Player_data.scene_path)
 
 func _format_mission_datetime(dt_str: String) -> String:
@@ -168,6 +170,12 @@ func _format_mission_datetime(dt_str: String) -> String:
 	if d.size() < 3 or t.size() < 2:
 		return dt_str
 	return "Début : %s/%s/%s  %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
+
+func _parse_time_to_hour(time_str: String) -> float:
+	var parts := time_str.split(":")
+	if parts.size() < 2:
+		return 0.0
+	return float(parts[0]) + float(parts[1]) / 60.0
 
 func _parse_datetime_to_unix(dt_str: String) -> float:
 	var parts := dt_str.split(" ")
