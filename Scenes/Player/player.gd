@@ -48,6 +48,19 @@ var combat_ui_instance = null
 var dialogue_box_scene = preload("res://UI/dialogue_box.tscn")
 var dialogue_box_instance = null
 
+var radial_menu_scene = preload("res://UI/radial_menu.tscn")
+var radial_menu_instance = null
+
+const RADIAL_ITEMS = [
+	{"id": "build",  "letter": "B", "label": "Construire"},
+	{"id": "take",   "letter": "T", "label": "Ramasser"},
+	{"id": "talk",   "letter": "Z", "label": "Parler"},
+	{"id": "combat", "letter": "C", "label": "Combat"},
+	{"id": "sheet",  "letter": "P", "label": "Fiche"},
+	{"id": "attack", "letter": "A", "label": "Attaquer"},
+]
+const RADIAL_CLICK_RADIUS = 26.0
+
 const CONE_LENGTH   = 130.0
 const CONE_FOV_HALF = 45.0   # demi-angle du cône (degrés)
 
@@ -106,6 +119,10 @@ func _ready():
 
 	dialogue_box_instance = dialogue_box_scene.instantiate()
 	add_child(dialogue_box_instance)
+
+	radial_menu_instance = radial_menu_scene.instantiate()
+	add_child(radial_menu_instance)
+	radial_menu_instance.action_selected.connect(_handle_radial_action)
 
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
@@ -178,7 +195,18 @@ func _draw() -> void:
 	)
 
 func _input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var screen_pos = get_global_transform_with_canvas().origin
+		if event.position.distance_to(screen_pos) <= RADIAL_CLICK_RADIUS:
+			if not display_menu and not in_combat:
+				radial_menu_instance.show_at(screen_pos, RADIAL_ITEMS)
+				get_viewport().set_input_as_handled()
+				return
+
 	if event.is_action_pressed("ui_pause"):
+		if radial_menu_instance and radial_menu_instance.visible:
+			radial_menu_instance.visible = false
+			return
 		if in_combat:
 			combat_ui_instance.cancel()
 			_end_combat()
@@ -224,7 +252,9 @@ func _input(event):
 		_on_attack_key()
 
 func input_move():
-	if display_menu or in_combat or (dialogue_box_instance and dialogue_box_instance.visible):
+	if display_menu or in_combat \
+			or (dialogue_box_instance and dialogue_box_instance.visible) \
+			or (radial_menu_instance and radial_menu_instance.visible):
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -697,3 +727,24 @@ func _restart_game():
 		"appearance_feet":    Player_data.appearance_feet,
 	})
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
+
+func _handle_radial_action(action_id: String) -> void:
+	match action_id:
+		"build":
+			EventBus.build_computer.emit(direction)
+		"take":
+			if is_instance_valid(Player_data.contact_object):
+				Player_data.contact_object.collect()
+		"talk":
+			if is_instance_valid(Player_data.contact_npc):
+				dialogue_box_instance.open(Player_data.contact_npc.npc_name, Player_data.contact_npc.dialogue)
+		"combat":
+			if is_instance_valid(Player_data.contact_enemy):
+				_start_combat(Player_data.contact_enemy)
+				_on_attack_key()
+		"sheet":
+			character_sheet_instance.visible = not character_sheet_instance.visible
+			if character_sheet_instance.visible:
+				character_sheet_instance.refresh()
+		"attack":
+			_on_attack_key()
