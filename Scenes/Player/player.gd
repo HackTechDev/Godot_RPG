@@ -242,8 +242,8 @@ func input_move():
 	var look_vec = _angle_to_vec(look_angle)
 	# Vitesse réduite si : corps ≠ regard, OU si le joueur recule par rapport au corps
 	var aligned        = abs(_norm_angle(look_angle - body_angle)) < 1.0
-	var moving_backward = input_movement.dot(_angle_to_vec(body_angle)) < 0.0
-	var current_speed  = GameConfig.player_speed_normal if (aligned and not moving_backward) else GameConfig.player_speed_slow
+	var moving_forward = input_movement.dot(_angle_to_vec(body_angle)) > 0.0
+	var current_speed  = GameConfig.player_speed_normal if (aligned and moving_forward) else GameConfig.player_speed_slow
 
 	_debug_speed = current_speed
 	if input_movement != Vector2.ZERO:
