@@ -539,9 +539,59 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - Affiché après le bouton **Play** (à la place de l'entrée directe en jeu)
 - Les missions sont définies dans `missions.json` à la racine du projet :
-  - `id`, `title`, `scene` (chemin Godot vers la scène de départ), `description`, `objectives`
-- Interface : `ItemList` des missions disponibles + titre, description, objectifs de la mission sélectionnée
-- Bouton **Accepter** (désactivé tant qu'aucune mission n'est sélectionnée) : charge la sauvegarde et démarre la scène de la mission
+  - `id`, `title`, `scene`, `spawn {x,y}`, `start_datetime`, `description`, `objectives`
+- Interface : `ItemList` des missions + titre, date/heure de début, description, objectifs
+- Bouton **Accepter** (désactivé tant qu'aucune mission n'est sélectionnée) : charge la sauvegarde, applique le spawn et l'horloge de mission, démarre la scène
 - Bouton **Retour** : revient au menu principal
 - Ajouter une mission = ajouter un objet dans `missions.json`, aucune modification de code
+- 10 missions disponibles réparties sur les niveaux 1 à 4
 - **Fichiers :** `missions.json`, `UI/main_menu.tscn`, `UI/main_menu.gd`
+
+---
+
+## Spawn du joueur initialisé depuis missions.json
+
+- Le champ `spawn {x, y}` de chaque mission définit la position de départ du joueur
+- Transmis via `Player_data.json_spawn` / `use_json_spawn`, appliqué par `base_level._place_player()`
+- **Fichiers :** `missions.json`, `UI/main_menu.gd`, `Scenes/Player/player_data.gd`
+
+---
+
+## Horloge de mission en jeu
+
+- Date et heure affichées en haut au centre de l'écran (format `JJ/MM/AAAA HHhMM`)
+- 1 minute réelle = 1 heure de jeu
+- Date/heure de début définie par `start_datetime` dans `missions.json`
+- Calcul via timestamps Unix (`Time` API) : gestion automatique des rollovers
+- **Fichiers :** `UI/hud.tscn`, `UI/hud.gd`, `Scenes/Player/player_data.gd`
+
+---
+
+## Cône de vision et rotation indépendante du corps
+
+- **Cône vert** (FOV 90°, longueur 130 px) affiché depuis le centre du sprite : indique le champ de vision
+- **Flèche orange** : indique la direction du corps
+- Rotation du regard : **pavé num. 7 / 9**, pas de 45° — limité à ±135° du corps (simulation des limites naturelles de la tête)
+- Rotation du corps : **pavé num. 4 / 6**, pas de 45°
+- Le mouvement (flèches / WASD) est totalement dissocié du pavé numérique
+- **Fichiers :** `Scenes/Player/player.gd`
+
+---
+
+## Règles de vitesse liées à l'orientation
+
+- **Vitesse normale** (`player_speed_normal`, défaut 70 px/s) : corps = regard ET déplacement vers l'avant (dot > 1e-6)
+- **Vitesse réduite** (`player_speed_slow`, défaut 35 px/s) dans tous les autres cas : regard ≠ corps, déplacement latéral (dot ≈ 0) ou recul (dot < 0)
+- Paramètres configurables dans `GameConfig` (`Autoload/game_config.gd`)
+- **Fichiers :** `Scenes/Player/player.gd`, `Autoload/game_config.gd`
+
+---
+
+## Monitors de debug dans le Debugger Godot
+
+- Trois moniteurs personnalisés visibles dans **Debugger → Monitors → Joueur** :
+  - `regard_angle` : angle du cône de vision en degrés
+  - `corps_angle` : angle du corps en degrés
+  - `vitesse` : vitesse appliquée au frame courant
+- Enregistrés au démarrage du joueur, supprimés automatiquement à sa destruction
+- **Fichiers :** `Scenes/Player/player.gd`

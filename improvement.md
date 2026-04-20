@@ -86,6 +86,10 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Technique
 
+### Affichage du cône de vision conditionnel
+- Le cône de vision et la flèche de corps sont toujours affichés, même sans activation des contrôles pavé numérique
+- Envisager une option pour masquer ces indicateurs (toggle dans Settings ou touche dédiée)
+
 ### Sons d'effets
 - Son de collecte quand T est pressé sur un objet
 - Son de poussée quand R est pressé
