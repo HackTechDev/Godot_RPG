@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal action_selected(action_id: String)
+signal closed
 
 const RADIUS   = 68.0
 const BTN_DIAM = 38.0
@@ -34,6 +35,7 @@ func _close() -> void:
 	_container.scale    = Vector2.ONE
 	_container.modulate = Color(1, 1, 1, 1)
 	visible = false
+	closed.emit()
 
 func _build(items: Array) -> void:
 	for c in _container.get_children():
@@ -96,4 +98,4 @@ func _make_btn(item: Dictionary) -> Button:
 
 func _on_action(action_id: String) -> void:
 	action_selected.emit(action_id)
-	visible = false
+	_close()

@@ -123,6 +123,7 @@ func _ready():
 	radial_menu_instance = radial_menu_scene.instantiate()
 	add_child(radial_menu_instance)
 	radial_menu_instance.action_selected.connect(_handle_radial_action)
+	radial_menu_instance.closed.connect(func(): get_tree().paused = false)
 
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
@@ -199,15 +200,16 @@ func _input(event):
 		var screen_pos = get_global_transform_with_canvas().origin
 		if event.position.distance_to(screen_pos) <= RADIAL_CLICK_RADIUS:
 			if radial_menu_instance.visible:
-				radial_menu_instance.visible = false
+				radial_menu_instance._close()
 			elif not display_menu and not in_combat:
 				radial_menu_instance.show_at(screen_pos, RADIAL_ITEMS)
+				get_tree().paused = true
 			get_viewport().set_input_as_handled()
 			return
 
 	if event.is_action_pressed("ui_pause"):
 		if radial_menu_instance and radial_menu_instance.visible:
-			radial_menu_instance.visible = false
+			radial_menu_instance._close()
 			return
 		if in_combat:
 			combat_ui_instance.cancel()
@@ -255,8 +257,7 @@ func _input(event):
 
 func input_move():
 	if display_menu or in_combat \
-			or (dialogue_box_instance and dialogue_box_instance.visible) \
-			or (radial_menu_instance and radial_menu_instance.visible):
+			or (dialogue_box_instance and dialogue_box_instance.visible):
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
