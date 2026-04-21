@@ -49,6 +49,7 @@ func _build(items: Array) -> void:
 		_container.add_child(wrapper)
 
 func _make_item(item: Dictionary) -> Control:
+	var is_disabled: bool = item.get("disabled", false)
 	var wrapper = Control.new()
 	wrapper.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -63,7 +64,8 @@ func _make_item(item: Dictionary) -> Control:
 	lbl.size = Vector2(LBL_W, 14.0)
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lbl.add_theme_font_size_override("font_size", 10)
-	lbl.add_theme_color_override("font_color", Color(0.92, 0.92, 0.92, 1.0))
+	var lbl_color = Color(0.45, 0.45, 0.45, 0.7) if is_disabled else Color(0.92, 0.92, 0.92, 1.0)
+	lbl.add_theme_color_override("font_color", lbl_color)
 	lbl.add_theme_constant_override("outline_size", 2)
 	lbl.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	wrapper.add_child(lbl)
@@ -71,29 +73,45 @@ func _make_item(item: Dictionary) -> Control:
 	return wrapper
 
 func _make_btn(item: Dictionary) -> Button:
+	var is_disabled: bool = item.get("disabled", false)
 	var btn = Button.new()
 	btn.text = item.get("letter", "?")
 	btn.tooltip_text = item.get("label", "")
+	btn.disabled = is_disabled
 	btn.custom_minimum_size = Vector2(BTN_DIAM, BTN_DIAM)
 	btn.size               = Vector2(BTN_DIAM, BTN_DIAM)
 
 	var r = int(BTN_DIAM / 2)
-	var s = StyleBoxFlat.new()
-	s.bg_color = Color(0.10, 0.12, 0.16, 0.92)
-	s.border_color = Color(0.40, 0.80, 0.40, 1.0)
-	s.set_border_width_all(2)
-	s.corner_radius_top_left     = r
-	s.corner_radius_top_right    = r
-	s.corner_radius_bottom_left  = r
-	s.corner_radius_bottom_right = r
-	btn.add_theme_stylebox_override("normal", s)
 
-	var sh = s.duplicate()
-	sh.bg_color = Color(0.20, 0.50, 0.20, 0.95)
-	btn.add_theme_stylebox_override("hover",   sh)
-	btn.add_theme_stylebox_override("pressed", sh)
+	if is_disabled:
+		var sd = StyleBoxFlat.new()
+		sd.bg_color = Color(0.12, 0.12, 0.12, 0.55)
+		sd.border_color = Color(0.30, 0.30, 0.30, 0.50)
+		sd.set_border_width_all(2)
+		sd.corner_radius_top_left     = r
+		sd.corner_radius_top_right    = r
+		sd.corner_radius_bottom_left  = r
+		sd.corner_radius_bottom_right = r
+		btn.add_theme_stylebox_override("disabled", sd)
+		btn.add_theme_color_override("font_disabled_color", Color(0.40, 0.40, 0.40, 0.65))
+	else:
+		var s = StyleBoxFlat.new()
+		s.bg_color = Color(0.10, 0.12, 0.16, 0.92)
+		s.border_color = Color(0.40, 0.80, 0.40, 1.0)
+		s.set_border_width_all(2)
+		s.corner_radius_top_left     = r
+		s.corner_radius_top_right    = r
+		s.corner_radius_bottom_left  = r
+		s.corner_radius_bottom_right = r
+		btn.add_theme_stylebox_override("normal", s)
+
+		var sh = s.duplicate()
+		sh.bg_color = Color(0.20, 0.50, 0.20, 0.95)
+		btn.add_theme_stylebox_override("hover",   sh)
+		btn.add_theme_stylebox_override("pressed", sh)
+		btn.pressed.connect(_on_action.bind(item.get("id", "")))
+
 	btn.add_theme_font_size_override("font_size", 14)
-	btn.pressed.connect(_on_action.bind(item.get("id", "")))
 	return btn
 
 func _on_action(action_id: String) -> void:

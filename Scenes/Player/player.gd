@@ -51,15 +51,17 @@ var dialogue_box_instance = null
 var radial_menu_scene = preload("res://UI/radial_menu.tscn")
 var radial_menu_instance = null
 
-const RADIAL_ITEMS = [
-	{"id": "build",  "letter": "B", "label": "Construire"},
-	{"id": "take",   "letter": "T", "label": "Ramasser"},
-	{"id": "talk",   "letter": "Z", "label": "Parler"},
-	{"id": "combat", "letter": "C", "label": "Combat"},
-	{"id": "sheet",  "letter": "P", "label": "Fiche"},
-	{"id": "attack", "letter": "A", "label": "Attaquer"},
-]
 const RADIAL_CLICK_RADIUS = 26.0
+
+func _radial_items() -> Array:
+	return [
+		{"id": "build",  "letter": "B", "label": "Construire", "disabled": false},
+		{"id": "take",   "letter": "T", "label": "Ramasser",   "disabled": not is_instance_valid(Player_data.contact_object)},
+		{"id": "talk",   "letter": "Z", "label": "Parler",     "disabled": not is_instance_valid(Player_data.contact_npc)},
+		{"id": "combat", "letter": "C", "label": "Combat",     "disabled": not is_instance_valid(Player_data.contact_enemy)},
+		{"id": "sheet",  "letter": "P", "label": "Fiche",      "disabled": false},
+		{"id": "attack", "letter": "A", "label": "Attaquer",   "disabled": false},
+	]
 
 const CONE_LENGTH   = 130.0
 const CONE_FOV_HALF = 45.0   # demi-angle du cône (degrés)
@@ -202,7 +204,7 @@ func _input(event):
 			if radial_menu_instance.visible:
 				radial_menu_instance._close()
 			elif not display_menu and not in_combat:
-				radial_menu_instance.show_at(screen_pos, RADIAL_ITEMS)
+				radial_menu_instance.show_at(screen_pos, _radial_items())
 				get_tree().paused = true
 			get_viewport().set_input_as_handled()
 			return
