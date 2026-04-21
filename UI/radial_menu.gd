@@ -19,8 +19,20 @@ func show_at(screen_pos: Vector2, items: Array) -> void:
 	_container.position = screen_pos
 	_backdrop.size = get_viewport().get_visible_rect().size
 	visible = true
+	_animate_open()
+
+func _animate_open() -> void:
+	_container.scale    = Vector2(0.05, 0.05)
+	_container.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	var tw = create_tween().set_parallel(true)
+	tw.tween_property(_container, "scale",    Vector2.ONE,       0.22) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_container, "modulate", Color(1, 1, 1, 1), 0.16) \
+		.set_trans(Tween.TRANS_LINEAR)
 
 func _close() -> void:
+	_container.scale    = Vector2.ONE
+	_container.modulate = Color(1, 1, 1, 1)
 	visible = false
 
 func _build(items: Array) -> void:
