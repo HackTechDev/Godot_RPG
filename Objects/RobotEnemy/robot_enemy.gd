@@ -3,13 +3,15 @@ extends CharacterBody2D
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = anim_tree.get("parameters/playback")
 
-const SPEED = 35.0
+const SPEED            = 35.0
 const DETECTION_RADIUS = 120.0
-const COMBAT_RADIUS = 70.0
-const DAMAGE_RADIUS = 30.0
-const DAMAGE_COOLDOWN = 1.5
+const CONE_FOV_HALF    = 60.0   # demi-angle du cône de vision (degrés)
+const COMBAT_RADIUS    = 70.0
+const DAMAGE_RADIUS    = 30.0
+const DAMAGE_COOLDOWN  = 1.5
 
-var _damage_timer = 0.0
+var _damage_timer  = 0.0
+var facing_angle: float = -90.0  # direction du regard (degrés, 0 = droite)
 
 var enemy_attack: int
 var enemy_defense: int
@@ -38,6 +40,7 @@ func _create_combat_label():
 	add_child(combat_label)
 
 func _physics_process(delta):
+	queue_redraw()
 	if in_combat:
 		_stand_idle()
 		return
@@ -51,12 +54,13 @@ func _physics_process(delta):
 		_stand_idle()
 		return
 
-	var player = player_nodes[0]
+	var player    = player_nodes[0]
 	var to_player = player.global_position - global_position
-	var dist = to_player.length()
+	var dist      = to_player.length()
 
-	if dist <= DETECTION_RADIUS:
+	if dist <= DETECTION_RADIUS and _in_cone(to_player):
 		var dir = to_player.normalized()
+		facing_angle = rad_to_deg(dir.angle())
 		velocity = dir * SPEED
 		anim_tree.set("parameters/Idle/blend_position", dir)
 		anim_tree.set("parameters/Move/blend_position", dir)
@@ -78,6 +82,24 @@ func _physics_process(delta):
 		_stand_idle()
 
 	move_and_slide()
+
+func _in_cone(to_player: Vector2) -> bool:
+	var facing_vec = Vector2(cos(deg_to_rad(facing_angle)), sin(deg_to_rad(facing_angle)))
+	return to_player.normalized().dot(facing_vec) >= cos(deg_to_rad(CONE_FOV_HALF))
+
+func _draw() -> void:
+	if is_dead:
+		return
+	var look_rad  = deg_to_rad(facing_angle)
+	var half_fov  = deg_to_rad(CONE_FOV_HALF)
+	var steps     = 12
+	var pts       = PackedVector2Array([Vector2.ZERO])
+	for i in range(steps + 1):
+		var a = look_rad - half_fov + 2.0 * half_fov * i / steps
+		pts.append(Vector2(cos(a), sin(a)) * DETECTION_RADIUS)
+	draw_colored_polygon(pts, Color(1.0, 0.15, 0.05, 0.10))
+	draw_line(Vector2.ZERO, Vector2(cos(look_rad - half_fov), sin(look_rad - half_fov)) * DETECTION_RADIUS, Color(1.0, 0.15, 0.05, 0.28), 1.0)
+	draw_line(Vector2.ZERO, Vector2(cos(look_rad + half_fov), sin(look_rad + half_fov)) * DETECTION_RADIUS, Color(1.0, 0.15, 0.05, 0.28), 1.0)
 
 func _stand_idle():
 	velocity = Vector2.ZERO
