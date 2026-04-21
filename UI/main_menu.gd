@@ -154,7 +154,8 @@ func _on_button_accept_pressed() -> void:
 		Player_data.use_json_spawn = true
 	var dt_str: String = _selected_mission.get("start_datetime", "2024-01-01 08:00")
 	Player_data.mission_start_unix  = _parse_datetime_to_unix(dt_str)
-	Player_data.mission_real_start  = Time.get_unix_time_from_system()
+	Player_data.mission_real_start      = Time.get_unix_time_from_system()
+	Player_data.mission_paused_duration = 0.0
 	Player_data.mission_sunrise_hour = _parse_time_to_hour(_selected_mission.get("sunrise", "06:00"))
 	Player_data.mission_sunset_hour  = _parse_time_to_hour(_selected_mission.get("sunset",  "20:00"))
 	SceneTransition.change_scene(Player_data.scene_path)

@@ -46,8 +46,9 @@ static var player_sprite_frame: int = 0
 static var goto_character_creation: bool = false
 
 # Horloge de mission — 1 minute réelle = 1 heure de jeu
-static var mission_start_unix: float = 0.0   # date/heure de début de mission (unix)
-static var mission_real_start: float = 0.0   # temps réel au lancement de la mission (unix)
+static var mission_start_unix: float = 0.0        # date/heure de début de mission (unix)
+static var mission_real_start: float = 0.0        # temps réel au lancement de la mission (unix)
+static var mission_paused_duration: float = 0.0   # durée cumulée des pauses (menus, dialogue…)
 
 # Cycle jour/nuit
 static var mission_sunrise_hour: float = 6.0   # heure du lever du soleil (0-24)
