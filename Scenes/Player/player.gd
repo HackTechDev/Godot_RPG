@@ -173,29 +173,30 @@ func _draw() -> void:
 		var spr_rect: Rect2 = master_sprite.get_rect()
 		draw_rect(Rect2(master_sprite.position + spr_rect.position, spr_rect.size), Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
 
-	# --- Cône de vision ---
-	var look_rad  = deg_to_rad(look_angle)
-	var half_fov  = deg_to_rad(CONE_FOV_HALF)
-	var steps     = 12
-	var pts       = PackedVector2Array([Vector2.ZERO])
-	for i in range(steps + 1):
-		var a = look_rad - half_fov + 2.0 * half_fov * i / steps
-		pts.append(Vector2(cos(a), sin(a)) * CONE_LENGTH)
-	draw_colored_polygon(pts, Color(0.2, 1.0, 0.3, 0.12))
-	draw_line(Vector2.ZERO, Vector2(cos(look_rad - half_fov), sin(look_rad - half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
-	draw_line(Vector2.ZERO, Vector2(cos(look_rad + half_fov), sin(look_rad + half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
+	if GameConfig.show_cone:
+		# --- Cône de vision ---
+		var look_rad  = deg_to_rad(look_angle)
+		var half_fov  = deg_to_rad(CONE_FOV_HALF)
+		var steps     = 12
+		var pts       = PackedVector2Array([Vector2.ZERO])
+		for i in range(steps + 1):
+			var a = look_rad - half_fov + 2.0 * half_fov * i / steps
+			pts.append(Vector2(cos(a), sin(a)) * CONE_LENGTH)
+		draw_colored_polygon(pts, Color(0.2, 1.0, 0.3, 0.12))
+		draw_line(Vector2.ZERO, Vector2(cos(look_rad - half_fov), sin(look_rad - half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
+		draw_line(Vector2.ZERO, Vector2(cos(look_rad + half_fov), sin(look_rad + half_fov)) * CONE_LENGTH, Color(0.2, 1.0, 0.3, 0.35), 1.0)
 
-	# --- Flèche de direction du corps ---
-	var body_rad  = deg_to_rad(body_angle)
-	var body_dir_vec  = Vector2(cos(body_rad), sin(body_rad))
-	var perp      = Vector2(-sin(body_rad), cos(body_rad))
-	var tip       = body_dir_vec * 28.0
-	var base      = tip - body_dir_vec * 10.0
-	draw_line(Vector2.ZERO, tip, Color(1.0, 0.55, 0.0, 0.85), 2.0)
-	draw_colored_polygon(
-		PackedVector2Array([tip, base + perp * 5.0, base - perp * 5.0]),
-		Color(1.0, 0.55, 0.0, 0.85)
-	)
+		# --- Flèche de direction du corps ---
+		var body_rad  = deg_to_rad(body_angle)
+		var body_dir_vec  = Vector2(cos(body_rad), sin(body_rad))
+		var perp      = Vector2(-sin(body_rad), cos(body_rad))
+		var tip       = body_dir_vec * 28.0
+		var base      = tip - body_dir_vec * 10.0
+		draw_line(Vector2.ZERO, tip, Color(1.0, 0.55, 0.0, 0.85), 2.0)
+		draw_colored_polygon(
+			PackedVector2Array([tip, base + perp * 5.0, base - perp * 5.0]),
+			Color(1.0, 0.55, 0.0, 0.85)
+		)
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

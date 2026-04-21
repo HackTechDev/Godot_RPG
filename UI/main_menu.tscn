@@ -978,6 +978,15 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Affichage du debug de collision"
 
+[node name="SeparatorCone" type="HSeparator" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=176543211]
+layout_mode = 2
+
+[node name="CheckShowCone" type="CheckButton" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=176543212]
+layout_mode = 2
+button_pressed = true
+theme_override_font_sizes/font_size = 18
+text = "Afficher le cône de vision et la flèche de corps"
+
 [node name="ButtonDebugBack" type="Button" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=187654321]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -1127,6 +1136,7 @@ parameters/looping = true
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/CreateButton" to="MainMenuLayer" method="_on_cc_create_pressed"]
 [connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox" to="MainMenuLayer" method="_on_check_debug_hitbox_toggled"]
 [connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision" to="MainMenuLayer" method="_on_check_debug_collision_toggled"]
+[connection signal="toggled" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone" to="MainMenuLayer" method="_on_check_show_cone_toggled"]
 [connection signal="pressed" from="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonDebugBack" to="MainMenuLayer" method="_on_button_debug_back_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
 [connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]

@@ -626,3 +626,42 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Fix : `character_sheet.tscn` et `MainMenuLayer` (main_menu.tscn) passés au **layer 10**, rendus après le HUD
 - La fiche de personnage (Sheet) **pause** maintenant le jeu à l'ouverture et reprend à la fermeture (comportement identique à Settings et Home qui pausaient déjà)
 - **Fichiers :** `UI/character_sheet.tscn`, `UI/main_menu.tscn`, `Scenes/Player/player.gd`
+
+---
+
+## Gel du temps de jeu pendant les menus
+
+- L'horloge de mission est figée quand un menu est ouvert (Sheet, Settings, Home, menu radial)
+- `hud.gd` détecte les transitions `get_tree().paused` bord montant/descendant et accumule la durée en pause dans `Player_data.mission_paused_duration`
+- `_elapsed_real()` soustrait ce cumul au calcul de l'heure de jeu
+- `mission_paused_duration` remis à 0 à chaque démarrage de mission
+- **Fichiers :** `UI/hud.gd`, `Scenes/Player/player_data.gd`, `UI/main_menu.gd`
+
+---
+
+## Cône de vision pour les ennemis
+
+- Chaque `RobotEnemy` détecte le joueur uniquement dans un cône de **120°** (±60°) en avant
+- Cône affiché en rouge semi-transparent via `_draw()` (polygon + deux lignes de bordure)
+- `facing_angle` mis à jour en temps réel quand le robot se déplace vers le joueur
+- Masqué automatiquement quand le robot est mort (`is_dead`)
+- **Fichiers :** `Objects/RobotEnemy/robot_enemy.gd`
+
+---
+
+## Écran de chargement stylisé
+
+- Remplace la coupure nette entre scènes par un écran de chargement avec barre de progression animée
+- Chargement asynchrone via `ResourceLoader.load_threaded_request()` ; statut sondé à chaque frame
+- UI construite en code : titre doré "COMMANDO ZOMBI", sous-titre, lignes décoratives, barre verte, texte "CHARGEMENT..." animé (points de suspension)
+- Fallback sur chargement synchrone en cas d'échec asynchrone
+- **Fichiers :** `Autoload/scene_transition.gd`
+
+---
+
+## Indicateurs de cône et flèche masquables
+
+- Option **Settings → Debug → Afficher le cône et la flèche** pour masquer/afficher les indicateurs visuels du joueur (cône vert + flèche orange)
+- Contrôlé par `GameConfig.show_cone` (autoload), persisté dans `user://settings.json`
+- Appliqué en temps réel via `if GameConfig.show_cone:` dans `_draw()` du joueur
+- **Fichiers :** `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player.gd`

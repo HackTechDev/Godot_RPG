@@ -19,6 +19,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var debug_settings: Control = $DebugSettings
 @onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
+@onready var check_show_cone: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
 
 const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -250,6 +251,7 @@ func _on_button_debug_pressed():
 	debug_settings.visible = true
 	check_debug_hitbox.button_pressed = GameConfig.debug_show_hitbox
 	check_debug_collision.button_pressed = GameConfig.debug_show_collision
+	check_show_cone.button_pressed = GameConfig.show_cone
 
 func _on_check_debug_hitbox_toggled(toggled_on: bool):
 	GameConfig.debug_show_hitbox = toggled_on
@@ -257,6 +259,10 @@ func _on_check_debug_hitbox_toggled(toggled_on: bool):
 
 func _on_check_debug_collision_toggled(toggled_on: bool):
 	GameConfig.debug_show_collision = toggled_on
+	_save_audio_settings()
+
+func _on_check_show_cone_toggled(toggled_on: bool):
+	GameConfig.show_cone = toggled_on
 	_save_audio_settings()
 
 func _on_button_debug_back_pressed():
@@ -456,7 +462,8 @@ func _save_audio_settings():
 		"sfx_enabled": GameConfig.sfx_enabled,
 		"sfx_volume_linear": GameConfig.sfx_volume_linear,
 		"debug_show_hitbox": GameConfig.debug_show_hitbox,
-		"debug_show_collision": GameConfig.debug_show_collision
+		"debug_show_collision": GameConfig.debug_show_collision,
+		"show_cone": GameConfig.show_cone
 	}
 	var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	file.store_line(JSON.stringify(data))
@@ -476,6 +483,7 @@ func _load_audio_settings():
 	GameConfig.sfx_volume_linear = maxf(data.get("sfx_volume_linear", 0.8), 0.01)
 	GameConfig.debug_show_hitbox = data.get("debug_show_hitbox", false)
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
+	GameConfig.show_cone = data.get("show_cone", true)
 
 func _on_button_settings_back_pressed():
 	main.visible = true

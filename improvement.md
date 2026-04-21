@@ -51,9 +51,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Petite carte en coin d'écran montrant la position du joueur dans le niveau
 - Peut être générée dynamiquement depuis les données de la TileMap
 
-### Écran de chargement stylisé
-- Afficher un vrai écran "Chargement..." avec barre de progression
-- Nécessite `ResourceLoader` en mode thread pour un chargement asynchrone
+### ~~Écran de chargement stylisé~~ ✅ *Implémenté*
+- Barre de progression animée, chargement asynchrone via `ResourceLoader.load_threaded_request()`
 
 ### Tutoriel / première fois
 - Détecter si c'est la première partie (`user://rpg.json` absent)
@@ -86,9 +85,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Technique
 
-### Affichage du cône de vision conditionnel
-- Le cône de vision et la flèche de corps sont toujours affichés, même sans activation des contrôles pavé numérique
-- Envisager une option pour masquer ces indicateurs (toggle dans Settings ou touche dédiée)
+### ~~Affichage du cône de vision conditionnel~~ ✅ *Implémenté*
+- Toggle dans **Settings → Debug** ; persisté dans `GameConfig.show_cone` / `user://settings.json`
 
 ### Sons d'effets
 - Son de collecte quand T est pressé sur un objet
@@ -149,10 +147,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Toggle dans **Settings → Controls** ou touche dédiée (ex. : **V**) pour masquer/afficher le cône et la flèche de corps
 - Mémoriser le choix dans `GameConfig` et `user://settings.json`
 
-### Cône de vision pour les ennemis
-- Chaque `RobotEnemy` possède son propre cône de détection (angle + portée configurable dans `enemies.json`)
-- Le joueur n'est détecté que s'il se trouve dans ce cône — remplace la simple détection radiale actuelle
-- Visualisable en mode debug (`GameConfig.DEBUG`)
+### ~~Cône de vision pour les ennemis~~ ✅ *Implémenté*
+- Cône 120° (±60°) affiché en rouge ; détection par produit scalaire ; `facing_angle` mis à jour en déplacement
 
 ### Impact du cycle jour/nuit sur la détection
 - La nuit : portée de détection des ennemis réduite (visibilité diminuée pour tout le monde)
@@ -175,27 +171,21 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Petite icône soleil/lune à côté de l'horloge qui change selon la phase du jour
 - Barre de progression circulaire représentant l'avancement de la journée
 
-### Gel du temps pendant les menus
-- Actuellement l'horloge de jeu continue pendant la pause menu (basée sur `Time.get_unix_time_from_system()`)
-- Mémoriser le temps cumulé en pause et le soustraire au calcul pour figer l'heure de jeu
+### ~~Gel du temps pendant les menus~~ ✅ *Implémenté*
+- `mission_paused_duration` accumulé dans `hud.gd`, soustrait à `_elapsed_real()`
 
 ---
 
 ## Menu radial
 
-### Étiquettes des actions visibles
-- Afficher le nom de l'action sous chaque bouton (petit `Label` en plus de la lettre), sans attendre le tooltip
-- Améliore la lisibilité, surtout lors de la première utilisation
+### ~~Étiquettes des actions visibles~~ ✅ *Implémenté*
+- `Label` sous chaque bouton du menu radial, visible sans attendre de tooltip
 
-### Animation d'ouverture
-- Les boutons émergent du centre en fondu + léger scale (0 → 1) en quelques frames
-- Renforce le feedback visuel à l'ouverture
+### ~~Animation d'ouverture~~ ✅ *Implémenté*
+- Scale 0→1 + fondu avec `TRANS_BACK / EASE_OUT` (effet rebond)
 
-### Griser les actions indisponibles
-- "Ramasser" grisé si `Player_data.contact_object` est null
-- "Parler" grisé si `Player_data.contact_npc` est null
-- "Combat" grisé si `Player_data.contact_enemy` est null
-- Évite les clics inefficaces et informe le joueur sur l'état du contexte
+### ~~Griser les actions indisponibles~~ ✅ *Implémenté*
+- Ramasser/Parler/Combat grisés si aucun contact valide (`is_instance_valid`)
 
 ### Support manette / gamepad
 - Maintenir un bouton de la manette pour ouvrir le menu radial
