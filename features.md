@@ -571,7 +571,7 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - **Cône vert** (FOV 90°, longueur 130 px) affiché depuis le centre du sprite : indique le champ de vision
 - **Flèche orange** : indique la direction du corps
-- Rotation du regard : **pavé num. 7 / 9**, pas de 45° — limité à ±135° du corps (simulation des limites naturelles de la tête)
+- Rotation du regard : **pavé num. 7 / 9**, pas de 45° — limité à ±90° du corps (simulation des limites naturelles de la tête)
 - Rotation du corps : **pavé num. 4 / 6**, pas de 45°
 - Le mouvement (flèches / WASD) est totalement dissocié du pavé numérique
 - **Fichiers :** `Scenes/Player/player.gd`
@@ -595,3 +595,34 @@ Récapitulatif de toutes les modifications apportées au projet.
   - `vitesse` : vitesse appliquée au frame courant
 - Enregistrés au démarrage du joueur, supprimés automatiquement à sa destruction
 - **Fichiers :** `Scenes/Player/player.gd`
+
+---
+
+## Cycle jour/nuit progressif
+
+- Overlay plein écran (`ColorRect` bleu nuit semi-transparent) superposé au monde de jeu
+- Alpha 0 = plein jour, 0,85 = pleine nuit ; transitions progressives d'une durée d'1 heure de jeu (= 1 minute réelle)
+- Chaque mission définit `sunrise` et `sunset` (format `"HH:MM"`) dans `missions.json`
+- `_compute_night_alpha(game_hour)` : 4 phases — lever, plein jour, coucher, pleine nuit ; calcul ancré sur `since_rise = fmod(game_hour - sunrise + 24, 24)` pour gérer les rollovers minuit
+- Les heures de lever/coucher sont stockées dans `Player_data.mission_sunrise_hour / mission_sunset_hour` et parsées au lancement de la mission
+- **Fichiers :** `missions.json`, `UI/hud.tscn`, `UI/hud.gd`, `Scenes/Player/player_data.gd`, `UI/main_menu.gd`
+
+---
+
+## Menu radial au clic sur le personnage
+
+- Clic gauche sur le sprite du joueur (rayon 26 px) → 6 boutons circulaires disposés en cercle (rayon 68 px)
+- Actions disponibles : **B** Construire, **T** Ramasser, **Z** Parler, **C** Combat, **P** Fiche, **A** Attaquer
+- Fermeture : clic sur une action (l'action est exécutée), clic en dehors (backdrop transparent), ou **Échap**
+- Déplacement du joueur bloqué tant que le menu est visible
+- Boutons circulaires générés dynamiquement avec `StyleBoxFlat` (corner radius = demi-diamètre)
+- **Fichiers :** `UI/radial_menu.tscn`, `UI/radial_menu.gd`, `Scenes/Player/player.gd`
+
+---
+
+## Menus exclus du cycle nuit + pause automatique
+
+- Le `NightOverlay` (HUD, layer 1) ne s'applique plus sur les menus Sheet, Settings et Home
+- Fix : `character_sheet.tscn` et `MainMenuLayer` (main_menu.tscn) passés au **layer 10**, rendus après le HUD
+- La fiche de personnage (Sheet) **pause** maintenant le jeu à l'ouverture et reprend à la fermeture (comportement identique à Settings et Home qui pausaient déjà)
+- **Fichiers :** `UI/character_sheet.tscn`, `UI/main_menu.tscn`, `Scenes/Player/player.gd`
