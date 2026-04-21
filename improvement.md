@@ -51,9 +51,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Petite carte en coin d'écran montrant la position du joueur dans le niveau
 - Peut être générée dynamiquement depuis les données de la TileMap
 
-### ~~Écran de chargement stylisé~~ ✅ *Implémenté*
-- Barre de progression animée, chargement asynchrone via `ResourceLoader.load_threaded_request()`
-
 ### Tutoriel / première fois
 - Détecter si c'est la première partie (`user://rpg.json` absent)
 - Afficher des bulles d'aide contextuelles (ex. : "Appuyez sur T pour ramasser")
@@ -85,9 +82,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Technique
 
-### ~~Affichage du cône de vision conditionnel~~ ✅ *Implémenté*
-- Toggle dans **Settings → Debug** ; persisté dans `GameConfig.show_cone` / `user://settings.json`
-
 ### Sons d'effets
 - Son de collecte quand T est pressé sur un objet
 - Son de poussée quand R est pressé
@@ -105,10 +99,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Pool d'objets pour les ennemis
 - Au lieu de `queue_free()` + `instantiate()`, recycler les instances de `RobotEnemy`
 - Améliore les performances sur les niveaux avec beaucoup d'ennemis
-
-### ~~Logs de debug désactivables~~ ✅ *Implémenté*
-- `GameConfig.DEBUG = false` conditionne les `print()` dans le code
-- `GameConfig.debug_show_hitbox` pour l'affichage des hitboxes
 
 ---
 
@@ -143,13 +133,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Cône de vision
 
-### Affichage conditionnel du cône *(déjà listé — détail ajouté)*
-- Toggle dans **Settings → Controls** ou touche dédiée (ex. : **V**) pour masquer/afficher le cône et la flèche de corps
-- Mémoriser le choix dans `GameConfig` et `user://settings.json`
-
-### ~~Cône de vision pour les ennemis~~ ✅ *Implémenté*
-- Cône 120° (±60°) affiché en rouge ; détection par produit scalaire ; `facing_angle` mis à jour en déplacement
-
 ### Impact du cycle jour/nuit sur la détection
 - La nuit : portée de détection des ennemis réduite (visibilité diminuée pour tout le monde)
 - Complète logiquement le cycle jour/nuit déjà en place
@@ -171,21 +154,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Petite icône soleil/lune à côté de l'horloge qui change selon la phase du jour
 - Barre de progression circulaire représentant l'avancement de la journée
 
-### ~~Gel du temps pendant les menus~~ ✅ *Implémenté*
-- `mission_paused_duration` accumulé dans `hud.gd`, soustrait à `_elapsed_real()`
-
 ---
 
 ## Menu radial
-
-### ~~Étiquettes des actions visibles~~ ✅ *Implémenté*
-- `Label` sous chaque bouton du menu radial, visible sans attendre de tooltip
-
-### ~~Animation d'ouverture~~ ✅ *Implémenté*
-- Scale 0→1 + fondu avec `TRANS_BACK / EASE_OUT` (effet rebond)
-
-### ~~Griser les actions indisponibles~~ ✅ *Implémenté*
-- Ramasser/Parler/Combat grisés si aucun contact valide (`is_instance_valid`)
 
 ### Support manette / gamepad
 - Maintenir un bouton de la manette pour ouvrir le menu radial
