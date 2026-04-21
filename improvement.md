@@ -108,9 +108,9 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Au lieu de `queue_free()` + `instantiate()`, recycler les instances de `RobotEnemy`
 - Améliore les performances sur les niveaux avec beaucoup d'ennemis
 
-### Logs de debug désactivables
-- Les `print()` dans le code (saveAllObjects, load game, etc.) conditionnés à une constante `DEBUG = false`
-- Améliore les performances et la lisibilité des logs à l'export
+### ~~Logs de debug désactivables~~ ✅ *Implémenté*
+- `GameConfig.DEBUG = false` conditionne les `print()` dans le code
+- `GameConfig.debug_show_hitbox` pour l'affichage des hitboxes
 
 ---
 
@@ -140,3 +140,64 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Sprite LPC pour les PNJ et ennemis
 - Utiliser le même système de layers LPC pour habiller les PNJ et les `RobotEnemy`
 - Permet une variété visuelle sans créer de nouvelles textures manuellement
+
+---
+
+## Cône de vision
+
+### Affichage conditionnel du cône *(déjà listé — détail ajouté)*
+- Toggle dans **Settings → Controls** ou touche dédiée (ex. : **V**) pour masquer/afficher le cône et la flèche de corps
+- Mémoriser le choix dans `GameConfig` et `user://settings.json`
+
+### Cône de vision pour les ennemis
+- Chaque `RobotEnemy` possède son propre cône de détection (angle + portée configurable dans `enemies.json`)
+- Le joueur n'est détecté que s'il se trouve dans ce cône — remplace la simple détection radiale actuelle
+- Visualisable en mode debug (`GameConfig.DEBUG`)
+
+### Impact du cycle jour/nuit sur la détection
+- La nuit : portée de détection des ennemis réduite (visibilité diminuée pour tout le monde)
+- Complète logiquement le cycle jour/nuit déjà en place
+
+---
+
+## Cycle jour/nuit
+
+### Couleur de l'overlay selon l'heure
+- Coucher de soleil : teinte orangée avant de passer au bleu nuit
+- Aube : teinte violacée / rosée avant le retour au blanc
+- Implémenter via `lerp` sur la couleur de `NightOverlay` en plus de l'alpha
+
+### Impact gameplay de la nuit
+- Ennemis plus nombreux ou plus rapides entre 22h00 et 05h00
+- Zones sûres uniquement accessibles le jour (portes verrouillées la nuit)
+
+### Indicateur visuel de l'heure sur le HUD
+- Petite icône soleil/lune à côté de l'horloge qui change selon la phase du jour
+- Barre de progression circulaire représentant l'avancement de la journée
+
+### Gel du temps pendant les menus
+- Actuellement l'horloge de jeu continue pendant la pause menu (basée sur `Time.get_unix_time_from_system()`)
+- Mémoriser le temps cumulé en pause et le soustraire au calcul pour figer l'heure de jeu
+
+---
+
+## Menu radial
+
+### Étiquettes des actions visibles
+- Afficher le nom de l'action sous chaque bouton (petit `Label` en plus de la lettre), sans attendre le tooltip
+- Améliore la lisibilité, surtout lors de la première utilisation
+
+### Animation d'ouverture
+- Les boutons émergent du centre en fondu + léger scale (0 → 1) en quelques frames
+- Renforce le feedback visuel à l'ouverture
+
+### Griser les actions indisponibles
+- "Ramasser" grisé si `Player_data.contact_object` est null
+- "Parler" grisé si `Player_data.contact_npc` est null
+- "Combat" grisé si `Player_data.contact_enemy` est null
+- Évite les clics inefficaces et informe le joueur sur l'état du contexte
+
+### Support manette / gamepad
+- Maintenir un bouton de la manette pour ouvrir le menu radial
+- Navigation au stick analogique gauche pour sélectionner l'action mise en surbrillance
+- Relâcher le bouton confirme l'action sélectionnée
