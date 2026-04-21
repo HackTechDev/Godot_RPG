@@ -198,10 +198,12 @@ func _input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var screen_pos = get_global_transform_with_canvas().origin
 		if event.position.distance_to(screen_pos) <= RADIAL_CLICK_RADIUS:
-			if not display_menu and not in_combat:
+			if radial_menu_instance.visible:
+				radial_menu_instance.visible = false
+			elif not display_menu and not in_combat:
 				radial_menu_instance.show_at(screen_pos, RADIAL_ITEMS)
-				get_viewport().set_input_as_handled()
-				return
+			get_viewport().set_input_as_handled()
+			return
 
 	if event.is_action_pressed("ui_pause"):
 		if radial_menu_instance and radial_menu_instance.visible:
