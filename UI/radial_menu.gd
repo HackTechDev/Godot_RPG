@@ -28,11 +28,33 @@ func _build(items: Array) -> void:
 		c.queue_free()
 	var n = items.size()
 	for i in range(n):
-		var a   = -PI / 2.0 + 2.0 * PI * i / float(n)
-		var off = Vector2(cos(a), sin(a)) * RADIUS
-		var btn = _make_btn(items[i])
-		btn.position = off - Vector2(BTN_DIAM, BTN_DIAM) / 2.0
-		_container.add_child(btn)
+		var a      = -PI / 2.0 + 2.0 * PI * i / float(n)
+		var off    = Vector2(cos(a), sin(a)) * RADIUS
+		var wrapper = _make_item(items[i])
+		wrapper.position = off - Vector2(BTN_DIAM / 2.0, BTN_DIAM / 2.0)
+		_container.add_child(wrapper)
+
+func _make_item(item: Dictionary) -> Control:
+	var wrapper = Control.new()
+	wrapper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var btn = _make_btn(item)
+	wrapper.add_child(btn)
+
+	const LBL_W = 70.0
+	var lbl = Label.new()
+	lbl.text = item.get("label", "")
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.position = Vector2((BTN_DIAM - LBL_W) / 2.0, BTN_DIAM + 3.0)
+	lbl.size = Vector2(LBL_W, 14.0)
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.add_theme_font_size_override("font_size", 10)
+	lbl.add_theme_color_override("font_color", Color(0.92, 0.92, 0.92, 1.0))
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+	wrapper.add_child(lbl)
+
+	return wrapper
 
 func _make_btn(item: Dictionary) -> Button:
 	var btn = Button.new()
