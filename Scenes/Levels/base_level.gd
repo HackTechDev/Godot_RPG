@@ -374,7 +374,7 @@ func _load_mechas() -> void:
 		"res://Scenes/Levels/%s/mechas.json" % name
 	)
 	for entry in entries:
-		var mecha = _mecha_scene.instantiate()
+		var mecha := _mecha_scene.instantiate() as Mecha
 		mecha.mecha_id = entry.get("id", "mecha_%s_%d" % [name, randi()])
 		mecha.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(mecha)

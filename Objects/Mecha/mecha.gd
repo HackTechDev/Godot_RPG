@@ -68,7 +68,7 @@ func get_save_data() -> Dictionary:
 	return { "id": mecha_id, "x": position.x, "y": position.y }
 
 func _find_safe_exit_position() -> Vector2:
-	var offsets := [
+	var offsets: Array[Vector2] = [
 		Vector2(60, 0), Vector2(-60, 0),
 		Vector2(0, 60), Vector2(0, -60),
 		Vector2(50, 50), Vector2(-50, 50),
@@ -80,7 +80,7 @@ func _find_safe_exit_position() -> Vector2:
 	]
 	var space_state := get_world_2d().direct_space_state
 	for offset in offsets:
-		var test_pos := global_position + offset
+		var test_pos: Vector2 = global_position + offset
 		var query := PhysicsPointQueryParameters2D.new()
 		query.position = test_pos
 		query.collision_mask = 1
