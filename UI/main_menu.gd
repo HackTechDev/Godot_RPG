@@ -212,6 +212,10 @@ func _on_button_quit_pressed():
 func _on_quit_dialog_confirmed():
 	if GameConfig.DEBUG:
 		print("Save Player")
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		Player_data.player_pos_x = players[0].position.x
+		Player_data.player_pos_y = players[0].position.y
 	liblevel.savePlayer(data_to_save())
 
 	if GameConfig.DEBUG:
@@ -219,8 +223,9 @@ func _on_quit_dialog_confirmed():
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
 	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
+	var mechas = get_tree().get_nodes_in_group("mecha")
 	var current_scene = get_tree().get_current_scene().get_name()
-	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies)
+	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
 
 	if GameConfig.DEBUG:
 		print("Credits")
