@@ -147,10 +147,11 @@ func _on_button_accept_pressed() -> void:
 		print("Mission acceptée : " + _selected_mission.get("title", ""))
 	liblevel.load_game()
 	var scene: String = _selected_mission.get("scene", "")
+	var saved_matches: bool = (Player_data.scene_path == scene)
 	if scene != "":
 		Player_data.scene_path = scene
 	var spawn: Dictionary = _selected_mission.get("spawn", {})
-	if not spawn.is_empty():
+	if not spawn.is_empty() and not saved_matches:
 		Player_data.json_spawn     = Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
 		Player_data.use_json_spawn = true
 	var dt_str: String = _selected_mission.get("start_datetime", "2024-01-01 08:00")
