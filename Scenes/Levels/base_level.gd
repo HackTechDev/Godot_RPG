@@ -156,24 +156,24 @@ func _process(_delta: float) -> void:
 
 	var hint_text := ""
 	for trig in _all_triggers:
-		var tr: Rect2 = trig["rect"]
-		if not sw_detect.intersects(tr):
+		var trig_rect: Rect2 = trig["rect"]
+		if not sw_detect.intersects(trig_rect):
 			continue
-		var horizontal := tr.size.x >= tr.size.y
+		var horizontal := trig_rect.size.x >= trig_rect.size.y
 		# Vérification de confinement sur l'axe parallèle au trigger
 		if horizontal:
-			if sw_detect.position.x <= tr.position.x or (sw_detect.position.x + sw_detect.size.x) >= (tr.position.x + tr.size.x):
+			if sw_detect.position.x <= trig_rect.position.x or (sw_detect.position.x + sw_detect.size.x) >= (trig_rect.position.x + trig_rect.size.x):
 				continue
 		else:
-			if sw_detect.position.y <= tr.position.y or (sw_detect.position.y + sw_detect.size.y) >= (tr.position.y + tr.size.y):
+			if sw_detect.position.y <= trig_rect.position.y or (sw_detect.position.y + sw_detect.size.y) >= (trig_rect.position.y + trig_rect.size.y):
 				continue
 		if horizontal:
-			if sw.get_center().y <= tr.get_center().y:
+			if sw.get_center().y <= trig_rect.get_center().y:
 				hint_text = "Zone de sortie (haut) — appuyez sur Espace"
 			else:
 				hint_text = "Zone de sortie (bas) — appuyez sur Espace"
 		else:
-			if sw.get_center().x <= tr.get_center().x:
+			if sw.get_center().x <= trig_rect.get_center().x:
 				hint_text = "Zone de sortie (gauche) — appuyez sur Espace"
 			else:
 				hint_text = "Zone de sortie (droite) — appuyez sur Espace"
@@ -203,23 +203,23 @@ func _unhandled_input(event: InputEvent) -> void:
 	var sw_detect := Rect2(sw.position.x + PlayerConfig.SPRITE_LEFT_INSET, sw.position.y + PlayerConfig.SPRITE_TOP_INSET, sw.size.x - PlayerConfig.SPRITE_LEFT_INSET - PlayerConfig.SPRITE_RIGHT_INSET, sw.size.y - PlayerConfig.SPRITE_TOP_INSET - PlayerConfig.SPRITE_BOTTOM_INSET)
 
 	for trig in _all_triggers:
-		var tr: Rect2      = trig["rect"]
+		var trig_rect: Rect2      = trig["rect"]
 		var target: String = trig["target"]
-		var horizontal     := tr.size.x >= tr.size.y
+		var horizontal     := trig_rect.size.x >= trig_rect.size.y
 
-		if not sw_detect.intersects(tr):
+		if not sw_detect.intersects(trig_rect):
 			continue
 
 		# Vérification de confinement sur l'axe parallèle au trigger
 		if horizontal:
-			if sw_detect.position.x <= tr.position.x or (sw_detect.position.x + sw_detect.size.x) >= (tr.position.x + tr.size.x):
+			if sw_detect.position.x <= trig_rect.position.x or (sw_detect.position.x + sw_detect.size.x) >= (trig_rect.position.x + trig_rect.size.x):
 				continue
 		else:
-			if sw_detect.position.y <= tr.position.y or (sw_detect.position.y + sw_detect.size.y) >= (tr.position.y + tr.size.y):
+			if sw_detect.position.y <= trig_rect.position.y or (sw_detect.position.y + sw_detect.size.y) >= (trig_rect.position.y + trig_rect.size.y):
 				continue
 
 		# Bord trouvé — déclencher la transition
-		var offset := player.global_position - tr.get_center()
+		var offset := player.global_position - trig_rect.get_center()
 		_save_transition_state(player)
 		Player_data.use_json_spawn = true
 		Player_data.json_spawn     = _compute_arrival_spawn(target, offset, horizontal)
