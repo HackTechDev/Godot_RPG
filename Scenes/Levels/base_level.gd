@@ -369,12 +369,16 @@ func _load_npcs() -> void:
 
 
 func _load_mechas() -> void:
-	var entries := _read_level_json(
-		"user://%s/mechas.json" % name,
-		"res://Scenes/Levels/%s/mechas.json" % name
-	)
+	var user_path   := "user://%s/mechas.json" % name
+	var res_path    := "res://Scenes/Levels/%s/mechas.json" % name
+	print("base_level._load_mechas: user=", user_path, " | res=", res_path)
+	var entries := _read_level_json(user_path, res_path)
+	print("base_level._load_mechas: %d entrée(s) trouvée(s)" % entries.size())
 	for entry in entries:
 		var mecha := _mecha_scene.instantiate() as Mecha
+		if mecha == null:
+			push_error("base_level._load_mechas: instantiate() as Mecha a retourné null — vérifier mecha.tscn/mecha.gd")
+			continue
 		mecha.mecha_id = entry.get("id", "mecha_%s_%d" % [name, randi()])
 		mecha.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(mecha)
@@ -382,10 +386,11 @@ func _load_mechas() -> void:
 
 func _read_level_json(user_path: String, config_path: String) -> Array:
 	for path in ([user_path] if user_path != "" else []) + [config_path]:
-		if FileAccess.file_exists(path):
-			var file = FileAccess.open(path, FileAccess.READ)
-			var data = JSON.parse_string(file.get_as_text())
-			file.close()
-			if data is Array:
-				return data
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file == null:
+			continue
+		var data = JSON.parse_string(file.get_as_text())
+		file.close()
+		if data is Array:
+			return data
 	return []
