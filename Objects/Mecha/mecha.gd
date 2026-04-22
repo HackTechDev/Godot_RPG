@@ -11,7 +11,9 @@ var is_occupied: bool = false
 var _pilot: Node2D = null
 var _smooth_velocity: Vector2 = Vector2.ZERO
 
-@onready var _hint_label: Label = $HintLabel
+@onready var _hint_label: Label  = $HintLabel
+@onready var _sprite:     Sprite2D = $Sprite2D
+@onready var _col_shape:  CollisionShape2D = $CollisionShape2D
 
 signal boarded(mecha: Mecha)
 signal disembarked(mecha: Mecha, exit_pos: Vector2)
@@ -19,6 +21,14 @@ signal disembarked(mecha: Mecha, exit_pos: Vector2)
 func _ready() -> void:
 	add_to_group("mecha")
 	_hint_label.visible = false
+
+	# Forcer les layers ici pour contourner les éventuels problèmes
+	# de parsing du .tscn créé hors éditeur
+	collision_layer = 4   # layer 3 (mecha)
+	collision_mask  = 1   # détecte layer 1 (murs/TileMap)
+
+	# Ajuster la collision shape à la taille réelle du sprite
+	_rebuild_collision_shape()
 
 func _physics_process(delta: float) -> void:
 	if not is_occupied:
@@ -66,6 +76,18 @@ func disembark() -> Vector2:
 
 func get_save_data() -> Dictionary:
 	return { "id": mecha_id, "x": position.x, "y": position.y }
+
+func _rebuild_collision_shape() -> void:
+	if _sprite == null or _sprite.texture == null:
+		return
+	var tex_size := _sprite.texture.get_size()
+	var scaled   := tex_size * _sprite.scale
+	# Réduire légèrement (80 %) pour laisser un pixel de marge visuelle
+	var shape_size := scaled * 0.8
+	var rect := RectangleShape2D.new()
+	rect.size = shape_size
+	_col_shape.shape    = rect
+	_col_shape.position = Vector2.ZERO
 
 func _find_safe_exit_position() -> Vector2:
 	var offsets: Array[Vector2] = [
