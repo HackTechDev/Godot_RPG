@@ -380,8 +380,12 @@ func _load_mechas() -> void:
 			push_error("base_level._load_mechas: instantiate() as Mecha a retourné null — vérifier mecha.tscn/mecha.gd")
 			continue
 		mecha.mecha_id = entry.get("id", "mecha_%s_%d" % [name, randi()])
-		mecha.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		var px := float(entry.get("x", 0.0))
+		var py := float(entry.get("y", 0.0))
+		print("base_level._load_mechas: id=%s pos=(%s,%s)" % [mecha.mecha_id, px, py])
 		add_child(mecha)
+		mecha.global_position = Vector2(px, py)
+		print("base_level._load_mechas: mecha.global_position après add_child = ", mecha.global_position)
 
 
 func _read_level_json(user_path: String, config_path: String) -> Array:
