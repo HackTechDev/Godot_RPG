@@ -45,12 +45,21 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	var enemies_file = FileAccess.open("user://%s/enemies.json" % current_scene, FileAccess.WRITE)
 	enemies_file.store_line(JSON.stringify(enemies_data))
 	enemies_file.close()
+
+	# mechas.json — positions des mechas
+	var mechas_data: Array = []
+	for mecha in mechas:
+		if mecha.has_method("get_save_data"):
+			mechas_data.append(mecha.get_save_data())
+	var mechas_file = FileAccess.open("user://%s/mechas.json" % current_scene, FileAccess.WRITE)
+	mechas_file.store_line(JSON.stringify(mechas_data))
+	mechas_file.close()
 	
 func reinitializeLevel():
 	if GameConfig.DEBUG:
 		print("Reinitialize Level")
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
-		for file_name in ["objects.json", "enemies.json"]:
+		for file_name in ["objects.json", "enemies.json", "mechas.json"]:
 			var path = "user://%s/%s" % [level, file_name]
 			if FileAccess.file_exists(path):
 				DirAccess.remove_absolute(path)

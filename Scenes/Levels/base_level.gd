@@ -3,10 +3,12 @@ extends Node2D
 @onready var player_scene = preload("res://Scenes/Player/player.tscn")
 var _liblevel = preload("res://Lib/liblevel.gd").new()
 
-var _computer_scene = preload("res://Objects/Computers/computer.tscn")
-var _robot_scene    = preload("res://Objects/Robots/robot.tscn")
-var _enemy_scene    = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
-var _npc_scene      = preload("res://Objects/NPC/npc.tscn")
+var _computer_scene          = preload("res://Objects/Computers/computer.tscn")
+var _robot_scene             = preload("res://Objects/Robots/robot.tscn")
+var _enemy_scene             = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
+var _npc_scene               = preload("res://Objects/NPC/npc.tscn")
+var _mecha_scene             = preload("res://Objects/Mecha/mecha.tscn")
+var _camera_controller_script = preload("res://Autoload/CameraController.gd")
 
 # Empêche les zones JSON de se déclencher immédiatement après un spawn
 var _transition_cooldown := false
@@ -28,10 +30,16 @@ func _ready() -> void:
 	_load_objects()
 	_load_enemies()
 	_load_npcs()
+	_load_mechas()
 
 	var player = player_scene.instantiate()
 	_place_player(player)
 	add_child(player)
+
+	# CameraController remplace la Camera2D embarquée dans player.tscn
+	var cam_ctrl = _camera_controller_script.new()
+	add_child(cam_ctrl)
+	cam_ctrl.set_follow(player)
 
 	_trigger_hint = Label.new()
 	_trigger_hint.text = "Haut du sprite = haut du trigger — appuyez sur Espace"
@@ -269,6 +277,10 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 # ---------------------------------------------------------------------------
 
 func _save_transition_state(player: Node2D) -> void:
+	# Forcer le démontage avant la transition pour assurer un état propre
+	if Player_data.in_mecha and player.has_method("force_dismount"):
+		player.force_dismount()
+
 	var sprite := player.get_node_or_null("Sprite2D")
 	if sprite:
 		Player_data.player_sprite_frame = sprite.frame
@@ -276,7 +288,8 @@ func _save_transition_state(player: Node2D) -> void:
 	var computers     := get_tree().get_nodes_in_group("computer")
 	var robots        := get_tree().get_nodes_in_group("robot")
 	var robot_enemies := get_tree().get_nodes_in_group("robot_enemy")
-	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies)
+	var mechas        := get_tree().get_nodes_in_group("mecha")
+	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies, mechas)
 	_liblevel.savePlayer({
 		"player_position":    [player.position.x, player.position.y],
 		"player_facing":      Player_data.player_facing,
@@ -353,6 +366,18 @@ func _load_npcs() -> void:
 		npc.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(npc)
 		npc.setup(entry)
+
+
+func _load_mechas() -> void:
+	var entries := _read_level_json(
+		"user://%s/mechas.json" % name,
+		"res://Scenes/Levels/%s/mechas.json" % name
+	)
+	for entry in entries:
+		var mecha = _mecha_scene.instantiate()
+		mecha.mecha_id = entry.get("id", "mecha_%s_%d" % [name, randi()])
+		mecha.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		add_child(mecha)
 
 
 func _read_level_json(user_path: String, config_path: String) -> Array:

@@ -70,6 +70,14 @@ var speed = 70
 var input_movement = Vector2.ZERO
 var health = Player_data.player_health
 
+# --- Mecha ---
+var _in_mecha: bool = false
+var _active_mecha: Mecha = null
+var _nearby_mecha: Mecha = null
+var _mecha_cooldown: float = 0.0
+const MECHA_COOLDOWN_TIME: float = 1.0
+const MECHA_PROXIMITY: float = 50.0
+
 # Angles en degrés : 0 = droite, 90 = bas, 180 = gauche, -90 = haut
 var body_angle: float = -90.0   # direction du corps (pavé 4/6)
 var look_angle: float = -90.0   # direction du regard/cône (pavé 7/9)
@@ -139,6 +147,8 @@ func _ready():
 
 	_apply_appearance()
 	_restore_sprite_state()
+	# Désactive la caméra embarquée si CameraController gère la caméra
+	call_deferred("_disable_own_camera_if_controller")
 	SceneTransition.fade_in()
 	Performance.add_custom_monitor("Joueur/regard_angle",  func(): return look_angle)
 	Performance.add_custom_monitor("Joueur/corps_angle",   func(): return body_angle)
@@ -149,10 +159,14 @@ func _exit_tree():
 	Performance.remove_custom_monitor("Joueur/corps_angle")
 	Performance.remove_custom_monitor("Joueur/vitesse")
 
-func _physics_process(_delta):
+func _physics_process(delta: float) -> void:
+	if _mecha_cooldown > 0.0:
+		_mecha_cooldown -= delta
 	input_move()
 
 func _process(_delta):
+	if not _in_mecha:
+		_update_nearby_mecha()
 	if in_combat and is_instance_valid(combat_enemy):
 		_update_combat_label_positions()
 	if not _game_over_shown and Player_data.player_health <= 0:
@@ -226,6 +240,11 @@ func _input(event):
 			KEY_KP_7: _rotate_look(-45.0)
 			KEY_KP_9: _rotate_look(45.0)
 
+	if event.is_action_pressed("ui_m"):
+		if not display_menu and not in_combat \
+				and not (dialogue_box_instance and dialogue_box_instance.visible):
+			_on_mecha_key()
+
 	if event.is_action_pressed("ui_b"):
 		if GameConfig.DEBUG:
 			print("b key: build")
@@ -259,6 +278,8 @@ func _input(event):
 		_on_attack_key()
 
 func input_move():
+	if _in_mecha:
+		return
 	if display_menu or in_combat \
 			or (dialogue_box_instance and dialogue_box_instance.visible):
 		velocity = Vector2.ZERO
@@ -313,8 +334,9 @@ func _auto_save_objects():
 	var computers = get_tree().get_nodes_in_group("computer")
 	var robots = get_tree().get_nodes_in_group("robot")
 	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
+	var mechas = get_tree().get_nodes_in_group("mecha")
 	var current_scene = get_tree().get_current_scene().get_name()
-	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies)
+	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
 
 func _facing_to_vector() -> Vector2:
 	match direction:
@@ -700,6 +722,84 @@ func _spr_load(spr: Sprite2D, key: String) -> void:
 
 func _spr_none(spr: Sprite2D) -> void:
 	spr.visible = false
+
+# --- Mecha ---
+
+func _disable_own_camera_if_controller() -> void:
+	if get_tree().get_first_node_in_group("camera_controller") != null:
+		var cam := get_node_or_null("Camera2D") as Camera2D
+		if cam:
+			cam.enabled = false
+
+func _update_nearby_mecha() -> void:
+	var best: Mecha = null
+	var best_dist := INF
+	for node in get_tree().get_nodes_in_group("mecha"):
+		var m := node as Mecha
+		if m == null or m.is_occupied:
+			continue
+		var d := global_position.distance_to(m.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = m
+	# Masquer l'ancien hint si la cible change
+	if is_instance_valid(_nearby_mecha) and _nearby_mecha != best:
+		_nearby_mecha.hide_board_hint()
+	_nearby_mecha = best
+	if is_instance_valid(_nearby_mecha) and _nearby_mecha.is_player_nearby(global_position):
+		_nearby_mecha.show_board_hint()
+	elif is_instance_valid(_nearby_mecha):
+		_nearby_mecha.hide_board_hint()
+		_nearby_mecha = null
+
+func _on_mecha_key() -> void:
+	if _mecha_cooldown > 0.0:
+		return
+	if _in_mecha:
+		_dismount_mecha()
+	elif is_instance_valid(_nearby_mecha) and _nearby_mecha.is_player_nearby(global_position):
+		_mount_mecha(_nearby_mecha)
+
+func _mount_mecha(mecha: Mecha) -> void:
+	_in_mecha = true
+	_active_mecha = mecha
+	_mecha_cooldown = MECHA_COOLDOWN_TIME
+	Player_data.in_mecha = true
+	Player_data.current_mecha_id = mecha.mecha_id
+	# Cacher le sprite joueur
+	master_sprite.visible = false
+	appearance_layers.visible = false
+	# Désactiver la collision du joueur (évite l'interférence avec les murs)
+	var col := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col:
+		col.set_deferred("disabled", true)
+	velocity = Vector2.ZERO
+	mecha.board(self)
+	EventBus.player_mounted_mecha.emit(mecha)
+
+func _dismount_mecha() -> void:
+	if not is_instance_valid(_active_mecha):
+		_in_mecha = false
+		Player_data.in_mecha = false
+		return
+	var exit_pos := _active_mecha.disembark()
+	global_position = exit_pos
+	_in_mecha = false
+	_mecha_cooldown = MECHA_COOLDOWN_TIME
+	Player_data.in_mecha = false
+	Player_data.current_mecha_id = ""
+	_active_mecha = null
+	# Réactiver collision
+	var col := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col:
+		col.set_deferred("disabled", false)
+	# Restaurer sprite
+	_apply_appearance()
+	EventBus.player_dismounted_mecha.emit()
+
+func force_dismount() -> void:
+	if _in_mecha:
+		_dismount_mecha()
 
 func _restart_game():
 	liblevel.reinitializeLevel()

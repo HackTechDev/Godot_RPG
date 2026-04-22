@@ -42,6 +42,10 @@ static var json_spawn: Vector2 = Vector2.ZERO
 # Frame du sprite au moment de la dernière transition
 static var player_sprite_frame: int = 0
 
+# État mecha
+static var in_mecha: bool = false
+static var current_mecha_id: String = ""
+
 # Indique au menu principal d'ouvrir directement la création de personnage
 static var goto_character_creation: bool = false
 

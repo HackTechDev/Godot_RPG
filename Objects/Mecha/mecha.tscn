@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Objects/Mecha/mecha.gd" id="1_mecha"]
+[ext_resource type="Texture2D" uid="uid://beernh4rtfytf" path="res://Images/mecha.png" id="2_mecha"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(28, 28)
+
+[node name="Mecha" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_mecha")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_mecha")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="HintLabel" type="Label" parent="."]
+position = Vector2(-36, -38)
+z_index = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+text = "M : Piloter"
+visible = false
