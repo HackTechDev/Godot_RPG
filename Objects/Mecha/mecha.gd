@@ -5,6 +5,7 @@ extends CharacterBody2D
 @export var mecha_speed: float = 120.0
 @export var inertia_factor: float = 6.0
 @export var proximity_range: float = 50.0
+@export var hitbox_scale: float = 1.0
 
 var is_occupied: bool = false
 
@@ -80,10 +81,9 @@ func get_save_data() -> Dictionary:
 func _rebuild_collision_shape() -> void:
 	if _sprite == null or _sprite.texture == null:
 		return
-	var tex_size := _sprite.texture.get_size()
-	var scaled   := tex_size * _sprite.scale
-	# Réduire légèrement (80 %) pour laisser un pixel de marge visuelle
-	var shape_size := scaled * 0.8
+	var tex_size   := _sprite.texture.get_size()
+	var scaled     := tex_size * _sprite.scale
+	var shape_size := scaled * hitbox_scale
 	var rect := RectangleShape2D.new()
 	rect.size = shape_size
 	_col_shape.shape    = rect
