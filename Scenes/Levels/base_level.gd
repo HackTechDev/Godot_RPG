@@ -396,5 +396,7 @@ func _read_level_json(user_path: String, config_path: String) -> Array:
 		var data = JSON.parse_string(file.get_as_text())
 		file.close()
 		if data is Array:
+			if GameConfig.DEBUG:
+				print("_read_level_json: lu depuis ", path)
 			return data
 	return []
