@@ -983,8 +983,8 @@ layout_mode = 2
 
 [node name="CheckShowCone" type="CheckButton" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=176543212]
 layout_mode = 2
-button_pressed = true
 theme_override_font_sizes/font_size = 18
+button_pressed = true
 text = "Afficher le cône de vision et la flèche de corps"
 
 [node name="ButtonDebugBack" type="Button" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=187654321]
