@@ -14,7 +14,7 @@ func savePlayer(data_to_save):
 	file.store_line(to_json)
 	file.close()
 	
-func saveAllObjects(current_scene, computers, robots, robot_enemies = []):
+func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas = []):
 	if GameConfig.DEBUG:
 		print("saveAllObjects")
 
