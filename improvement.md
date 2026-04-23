@@ -162,3 +162,28 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Maintenir un bouton de la manette pour ouvrir le menu radial
 - Navigation au stick analogique gauche pour sélectionner l'action mise en surbrillance
 - Relâcher le bouton confirme l'action sélectionnée
+
+---
+
+## Mecha
+
+### Armement du Mecha
+- Ajouter une arme intégrée au Mecha (mitrailleuse, lance-roquettes) déclenchée par une touche dédiée
+- Dégâts et portée supérieurs au combat à pied ; munitions limitées par mission
+
+### Santé et destruction du Mecha
+- Le Mecha accumule des dégâts reçus (ennemis, mines, pièges)
+- Quand la santé du Mecha tombe à 0, le joueur est éjecté et le Mecha est détruit (inutilisable jusqu'à réinitialisation)
+- Afficher la santé du Mecha dans le HUD pendant le pilotage
+
+### Mecha multi-joueur / mission
+- Certaines missions pourraient nécessiter le Mecha pour franchir des zones (obstacles, distances)
+- Un Mecha cassé bloque l'accès à ces zones → encourage à l'utiliser avec précaution
+
+### Variantes de Mecha
+- Plusieurs types de Mechas (léger / lourd) avec vitesse, hitbox et armement différents
+- Type défini par `mecha_type` dans `mechas.json`
+
+### Son du Mecha
+- Son moteur en boucle pendant le déplacement (différent des pas du joueur)
+- Son d'impact quand le Mecha heurte un mur

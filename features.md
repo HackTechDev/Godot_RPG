@@ -665,3 +665,21 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Contrôlé par `GameConfig.show_cone` (autoload), persisté dans `user://settings.json`
 - Appliqué en temps réel via `if GameConfig.show_cone:` dans `_draw()` du joueur
 - **Fichiers :** `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player.gd`
+
+---
+
+## Système de pilotage de Mecha (touche M)
+
+- Le joueur peut monter dans un Mecha en approchant à portée et en appuyant sur **M**
+- Label "M : Piloter" affiché sur le Mecha quand le joueur est à portée (`proximity_range`, défaut 50 px)
+- **Montée** : sprites du joueur masqués, sa `CollisionShape2D` désactivée, la caméra zoome à ×0.8
+- **Descente** : touche **M** à nouveau ; algorithme de position de sortie sûre (16 offsets testés via `PhysicsPointQueryParameters2D` pour éviter les murs) ; sprites et collisions restaurés
+- **Déplacement avec inertie** : mouvement piloté par Flèches/WASD avec lissage exponentiel (`_smooth_velocity.lerp(target, inertia_factor * delta)`) — vitesse et facteur d'inertie configurables
+- **Hitbox dédiée** : `RectangleShape2D` redimensionnée au démarrage depuis la taille réelle du sprite (`texture.get_size() × sprite.scale × hitbox_scale`)
+- **`@export hitbox_scale`** : facteur multiplicatif de hitbox réglable dans l'inspecteur Godot (défaut 1.0)
+- **Collision murs** : `collision_layer = 4` (layer 3, mecha), `collision_mask = 1` (layer 1, TileMap) forcés dans `_ready()` pour contourner les éventuels problèmes de parsing du `.tscn`
+- **Cooldown anti-spam** : délai avant de pouvoir re-monter après une descente
+- **Multi-mecha** : chaque Mecha possède un `mecha_id` unique, plusieurs Mechas coexistent par niveau
+- **CameraController** : suit la cible avec lerp (`LERP_SPEED = 5.0`) et zoome progressivement lors du pilotage (`MECHA_ZOOM = 0.8`, `DEFAULT_ZOOM = 1.0`) ; utilise `EventBus.player_mounted_mecha` / `player_dismounted_mecha`
+- **Sauvegarde JSON** : positions des Mechas persistées dans `user://level_X/mechas.json` (priorité) → `res://Scenes/Levels/level_X/mechas.json` (fallback) ; chargement dans `base_level._load_mechas()`
+- **Fichiers :** `Objects/Mecha/mecha.gd`, `Objects/Mecha/mecha.tscn`, `Autoload/CameraController.gd`, `Autoload/EventBus.gd`, `Scenes/Levels/base_level.gd`, `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `Scenes/Levels/level_1/mechas.json`
