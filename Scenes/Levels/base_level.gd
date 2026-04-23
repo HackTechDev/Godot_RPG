@@ -383,11 +383,10 @@ func _load_mechas() -> void:
 			push_error("base_level._load_mechas: instantiate() as Mecha a retourné null — vérifier mecha.tscn/mecha.gd")
 			continue
 		mecha.mecha_id = entry.get("id", "mecha_%s_%d" % [name, randi()])
-		if entry.has("speed"):          mecha.mecha_speed      = float(entry["speed"])
-		if entry.has("inertia"):        mecha.inertia_factor   = float(entry["inertia"])
-		if entry.has("proximity"):      mecha.proximity_range  = float(entry["proximity"])
-		if entry.has("hitbox_scale"):   mecha.hitbox_scale     = float(entry["hitbox_scale"])
-		if entry.has("rotation_speed"): mecha.rotation_speed   = float(entry["rotation_speed"])
+		if entry.has("speed"):        mecha.mecha_speed    = float(entry["speed"])
+		if entry.has("inertia"):      mecha.inertia_factor = float(entry["inertia"])
+		if entry.has("proximity"):    mecha.proximity_range = float(entry["proximity"])
+		if entry.has("hitbox_scale"): mecha.hitbox_scale   = float(entry["hitbox_scale"])
 		if entry.has("facing_x") and entry.has("facing_y"):
 			mecha.facing_dir = Vector2(float(entry["facing_x"]), float(entry["facing_y"])).normalized()
 		var px := float(entry.get("x", 0.0))

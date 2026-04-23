@@ -6,7 +6,6 @@ extends CharacterBody2D
 @export var inertia_factor: float = 6.0
 @export var proximity_range: float = 50.0
 @export var hitbox_scale: float = 2.0
-@export var rotation_speed: float = 8.0
 
 var is_occupied: bool = false
 var facing_dir: Vector2 = Vector2.UP
@@ -14,8 +13,8 @@ var facing_dir: Vector2 = Vector2.UP
 var _pilot: Node2D = null
 var _smooth_velocity: Vector2 = Vector2.ZERO
 
-@onready var _hint_label: Label  = $HintLabel
-@onready var _sprite:     Sprite2D = $Sprite2D
+@onready var _hint_label: Label           = $HintLabel
+@onready var _sprite:     AnimatedSprite2D = $AnimatedSprite2D
 @onready var _col_shape:  CollisionShape2D = $CollisionShape2D
 
 signal boarded(mecha: Mecha)
@@ -25,16 +24,15 @@ func _ready() -> void:
 	add_to_group("mecha")
 	_hint_label.visible = false
 
-	# Forcer les layers ici pour contourner les éventuels problèmes
-	# de parsing du .tscn créé hors éditeur
-	collision_layer = 4   # layer 3 (mecha)
-	collision_mask  = 1   # détecte layer 1 (murs/TileMap)
+	collision_layer = 4
+	collision_mask  = 1
 
-	# Ajuster la collision shape à la taille réelle du sprite
 	_rebuild_collision_shape()
 
-	# Initialise la rotation du sprite depuis facing_dir (valeur chargée ou défaut UP)
-	_sprite.rotation = facing_dir.angle() + PI / 2.0
+	_sprite.animation = _anim_for_dir(facing_dir)
+	_sprite.frame = 0
+	_sprite.stop()
+
 
 func _physics_process(delta: float) -> void:
 	if not is_occupied:
@@ -51,8 +49,12 @@ func _physics_process(delta: float) -> void:
 
 	if input_dir != Vector2.ZERO:
 		facing_dir = input_dir
-	var target_angle := facing_dir.angle() + PI / 2.0
-	_sprite.rotation = lerp_angle(_sprite.rotation, target_angle, rotation_speed * delta)
+		var anim := _anim_for_dir(facing_dir)
+		if _sprite.animation != anim or not _sprite.is_playing():
+			_sprite.play(anim)
+	else:
+		if _sprite.is_playing():
+			_sprite.stop()
 
 	_smooth_velocity = _smooth_velocity.lerp(input_dir * mecha_speed, inertia_factor * delta)
 	velocity = _smooth_velocity
@@ -61,14 +63,25 @@ func _physics_process(delta: float) -> void:
 	if is_instance_valid(_pilot):
 		_pilot.global_position = global_position
 
+
+func _anim_for_dir(dir: Vector2) -> StringName:
+	if abs(dir.x) >= abs(dir.y):
+		return &"walk_right" if dir.x >= 0 else &"walk_left"
+	else:
+		return &"walk_down" if dir.y > 0 else &"walk_up"
+
+
 func is_player_nearby(player_pos: Vector2) -> bool:
 	return global_position.distance_to(player_pos) <= proximity_range
+
 
 func show_board_hint() -> void:
 	_hint_label.visible = true
 
+
 func hide_board_hint() -> void:
 	_hint_label.visible = false
+
 
 func board(pilot: Node2D) -> void:
 	is_occupied = true
@@ -77,6 +90,7 @@ func board(pilot: Node2D) -> void:
 	hide_board_hint()
 	boarded.emit(self)
 
+
 func disembark() -> Vector2:
 	var exit_pos := _find_safe_exit_position()
 	is_occupied = false
@@ -84,6 +98,7 @@ func disembark() -> Vector2:
 	_smooth_velocity = Vector2.ZERO
 	disembarked.emit(self, exit_pos)
 	return exit_pos
+
 
 func get_save_data() -> Dictionary:
 	return {
@@ -94,18 +109,22 @@ func get_save_data() -> Dictionary:
 		"facing_y": facing_dir.y
 	}
 
+
 func _rebuild_collision_shape() -> void:
-	if _sprite == null or _sprite.texture == null:
+	if _sprite == null or _sprite.sprite_frames == null:
 		return
-	var tex_size := _sprite.texture.get_size()
+	var tex := _sprite.sprite_frames.get_frame_texture(&"walk_right", 0)
+	if tex == null:
+		return
+	var tex_size := tex.get_size()
 	var scaled   := tex_size * _sprite.scale
 	var circle   := CircleShape2D.new()
 	circle.radius = minf(scaled.x, scaled.y) * 0.5 * hitbox_scale
 	_col_shape.shape    = circle
 	_col_shape.position = Vector2.ZERO
 
+
 func _find_safe_exit_position() -> Vector2:
-	# Teste d'abord les directions relatives à l'orientation du mecha
 	var back := -facing_dir * 70
 	var left := Vector2(-facing_dir.y, facing_dir.x) * 60
 	var right := -left
@@ -126,5 +145,4 @@ func _find_safe_exit_position() -> Vector2:
 		query.exclude = [self.get_rid()]
 		if space_state.intersect_point(query).is_empty():
 			return test_pos
-	# Fallback : position brute sans vérification (plutôt que de rester coincé dans le mecha)
 	return global_position + Vector2(70, 0)

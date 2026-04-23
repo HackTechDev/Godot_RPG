@@ -6,7 +6,6 @@
 	"speed": 120.0,
 	"inertia": 6.0,
 	"proximity": 50.0,
-	"hitbox_scale": 1.0,
-	"rotation_speed": 8.0
+	"hitbox_scale": 1.0
   }
 ]

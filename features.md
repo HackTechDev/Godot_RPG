@@ -675,12 +675,11 @@ Récapitulatif de toutes les modifications apportées au projet.
 - **Montée** : sprites du joueur masqués, sa `CollisionShape2D` désactivée, la caméra zoome à ×0.8
 - **Descente** : touche **M** à nouveau ; algorithme de position de sortie sûre (16 offsets testés via `PhysicsPointQueryParameters2D` pour éviter les murs) ; sprites et collisions restaurés
 - **Déplacement avec inertie** : mouvement piloté par Flèches/WASD avec lissage exponentiel (`_smooth_velocity.lerp(target, inertia_factor * delta)`) — vitesse et facteur d'inertie configurables
-- **Hitbox dédiée** : `RectangleShape2D` redimensionnée au démarrage depuis la taille réelle du sprite (`texture.get_size() × sprite.scale × hitbox_scale`)
-- **`@export hitbox_scale`** : facteur multiplicatif de hitbox réglable dans l'inspecteur Godot (défaut 1.0)
-- **Collision murs** : `collision_layer = 4` (layer 3, mecha), `collision_mask = 1` (layer 1, TileMap) forcés dans `_ready()` pour contourner les éventuels problèmes de parsing du `.tscn`
-- **Hitbox circulaire** : `CircleShape2D` centrée sur le mecha — rayon = `min(largeur, hauteur) / 2 × hitbox_scale` ; cohérent avec la rotation du sprite (un rectangle donnerait des collisions incohérentes selon l'angle)
+- **Hitbox circulaire** : `CircleShape2D` centrée sur le mecha — rayon = `min(largeur, hauteur) / 2 × hitbox_scale` ; invariante à la direction (contrairement à un rectangle)
+- **`@export hitbox_scale`** : facteur multiplicatif de hitbox réglable dans l'inspecteur Godot (défaut 2.0)
+- **Collision murs** : `collision_layer = 4` (layer 3, mecha), `collision_mask = 1` (layer 1, TileMap) forcés dans `_ready()`
 - **Orientation** : `facing_dir` (`Vector2`, public) mémorise la dernière direction de déplacement non-nulle ; l'avant du mecha = `facing_dir`, l'arrière = `-facing_dir`
-- **Rotation du sprite** : le sprite tourne en douceur vers `facing_dir` via `lerp_angle` avec le facteur `rotation_speed` — offset `+PI/2` car le front du sprite pointe vers le haut par défaut
+- **Animations directionnelles** : `AnimatedSprite2D` avec sprite sheet 3×4 (`mecha_spider_sheet.png`, 266×101 px/frame) — 4 animations : `walk_right`, `walk_left`, `walk_up`, `walk_down`, 3 frames chacune à 8 fps ; animation stoppée (frame figée) quand le mecha est à l'arrêt
 - **Éjection orientée** : `_find_safe_exit_position()` teste en priorité l'arrière, puis les côtés relatifs à `facing_dir`, avant les offsets absolus
 - **Cooldown anti-spam** : délai avant de pouvoir re-monter après une descente
 - **Multi-mecha** : chaque Mecha possède un `mecha_id` unique, plusieurs Mechas coexistent par niveau
@@ -692,7 +691,6 @@ Récapitulatif de toutes les modifications apportées au projet.
   | `inertia` | `inertia_factor` | 6.0 |
   | `proximity` | `proximity_range` | 50.0 |
   | `hitbox_scale` | `hitbox_scale` | 2.0 |
-  | `rotation_speed` | `rotation_speed` | 8.0 |
 
 - **CameraController** : suit la cible avec lerp (`LERP_SPEED = 5.0`) et zoome progressivement lors du pilotage (`MECHA_ZOOM = 0.8`, `DEFAULT_ZOOM = 1.0`) ; utilise `EventBus.player_mounted_mecha` / `player_dismounted_mecha`
 - **Sauvegarde JSON** : positions des Mechas persistées dans `user://level_X/mechas.json` (priorité) → `res://Scenes/Levels/level_X/mechas.json` (fallback) ; chargement dans `base_level._load_mechas()`

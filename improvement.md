@@ -188,7 +188,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Son moteur en boucle pendant le déplacement (différent des pas du joueur)
 - Son d'impact quand le Mecha heurte un mur
 
-### Sprite directionnel
-- Sprite sheet 4 ou 8 directions à la place de la rotation continue
-- Permettrait d'avoir un rendu pixel-art cohérent sans artefacts de rotation
-- `facing_dir` est déjà disponible pour piloter l'animation
+### Sprite directionnel (fait)
+- `AnimatedSprite2D` avec sprite sheet 3×4 (`mecha_spider_sheet.png`) — 4 directions × 3 frames, 8 fps
+- `_anim_for_dir(facing_dir)` → `walk_right / walk_left / walk_up / walk_down`
