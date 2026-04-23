@@ -2,6 +2,8 @@ extends RefCounted
 
 static var version = "1"
 
+const MISSION_STATE_PATH = "user://current_mission.json"
+
 func displayVersion():
 	return "LibLevel version: " + version
 
@@ -55,9 +57,28 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	mechas_file.store_line(JSON.stringify(mechas_data))
 	mechas_file.close()
 	
+func save_mission_state(mission_id: String, started: bool, elapsed_real: float = 0.0) -> void:
+	var data := {"mission_id": mission_id, "started": started, "mission_elapsed_real": elapsed_real}
+	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_line(JSON.stringify(data))
+		file.close()
+
+func load_mission_state() -> Dictionary:
+	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var data = JSON.parse_string(file.get_as_text())
+	file.close()
+	if data is Dictionary:
+		return data
+	return {}
+
 func reinitializeLevel():
 	if GameConfig.DEBUG:
 		print("Reinitialize Level")
+	if FileAccess.file_exists(MISSION_STATE_PATH):
+		DirAccess.remove_absolute(MISSION_STATE_PATH)
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
 		for file_name in ["objects.json", "enemies.json", "mechas.json"]:
 			var path = "user://%s/%s" % [level, file_name]

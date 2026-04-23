@@ -32,6 +32,13 @@ const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/V
 
 var _missions: Array = []
 var _selected_mission: Dictionary = {}
+var _pending_mission: Dictionary = {}
+
+var _mr_panel:      Control        = null
+var _mr_title:      Label          = null
+var _mr_datetime:   Label          = null
+var _mr_health:     Label          = null
+var _mr_objectives: RichTextLabel  = null
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -146,17 +153,62 @@ func _on_button_accept_pressed() -> void:
 	if GameConfig.DEBUG:
 		print("Mission acceptée : " + _selected_mission.get("title", ""))
 	liblevel.load_game()
-	var scene: String = _selected_mission.get("scene", "")
+	var mission_id: String = _selected_mission.get("id", "")
+	var state := liblevel.load_mission_state()
+	if state.get("started", false) and state.get("mission_id", "") == mission_id:
+		_show_mission_recap(state)
+		return
+	if not FileAccess.file_exists(Player_data.save_path):
+		_pending_mission = _selected_mission.duplicate()
+		mission_select.visible = false
+		character_creation.visible = true
+		_cc_show_page(1)
+		return
+	_launch_mission(_selected_mission, false)
+
+func _launch_mission(mission: Dictionary, resume: bool) -> void:
+	Player_data.current_mission_id = mission.get("id", "")
+	var scene: String = mission.get("scene", "")
 	var saved_matches: bool = (Player_data.scene_path == scene)
 	if scene != "":
 		Player_data.scene_path = scene
-	var spawn: Dictionary = _selected_mission.get("spawn", {})
-	if not spawn.is_empty() and not saved_matches:
-		Player_data.json_spawn     = Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
-		Player_data.use_json_spawn = true
+	if not resume:
+		var spawn: Dictionary = mission.get("spawn", {})
+		if not spawn.is_empty() and not saved_matches:
+			Player_data.json_spawn     = Vector2(spawn.get("x", 0.0), spawn.get("y", 0.0))
+			Player_data.use_json_spawn = true
+		var dt_str: String = mission.get("start_datetime", "2024-01-01 08:00")
+		Player_data.mission_start_unix      = _parse_datetime_to_unix(dt_str)
+		Player_data.mission_real_start      = Time.get_unix_time_from_system()
+		Player_data.mission_paused_duration = 0.0
+		Player_data.mission_sunrise_hour = _parse_time_to_hour(mission.get("sunrise", "06:00"))
+		Player_data.mission_sunset_hour  = _parse_time_to_hour(mission.get("sunset",  "20:00"))
+		liblevel.save_mission_state(Player_data.current_mission_id, false, 0.0)
+	SceneTransition.change_scene(Player_data.scene_path)
+
+func _show_mission_recap(state: Dictionary) -> void:
+	_mr_title.text    = _selected_mission.get("title", "")
+	_mr_datetime.text = _format_mission_datetime(_selected_mission.get("start_datetime", ""))
+	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
+	_mr_objectives.text = _selected_mission.get("objectives", "")
+	mission_select.visible = false
+	_mr_panel.visible = true
+
+func _on_recap_back_pressed() -> void:
+	_mr_panel.visible = false
+	mission_select.visible = true
+
+func _on_recap_continue_pressed() -> void:
+	_mr_panel.visible = false
+	var state := liblevel.load_mission_state()
+	var elapsed: float = state.get("mission_elapsed_real", 0.0)
+	Player_data.current_mission_id = _selected_mission.get("id", "")
+	var scene: String = _selected_mission.get("scene", "")
+	if scene != "":
+		Player_data.scene_path = scene
 	var dt_str: String = _selected_mission.get("start_datetime", "2024-01-01 08:00")
-	Player_data.mission_start_unix  = _parse_datetime_to_unix(dt_str)
-	Player_data.mission_real_start      = Time.get_unix_time_from_system()
+	Player_data.mission_start_unix      = _parse_datetime_to_unix(dt_str)
+	Player_data.mission_real_start      = Time.get_unix_time_from_system() - elapsed
 	Player_data.mission_paused_duration = 0.0
 	Player_data.mission_sunrise_hour = _parse_time_to_hour(_selected_mission.get("sunrise", "06:00"))
 	Player_data.mission_sunset_hour  = _parse_time_to_hour(_selected_mission.get("sunset",  "20:00"))
@@ -443,7 +495,10 @@ func _on_cc_create_pressed():
 	liblevel.reinitializeLevel()
 	liblevel.load_game()
 	get_tree().paused = false
-	SceneTransition.change_scene(Player_data.scene_path)
+	if not _pending_mission.is_empty():
+		_launch_mission(_pending_mission, false)
+	else:
+		SceneTransition.change_scene(Player_data.scene_path)
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
@@ -524,14 +579,93 @@ func _on_reinitialize_pressed():
 	Player_data.goto_character_creation = true
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
 
+func _build_mission_recap_panel() -> void:
+	_mr_panel = Control.new()
+	_mr_panel.name = "MissionRecap"
+	_mr_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mr_panel.visible = false
+	add_child(_mr_panel)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mr_panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_mr_panel.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(540, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 24)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 10)
+	margin.add_child(vbox)
+
+	var header := Label.new()
+	header.text = "RÉCAPITULATIF DE MISSION"
+	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(header)
+
+	vbox.add_child(HSeparator.new())
+
+	_mr_title = Label.new()
+	_mr_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_mr_title)
+
+	_mr_datetime = Label.new()
+	_mr_datetime.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_mr_datetime)
+
+	vbox.add_child(HSeparator.new())
+
+	_mr_health = Label.new()
+	_mr_health.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_mr_health)
+
+	vbox.add_child(HSeparator.new())
+
+	var obj_lbl := Label.new()
+	obj_lbl.text = "Objectifs :"
+	vbox.add_child(obj_lbl)
+
+	_mr_objectives = RichTextLabel.new()
+	_mr_objectives.bbcode_enabled = true
+	_mr_objectives.fit_content = true
+	_mr_objectives.custom_minimum_size = Vector2(0, 60)
+	vbox.add_child(_mr_objectives)
+
+	vbox.add_child(HSeparator.new())
+
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 20)
+	vbox.add_child(buttons)
+
+	var btn_back := Button.new()
+	btn_back.text = "Retour"
+	btn_back.pressed.connect(_on_recap_back_pressed)
+	buttons.add_child(btn_back)
+
+	var btn_continue := Button.new()
+	btn_continue.text = "Continuer"
+	btn_continue.pressed.connect(_on_recap_continue_pressed)
+	buttons.add_child(btn_continue)
+
 func _ready():
 	if GameConfig.DEBUG:
 		print("Init Game")
 	if GameConfig.DEBUG:
 		print(liblevel.displayVersion())
-	
-	get_tree().set_auto_accept_quit(false)
 
+	get_tree().set_auto_accept_quit(false)
+	_build_mission_recap_panel()
 	music_neon_dream.play()
 	_load_audio_settings()
 	SceneTransition.fade_in()

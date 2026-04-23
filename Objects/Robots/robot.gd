@@ -17,4 +17,19 @@ func collect():
 	Player_data.robot += 1
 	Player_data.inventory.append({"type": "robot", "label": "Robot"})
 	EventBus.item_collected.emit("Robot collecté !")
+	_mark_mission_started()
 	queue_free()
+
+func _mark_mission_started() -> void:
+	if Player_data.current_mission_id == "":
+		return
+	var file := FileAccess.open("user://current_mission.json", FileAccess.READ)
+	if file:
+		var data = JSON.parse_string(file.get_as_text())
+		file.close()
+		if data is Dictionary and data.get("started", false):
+			return
+	var out := FileAccess.open("user://current_mission.json", FileAccess.WRITE)
+	if out:
+		out.store_line(JSON.stringify({"mission_id": Player_data.current_mission_id, "started": true, "mission_elapsed_real": 0.0}))
+		out.close()

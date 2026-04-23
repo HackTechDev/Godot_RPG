@@ -46,6 +46,9 @@ static var player_sprite_frame: int = 0
 static var in_mecha: bool = false
 static var current_mecha_id: String = ""
 
+# Mission en cours
+static var current_mission_id: String = ""
+
 # Indique au menu principal d'ouvrir directement la création de personnage
 static var goto_character_creation: bool = false
 
