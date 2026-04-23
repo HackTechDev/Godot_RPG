@@ -88,12 +88,11 @@ func get_save_data() -> Dictionary:
 func _rebuild_collision_shape() -> void:
 	if _sprite == null or _sprite.texture == null:
 		return
-	var tex_size   := _sprite.texture.get_size()
-	var scaled     := tex_size * _sprite.scale
-	var shape_size := scaled * hitbox_scale
-	var rect := RectangleShape2D.new()
-	rect.size = shape_size
-	_col_shape.shape    = rect
+	var tex_size := _sprite.texture.get_size()
+	var scaled   := tex_size * _sprite.scale
+	var circle   := CircleShape2D.new()
+	circle.radius = minf(scaled.x, scaled.y) * 0.5 * hitbox_scale
+	_col_shape.shape    = circle
 	_col_shape.position = Vector2.ZERO
 
 func _find_safe_exit_position() -> Vector2:
