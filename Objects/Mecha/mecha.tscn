@@ -1,55 +1,71 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" uid="uid://p3oyk0c4tbpt" path="res://Objects/Mecha/mecha.gd" id="1_mecha"]
 [ext_resource type="Texture2D" path="res://Images/mecha_spider_sheet.png" id="2_spider"]
 
 [sub_resource type="AtlasTexture" id="AT_r0f0"]
 atlas = ExtResource("2_spider")
-region = Rect2(0, 0, 266, 101)
+region = Rect2(0, 0, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r0f1"]
 atlas = ExtResource("2_spider")
-region = Rect2(266, 0, 266, 101)
+region = Rect2(187, 0, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r0f2"]
 atlas = ExtResource("2_spider")
-region = Rect2(532, 0, 266, 101)
+region = Rect2(374, 0, 187, 101)
+
+[sub_resource type="AtlasTexture" id="AT_r0f3"]
+atlas = ExtResource("2_spider")
+region = Rect2(561, 0, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r1f0"]
 atlas = ExtResource("2_spider")
-region = Rect2(0, 101, 266, 101)
+region = Rect2(0, 101, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r1f1"]
 atlas = ExtResource("2_spider")
-region = Rect2(266, 101, 266, 101)
+region = Rect2(187, 101, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r1f2"]
 atlas = ExtResource("2_spider")
-region = Rect2(532, 101, 266, 101)
+region = Rect2(374, 101, 187, 101)
+
+[sub_resource type="AtlasTexture" id="AT_r1f3"]
+atlas = ExtResource("2_spider")
+region = Rect2(561, 101, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r2f0"]
 atlas = ExtResource("2_spider")
-region = Rect2(0, 202, 266, 101)
+region = Rect2(0, 202, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r2f1"]
 atlas = ExtResource("2_spider")
-region = Rect2(266, 202, 266, 101)
+region = Rect2(187, 202, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r2f2"]
 atlas = ExtResource("2_spider")
-region = Rect2(532, 202, 266, 101)
+region = Rect2(374, 202, 187, 101)
+
+[sub_resource type="AtlasTexture" id="AT_r2f3"]
+atlas = ExtResource("2_spider")
+region = Rect2(561, 202, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r3f0"]
 atlas = ExtResource("2_spider")
-region = Rect2(0, 303, 266, 101)
+region = Rect2(0, 303, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r3f1"]
 atlas = ExtResource("2_spider")
-region = Rect2(266, 303, 266, 101)
+region = Rect2(187, 303, 187, 101)
 
 [sub_resource type="AtlasTexture" id="AT_r3f2"]
 atlas = ExtResource("2_spider")
-region = Rect2(532, 303, 266, 101)
+region = Rect2(374, 303, 187, 101)
+
+[sub_resource type="AtlasTexture" id="AT_r3f3"]
+atlas = ExtResource("2_spider")
+region = Rect2(561, 303, 187, 101)
 
 [sub_resource type="SpriteFrames" id="SF_mecha"]
 animations = [{
@@ -62,6 +78,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AT_r0f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_r0f3")
 }],
 "loop": true,
 "name": &"walk_right",
@@ -76,6 +95,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AT_r1f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_r1f3")
 }],
 "loop": true,
 "name": &"walk_left",
@@ -90,6 +112,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AT_r2f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_r2f3")
 }],
 "loop": true,
 "name": &"walk_up",
@@ -104,6 +129,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AT_r3f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_r3f3")
 }],
 "loop": true,
 "name": &"walk_down",

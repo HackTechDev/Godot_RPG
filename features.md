@@ -679,7 +679,7 @@ Récapitulatif de toutes les modifications apportées au projet.
 - **`@export hitbox_scale`** : facteur multiplicatif de hitbox réglable dans l'inspecteur Godot (défaut 2.0)
 - **Collision murs** : `collision_layer = 4` (layer 3, mecha), `collision_mask = 1` (layer 1, TileMap) forcés dans `_ready()`
 - **Orientation** : `facing_dir` (`Vector2`, public) mémorise la dernière direction de déplacement non-nulle ; l'avant du mecha = `facing_dir`, l'arrière = `-facing_dir`
-- **Animations directionnelles** : `AnimatedSprite2D` avec sprite sheet 3×4 (`mecha_spider_sheet.png`, 266×101 px/frame) — 4 animations : `walk_right`, `walk_left`, `walk_up`, `walk_down`, 3 frames chacune à 8 fps ; animation stoppée (frame figée) quand le mecha est à l'arrêt
+- **Animations directionnelles** : `AnimatedSprite2D` avec sprite sheet 4×4 (`mecha_spider_sheet.png`, 187×101 px/frame, 748×404 total) — 4 animations : `walk_right`, `walk_left`, `walk_up`, `walk_down`, 4 frames chacune à 8 fps ; animation stoppée (frame figée) quand le mecha est à l'arrêt
 - **Éjection orientée** : `_find_safe_exit_position()` teste en priorité l'arrière, puis les côtés relatifs à `facing_dir`, avant les offsets absolus
 - **Cooldown anti-spam** : délai avant de pouvoir re-monter après une descente
 - **Multi-mecha** : chaque Mecha possède un `mecha_id` unique, plusieurs Mechas coexistent par niveau
