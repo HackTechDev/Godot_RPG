@@ -156,7 +156,7 @@ func _on_button_accept_pressed() -> void:
 	var mission_id: String = _selected_mission.get("id", "")
 	var state := liblevel.load_mission_state()
 	if state.get("started", false) and state.get("mission_id", "") == mission_id:
-		_show_mission_recap(state)
+		_show_mission_recap()
 		return
 	if not FileAccess.file_exists(Player_data.save_path):
 		_pending_mission = _selected_mission.duplicate()
@@ -186,7 +186,7 @@ func _launch_mission(mission: Dictionary, resume: bool) -> void:
 		liblevel.save_mission_state(Player_data.current_mission_id, false, 0.0)
 	SceneTransition.change_scene(Player_data.scene_path)
 
-func _show_mission_recap(state: Dictionary) -> void:
+func _show_mission_recap() -> void:
 	_mr_title.text    = _selected_mission.get("title", "")
 	_mr_datetime.text = _format_mission_datetime(_selected_mission.get("start_datetime", ""))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
