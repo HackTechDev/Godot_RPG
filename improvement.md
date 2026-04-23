@@ -187,3 +187,8 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Son du Mecha
 - Son moteur en boucle pendant le déplacement (différent des pas du joueur)
 - Son d'impact quand le Mecha heurte un mur
+
+### Sprite directionnel
+- Sprite sheet 4 ou 8 directions à la place de la rotation continue
+- Permettrait d'avoir un rendu pixel-art cohérent sans artefacts de rotation
+- `facing_dir` est déjà disponible pour piloter l'animation
