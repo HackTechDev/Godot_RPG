@@ -1,4 +1,12 @@
 
 [
-  { "id": "mecha_level1_01", "x": 480, "y": 336 }
+  {
+    "id": "mecha_level1_01",
+    "x": 480, "y": 336,
+    "speed": 120.0,
+    "inertia": 6.0,
+    "proximity": 50.0,
+    "hitbox_scale": 1.0,
+    "rotation_speed": 8.0
+  }
 ]
