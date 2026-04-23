@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var mecha_speed: float = 120.0
 @export var inertia_factor: float = 6.0
 @export var proximity_range: float = 50.0
-@export var hitbox_scale: float = 1.0
+@export var hitbox_scale: float = 2.0
 @export var rotation_speed: float = 8.0
 
 var is_occupied: bool = false
