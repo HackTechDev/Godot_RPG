@@ -388,6 +388,8 @@ func _load_mechas() -> void:
 		if entry.has("proximity"):      mecha.proximity_range  = float(entry["proximity"])
 		if entry.has("hitbox_scale"):   mecha.hitbox_scale     = float(entry["hitbox_scale"])
 		if entry.has("rotation_speed"): mecha.rotation_speed   = float(entry["rotation_speed"])
+		if entry.has("facing_x") and entry.has("facing_y"):
+			mecha.facing_dir = Vector2(float(entry["facing_x"]), float(entry["facing_y"])).normalized()
 		var px := float(entry.get("x", 0.0))
 		var py := float(entry.get("y", 0.0))
 		print("base_level._load_mechas: id=%s pos=(%s,%s)" % [mecha.mecha_id, px, py])

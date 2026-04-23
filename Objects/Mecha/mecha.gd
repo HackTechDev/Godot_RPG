@@ -33,6 +33,9 @@ func _ready() -> void:
 	# Ajuster la collision shape à la taille réelle du sprite
 	_rebuild_collision_shape()
 
+	# Initialise la rotation du sprite depuis facing_dir (valeur chargée ou défaut UP)
+	_sprite.rotation = facing_dir.angle() + PI / 2.0
+
 func _physics_process(delta: float) -> void:
 	if not is_occupied:
 		velocity = Vector2.ZERO
@@ -83,7 +86,13 @@ func disembark() -> Vector2:
 	return exit_pos
 
 func get_save_data() -> Dictionary:
-	return { "id": mecha_id, "x": position.x, "y": position.y }
+	return {
+		"id": mecha_id,
+		"x": position.x,
+		"y": position.y,
+		"facing_x": facing_dir.x,
+		"facing_y": facing_dir.y
+	}
 
 func _rebuild_collision_shape() -> void:
 	if _sprite == null or _sprite.texture == null:
