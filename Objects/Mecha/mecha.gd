@@ -6,8 +6,10 @@ extends CharacterBody2D
 @export var inertia_factor: float = 6.0
 @export var proximity_range: float = 50.0
 @export var hitbox_scale: float = 1.0
+@export var rotation_speed: float = 8.0
 
 var is_occupied: bool = false
+var facing_dir: Vector2 = Vector2.UP
 
 var _pilot: Node2D = null
 var _smooth_velocity: Vector2 = Vector2.ZERO
@@ -43,6 +45,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_physical_key_pressed(KEY_DOWN)  or Input.is_physical_key_pressed(KEY_S): input_dir.y += 1.0
 	if input_dir.length() > 1.0:
 		input_dir = input_dir.normalized()
+
+	if input_dir != Vector2.ZERO:
+		facing_dir = input_dir
+	var target_angle := facing_dir.angle() + PI / 2.0
+	_sprite.rotation = lerp_angle(_sprite.rotation, target_angle, rotation_speed * delta)
 
 	_smooth_velocity = _smooth_velocity.lerp(input_dir * mecha_speed, inertia_factor * delta)
 	velocity = _smooth_velocity
@@ -90,11 +97,13 @@ func _rebuild_collision_shape() -> void:
 	_col_shape.position = Vector2.ZERO
 
 func _find_safe_exit_position() -> Vector2:
+	# Teste d'abord les directions relatives à l'orientation du mecha
+	var back := -facing_dir * 70
+	var left := Vector2(-facing_dir.y, facing_dir.x) * 60
+	var right := -left
 	var offsets: Array[Vector2] = [
-		Vector2(60, 0), Vector2(-60, 0),
-		Vector2(0, 60), Vector2(0, -60),
-		Vector2(50, 50), Vector2(-50, 50),
-		Vector2(50, -50), Vector2(-50, -50),
+		back, left, right, -back,
+		back + left, back + right,
 		Vector2(90, 0), Vector2(-90, 0),
 		Vector2(0, 90), Vector2(0, -90),
 		Vector2(80, 80), Vector2(-80, 80),
