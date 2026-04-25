@@ -34,12 +34,13 @@ var _missions: Array = []
 var _selected_mission: Dictionary = {}
 var _pending_mission: Dictionary = {}
 
-var _mr_panel:      Control        = null
-var _mr_title:      Label          = null
-var _mr_datetime:   Label          = null
-var _mr_elapsed:    Label          = null
-var _mr_health:     Label          = null
-var _mr_objectives: RichTextLabel  = null
+var _mr_panel:          Control        = null
+var _mr_title:          Label          = null
+var _mr_datetime:       Label          = null
+var _mr_game_datetime:  Label          = null
+var _mr_elapsed:        Label          = null
+var _mr_health:         Label          = null
+var _mr_objectives:     RichTextLabel  = null
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -207,9 +208,10 @@ func _show_mission_recap() -> void:
 			state.get("mission_elapsed_real", 0.0),
 			started_at
 		)
-	_mr_title.text    = _selected_mission.get("title", "")
-	_mr_datetime.text = _format_saved_at(saved_at)
-	_mr_elapsed.text  = _format_elapsed(state.get("mission_elapsed_real", 0.0))
+	_mr_title.text         = _selected_mission.get("title", "")
+	_mr_datetime.text      = _format_saved_at(saved_at)
+	_mr_game_datetime.text = _format_game_datetime(state.get("game_datetime", ""))
+	_mr_elapsed.text       = _format_elapsed(state.get("mission_elapsed_real", 0.0))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
 	mission_select.visible = false
@@ -258,6 +260,25 @@ func _format_started_at(dt_str: String) -> String:
 	if d.size() < 3 or t.size() < 2:
 		return dt_str
 	return "Commencé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
+
+func _compute_game_datetime(elapsed: float) -> String:
+	if Player_data.mission_start_unix <= 0.0:
+		return ""
+	var game_unix := Player_data.mission_start_unix + elapsed * 60.0
+	var dt := Time.get_datetime_dict_from_unix_time(int(game_unix))
+	return "%04d-%02d-%02d %02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute]
+
+func _format_game_datetime(dt_str: String) -> String:
+	if dt_str == "":
+		return ""
+	var parts := dt_str.split(" ")
+	if parts.size() < 2:
+		return dt_str
+	var d := parts[0].split("-")
+	var t := parts[1].split(":")
+	if d.size() < 3 or t.size() < 2:
+		return dt_str
+	return "En jeu : %s/%s/%s  %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
 func _format_saved_at(dt_str: String) -> String:
 	if dt_str == "":
@@ -342,7 +363,8 @@ func _on_quit_dialog_confirmed():
 			elapsed = Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
 		else:
 			elapsed = liblevel.load_mission_state().get("mission_elapsed_real", 0.0)
-		liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed)
+		var game_datetime := _compute_game_datetime(elapsed)
+		liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed, "", game_datetime)
 
 	if GameConfig.DEBUG:
 		print("Credits")
@@ -687,6 +709,10 @@ func _build_mission_recap_panel() -> void:
 	_mr_datetime = Label.new()
 	_mr_datetime.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_mr_datetime)
+
+	_mr_game_datetime = Label.new()
+	_mr_game_datetime.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_mr_game_datetime)
 
 	_mr_elapsed = Label.new()
 	_mr_elapsed.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

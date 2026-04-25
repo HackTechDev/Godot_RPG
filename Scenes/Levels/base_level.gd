@@ -3,6 +3,13 @@ extends Node2D
 @onready var player_scene = preload("res://Scenes/Player/player.tscn")
 var _liblevel = preload("res://Lib/liblevel.gd").new()
 
+func _compute_game_datetime(elapsed: float) -> String:
+	if Player_data.mission_start_unix <= 0.0:
+		return ""
+	var game_unix := Player_data.mission_start_unix + elapsed * 60.0
+	var dt := Time.get_datetime_dict_from_unix_time(int(game_unix))
+	return "%04d-%02d-%02d %02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute]
+
 var _computer_scene          = preload("res://Objects/Computers/computer.tscn")
 var _robot_scene             = preload("res://Objects/Robots/robot.tscn")
 var _enemy_scene             = preload("res://Objects/RobotEnemy/robot_enemy.tscn")
@@ -292,7 +299,8 @@ func _save_transition_state(player: Node2D) -> void:
 	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies, mechas)
 	if Player_data.current_mission_id != "" and Player_data.mission_real_start > 0.0:
 		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
-		_liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed)
+		var game_datetime := _compute_game_datetime(elapsed)
+		_liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed, "", game_datetime)
 	_liblevel.savePlayer({
 		"player_position":    [player.position.x, player.position.y],
 		"player_facing":      Player_data.player_facing,
