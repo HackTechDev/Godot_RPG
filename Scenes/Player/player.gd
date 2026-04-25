@@ -224,10 +224,12 @@ func _input(event):
 		if event.position.distance_to(screen_pos) <= RADIAL_CLICK_RADIUS:
 			if radial_menu_instance.visible:
 				radial_menu_instance._close()
-			elif not display_menu and not in_combat:
+				get_viewport().set_input_as_handled()
+			elif not display_menu and not in_combat \
+					and not (dialogue_box_instance and dialogue_box_instance.visible):
 				radial_menu_instance.show_at(screen_pos, _radial_items())
 				get_tree().paused = true
-			get_viewport().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 			return
 
 	if event.is_action_pressed("ui_pause"):
