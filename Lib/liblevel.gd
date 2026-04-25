@@ -57,8 +57,15 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	mechas_file.store_line(JSON.stringify(mechas_data))
 	mechas_file.close()
 	
-func save_mission_state(mission_id: String, started: bool, elapsed_real: float = 0.0) -> void:
-	var data := {"mission_id": mission_id, "started": started, "mission_elapsed_real": elapsed_real}
+func save_mission_state(mission_id: String, started: bool, elapsed_real: float = 0.0, started_at: String = "") -> void:
+	if started_at == "":
+		started_at = load_mission_state().get("started_at", "")
+	var data := {
+		"mission_id": mission_id,
+		"started": started,
+		"mission_elapsed_real": elapsed_real,
+		"started_at": started_at
+	}
 	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.WRITE)
 	if file:
 		file.store_line(JSON.stringify(data))

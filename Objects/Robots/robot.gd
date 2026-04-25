@@ -23,13 +23,21 @@ func collect():
 func _mark_mission_started() -> void:
 	if Player_data.current_mission_id == "":
 		return
-	var file := FileAccess.open("user://current_mission.json", FileAccess.READ)
+	var path := "user://current_mission.json"
+	var state: Dictionary = {}
+	var file := FileAccess.open(path, FileAccess.READ)
 	if file:
-		var data = JSON.parse_string(file.get_as_text())
+		var parsed = JSON.parse_string(file.get_as_text())
 		file.close()
-		if data is Dictionary and data.get("started", false):
-			return
-	var out := FileAccess.open("user://current_mission.json", FileAccess.WRITE)
+		if parsed is Dictionary:
+			state = parsed
+	if state.get("started", false):
+		return
+	state["mission_id"] = Player_data.current_mission_id
+	state["started"] = true
+	if not state.has("mission_elapsed_real"):
+		state["mission_elapsed_real"] = 0.0
+	var out := FileAccess.open(path, FileAccess.WRITE)
 	if out:
-		out.store_line(JSON.stringify({"mission_id": Player_data.current_mission_id, "started": true, "mission_elapsed_real": 0.0}))
+		out.store_line(JSON.stringify(state))
 		out.close()

@@ -183,12 +183,15 @@ func _launch_mission(mission: Dictionary, resume: bool) -> void:
 		Player_data.mission_paused_duration = 0.0
 		Player_data.mission_sunrise_hour = _parse_time_to_hour(mission.get("sunrise", "06:00"))
 		Player_data.mission_sunset_hour  = _parse_time_to_hour(mission.get("sunset",  "20:00"))
-		liblevel.save_mission_state(Player_data.current_mission_id, false, 0.0)
+		var dt := Time.get_datetime_dict_from_system()
+		var started_at := "%04d-%02d-%02d %02d:%02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second]
+		liblevel.save_mission_state(Player_data.current_mission_id, false, 0.0, started_at)
 	SceneTransition.change_scene(Player_data.scene_path)
 
 func _show_mission_recap() -> void:
+	var state := liblevel.load_mission_state()
 	_mr_title.text    = _selected_mission.get("title", "")
-	_mr_datetime.text = _format_mission_datetime(_selected_mission.get("start_datetime", ""))
+	_mr_datetime.text = _format_started_at(state.get("started_at", ""))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
 	mission_select.visible = false
@@ -225,6 +228,18 @@ func _format_mission_datetime(dt_str: String) -> String:
 	if d.size() < 3 or t.size() < 2:
 		return dt_str
 	return "Début : %s/%s/%s  %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
+
+func _format_started_at(dt_str: String) -> String:
+	if dt_str == "":
+		return "Date de départ inconnue"
+	var parts := dt_str.split(" ")
+	if parts.size() < 2:
+		return dt_str
+	var d := parts[0].split("-")
+	var t := parts[1].split(":")
+	if d.size() < 3 or t.size() < 2:
+		return dt_str
+	return "Commencé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
 func _parse_time_to_hour(time_str: String) -> float:
 	var parts := time_str.split(":")
