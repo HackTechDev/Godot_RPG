@@ -192,9 +192,15 @@ func _launch_mission(mission: Dictionary, resume: bool) -> void:
 func _show_mission_recap() -> void:
 	var state := liblevel.load_mission_state()
 	var started_at: String = state.get("started_at", "")
-	if started_at == "":
+	var saved_at: String   = state.get("saved_at", "")
+	# Initialise les champs manquants (anciennes sauvegardes) et écrit le fichier
+	if started_at == "" or saved_at == "":
 		var dt := Time.get_datetime_dict_from_system()
-		started_at = "%04d-%02d-%02d %02d:%02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second]
+		var now_str := "%04d-%02d-%02d %02d:%02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second]
+		if started_at == "":
+			started_at = now_str
+		if saved_at == "":
+			saved_at = now_str
 		liblevel.save_mission_state(
 			state.get("mission_id", Player_data.current_mission_id),
 			true,
@@ -202,7 +208,7 @@ func _show_mission_recap() -> void:
 			started_at
 		)
 	_mr_title.text    = _selected_mission.get("title", "")
-	_mr_datetime.text = _format_saved_at(state.get("saved_at", ""))
+	_mr_datetime.text = _format_saved_at(saved_at)
 	_mr_elapsed.text  = _format_elapsed(state.get("mission_elapsed_real", 0.0))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
@@ -330,8 +336,12 @@ func _on_quit_dialog_confirmed():
 	var current_scene = get_tree().get_current_scene().get_name()
 	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
 
-	if Player_data.current_mission_id != "" and Player_data.mission_real_start > 0.0:
-		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
+	if Player_data.current_mission_id != "":
+		var elapsed: float
+		if Player_data.mission_real_start > 0.0:
+			elapsed = Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
+		else:
+			elapsed = liblevel.load_mission_state().get("mission_elapsed_real", 0.0)
 		liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed)
 
 	if GameConfig.DEBUG:
