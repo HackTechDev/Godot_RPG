@@ -60,11 +60,14 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 func save_mission_state(mission_id: String, started: bool, elapsed_real: float = 0.0, started_at: String = "") -> void:
 	if started_at == "":
 		started_at = load_mission_state().get("started_at", "")
+	var now := Time.get_datetime_dict_from_system()
+	var saved_at := "%04d-%02d-%02d %02d:%02d:%02d" % [now.year, now.month, now.day, now.hour, now.minute, now.second]
 	var data := {
 		"mission_id": mission_id,
 		"started": started,
 		"mission_elapsed_real": elapsed_real,
-		"started_at": started_at
+		"started_at": started_at,
+		"saved_at": saved_at
 	}
 	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.WRITE)
 	if file:

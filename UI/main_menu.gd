@@ -202,7 +202,7 @@ func _show_mission_recap() -> void:
 			started_at
 		)
 	_mr_title.text    = _selected_mission.get("title", "")
-	_mr_datetime.text = _format_started_at(started_at)
+	_mr_datetime.text = _format_saved_at(state.get("saved_at", ""))
 	_mr_elapsed.text  = _format_elapsed(state.get("mission_elapsed_real", 0.0))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
@@ -252,6 +252,18 @@ func _format_started_at(dt_str: String) -> String:
 	if d.size() < 3 or t.size() < 2:
 		return dt_str
 	return "Commencé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
+
+func _format_saved_at(dt_str: String) -> String:
+	if dt_str == "":
+		return "Dernière sauvegarde inconnue"
+	var parts := dt_str.split(" ")
+	if parts.size() < 2:
+		return dt_str
+	var d := parts[0].split("-")
+	var t := parts[1].split(":")
+	if d.size() < 3 or t.size() < 2:
+		return dt_str
+	return "Sauvegardé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
 func _format_elapsed(seconds: float) -> String:
 	var total := int(seconds)
