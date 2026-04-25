@@ -185,7 +185,7 @@ func _launch_mission(mission: Dictionary, resume: bool) -> void:
 		Player_data.mission_sunset_hour  = _parse_time_to_hour(mission.get("sunset",  "20:00"))
 		var dt := Time.get_datetime_dict_from_system()
 		var started_at := "%04d-%02d-%02d %02d:%02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second]
-		liblevel.save_mission_state(Player_data.current_mission_id, false, 0.0, started_at)
+		liblevel.save_mission_state(Player_data.current_mission_id, true, 0.0, started_at)
 	SceneTransition.change_scene(Player_data.scene_path)
 
 func _show_mission_recap() -> void:
