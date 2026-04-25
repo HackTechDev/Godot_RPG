@@ -293,9 +293,8 @@ func _format_saved_at(dt_str: String) -> String:
 	return "Sauvegardé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
 func _format_elapsed(seconds: float) -> String:
-	var total := int(seconds)
-	var h := total / 3600
-	var m := (total % 3600) / 60
+	var h: int = int(seconds / 3600.0)
+	var m: int = int(fmod(seconds, 3600.0) / 60.0)
 	if h > 0:
 		return "Temps joué : %dh%02d" % [h, m]
 	elif m > 0:
