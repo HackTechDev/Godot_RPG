@@ -296,7 +296,7 @@ func _on_quit_dialog_confirmed():
 	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
 
 	if Player_data.current_mission_id != "" and Player_data.mission_real_start > 0.0:
-		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start
+		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
 		liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed)
 
 	if GameConfig.DEBUG:

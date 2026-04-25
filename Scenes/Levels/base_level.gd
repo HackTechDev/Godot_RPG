@@ -291,7 +291,7 @@ func _save_transition_state(player: Node2D) -> void:
 	var mechas        := get_tree().get_nodes_in_group("mecha")
 	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies, mechas)
 	if Player_data.current_mission_id != "" and Player_data.mission_real_start > 0.0:
-		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start
+		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
 		_liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed)
 	_liblevel.savePlayer({
 		"player_position":    [player.position.x, player.position.y],
