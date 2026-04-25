@@ -522,12 +522,13 @@ func _on_cc_create_pressed():
 		"appearance_feet":      Player_data.appearance_feet
 	})
 	liblevel.reinitializeLevel()
-	liblevel.load_game()
 	get_tree().paused = false
 	if not _pending_mission.is_empty():
+		liblevel.load_game()
 		_launch_mission(_pending_mission, false)
 	else:
-		SceneTransition.change_scene(Player_data.scene_path)
+		character_creation.visible = false
+		main.visible = true
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
