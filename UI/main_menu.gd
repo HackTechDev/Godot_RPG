@@ -190,8 +190,18 @@ func _launch_mission(mission: Dictionary, resume: bool) -> void:
 
 func _show_mission_recap() -> void:
 	var state := liblevel.load_mission_state()
+	var started_at: String = state.get("started_at", "")
+	if started_at == "":
+		var dt := Time.get_datetime_dict_from_system()
+		started_at = "%04d-%02d-%02d %02d:%02d:%02d" % [dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second]
+		liblevel.save_mission_state(
+			state.get("mission_id", Player_data.current_mission_id),
+			true,
+			state.get("mission_elapsed_real", 0.0),
+			started_at
+		)
 	_mr_title.text    = _selected_mission.get("title", "")
-	_mr_datetime.text = _format_started_at(state.get("started_at", ""))
+	_mr_datetime.text = _format_started_at(started_at)
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
 	mission_select.visible = false
