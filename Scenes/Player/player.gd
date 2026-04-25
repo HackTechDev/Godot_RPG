@@ -101,6 +101,10 @@ func _ready():
 	background_menu.position = Vector2(-576, -324)
 	background_menu.visible = false
 	background_menu.z_index = 10
+	background_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in background_menu.get_children():
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text_menu = menu_instance.get_node("MainMenuLayer")
 	text_menu.visible = false
 
