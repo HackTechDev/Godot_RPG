@@ -637,6 +637,18 @@ func _load_audio_settings():
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
 	GameConfig.show_cone = data.get("show_cone", true)
 
+func show_main_panel() -> void:
+	settings.visible = false
+	help.visible = false
+	audio_settings.visible = false
+	controls_settings.visible = false
+	debug_settings.visible = false
+	mission_select.visible = false
+	character_creation.visible = false
+	if _mr_panel:
+		_mr_panel.visible = false
+	main.visible = true
+
 func set_in_game_mode(enabled: bool) -> void:
 	_in_game = enabled
 	if _btn_settings_back:

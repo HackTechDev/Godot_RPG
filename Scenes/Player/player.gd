@@ -381,9 +381,7 @@ func _on_hud_home_requested():
 	display_menu = true
 	background_menu.visible = true
 	text_menu.visible = true
-	text_menu.main.visible = true
-	text_menu.settings.visible = false
-	text_menu.help.visible = false
+	text_menu.show_main_panel()
 	get_tree().paused = true
 
 func movement_sounds():
