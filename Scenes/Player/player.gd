@@ -766,8 +766,8 @@ func _mount_mecha(mecha: Mecha) -> void:
 	_mecha_cooldown = MECHA_COOLDOWN_TIME
 	Player_data.in_mecha = true
 	Player_data.current_mecha_id = mecha.mecha_id
-	# Joueur visible au premier plan sur le mecha
-	z_index = mecha.z_index + 1
+	master_sprite.visible = false
+	appearance_layers.visible = false
 	# Désactiver la collision du joueur (évite l'interférence avec les murs)
 	var col := get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if col:
@@ -788,7 +788,6 @@ func _dismount_mecha() -> void:
 	Player_data.in_mecha = false
 	Player_data.current_mecha_id = ""
 	_active_mecha = null
-	z_index = 0
 	# Réactiver collision
 	var col := get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if col:
