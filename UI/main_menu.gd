@@ -1,9 +1,13 @@
 extends CanvasLayer
 
+signal return_to_game
+
 const SETTINGS_PATH = "user://settings.json"
 const TOTAL_POINTS = 30
 
 var liblevel = preload("res://Lib/liblevel.gd").new()
+
+var _in_game: bool = false
 
 @onready var main: Control = $Main
 @onready var settings: Control = $Settings
@@ -21,6 +25,7 @@ var liblevel = preload("res://Lib/liblevel.gd").new()
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
 @onready var check_show_cone: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
+@onready var _btn_settings_back: Button = $Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack
 
 const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
 @onready var ms_list:        ItemList      = get_node(_MS_BASE + "/MissionList")
@@ -632,12 +637,20 @@ func _load_audio_settings():
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
 	GameConfig.show_cone = data.get("show_cone", true)
 
+func set_in_game_mode(enabled: bool) -> void:
+	_in_game = enabled
+	if _btn_settings_back:
+		_btn_settings_back.text = "Back to the game" if enabled else "Back"
+
 func _on_button_settings_back_pressed():
-	main.visible = true
 	settings.visible = false
 	help.visible = false
 	audio_settings.visible = false
 	controls_settings.visible = false
+	if _in_game:
+		return_to_game.emit()
+	else:
+		main.visible = true
 
 func _on_button_help_back_pressed() -> void:
 	main.visible = true

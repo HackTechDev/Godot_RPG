@@ -108,6 +108,8 @@ func _ready():
 	play_button_menu.text = "Back to the game"
 	play_button_menu.pressed.disconnect(text_menu._on_button_play_pressed)
 	play_button_menu.pressed.connect(_close_menu)
+	text_menu.set_in_game_mode(true)
+	text_menu.return_to_game.connect(_close_menu)
 
 	character_sheet_instance = character_sheet_scene.instantiate()
 	add_child(character_sheet_instance)
