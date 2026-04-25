@@ -37,6 +37,7 @@ var _pending_mission: Dictionary = {}
 var _mr_panel:      Control        = null
 var _mr_title:      Label          = null
 var _mr_datetime:   Label          = null
+var _mr_elapsed:    Label          = null
 var _mr_health:     Label          = null
 var _mr_objectives: RichTextLabel  = null
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
@@ -202,6 +203,7 @@ func _show_mission_recap() -> void:
 		)
 	_mr_title.text    = _selected_mission.get("title", "")
 	_mr_datetime.text = _format_started_at(started_at)
+	_mr_elapsed.text  = _format_elapsed(state.get("mission_elapsed_real", 0.0))
 	_mr_health.text   = "Santé restante : %d / %d PV" % [Player_data.player_health, Player_data.player_health_base]
 	_mr_objectives.text = _selected_mission.get("objectives", "")
 	mission_select.visible = false
@@ -250,6 +252,17 @@ func _format_started_at(dt_str: String) -> String:
 	if d.size() < 3 or t.size() < 2:
 		return dt_str
 	return "Commencé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
+
+func _format_elapsed(seconds: float) -> String:
+	var total := int(seconds)
+	var h := total / 3600
+	var m := (total % 3600) / 60
+	if h > 0:
+		return "Temps joué : %dh%02d" % [h, m]
+	elif m > 0:
+		return "Temps joué : %d min" % m
+	else:
+		return "Temps joué : moins d'une minute"
 
 func _parse_time_to_hour(time_str: String) -> float:
 	var parts := time_str.split(":")
@@ -652,6 +665,10 @@ func _build_mission_recap_panel() -> void:
 	_mr_datetime = Label.new()
 	_mr_datetime.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_mr_datetime)
+
+	_mr_elapsed = Label.new()
+	_mr_elapsed.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_mr_elapsed)
 
 	vbox.add_child(HSeparator.new())
 
