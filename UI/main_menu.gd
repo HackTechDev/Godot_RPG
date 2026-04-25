@@ -294,6 +294,7 @@ func _format_saved_at(dt_str: String) -> String:
 	var d := parts[0].split("-")
 	var t := parts[1].split(":")
 	if d.size() < 3 or t.size() < 2:
+
 		return dt_str
 	return "Sauvegardé le %s/%s/%s à %sh%s" % [d[2], d[1], d[0], t[0], t[1]]
 
