@@ -853,9 +853,7 @@ text = "Santé (Health)"
 
 [node name="HealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow" unique_id=1947799995]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="AttackRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=67133166]
 layout_mode = 2
@@ -868,9 +866,7 @@ text = "Attaque (Attack)"
 
 [node name="AttackSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow" unique_id=1171944306]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="DefenseRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1177060060]
 layout_mode = 2
@@ -883,9 +879,7 @@ text = "Défense (Defense)"
 
 [node name="DefenseSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow" unique_id=618969306]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="StaminaRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110001]
 layout_mode = 2
@@ -898,9 +892,7 @@ text = "Endurance (Stamina)"
 
 [node name="StaminaSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StaminaRow" unique_id=1111110003]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="StealthRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110004]
 layout_mode = 2
@@ -913,9 +905,7 @@ text = "Discrétion (Stealth)"
 
 [node name="StealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StealthRow" unique_id=1111110006]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="SpeedRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110007]
 layout_mode = 2
@@ -928,9 +918,7 @@ text = "Vitesse (Speed)"
 
 [node name="SpeedSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/SpeedRow" unique_id=1111110009]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="PrecisionRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110010]
 layout_mode = 2
@@ -943,9 +931,7 @@ text = "Précision (Precision)"
 
 [node name="PrecisionSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/PrecisionRow" unique_id=1111110012]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="StrengthRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110013]
 layout_mode = 2
@@ -958,9 +944,7 @@ text = "Force (Strength)"
 
 [node name="StrengthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StrengthRow" unique_id=1111110015]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="IntelligenceRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110016]
 layout_mode = 2
@@ -973,9 +957,7 @@ text = "Intelligence (Intelligence)"
 
 [node name="IntelligenceSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/IntelligenceRow" unique_id=1111110018]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="WeightRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110019]
 layout_mode = 2
@@ -988,9 +970,7 @@ text = "Capacité de charge (Weight)"
 
 [node name="WeightSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/WeightRow" unique_id=1111110021]
 layout_mode = 2
-min_value = 1.0
 max_value = 60.0
-value = 5.0
 
 [node name="LabelRemaining" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats" unique_id=1785024605]
 layout_mode = 2
