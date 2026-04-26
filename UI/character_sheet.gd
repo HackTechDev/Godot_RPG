@@ -1,8 +1,9 @@
 extends CanvasLayer
 
-const _BASE = "Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
-const _COL  = _BASE + "/ContentRow/StatsColumn"
-const _VP   = _BASE + "/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"
+const _BASE  = "Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
+const _COL   = _BASE + "/ContentRow/StatsColumn"
+const _VP    = _BASE + "/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"
+const _SP    = _BASE + "/StatsPanel/StatsGrid"
 
 @onready var label_health    = get_node(_COL + "/LabelHealth")
 @onready var label_attack    = get_node(_COL + "/LabelAttack")
@@ -13,6 +14,19 @@ const _VP   = _BASE + "/ContentRow/PreviewPanel/PreviewCenter/CharPreview/Previe
 @onready var label_inventory = get_node(_COL + "/LabelInventory")
 
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
+@onready var _content_row    = get_node(_BASE + "/ContentRow")
+@onready var _stats_panel    = get_node(_BASE + "/StatsPanel")
+
+@onready var _ls_health       = get_node(_SP + "/ColLeft/LabelStatHealth")
+@onready var _ls_attack       = get_node(_SP + "/ColLeft/LabelStatAttack")
+@onready var _ls_defense      = get_node(_SP + "/ColLeft/LabelStatDefense")
+@onready var _ls_stamina      = get_node(_SP + "/ColLeft/LabelStatStamina")
+@onready var _ls_stealth      = get_node(_SP + "/ColLeft/LabelStatStealth")
+@onready var _ls_speed        = get_node(_SP + "/ColRight/LabelStatSpeed")
+@onready var _ls_precision    = get_node(_SP + "/ColRight/LabelStatPrecision")
+@onready var _ls_strength     = get_node(_SP + "/ColRight/LabelStatStrength")
+@onready var _ls_intelligence = get_node(_SP + "/ColRight/LabelStatIntelligence")
+@onready var _ls_weight       = get_node(_SP + "/ColRight/LabelStatWeight")
 @onready var _spr_body       = get_node(_VP + "/SpriteBody")
 @onready var _spr_legs       = get_node(_VP + "/SpriteLegs")
 @onready var _spr_feet       = get_node(_VP + "/SpriteFeet")
@@ -43,7 +57,26 @@ func refresh():
 			lines.append("- " + item["label"])
 		label_inventory.text = "\n".join(lines)
 
+	_ls_health.text       = "Santé : %d / 20"              % Player_data.player_health
+	_ls_attack.text       = "Attaque : %d / 20"            % Player_data.player_attack
+	_ls_defense.text      = "Défense : %d / 20"            % Player_data.player_defense
+	_ls_stamina.text      = "Endurance : %d / 20"          % Player_data.player_stamina
+	_ls_stealth.text      = "Discrétion : %d / 20"         % Player_data.player_stealth
+	_ls_speed.text        = "Vitesse : %d / 20"            % Player_data.player_speed
+	_ls_precision.text    = "Précision : %d / 20"          % Player_data.player_precision
+	_ls_strength.text     = "Force : %d / 20"              % Player_data.player_strength
+	_ls_intelligence.text = "Intelligence : %d / 20"       % Player_data.player_intelligence
+	_ls_weight.text       = "Capacité de charge : %d / 20" % Player_data.player_weight_capacity
+
 	_refresh_preview()
+
+func _on_tab_fiche_pressed():
+	_content_row.visible = true
+	_stats_panel.visible = false
+
+func _on_tab_stats_pressed():
+	_content_row.visible = false
+	_stats_panel.visible = true
 
 func _refresh_preview():
 	if Player_data.appearance_body == "":

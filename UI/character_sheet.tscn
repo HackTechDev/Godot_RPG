@@ -47,6 +47,20 @@ horizontal_alignment = 1
 [node name="Separator" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=960052270]
 layout_mode = 2
 
+[node name="TabBar" type="HBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2200000001]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BtnFiche" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2200000002]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fiche"
+
+[node name="BtnStats" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2200000003]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stats"
+
 [node name="ContentRow" type="HBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1797863708]
 layout_mode = 2
 size_flags_vertical = 3
@@ -216,8 +230,94 @@ autowrap_mode = 3
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="StatsPanel" type="VBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2200000004]
+layout_mode = 2
+visible = false
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="StatsTitle" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel" unique_id=2200000005]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Statistiques du personnage"
+horizontal_alignment = 1
+
+[node name="StatsSep" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel" unique_id=2200000006]
+layout_mode = 2
+
+[node name="StatsGrid" type="HBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel" unique_id=2200000007]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ColLeft" type="VBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid" unique_id=2200000008]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="LabelStatHealth" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColLeft" unique_id=2200000009]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Santé : –"
+
+[node name="LabelStatAttack" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColLeft" unique_id=2200000010]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Attaque : –"
+
+[node name="LabelStatDefense" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColLeft" unique_id=2200000011]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Défense : –"
+
+[node name="LabelStatStamina" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColLeft" unique_id=2200000012]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Endurance : –"
+
+[node name="LabelStatStealth" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColLeft" unique_id=2200000013]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Discrétion : –"
+
+[node name="ColRight" type="VBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid" unique_id=2200000014]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="LabelStatSpeed" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000015]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Vitesse : –"
+
+[node name="LabelStatPrecision" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000016]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Précision : –"
+
+[node name="LabelStatStrength" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000017]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Force : –"
+
+[node name="LabelStatIntelligence" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000018]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Intelligence : –"
+
+[node name="LabelStatWeight" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000019]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Capacité de charge : –"
+
+[node name="StatsSpacer" type="Control" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel" unique_id=2200000020]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="ButtonClose" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2098477626]
 layout_mode = 2
 text = "Fermer"
 
+[connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnFiche" to="." method="_on_tab_fiche_pressed"]
+[connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnStats" to="." method="_on_tab_stats_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
