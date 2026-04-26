@@ -16,7 +16,7 @@
 extends EditorScript
 
 # ── Constantes ────────────────────────────────────────────────────────────────
-const TILE_PX      := 200
+const TILE_PX      := 128   # 8 × tile_size (16 px) = 128 px par caractère ASCII
 const TEMPLATE     := "res://Scenes/Levels/level_4/level_4.tscn"
 const LEVELS_BASE  := "res://Scenes/Levels"
 const MISSIONS_RES := "res://missions.json"
@@ -146,12 +146,12 @@ func _write_level(n: int, cfg: Dictionary, gnd: Array[Vector2i], wll: Array[Vect
 	ct = ct.replace(
 		'[node name="level_4" type="Node2D" unique_id=1361413524]',
 		'[node name="level_%d" type="Node2D" unique_id=%d]' % [n, nid])
-	# Scale 12.5× sur le nœud TileMap : tuile atlas 16 px → 200 px monde.
-	# Le tile_size (16 px) et les polygones de collision (±8 px) restent
-	# inchangés ; le transform du nœud les agrandit automatiquement.
+	# Scale 8× : tuile atlas 16 px × 8 = 128 px par caractère ASCII en monde.
+	# tile_size (16 px) et polygones de collision (±8 px) non modifiés ;
+	# le transform du nœud les agrandit automatiquement (±8 × 8 = ±64 px).
 	ct = ct.replace(
 		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ny_sort_enabled',
-		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ntransform = Transform2D(12.5, 0, 0, 12.5, 0, 0)\ny_sort_enabled')
+		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ntransform = Transform2D(8, 0, 0, 8, 0, 0)\ny_sort_enabled')
 
 	ct = _replace_layer(ct, "layer_0", _make_arr(gnd, GROUND_SRC, TILE_GROUND))
 	ct = _replace_layer(ct, "layer_1", _make_arr(wll, WALL_SRC,   TILE_WALL))
@@ -171,10 +171,12 @@ func _write_level(n: int, cfg: Dictionary, gnd: Array[Vector2i], wll: Array[Vect
 			'extends "res://Scenes/Levels/base_level.gd"\n\nfunc _ready():\n\tsuper._ready()\n')
 	_write(dir + "/level_%d.gd.uid" % n, "uid://" + uid_gd)
 
-	_update_mission_spawn(n, sp.x * TILE_PX, sp.y * TILE_PX)
+	# Spawn au centre de la tuile 'S' : garantit une position dans une salle
+	var half := TILE_PX / 2
+	_update_mission_spawn(n, sp.x * TILE_PX + half, sp.y * TILE_PX + half)
 
 	print("level_%d généré ✓  sol:%d  murs:%d  spawn:(%d,%d)px" % [
-		n, gnd.size(), wll.size(), sp.x * TILE_PX, sp.y * TILE_PX])
+		n, gnd.size(), wll.size(), sp.x * TILE_PX + half, sp.y * TILE_PX + half])
 
 # ── Encodage PackedInt32Array ──────────────────────────────────────────────────
 func _encode_cell(x: int, y: int) -> int:
