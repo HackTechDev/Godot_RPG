@@ -1,112 +1,142 @@
 [
-  {
-	"id": "mission_01",
-	"title": "Opération Aube Rouge",
-	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-	"spawn": { "x": 440, "y": 136 },
-	"start_datetime": "2024-03-15 06:00",
-	"sunrise": "06:00",
-	"sunset": "20:30",
-	"description": "Les zombies ont envahi la zone industrielle du secteur nord. Votre équipe est dépêchée pour sécuriser le périmètre et éliminer toute menace avant que la situation ne devienne incontrôlable.",
-	"objectives": "• Atteindre le poste de commandement\n• Neutraliser les zombies présents dans le secteur\n• Récupérer les données sur les ordinateurs"
-  },
-  {
-	"id": "mission_02",
-	"title": "Extraction Foxtrot",
-	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-	"spawn": { "x": 440, "y": 136 },
-	"start_datetime": "2024-06-21 14:30",
-	"sunrise": "06:30",
-	"sunset": "21:00",
-	"description": "Un agent de renseignement est bloqué dans le district est. La zone est lourdement infestée. Vous devez le localiser et assurer son évacuation.",
-	"objectives": "• Localiser l'agent dans le district est\n• Sécuriser la zone d'extraction\n• Évacuer l'agent sain et sauf"
-  },
-  {
-	"id": "mission_03",
-	"title": "Dernier Rempart",
-	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-	"spawn": { "x": 440, "y": 136 },
-	"start_datetime": "2024-11-03 22:00",
-	"sunrise": "07:00",
-	"sunset": "18:00",
-	"description": "La dernière ligne de défense est sur le point de céder. Vous êtes envoyé en renfort pour stopper l'avancée des zombies et protéger les civils encore présents dans la zone.",
-	"objectives": "• Rejoindre les forces amies au périmètre\n• Repousser les vagues d'attaque\n• Protéger les points d'évacuation civile"
-  },
-  {
-	"id": "mission_04",
-	"title": "Opération Marteau Gris",
-	"scene": "res://Scenes/Levels/level_2/level_2.tscn",
-	"spawn": { "x": 200, "y": 300 },
-	"start_datetime": "2024-04-08 05:30",
-	"sunrise": "06:00",
-	"sunset": "20:30",
-	"description": "Une cache d'armement a été détectée dans le secteur industriel sud. Des robots hostiles patrouillent la zone. Neutralisez les menaces et récupérez le matériel avant l'aube.",
-	"objectives": "• Pénétrer dans le secteur industriel sud\n• Éliminer les patrouilles ennemies\n• Sécuriser la cache d'armement"
-  },
-  {
-	"id": "mission_05",
-	"title": "Nuit Blanche",
-	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-	"spawn": { "x": 200, "y": 400 },
-	"start_datetime": "2024-08-17 23:45",
-	"sunrise": "05:30",
-	"sunset": "20:00",
-	"description": "Des signaux radio non identifiés ont été captés dans la zone après minuit. Une unité de reconnaissance doit infiltrer le secteur, identifier la source et neutraliser toute présence ennemie.",
-	"objectives": "• Infiltrer la zone sans déclencher l'alarme\n• Localiser la source des transmissions\n• Récupérer l'équipement de communication"
-  },
-  {
-	"id": "mission_06",
-	"title": "Zone Delta",
-	"scene": "res://Scenes/Levels/level_4/level_4.tscn",
-	"spawn": { "x": 100, "y": 383 },
-	"start_datetime": "2024-09-02 12:00",
-	"sunrise": "07:00",
-	"sunset": "20:00",
-	"description": "Le secteur Delta est une zone de transit stratégique tombée aux mains des robots ennemis. Reprenez le contrôle du couloir et rétablissez la liaison entre les deux bases alliées.",
-	"objectives": "• Traverser le couloir Delta sous couverture\n• Détruire les tourelles ennemies\n• Rétablir la liaison radio avec la base nord"
-  },
-  {
-	"id": "mission_07",
-	"title": "Évacuation Bravo",
-	"scene": "res://Scenes/Levels/level_3/level_3.tscn",
-	"spawn": { "x": 440, "y": 136 },
-	"start_datetime": "2024-07-30 15:15",
-	"sunrise": "06:30",
-	"sunset": "20:30",
-	"description": "Un groupe de civils est retranché dans un bâtiment du secteur Bravo, cerné par des hordes de zombies. L'heure tourne — chaque minute compte pour les atteindre et les conduire en sécurité.",
-	"objectives": "• Atteindre le bâtiment Bravo-7\n• Escorter les civils jusqu'au point de collecte\n• Tenir la position jusqu'à l'arrivée des renforts"
-  },
-  {
-	"id": "mission_08",
-	"title": "Protocole Oméga",
-	"scene": "res://Scenes/Levels/level_2/level_2.tscn",
-	"spawn": { "x": 350, "y": 200 },
-	"start_datetime": "2024-12-24 20:00",
-	"sunrise": "08:00",
-	"sunset": "16:30",
-	"description": "Des informations classifiées sur le Protocole Oméga ont été volées et stockées sur des terminaux dans le secteur sud. Récupérez les données avant qu'elles ne soient transmises à l'ennemi.",
-	"objectives": "• Neutraliser les gardes du périmètre\n• Accéder aux terminaux classifiés\n• Extraire les données et quitter la zone"
-  },
-  {
-	"id": "mission_09",
-	"title": "Chasse aux Fantômes",
-	"scene": "res://Scenes/Levels/level_1/level_1.tscn",
-	"spawn": { "x": 550, "y": 300 },
-	"start_datetime": "2025-01-19 08:45",
-	"sunrise": "08:00",
-	"sunset": "17:00",
-	"description": "Des unités ennemies fantômes se déplacent dans le secteur en utilisant des brouilleurs de signal. Localisez et neutralisez ces unités avant qu'elles ne sabotent les infrastructures critiques.",
-	"objectives": "• Identifier les positions des unités fantômes\n• Détruire les brouilleurs de signal\n• Sécuriser les infrastructures critiques"
-  },
-  {
-	"id": "mission_10",
-	"title": "Forteresse Assiégée",
-	"scene": "res://Scenes/Levels/level_4/level_4.tscn",
-	"spawn": { "x": 100, "y": 200 },
-	"start_datetime": "2025-03-05 02:30",
-	"sunrise": "07:00",
-	"sunset": "19:30",
-	"description": "Le poste avancé Kilo-4 est assiégé depuis 48 heures. Les défenseurs sont à court de munitions et de vivres. Percez les lignes ennemies, ravitaillez la garnison et brisez le siège.",
-	"objectives": "• Percer les lignes ennemies au nord\n• Livrer les ravitaillements à la garnison\n• Éliminer le commandement ennemi pour lever le siège"
-  }
+	{
+		"description": "Les zombies ont envahi la zone industrielle du secteur nord. Votre équipe est dépêchée pour sécuriser le périmètre et éliminer toute menace avant que la situation ne devienne incontrôlable.",
+		"id": "mission_01",
+		"objectives": "• Atteindre le poste de commandement\n• Neutraliser les zombies présents dans le secteur\n• Récupérer les données sur les ordinateurs",
+		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"spawn": {
+			"x": 440.0,
+			"y": 136.0
+		},
+		"start_datetime": "2024-03-15 06:00",
+		"sunrise": "06:00",
+		"sunset": "20:30",
+		"title": "Opération Aube Rouge"
+	},
+	{
+		"description": "Un agent de renseignement est bloqué dans le district est. La zone est lourdement infestée. Vous devez le localiser et assurer son évacuation.",
+		"id": "mission_02",
+		"objectives": "• Localiser l'agent dans le district est\n• Sécuriser la zone d'extraction\n• Évacuer l'agent sain et sauf",
+		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"spawn": {
+			"x": 440.0,
+			"y": 136.0
+		},
+		"start_datetime": "2024-06-21 14:30",
+		"sunrise": "06:30",
+		"sunset": "21:00",
+		"title": "Extraction Foxtrot"
+	},
+	{
+		"description": "La dernière ligne de défense est sur le point de céder. Vous êtes envoyé en renfort pour stopper l'avancée des zombies et protéger les civils encore présents dans la zone.",
+		"id": "mission_03",
+		"objectives": "• Rejoindre les forces amies au périmètre\n• Repousser les vagues d'attaque\n• Protéger les points d'évacuation civile",
+		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"spawn": {
+			"x": 440.0,
+			"y": 136.0
+		},
+		"start_datetime": "2024-11-03 22:00",
+		"sunrise": "07:00",
+		"sunset": "18:00",
+		"title": "Dernier Rempart"
+	},
+	{
+		"description": "Une cache d'armement a été détectée dans le secteur industriel sud. Des robots hostiles patrouillent la zone. Neutralisez les menaces et récupérez le matériel avant l'aube.",
+		"id": "mission_04",
+		"objectives": "• Pénétrer dans le secteur industriel sud\n• Éliminer les patrouilles ennemies\n• Sécuriser la cache d'armement",
+		"scene": "res://Scenes/Levels/level_2/level_2.tscn",
+		"spawn": {
+			"x": 200.0,
+			"y": 300.0
+		},
+		"start_datetime": "2024-04-08 05:30",
+		"sunrise": "06:00",
+		"sunset": "20:30",
+		"title": "Opération Marteau Gris"
+	},
+	{
+		"description": "Des signaux radio non identifiés ont été captés dans la zone après minuit. Une unité de reconnaissance doit infiltrer le secteur, identifier la source et neutraliser toute présence ennemie.",
+		"id": "mission_05",
+		"objectives": "• Infiltrer la zone sans déclencher l'alarme\n• Localiser la source des transmissions\n• Récupérer l'équipement de communication",
+		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"spawn": {
+			"x": 200.0,
+			"y": 400.0
+		},
+		"start_datetime": "2024-08-17 23:45",
+		"sunrise": "05:30",
+		"sunset": "20:00",
+		"title": "Nuit Blanche"
+	},
+	{
+		"description": "Le secteur Delta est une zone de transit stratégique tombée aux mains des robots ennemis. Reprenez le contrôle du couloir et rétablissez la liaison entre les deux bases alliées.",
+		"id": "mission_06",
+		"objectives": "• Traverser le couloir Delta sous couverture\n• Détruire les tourelles ennemies\n• Rétablir la liaison radio avec la base nord",
+		"scene": "res://Scenes/Levels/level_4/level_4.tscn",
+		"spawn": {
+			"x": 100.0,
+			"y": 383.0
+		},
+		"start_datetime": "2024-09-02 12:00",
+		"sunrise": "07:00",
+		"sunset": "20:00",
+		"title": "Zone Delta"
+	},
+	{
+		"description": "Un groupe de civils est retranché dans un bâtiment du secteur Bravo, cerné par des hordes de zombies. L'heure tourne — chaque minute compte pour les atteindre et les conduire en sécurité.",
+		"id": "mission_07",
+		"objectives": "• Atteindre le bâtiment Bravo-7\n• Escorter les civils jusqu'au point de collecte\n• Tenir la position jusqu'à l'arrivée des renforts",
+		"scene": "res://Scenes/Levels/level_3/level_3.tscn",
+		"spawn": {
+			"x": 440.0,
+			"y": 136.0
+		},
+		"start_datetime": "2024-07-30 15:15",
+		"sunrise": "06:30",
+		"sunset": "20:30",
+		"title": "Évacuation Bravo"
+	},
+	{
+		"description": "Des informations classifiées sur le Protocole Oméga ont été volées et stockées sur des terminaux dans le secteur sud. Récupérez les données avant qu'elles ne soient transmises à l'ennemi.",
+		"id": "mission_08",
+		"objectives": "• Neutraliser les gardes du périmètre\n• Accéder aux terminaux classifiés\n• Extraire les données et quitter la zone",
+		"scene": "res://Scenes/Levels/level_2/level_2.tscn",
+		"spawn": {
+			"x": 350.0,
+			"y": 200.0
+		},
+		"start_datetime": "2024-12-24 20:00",
+		"sunrise": "08:00",
+		"sunset": "16:30",
+		"title": "Protocole Oméga"
+	},
+	{
+		"description": "Des unités ennemies fantômes se déplacent dans le secteur en utilisant des brouilleurs de signal. Localisez et neutralisez ces unités avant qu'elles ne sabotent les infrastructures critiques.",
+		"id": "mission_09",
+		"objectives": "• Identifier les positions des unités fantômes\n• Détruire les brouilleurs de signal\n• Sécuriser les infrastructures critiques",
+		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"spawn": {
+			"x": 550.0,
+			"y": 300.0
+		},
+		"start_datetime": "2025-01-19 08:45",
+		"sunrise": "08:00",
+		"sunset": "17:00",
+		"title": "Chasse aux Fantômes"
+	},
+	{
+		"description": "Le poste avancé Kilo-4 est assiégé depuis 48 heures. Les défenseurs sont à court de munitions et de vivres. Percez les lignes ennemies, ravitaillez la garnison et brisez le siège.",
+		"id": "mission_10",
+		"objectives": "• Percer les lignes ennemies au nord\n• Livrer les ravitaillements à la garnison\n• Éliminer le commandement ennemi pour lever le siège",
+		"scene": "res://Scenes/Levels/level_10/level_10.tscn",
+		"spawn": {
+			"x": 12224,
+			"y": 9024
+		},
+		"start_datetime": "2025-03-05 08:30",
+		"sunrise": "07:00",
+		"sunset": "19:30",
+		"title": "Forteresse Assiégée"
+	}
 ]
