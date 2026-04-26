@@ -7,16 +7,15 @@
 ##   '>' = sortie de niveau                     → tuile sol
 ##   ' ' = vide / mur extérieur                → aucune tuile
 ##
-## Les murs Godot (layer_1, avec collision) sont auto-générés :
-## toute cellule ' ' adjacente (8 directions) à une cellule sol
-## devient une tuile mur.
-##
-## Échelle : 1 caractère ASCII = 1 tuile = 200 pixels dans Godot.
+## Chaque caractère ASCII = 8×8 tuiles natives (tile_size 16 px × 8 = 128 px).
+## Aucun scale appliqué sur le nœud TileMap : les tuiles s'affichent
+## à leur taille naturelle, sans redimensionnement.
 @tool
 extends EditorScript
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 const TILE_PX      := 128   # 8 × tile_size (16 px) = 128 px par caractère ASCII
+const T            := 8     # tuiles par caractère ASCII (chaque dim)
 const TEMPLATE     := "res://Scenes/Levels/level_4/level_4.tscn"
 const LEVELS_BASE  := "res://Scenes/Levels"
 const MISSIONS_RES := "res://missions.json"
@@ -51,10 +50,9 @@ func generate_from_file(n: int, txt_path: String) -> void:
 
 	var lines := text.split("\n")
 
-	# ── Étape 1 : identifier les cellules sol ────────────────────────────────
-	# '#' = sol, 'S' = spawn (sol), '>' = sortie (sol), ' ' = vide
-	var floor_map: Dictionary = {}   # Vector2i → String (le caractère)
-	var sp := Vector2i(-1, -1)
+	# ── Étape 1 : lire les cellules ASCII ────────────────────────────────────
+	var ascii_floor: Dictionary = {}   # Vector2i → char
+	var sp_ascii    := Vector2i(-1, -1)
 
 	for y in lines.size():
 		var row: String = lines[y]
@@ -62,36 +60,41 @@ func generate_from_file(n: int, txt_path: String) -> void:
 			var c: String = row[x]
 			match c:
 				"#", "S", ">":
-					floor_map[Vector2i(x, y)] = c
-					if c == "S" and sp.x == -1:
-						sp = Vector2i(x, y)
+					ascii_floor[Vector2i(x, y)] = c
+					if c == "S" and sp_ascii.x == -1:
+						sp_ascii = Vector2i(x, y)
 
-	if floor_map.is_empty():
+	if ascii_floor.is_empty():
 		push_error("Aucune cellule sol trouvée dans : " + txt_path); return
 
-	var gnd: Array[Vector2i] = []
-	for pos: Vector2i in floor_map:
-		gnd.append(pos)
-
-	# ── Étape 2 : générer les murs autour des cellules sol ───────────────────
-	# Chaque cellule ' ' adjacente (8 directions) à une cellule sol → mur Godot
-	var wall_set: Dictionary = {}
-	for pos: Vector2i in gnd:
+	# ── Étape 2 : murs ASCII = cellules vides adjacentes aux cellules sol ────
+	var ascii_wall: Dictionary = {}
+	for pos: Vector2i in ascii_floor:
 		for dy: int in range(-1, 2):
 			for dx: int in range(-1, 2):
-				if dx == 0 and dy == 0:
-					continue
+				if dx == 0 and dy == 0: continue
 				var nb := Vector2i(pos.x + dx, pos.y + dy)
-				if not floor_map.has(nb):
-					wall_set[nb] = true
+				if not ascii_floor.has(nb):
+					ascii_wall[nb] = true
 
+	# ── Étape 3 : expansion T×T tuiles natives par cellule ASCII ─────────────
+	# Chaque char ASCII → bloc T×T tuiles à leur taille naturelle (pas de scale).
+	var gnd: Array[Vector2i] = []
 	var wll: Array[Vector2i] = []
-	for pos: Vector2i in wall_set:
-		wll.append(pos)
+
+	for pos: Vector2i in ascii_floor:
+		for dy: int in T:
+			for dx: int in T:
+				gnd.append(Vector2i(pos.x * T + dx, pos.y * T + dy))
+
+	for pos: Vector2i in ascii_wall:
+		for dy: int in T:
+			for dx: int in T:
+				wll.append(Vector2i(pos.x * T + dx, pos.y * T + dy))
 
 	var cfg := LEVEL_CFGS[n] as Dictionary
-	if sp.x == -1:
-		sp = cfg["spawn"] as Vector2i
+	var sp  := sp_ascii if sp_ascii.x != -1 else cfg["spawn"] as Vector2i
+	if sp_ascii.x == -1:
 		print("  Aucun 'S' trouvé — spawn config utilisé : (%d, %d)" % [sp.x, sp.y])
 
 	_write_level(n, cfg, gnd, wll, sp)
@@ -146,12 +149,8 @@ func _write_level(n: int, cfg: Dictionary, gnd: Array[Vector2i], wll: Array[Vect
 	ct = ct.replace(
 		'[node name="level_4" type="Node2D" unique_id=1361413524]',
 		'[node name="level_%d" type="Node2D" unique_id=%d]' % [n, nid])
-	# Scale 8× : tuile atlas 16 px × 8 = 128 px par caractère ASCII en monde.
-	# tile_size (16 px) et polygones de collision (±8 px) non modifiés ;
-	# le transform du nœud les agrandit automatiquement (±8 × 8 = ±64 px).
-	ct = ct.replace(
-		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ny_sort_enabled',
-		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ntransform = Transform2D(8, 0, 0, 8, 0, 0)\ny_sort_enabled')
+	# Pas de scale sur le TileMap : les tuiles sont à leur taille naturelle
+	# (16 px). L'expansion T×T par cellule ASCII donne 128 px par caractère.
 
 	ct = _replace_layer(ct, "layer_0", _make_arr(gnd, GROUND_SRC, TILE_GROUND))
 	ct = _replace_layer(ct, "layer_1", _make_arr(wll, WALL_SRC,   TILE_WALL))
