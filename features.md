@@ -695,3 +695,127 @@ Récapitulatif de toutes les modifications apportées au projet.
 - **CameraController** : suit la cible avec lerp (`LERP_SPEED = 5.0`) et zoome progressivement lors du pilotage (`MECHA_ZOOM = 0.8`, `DEFAULT_ZOOM = 1.0`) ; utilise `EventBus.player_mounted_mecha` / `player_dismounted_mecha`
 - **Sauvegarde JSON** : positions des Mechas persistées dans `user://level_X/mechas.json` (priorité) → `res://Scenes/Levels/level_X/mechas.json` (fallback) ; chargement dans `base_level._load_mechas()`
 - **Fichiers :** `Objects/Mecha/mecha.gd`, `Objects/Mecha/mecha.tscn`, `Autoload/CameraController.gd`, `Autoload/EventBus.gd`, `Scenes/Levels/base_level.gd`, `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `Scenes/Levels/level_1/mechas.json`
+
+---
+
+## Référence — Statistiques de l'armurerie
+
+Chaque équipement de l'armurerie possède des statistiques communes et des statistiques spécifiques à sa catégorie. Voici la signification de chaque champ.
+
+### Statistiques communes (toutes catégories)
+
+| Champ | Signification |
+|---|---|
+| `name` | Nom complet de l'équipement affiché dans l'interface |
+| `model` | Désignation constructeur / modèle |
+| `version` | Variante ou version du modèle |
+| `category` | Catégorie interne : `weapon`, `armor`, `gadget`, `clothing` |
+| `description` | Texte descriptif affiché dans la fiche de détail |
+| `weight` | Masse de l'équipement en kilogrammes — influence la capacité de charge utilisée |
+| `price` | Coût d'achat en crédits (¤) — déduit de `player_credit` à l'achat |
+
+---
+
+### Armes (`Armory/weapons.json`)
+
+| Champ | Signification |
+|---|---|
+| `damage` | Points de dégâts infligés à l'ennemi par tir ou coup réussi |
+| `precision` | Score de précision (échelle 1–10) : plus la valeur est élevée, plus la chance de toucher est grande — comparé à `player_precision` lors du jet de dés |
+| `range` | Portée effective de l'arme en mètres — au-delà, les tirs subissent une pénalité |
+| `fire_rate` | Cadence de tir en coups par minute — influence la rapidité des échanges |
+| `reload_time` | Durée de rechargement en secondes — pendant ce temps le joueur est vulnérable |
+| `magazine_size` | Nombre de munitions par chargeur avant rechargement obligatoire |
+| `noise` | Niveau sonore produit à chaque tir (échelle 1–10) — une valeur élevée alerte les ennemis à plus grande distance |
+| `recoil` | Recul produit lors du tir (échelle 1–10) — une valeur élevée dégrade la précision des tirs rapides successifs |
+| `mobility_penalty` | Malus de vitesse de déplacement (points soustraits à la vitesse de base) — les armes lourdes ralentissent le joueur |
+| `stealth_modifier` | Modificateur de discrétion : valeur négative = l'arme trahit la position du joueur ; valeur positive = l'arme aide à rester discret |
+| `fire_modes` | Liste des modes de tir disponibles : `semi` (semi-automatique), `auto` (automatique), `burst` (rafale), `bolt_action` (verrou, un coup à la fois), `melee` (corps-à-corps) |
+| `ammo_type` | Type de munitions requis (ex. `5.56mm`, `9mm`, `12 gauge`) — détermine la compatibilité avec les approvisionnements |
+| `can_attach_silencer` | `true` si un silencieux peut être monté — réduit le bruit et le modificateur de discrétion |
+
+---
+
+### Protections (`Armory/protections.json`)
+
+| Champ | Signification |
+|---|---|
+| `defense` | Bonus de défense ajouté à `player_defense` — augmente la résistance aux attaques ennemies lors des jets de défense |
+| `damage_reduction` | Pourcentage de réduction des dégâts reçus (ex. `0.20` = 20 %) — appliqué à chaque coup encaissé |
+| `mobility_penalty` | Malus de vitesse (points soustraits) — les armures lourdes ralentissent significativement le joueur |
+| `noise_increase` | Augmentation du bruit émis lors des déplacements — une armure bruyante compromet les approches discrètes |
+| `stealth_penalty` | Malus de discrétion : rend le joueur plus facilement détectable par les ennemis |
+
+---
+
+### Matériel (`Armory/gears.json`)
+
+| Champ | Signification |
+|---|---|
+| `effect` | Identifiant de l'effet spécial déclenché à l'utilisation — valeurs possibles : |
+| | `reveal_enemies` — révèle la position des ennemis à proximité sur la carte |
+| | `night_vision` — active la vision nocturne (réduit l'impact de l'obscurité) |
+| | `thermal_detection` — détection thermique des ennemis à travers les obstacles |
+| | `stun_enemies` — étourdit les ennemis dans le rayon d'action pendant la durée |
+| | `smoke_screen` — crée un écran de fumée bloquant la ligne de vue ennemie |
+| | `heal_player` — soigne le joueur d'un nombre de PV déterminé |
+| | `unlock_silent` — permet de crocheter une serrure sans bruit |
+| | `breach_door` — force l'ouverture d'une porte verrouillée |
+| | `disable_electronics` — désactive temporairement les appareils électroniques proches |
+| | `squad_coordination` — améliore temporairement les statistiques du groupe |
+| `detection_radius` | Rayon d'action de l'effet en mètres — zone affectée autour du joueur lors de l'activation |
+| `duration` | Durée d'activation de l'effet en secondes — au-delà le gadget doit recharger |
+| `cooldown` | Temps de recharge en secondes entre deux utilisations consécutives |
+
+---
+
+### Vêtements (`Armory/clothes.json`)
+
+| Champ | Signification |
+|---|---|
+| `stealth_bonus` | Bonus de discrétion ajouté à `player_stealth` — rend le joueur plus difficile à détecter |
+| `mobility_bonus` | Bonus de vitesse de déplacement — les tenues légères améliorent l'agilité |
+| `noise_reduction` | Réduction du bruit émis lors des déplacements — crucial pour les approches silencieuses |
+| `visibility_reduction` | Réduction de la visibilité du joueur aux yeux des ennemis (camouflage visuel) |
+| `temperature_resistance` | Résistance aux conditions climatiques extrêmes (chaleur, froid) — influence la stamina dans les environnements hostiles |
+| `defense` | Bonus de défense — certaines tenues offrent une protection physique légère |
+| `mobility_penalty` | Malus de vitesse — certains équipements encombrants (gilets tactiques, combinaisons) ralentissent le joueur |
+| `noise_increase` | Augmentation du bruit — certains matériaux (cuir rigide, équipements métalliques) produisent du son |
+| `stealth_penalty` | Malus de discrétion — certaines tenues aux couleurs vives ou matériaux réfléchissants trahissent la position |
+
+---
+
+### Correspondance affichage → clé JSON
+
+Le tableau suivant relie le label affiché dans l'interface (onglet Armurerie et popup de détail) à la clé JSON correspondante.
+
+| Affiché | Clé JSON | Catégorie |
+|---|---|---|
+| Dégâts | `damage` | Arme |
+| Précision | `precision` | Arme |
+| Portée (m) | `range` | Arme |
+| Cadence (cps/min) | `fire_rate` | Arme |
+| Rechargement (s) | `reload_time` | Arme |
+| Capacité chargeur | `magazine_size` | Arme |
+| Bruit | `noise` | Arme |
+| Recul | `recoil` | Arme |
+| Modes de tir | `fire_modes` | Arme |
+| Munitions | `ammo_type` | Arme |
+| Silencieux possible | `can_attach_silencer` | Arme |
+| Défense | `defense` | Protection / Vêtement |
+| Réduction dégâts | `damage_reduction` | Protection |
+| Effet | `effect` | Matériel |
+| Rayon (m) | `detection_radius` | Matériel |
+| Durée (s) | `duration` | Matériel |
+| Recharge (s) | `cooldown` | Matériel |
+| Bonus discrétion | `stealth_bonus` | Vêtement |
+| Bonus mobilité | `mobility_bonus` | Vêtement |
+| Réduction bruit | `noise_reduction` | Vêtement |
+| Réduction visibilité | `visibility_reduction` | Vêtement |
+| Résistance température | `temperature_resistance` | Vêtement |
+| Pénalité mobilité | `mobility_penalty` | Arme / Protection / Vêtement |
+| Pénalité discrétion | `stealth_penalty` | Protection / Vêtement |
+| Mod. discrétion | `stealth_modifier` | Arme |
+| Augmentation bruit | `noise_increase` | Protection / Vêtement |
+| Poids | `weight` | Toutes |
+| Prix | `price` | Toutes |
