@@ -689,7 +689,7 @@ func show_main_panel() -> void:
 func set_in_game_mode(enabled: bool) -> void:
 	_in_game = enabled
 	if _btn_settings_back:
-		_btn_settings_back.text = "Back to the game" if enabled else "Back"
+		_btn_settings_back.text = "Retour au jeu" if enabled else "Retour"
 
 func _on_button_settings_back_pressed():
 	settings.visible = false

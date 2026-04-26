@@ -102,26 +102,26 @@ vertical_alignment = 1
 [node name="ButtonPlay" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1018241128]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Play"
+text = "Jouer"
 
 [node name="ButtonSettings" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=806568808]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Settings"
+text = "Paramètres"
 
 [node name="ButtonHelp" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=500073050]
 layout_mode = 2
-text = "Help"
+text = "Aide"
 
 [node name="ButtonCreateCharacter" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=301613310]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Create Character Sheet"
+text = "Créer un personnage"
 
 [node name="ButtonQuit" type="Button" parent="MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=169991404]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Quit"
+text = "Quitter"
 
 [node name="Settings" type="Control" parent="MainMenuLayer" unique_id=677344004]
 visible = false
@@ -159,7 +159,7 @@ theme_override_constants/separation = 8
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
-text = "Settings"
+text = "Paramètres"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -173,7 +173,7 @@ text = "Audio"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "Video"
+text = "Vidéo"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -181,13 +181,13 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "Controls"
+text = "Contrôles"
 
 [node name="Network" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=619515010]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "Network"
+text = "Réseau"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -195,25 +195,25 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "Compatibility"
+text = "Compatibilité"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Reinitialize" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=181122789]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Reinitialize"
+text = "Réinitialiser"
 
 [node name="Debug" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=543219876]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "Debug"
+text = "Débogage"
 
 [node name="ButtonSettingsBack" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=134033988]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Back"
+text = "Retour"
 
 [node name="Help" type="Control" parent="MainMenuLayer" unique_id=64381400]
 visible = false
@@ -243,7 +243,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=513865787]
 layout_mode = 2
-text = "Help"
+text = "Aide"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=214057657]
@@ -253,7 +253,7 @@ Godot : Version 4.6.2"
 
 [node name="ButtonHelpBack" type="Button" parent="MainMenuLayer/Help/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1669289607]
 layout_mode = 2
-text = "Back"
+text = "Retour"
 
 [node name="AudioSettings" type="Control" parent="MainMenuLayer" unique_id=2077541515]
 visible = false
@@ -300,7 +300,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 button_pressed = true
-text = "Music"
+text = "Musique"
 
 [node name="LabelVolume" type="Label" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=538222356]
 layout_mode = 2
@@ -332,7 +332,7 @@ value = 80.0
 [node name="ButtonAudioBack" type="Button" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=116854048]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Back"
+text = "Retour"
 
 [node name="ControlsSettings" type="Control" parent="MainMenuLayer" unique_id=1164270192]
 visible = false
@@ -369,7 +369,7 @@ theme_override_constants/separation = 12
 [node name="Title" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=711956256]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "Controls"
+text = "Contrôles"
 horizontal_alignment = 1
 
 [node name="Separator" type="HSeparator" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1063278418]
@@ -384,12 +384,12 @@ columns = 2
 [node name="L1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1213921295]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Movement"
+text = "Déplacement"
 
 [node name="K1" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1520243955]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Arrows"
+text = "Flèches"
 
 [node name="L2" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=407984128]
 layout_mode = 2
@@ -404,7 +404,7 @@ text = "M"
 [node name="L3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=826597926]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Character sheet"
+text = "Fiche de personnage"
 
 [node name="K3" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1938856739]
 layout_mode = 2
@@ -414,7 +414,7 @@ text = "P"
 [node name="L4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1261728820]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Pick up"
+text = "Ramasser"
 
 [node name="K4" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1057115228]
 layout_mode = 2
@@ -424,7 +424,7 @@ text = "T"
 [node name="L5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1806197742]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Push"
+text = "Pousser"
 
 [node name="K5" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=2122432370]
 layout_mode = 2
@@ -434,7 +434,7 @@ text = "R"
 [node name="L6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=997492015]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Build"
+text = "Construire"
 
 [node name="K6" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1218008210]
 layout_mode = 2
@@ -444,7 +444,7 @@ text = "B"
 [node name="L7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1390324021]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Combat / Flee"
+text = "Combat / Fuite"
 
 [node name="K7" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=939518189]
 layout_mode = 2
@@ -454,7 +454,7 @@ text = "C"
 [node name="L8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1462692776]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Attack"
+text = "Attaquer"
 
 [node name="K8" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1917261052]
 layout_mode = 2
@@ -464,7 +464,7 @@ text = "A"
 [node name="L9" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=879505293]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Talk to NPC"
+text = "Parler au PNJ"
 
 [node name="K9" type="Label" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Grid" unique_id=1418276278]
 layout_mode = 2
@@ -474,7 +474,7 @@ text = "Z"
 [node name="ButtonControlsBack" type="Button" parent="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=821668189]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Back"
+text = "Retour"
 
 [node name="CharacterCreation" type="Control" parent="MainMenuLayer" unique_id=1233559944]
 visible = false
@@ -849,7 +849,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Santé (Health)"
+text = "Santé"
 
 [node name="HealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/HealthRow" unique_id=1947799995]
 layout_mode = 2
@@ -862,7 +862,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Attaque (Attack)"
+text = "Attaque"
 
 [node name="AttackSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/AttackRow" unique_id=1171944306]
 layout_mode = 2
@@ -875,7 +875,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Défense (Defense)"
+text = "Défense"
 
 [node name="DefenseSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/DefenseRow" unique_id=618969306]
 layout_mode = 2
@@ -888,7 +888,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Endurance (Stamina)"
+text = "Endurance"
 
 [node name="StaminaSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StaminaRow" unique_id=1111110003]
 layout_mode = 2
@@ -901,7 +901,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Discrétion (Stealth)"
+text = "Discrétion"
 
 [node name="StealthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StealthRow" unique_id=1111110006]
 layout_mode = 2
@@ -914,7 +914,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Vitesse (Speed)"
+text = "Vitesse"
 
 [node name="SpeedSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/SpeedRow" unique_id=1111110009]
 layout_mode = 2
@@ -927,7 +927,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Précision (Precision)"
+text = "Précision"
 
 [node name="PrecisionSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/PrecisionRow" unique_id=1111110012]
 layout_mode = 2
@@ -940,7 +940,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Force (Strength)"
+text = "Force"
 
 [node name="StrengthSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StrengthRow" unique_id=1111110015]
 layout_mode = 2
@@ -953,7 +953,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Intelligence (Intelligence)"
+text = "Intelligence"
 
 [node name="IntelligenceSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/IntelligenceRow" unique_id=1111110018]
 layout_mode = 2
@@ -966,7 +966,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Capacité de charge (Weight)"
+text = "Capacité de charge"
 
 [node name="WeightSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/WeightRow" unique_id=1111110021]
 layout_mode = 2
@@ -1050,7 +1050,7 @@ theme_override_constants/separation = 12
 [node name="Title" type="Label" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=321987654]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "Debug"
+text = "Débogage"
 horizontal_alignment = 1
 
 [node name="Separator" type="HSeparator" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=219876543]
@@ -1078,7 +1078,7 @@ text = "Afficher le cône de vision et la flèche de corps"
 [node name="ButtonDebugBack" type="Button" parent="MainMenuLayer/DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=187654321]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Back"
+text = "Retour"
 
 [node name="MissionSelect" type="Control" parent="MainMenuLayer" unique_id=1234570001]
 visible = false
@@ -1182,8 +1182,8 @@ text = "Accepter"
 [node name="QuitDialog" type="ConfirmationDialog" parent="MainMenuLayer" unique_id=1491087152]
 title = "Quitter"
 size = Vector2i(300, 120)
-ok_button_text = "Quit"
-dialog_text = "Are you sure you want to quit?"
+ok_button_text = "Quitter"
+dialog_text = "Êtes-vous sûr de vouloir quitter ?"
 
 [node name="Music_Neon_Dream" type="AudioStreamPlayer" parent="." unique_id=1030122907]
 stream = ExtResource("3_l0t56")

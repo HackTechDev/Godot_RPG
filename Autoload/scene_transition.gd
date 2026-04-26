@@ -59,7 +59,7 @@ func _build_ui() -> void:
 
 	# Sous-titre
 	var sub = Label.new()
-	sub.text = "MERCENARY RPG"
+	sub.text = "RPG MERCENAIRE"
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 13)
 	sub.add_theme_color_override("font_color", Color(0.60, 0.53, 0.35, 0.80))

@@ -59,7 +59,7 @@ text = "Fiche"
 [node name="BtnStats" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2200000003]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Stats"
+text = "Statistiques"
 
 [node name="BtnEquipements" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2300000002]
 layout_mode = 2

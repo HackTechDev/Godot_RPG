@@ -74,25 +74,25 @@ theme_override_constants/separation = 6
 layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
 theme_override_font_sizes/font_size = 13
-text = "Sheet"
+text = "Fiche"
 
 [node name="BtnArmory" type="Button" parent="TopBar/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
 theme_override_font_sizes/font_size = 13
-text = "Armory"
+text = "Armurerie"
 
 [node name="BtnSetting" type="Button" parent="TopBar/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
 theme_override_font_sizes/font_size = 13
-text = "Setting"
+text = "Paramètres"
 
 [node name="BtnHome" type="Button" parent="TopBar/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
 theme_override_font_sizes/font_size = 13
-text = "Home"
+text = "Accueil"
 
 [node name="ClockAnchor" type="Control" parent="."]
 layout_mode = 3
