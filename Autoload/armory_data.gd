@@ -8,7 +8,7 @@ var clothes: Array = []
 func _ready() -> void:
 	weapons = _load_json("res://Armory/weapons.json")
 	armors  = _load_json("res://Armory/protections.json")
-	gadgets = _load_json("res://Armory/equipments.json")
+	gadgets = _load_json("res://Armory/gears.json")
 	clothes = _load_json("res://Armory/clothes.json")
 
 func _load_json(path: String) -> Array:
