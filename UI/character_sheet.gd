@@ -17,7 +17,7 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
 @onready var _content_row    = get_node(_BASE + "/ContentRow")
 @onready var _stats_panel    = get_node(_BASE + "/StatsPanel")
-@onready var _equip_panel         = get_node(_BASE + "/EquipPanel")
+@onready var _equip_panel              = get_node(_BASE + "/EquipPanel")
 @onready var _equip_list_container: VBoxContainer = get_node(_BASE + "/EquipPanel/EquipListContainer")
 
 @onready var _ls_health       = get_node(_SP + "/ColLeft/LabelStatHealth")
@@ -43,6 +43,67 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var _spr_hair       = get_node(_VP + "/SpriteHair")
 @onready var _spr_headwear   = get_node(_VP + "/SpriteHeadwear")
 
+# --- Popup détail équipement ---
+var _detail_popup:  Control        = null
+var _dp_name:       Label          = null
+var _dp_model:      Label          = null
+var _dp_desc:       RichTextLabel  = null
+var _dp_stats:      VBoxContainer  = null
+
+const _KEY_LABELS: Dictionary = {
+	"damage":               "Dégâts",
+	"precision":            "Précision",
+	"range":                "Portée (m)",
+	"fire_rate":            "Cadence (cps/min)",
+	"reload_time":          "Rechargement (s)",
+	"magazine_size":        "Capacité chargeur",
+	"noise":                "Bruit",
+	"recoil":               "Recul",
+	"mobility_penalty":     "Pénalité mobilité",
+	"stealth_modifier":     "Mod. discrétion",
+	"fire_modes":           "Modes de tir",
+	"ammo_type":            "Munitions",
+	"can_attach_silencer":  "Silencieux possible",
+	"defense":              "Défense",
+	"damage_reduction":     "Réduction dégâts",
+	"stealth_penalty":      "Pénalité discrétion",
+	"noise_increase":       "Augmentation bruit",
+	"effect":               "Effet",
+	"detection_radius":     "Rayon (m)",
+	"duration":             "Durée (s)",
+	"cooldown":             "Recharge (s)",
+	"stealth_bonus":        "Bonus discrétion",
+	"mobility_bonus":       "Bonus mobilité",
+	"noise_reduction":      "Réduction bruit",
+	"visibility_reduction": "Réduction visibilité",
+	"temperature_resistance": "Résistance température",
+}
+
+const _EFFECT_LABELS: Dictionary = {
+	"reveal_enemies":      "Révéler les ennemis",
+	"night_vision":        "Vision nocturne",
+	"thermal_detection":   "Détection thermique",
+	"stun_enemies":        "Étourdir les ennemis",
+	"smoke_screen":        "Écran de fumée",
+	"heal_player":         "Soigner le joueur",
+	"unlock_silent":       "Crochetage silencieux",
+	"breach_door":         "Destruction de porte",
+	"disable_electronics": "Désactiver l'électronique",
+	"squad_coordination":  "Coordination d'escouade",
+}
+
+const _MODE_LABELS: Dictionary = {
+	"semi":        "Semi-auto",
+	"auto":        "Automatique",
+	"burst":       "Rafale",
+	"bolt_action": "Verrou",
+	"melee":       "Corps-à-corps",
+}
+
+
+func _ready() -> void:
+	_build_detail_popup()
+
 
 func refresh():
 	label_health.text    = "Santé : "       + str(Player_data.player_health)
@@ -56,7 +117,7 @@ func refresh():
 	if Player_data.inventory.is_empty():
 		label_inventory.text = "(vide)"
 	else:
-		var lines = []
+		var lines: Array = []
 		for item in Player_data.inventory:
 			lines.append("- " + item["label"])
 		label_inventory.text = "\n".join(lines)
@@ -72,14 +133,17 @@ func refresh():
 	else:
 		for eq in Player_data.player_equipment:
 			var cat: String = cat_fr.get(eq.get("category", ""), eq.get("category", ""))
-			var lbl := Label.new()
-			lbl.text = "• [%s]  %s" % [cat, eq.get("name", "?")]
-			lbl.add_theme_font_size_override("font_size", 14)
+			var btn := Button.new()
+			btn.text = "• [%s]  %s" % [cat, eq.get("name", "?")]
+			btn.add_theme_font_size_override("font_size", 14)
+			btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			btn.flat = true
 			var desc: String = eq.get("description", "")
 			if desc != "":
-				lbl.tooltip_text = desc
-				lbl.mouse_filter = Control.MOUSE_FILTER_PASS
-			_equip_list_container.add_child(lbl)
+				btn.tooltip_text = desc
+			var eq_copy := eq.duplicate()
+			btn.pressed.connect(func(): _show_equipment_detail(eq_copy))
+			_equip_list_container.add_child(btn)
 
 	_ls_health.text       = "Santé : %d / 20"              % Player_data.player_health
 	_ls_attack.text       = "Attaque : %d / 20"            % Player_data.player_attack
@@ -93,6 +157,7 @@ func refresh():
 	_ls_weight.text       = "Capacité de charge : %d / 20" % Player_data.player_weight_capacity
 
 	_refresh_preview()
+
 
 func _on_tab_fiche_pressed():
 	_content_row.visible = true
@@ -108,6 +173,148 @@ func _on_tab_equipements_pressed():
 	_content_row.visible = false
 	_stats_panel.visible = false
 	_equip_panel.visible = true
+
+
+# --- Popup détail ---
+
+func _build_detail_popup() -> void:
+	_detail_popup = Control.new()
+	_detail_popup.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_detail_popup.visible = false
+	get_node("Main").add_child(_detail_popup)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.55)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_detail_popup.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_detail_popup.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(480, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 20)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 8)
+	margin.add_child(vbox)
+
+	_dp_name = Label.new()
+	_dp_name.add_theme_font_size_override("font_size", 20)
+	vbox.add_child(_dp_name)
+
+	_dp_model = Label.new()
+	_dp_model.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(_dp_model)
+
+	_dp_desc = RichTextLabel.new()
+	_dp_desc.bbcode_enabled = false
+	_dp_desc.fit_content = true
+	_dp_desc.scroll_active = false
+	_dp_desc.add_theme_font_size_override("normal_font_size", 13)
+	vbox.add_child(_dp_desc)
+
+	vbox.add_child(HSeparator.new())
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(0, 80)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vbox.add_child(scroll)
+
+	_dp_stats = VBoxContainer.new()
+	_dp_stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_dp_stats.add_theme_constant_override("separation", 6)
+	scroll.add_child(_dp_stats)
+
+	var btn_close := Button.new()
+	btn_close.text = "Fermer"
+	btn_close.pressed.connect(_hide_equipment_detail)
+	vbox.add_child(btn_close)
+
+
+func _show_equipment_detail(eq: Dictionary) -> void:
+	var item := _find_item_in_armory(eq.get("id", ""))
+	if item.is_empty():
+		item = eq
+
+	_dp_name.text = item.get("name", eq.get("name", ""))
+	var model: String = item.get("model", "")
+	var ver:   String = item.get("version", "")
+	_dp_model.text = ("%s — %s" % [model, ver]) if ver != "" else model
+	_dp_desc.text  = item.get("description", eq.get("description", ""))
+
+	for child in _dp_stats.get_children():
+		child.queue_free()
+
+	_dp_add_stat("Poids", "%.1f kg" % item.get("weight", 0.0))
+	_dp_add_stat("Prix",  "%d ¤"    % int(item.get("price", 0)))
+
+	var cat_key: String = item.get("category", "")
+	var sub: Dictionary = item.get(cat_key, {})
+	for key in sub:
+		_dp_add_stat(_dp_label_key(key), _dp_format_val(key, sub[key]))
+
+	_detail_popup.visible = true
+
+
+func _hide_equipment_detail() -> void:
+	_detail_popup.visible = false
+
+
+func _find_item_in_armory(item_id: String) -> Dictionary:
+	for item in ArmoryData.weapons:
+		if item.get("id", "") == item_id: return item
+	for item in ArmoryData.armors:
+		if item.get("id", "") == item_id: return item
+	for item in ArmoryData.gadgets:
+		if item.get("id", "") == item_id: return item
+	for item in ArmoryData.clothes:
+		if item.get("id", "") == item_id: return item
+	return {}
+
+
+func _dp_add_stat(key: String, val: String) -> void:
+	var row := HBoxContainer.new()
+	var lk  := Label.new()
+	lk.text = key + " :"
+	lk.custom_minimum_size = Vector2(190, 0)
+	lk.add_theme_font_size_override("font_size", 13)
+	var lv := Label.new()
+	lv.text = val
+	lv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lv.add_theme_font_size_override("font_size", 13)
+	row.add_child(lk)
+	row.add_child(lv)
+	_dp_stats.add_child(row)
+
+
+func _dp_label_key(key: String) -> String:
+	return _KEY_LABELS.get(key, key)
+
+
+func _dp_format_val(key: String, val: Variant) -> String:
+	if key == "effect":
+		return _EFFECT_LABELS.get(str(val), str(val))
+	if key == "damage_reduction":
+		return "%d%%" % int(float(val) * 100)
+	if key == "fire_modes" and val is Array:
+		var modes: Array = val.map(func(m: Variant) -> String: return _MODE_LABELS.get(str(m), str(m)))
+		return ", ".join(modes)
+	if val is Array:
+		return ", ".join(val.map(func(x: Variant) -> String: return str(x)))
+	if val is bool:
+		return "Oui" if val else "Non"
+	if val is float:
+		return ("%.1f" % val) if val != float(int(val)) else str(int(val))
+	return str(val)
+
 
 func _refresh_preview():
 	if Player_data.appearance_body == "":
@@ -137,4 +344,5 @@ func _none(spr: Sprite2D) -> void:
 	spr.visible = false
 
 func _on_button_close_pressed():
+	_hide_equipment_detail()
 	visible = false
