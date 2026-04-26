@@ -135,6 +135,7 @@ func load_game():
 		Player_data.player_intelligence    = data.get("player_intelligence", 0)
 		Player_data.player_weight_capacity = data.get("player_weight_capacity", 0)
 		Player_data.player_credit          = data.get("player_credit", 1000)
+		Player_data.player_equipment       = data.get("player_equipment", [])
 		Player_data.player_nickname = data.get("player_nickname", "")
 		Player_data.player_biography = data.get("player_biography", "")
 		Player_data.player_rank = data.get("player_rank", "")
@@ -164,3 +165,4 @@ func load_game():
 		Player_data.player_intelligence    = 0
 		Player_data.player_weight_capacity = 0
 		Player_data.player_credit          = 1000
+		Player_data.player_equipment       = []

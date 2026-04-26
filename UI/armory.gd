@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal item_purchased
+
 const _KEY_LABELS := {
 	"damage":               "Dégâts",
 	"precision":            "Précision",
@@ -57,9 +59,11 @@ const _CAT_KEYS := ["weapon", "armor", "gadget", "clothing"]
 @onready var _det_model:  Label         = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetModel
 @onready var _det_desc:   RichTextLabel = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetDesc
 @onready var _det_stats:  VBoxContainer = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetStats
+@onready var _btn_buy:    Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy
 
-var _current_cat:   int   = 0
-var _current_items: Array = []
+var _current_cat:   int        = 0
+var _current_items: Array      = []
+var _current_item:  Dictionary = {}
 
 func _ready() -> void:
 	_show_category(0)
@@ -85,6 +89,7 @@ func _get_items(idx: int) -> Array:
 	return []
 
 func _show_item(item: Dictionary) -> void:
+	_current_item = item
 	_det_name.text  = item.get("name", "")
 	var model: String = item.get("model", "")
 	var ver:   String = item.get("version", "")
@@ -94,13 +99,48 @@ func _show_item(item: Dictionary) -> void:
 	for child in _det_stats.get_children():
 		child.queue_free()
 
+	var price: int = int(item.get("price", 0))
 	_add_stat("Poids", "%.1f kg" % item.get("weight", 0.0))
-	_add_stat("Prix",  "%d pts"  % int(item.get("price",  0)))
+	_add_stat("Prix",  "%d ¤" % price)
 
 	var cat_key: String = _CAT_KEYS[_current_cat]
 	var sub: Dictionary = item.get(cat_key, {})
 	for key in sub:
 		_add_stat(_label_key(key), _format_val(key, sub[key]))
+
+	var owned := _is_owned(item.get("id", ""))
+	if owned:
+		_btn_buy.text     = "Déjà possédé"
+		_btn_buy.disabled = true
+	else:
+		_btn_buy.text     = "Acheter (%d ¤)" % price
+		_btn_buy.disabled = Player_data.player_credit < price
+
+func _is_owned(item_id: String) -> bool:
+	for eq in Player_data.player_equipment:
+		if eq.get("id", "") == item_id:
+			return true
+	return false
+
+func _on_btn_buy_pressed() -> void:
+	if _current_item.is_empty():
+		return
+	var item_id: String = _current_item.get("id", "")
+	if _is_owned(item_id):
+		return
+	var price: int = int(_current_item.get("price", 0))
+	if Player_data.player_credit < price:
+		return
+	Player_data.player_credit -= price
+	Player_data.player_equipment.append({
+		"id":       item_id,
+		"name":     _current_item.get("name", ""),
+		"category": _current_item.get("category", ""),
+		"price":    price,
+	})
+	_btn_buy.text     = "Déjà possédé"
+	_btn_buy.disabled = true
+	item_purchased.emit()
 
 func _add_stat(key: String, val: String) -> void:
 	var row := HBoxContainer.new()

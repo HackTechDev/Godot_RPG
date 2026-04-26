@@ -14,6 +14,7 @@ static var player_strength: int = 0
 static var player_intelligence: int = 0
 static var player_weight_capacity: int = 0
 static var player_credit: int = 0
+static var player_equipment: Array = []
 static var player_nickname: String = ""
 static var player_biography: String = ""
 static var player_rank: String = ""

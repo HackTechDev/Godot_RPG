@@ -17,6 +17,8 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
 @onready var _content_row    = get_node(_BASE + "/ContentRow")
 @onready var _stats_panel    = get_node(_BASE + "/StatsPanel")
+@onready var _equip_panel    = get_node(_BASE + "/EquipPanel")
+@onready var _label_equip    = get_node(_BASE + "/EquipPanel/LabelEquipList")
 
 @onready var _ls_health       = get_node(_SP + "/ColLeft/LabelStatHealth")
 @onready var _ls_attack       = get_node(_SP + "/ColLeft/LabelStatAttack")
@@ -59,6 +61,16 @@ func refresh():
 			lines.append("- " + item["label"])
 		label_inventory.text = "\n".join(lines)
 
+	const CAT_FR := {"weapon": "Arme", "armor": "Protection", "gadget": "Matériel", "clothing": "Vêtement"}
+	if Player_data.player_equipment.is_empty():
+		_label_equip.text = "(aucun)"
+	else:
+		var lines: Array = []
+		for eq in Player_data.player_equipment:
+			var cat := CAT_FR.get(eq.get("category", ""), eq.get("category", ""))
+			lines.append("• [%s]  %s" % [cat, eq.get("name", "?")])
+		_label_equip.text = "\n".join(lines)
+
 	_ls_health.text       = "Santé : %d / 20"              % Player_data.player_health
 	_ls_attack.text       = "Attaque : %d / 20"            % Player_data.player_attack
 	_ls_defense.text      = "Défense : %d / 20"            % Player_data.player_defense
@@ -75,10 +87,17 @@ func refresh():
 func _on_tab_fiche_pressed():
 	_content_row.visible = true
 	_stats_panel.visible = false
+	_equip_panel.visible = false
 
 func _on_tab_stats_pressed():
 	_content_row.visible = false
 	_stats_panel.visible = true
+	_equip_panel.visible = false
+
+func _on_tab_equipements_pressed():
+	_content_row.visible = false
+	_stats_panel.visible = false
+	_equip_panel.visible = true
 
 func _refresh_preview():
 	if Player_data.appearance_body == "":

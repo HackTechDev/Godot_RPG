@@ -123,6 +123,7 @@ func _ready():
 
 	armory_instance = armory_scene.instantiate()
 	add_child(armory_instance)
+	armory_instance.item_purchased.connect(_on_armory_item_purchased)
 
 	hud_instance = hud_scene.instantiate()
 	add_child(hud_instance)
@@ -352,6 +353,41 @@ func _auto_save_objects():
 	var mechas = get_tree().get_nodes_in_group("mecha")
 	var current_scene = get_tree().get_current_scene().get_name()
 	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
+
+func _auto_save_player():
+	liblevel.savePlayer({
+		"player_position":        [Player_data.player_pos_x, Player_data.player_pos_y],
+		"player_facing":          Player_data.player_facing,
+		"scene":                  Player_data.player_previous_scene,
+		"player_health":          Player_data.player_health,
+		"player_health_base":     Player_data.player_health_base,
+		"player_attack":          Player_data.player_attack,
+		"player_defense":         Player_data.player_defense,
+		"player_stamina":         Player_data.player_stamina,
+		"player_stealth":         Player_data.player_stealth,
+		"player_speed":           Player_data.player_speed,
+		"player_precision":       Player_data.player_precision,
+		"player_strength":        Player_data.player_strength,
+		"player_intelligence":    Player_data.player_intelligence,
+		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_credit":          Player_data.player_credit,
+		"player_equipment":       Player_data.player_equipment,
+		"player_nickname":        Player_data.player_nickname,
+		"player_biography":       Player_data.player_biography,
+		"player_rank":            Player_data.player_rank,
+		"player_specialization":  Player_data.player_specialization,
+		"appearance_body":        Player_data.appearance_body,
+		"appearance_hair":        Player_data.appearance_hair,
+		"appearance_headwear":    Player_data.appearance_headwear,
+		"appearance_arms":        Player_data.appearance_arms,
+		"appearance_hands":       Player_data.appearance_hands,
+		"appearance_torso":       Player_data.appearance_torso,
+		"appearance_legs":        Player_data.appearance_legs,
+		"appearance_feet":        Player_data.appearance_feet,
+	})
+
+func _on_armory_item_purchased() -> void:
+	_auto_save_player()
 
 func _facing_to_vector() -> Vector2:
 	match direction:
@@ -851,6 +887,8 @@ func _restart_game():
 		"player_strength":        Player_data.player_strength,
 		"player_intelligence":    Player_data.player_intelligence,
 		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_credit":          Player_data.player_credit,
+		"player_equipment":       Player_data.player_equipment,
 		"player_nickname":        Player_data.player_nickname,
 		"player_biography":       Player_data.player_biography,
 		"player_rank":            Player_data.player_rank,

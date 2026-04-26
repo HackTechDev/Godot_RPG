@@ -61,6 +61,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Stats"
 
+[node name="BtnEquipements" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2300000002]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Equipements"
+
 [node name="ContentRow" type="HBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1797863708]
 layout_mode = 2
 size_flags_vertical = 3
@@ -319,10 +324,36 @@ text = "Capacité de charge : –"
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="EquipPanel" type="VBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2300000003]
+layout_mode = 2
+visible = false
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="EquipTitle" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000004]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Equipements achetés"
+horizontal_alignment = 1
+
+[node name="EquipSep" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000005]
+layout_mode = 2
+
+[node name="LabelEquipList" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000006]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "(aucun)"
+autowrap_mode = 3
+
+[node name="EquipSpacer" type="Control" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000007]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="ButtonClose" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2098477626]
 layout_mode = 2
 text = "Fermer"
 
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnFiche" to="." method="_on_tab_fiche_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnStats" to="." method="_on_tab_stats_pressed"]
+[connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnEquipements" to="." method="_on_tab_equipements_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
