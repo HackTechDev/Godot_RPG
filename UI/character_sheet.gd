@@ -141,7 +141,7 @@ func refresh():
 			var desc: String = eq.get("description", "")
 			if desc != "":
 				btn.tooltip_text = desc
-			var eq_copy := eq.duplicate()
+			var eq_copy: Dictionary = (eq as Dictionary).duplicate()
 			btn.pressed.connect(func(): _show_equipment_detail(eq_copy))
 			_equip_list_container.add_child(btn)
 
