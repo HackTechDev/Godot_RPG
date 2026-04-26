@@ -60,6 +60,7 @@ const _CAT_KEYS := ["weapon", "armor", "gadget", "clothing"]
 @onready var _det_desc:   RichTextLabel = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetDesc
 @onready var _det_stats:  VBoxContainer = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetStats
 @onready var _btn_buy:    Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy
+@onready var _btn_sell:   Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell
 
 var _current_cat:   int        = 0
 var _current_items: Array      = []
@@ -112,9 +113,12 @@ func _show_item(item: Dictionary) -> void:
 	if owned:
 		_btn_buy.text     = "Déjà possédé"
 		_btn_buy.disabled = true
+		_btn_sell.text    = "Vendre (%d ¤)" % price
+		_btn_sell.visible = true
 	else:
 		_btn_buy.text     = "Acheter (%d ¤)" % price
 		_btn_buy.disabled = Player_data.player_credit < price
+		_btn_sell.visible = false
 
 func _is_owned(item_id: String) -> bool:
 	for eq in Player_data.player_equipment:
@@ -191,6 +195,21 @@ func _on_btn_weapons_pressed(): _show_category(0)
 func _on_btn_armors_pressed():  _show_category(1)
 func _on_btn_gadgets_pressed(): _show_category(2)
 func _on_btn_clothes_pressed(): _show_category(3)
+
+func _on_btn_sell_pressed() -> void:
+	if _current_item.is_empty():
+		return
+	var item_id: String = _current_item.get("id", "")
+	for i in range(Player_data.player_equipment.size()):
+		if Player_data.player_equipment[i].get("id", "") == item_id:
+			Player_data.player_credit += Player_data.player_equipment[i].get("price", 0)
+			Player_data.player_equipment.remove_at(i)
+			break
+	var price: int = int(_current_item.get("price", 0))
+	_btn_buy.text     = "Acheter (%d ¤)" % price
+	_btn_buy.disabled = Player_data.player_credit < price
+	_btn_sell.visible = false
+	item_purchased.emit()
 
 func _on_button_close_pressed():
 	visible = false

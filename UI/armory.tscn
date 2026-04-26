@@ -134,6 +134,12 @@ size_flags_horizontal = 3
 disabled = true
 text = "Acheter"
 
+[node name="BtnSell" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+visible = false
+text = "Vendre"
+
 [node name="ButtonClose" type="Button" parent="Main/Center/Panel/Margin/VBox"]
 layout_mode = 2
 text = "Fermer"
@@ -144,4 +150,5 @@ text = "Fermer"
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnGadgets" to="." method="_on_btn_gadgets_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnClothes" to="." method="_on_btn_clothes_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy" to="." method="_on_btn_buy_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell" to="." method="_on_btn_sell_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ButtonClose" to="." method="_on_button_close_pressed"]
