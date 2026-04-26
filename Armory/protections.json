@@ -1,0 +1,146 @@
+[
+  {
+    "id": "armor_plate_carrier_mk2",
+    "name": "Gilet tactique MK2",
+    "model": "Plate Carrier",
+    "version": "MK2",
+    "description": "Gilet tactique équilibré offrant protection et modularité.",
+    "category": "armor",
+    "weight": 6.0,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 30,
+      "damage_reduction": 0.25,
+      "mobility_penalty": 3,
+      "stealth_penalty": 4,
+      "noise_increase": 2
+    }
+  },
+  {
+    "id": "armor_light_vest_mk1",
+    "name": "Gilet léger",
+    "model": "Light Vest",
+    "version": "MK1",
+    "description": "Protection légère qui conserve une bonne mobilité.",
+    "category": "armor",
+    "weight": 3.0,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 14,
+      "damage_reduction": 0.12,
+      "mobility_penalty": 1,
+      "stealth_penalty": 1,
+      "noise_increase": 1
+    }
+  },
+  {
+    "id": "armor_heavy_assault_mk3",
+    "name": "Armure d'assaut lourde",
+    "model": "Heavy Assault",
+    "version": "MK3",
+    "description": "Protection maximale au prix d'une forte perte de mobilité et de discrétion.",
+    "category": "armor",
+    "weight": 11.5,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 55,
+      "damage_reduction": 0.45,
+      "mobility_penalty": 6,
+      "stealth_penalty": 8,
+      "noise_increase": 5
+    }
+  },
+  {
+    "id": "armor_stealth_carrier_v1",
+    "name": "Gilet discret",
+    "model": "Stealth Carrier",
+    "version": "v1",
+    "description": "Gilet compact conçu pour l'infiltration avec une protection modérée.",
+    "category": "armor",
+    "weight": 4.2,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 20,
+      "damage_reduction": 0.18,
+      "mobility_penalty": 1,
+      "stealth_penalty": 0,
+      "noise_increase": 0
+    }
+  },
+  {
+    "id": "armor_riot_shield_v2",
+    "name": "Bouclier balistique",
+    "model": "Riot Shield",
+    "version": "v2",
+    "description": "Protection frontale très élevée, très encombrante.",
+    "category": "armor",
+    "weight": 9.0,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 65,
+      "damage_reduction": 0.55,
+      "mobility_penalty": 7,
+      "stealth_penalty": 9,
+      "noise_increase": 6
+    }
+  },
+  {
+    "id": "armor_helmet_fast_mk1",
+    "name": "Casque tactique FAST",
+    "model": "FAST Helmet",
+    "version": "MK1",
+    "description": "Casque léger compatible avec les accessoires tactiques.",
+    "category": "armor",
+    "weight": 1.4,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 12,
+      "damage_reduction": 0.08,
+      "mobility_penalty": 0,
+      "stealth_penalty": 1,
+      "noise_increase": 0
+    }
+  },
+  {
+    "id": "armor_helmet_heavy_mk2",
+    "name": "Casque lourd renforcé",
+    "model": "Heavy Helmet",
+    "version": "MK2",
+    "description": "Casque renforcé offrant une excellente protection de la tête.",
+    "category": "armor",
+    "weight": 2.6,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 22,
+      "damage_reduction": 0.16,
+      "mobility_penalty": 1,
+      "stealth_penalty": 2,
+      "noise_increase": 1
+    }
+  },
+  {
+    "id": "armor_knee_elbow_pads_v1",
+    "name": "Protections articulaires",
+    "model": "Joint Pads",
+    "version": "v1",
+    "description": "Genouillères et coudières réduisant les dégâts liés aux chutes et impacts.",
+    "category": "armor",
+    "weight": 0.9,
+    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "price" : 30,
+    "armor": {
+      "defense": 6,
+      "damage_reduction": 0.04,
+      "mobility_penalty": 0,
+      "stealth_penalty": 0,
+      "noise_increase": 0
+    }
+  }
+]
