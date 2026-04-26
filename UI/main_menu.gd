@@ -447,9 +447,16 @@ func _cc_show_page(page: int):
 	elif page == 3:
 		_cc_init_military()
 	elif page == 4:
-		cc_health.value  = 10
-		cc_attack.value  = 10
-		cc_defense.value = 10
+		cc_health.set_value_no_signal(5)
+		cc_attack.set_value_no_signal(5)
+		cc_defense.set_value_no_signal(5)
+		cc_stamina.set_value_no_signal(5)
+		cc_stealth.set_value_no_signal(5)
+		cc_speed.set_value_no_signal(5)
+		cc_precision.set_value_no_signal(5)
+		cc_strength.set_value_no_signal(5)
+		cc_intelligence.set_value_no_signal(5)
+		cc_weight.set_value_no_signal(5)
 		_cc_update_remaining()
 
 func _cc_init_appearance():
