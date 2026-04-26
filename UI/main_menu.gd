@@ -3,7 +3,7 @@ extends CanvasLayer
 signal return_to_game
 
 const SETTINGS_PATH = "user://settings.json"
-const TOTAL_POINTS = 30
+const TOTAL_POINTS = 60
 
 var liblevel = preload("res://Lib/liblevel.gd").new()
 
@@ -67,10 +67,17 @@ var _cc_current_page: int = 1
 @onready var cc_rank:      OptionButton  = get_node(_CC_BASE + "/PageMilitary/RankOption")
 @onready var cc_spec_list: ItemList      = get_node(_CC_BASE + "/PageMilitary/SpecRow/SpecList")
 @onready var cc_spec_desc: RichTextLabel = get_node(_CC_BASE + "/PageMilitary/SpecRow/SpecDescPanel/SpecDescMargin/SpecDesc")
-@onready var cc_health:    SpinBox       = get_node(_CC_BASE + "/PageStats/StatsContainer/HealthRow/HealthSpinBox")
-@onready var cc_attack:    SpinBox       = get_node(_CC_BASE + "/PageStats/StatsContainer/AttackRow/AttackSpinBox")
-@onready var cc_defense:   SpinBox       = get_node(_CC_BASE + "/PageStats/StatsContainer/DefenseRow/DefenseSpinBox")
-@onready var cc_remaining: Label         = get_node(_CC_BASE + "/PageStats/LabelRemaining")
+@onready var cc_health:       SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/HealthRow/HealthSpinBox")
+@onready var cc_attack:       SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/AttackRow/AttackSpinBox")
+@onready var cc_defense:      SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/DefenseRow/DefenseSpinBox")
+@onready var cc_stamina:      SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/StaminaRow/StaminaSpinBox")
+@onready var cc_stealth:      SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/StealthRow/StealthSpinBox")
+@onready var cc_speed:        SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/SpeedRow/SpeedSpinBox")
+@onready var cc_precision:    SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/PrecisionRow/PrecisionSpinBox")
+@onready var cc_strength:     SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/StrengthRow/StrengthSpinBox")
+@onready var cc_intelligence: SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/IntelligenceRow/IntelligenceSpinBox")
+@onready var cc_weight:       SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/WeightRow/WeightSpinBox")
+@onready var cc_remaining:    Label   = get_node(_CC_BASE + "/PageStats/LabelRemaining")
 
 # Appearance page option buttons
 @onready var cc_body_opt:     OptionButton = get_node(_CC_PA + "/OptionsScroll/OptionsVBox/BodyOption")
@@ -522,27 +529,31 @@ func _on_cc_spec_selected(index: int):
 	var spec_name = cc_spec_list.get_item_text(index)
 	cc_spec_desc.text = CC_SPECS.get(spec_name, "")
 
+func _cc_all_stats_sum() -> int:
+	return int(cc_health.value) + int(cc_attack.value) + int(cc_defense.value) \
+		+ int(cc_stamina.value) + int(cc_stealth.value) + int(cc_speed.value) \
+		+ int(cc_precision.value) + int(cc_strength.value) \
+		+ int(cc_intelligence.value) + int(cc_weight.value)
+
 func _cc_update_remaining():
-	var remaining = TOTAL_POINTS - int(cc_health.value) - int(cc_attack.value) - int(cc_defense.value)
-	cc_remaining.text = "Points restants : " + str(remaining)
+	cc_remaining.text = "Points restants : " + str(TOTAL_POINTS - _cc_all_stats_sum())
 
-func _on_cc_health_changed(value: float):
-	var others = int(cc_attack.value) + int(cc_defense.value)
-	if int(value) + others > TOTAL_POINTS:
-		cc_health.set_value_no_signal(TOTAL_POINTS - others)
+func _cc_on_stat_changed(spinbox: SpinBox, value: float) -> void:
+	var sum_others = _cc_all_stats_sum() - int(value)
+	if int(value) + sum_others > TOTAL_POINTS:
+		spinbox.set_value_no_signal(TOTAL_POINTS - sum_others)
 	_cc_update_remaining()
 
-func _on_cc_attack_changed(value: float):
-	var others = int(cc_health.value) + int(cc_defense.value)
-	if int(value) + others > TOTAL_POINTS:
-		cc_attack.set_value_no_signal(TOTAL_POINTS - others)
-	_cc_update_remaining()
-
-func _on_cc_defense_changed(value: float):
-	var others = int(cc_health.value) + int(cc_attack.value)
-	if int(value) + others > TOTAL_POINTS:
-		cc_defense.set_value_no_signal(TOTAL_POINTS - others)
-	_cc_update_remaining()
+func _on_cc_health_changed(value: float):    _cc_on_stat_changed(cc_health, value)
+func _on_cc_attack_changed(value: float):    _cc_on_stat_changed(cc_attack, value)
+func _on_cc_defense_changed(value: float):   _cc_on_stat_changed(cc_defense, value)
+func _on_cc_stamina_changed(value: float):   _cc_on_stat_changed(cc_stamina, value)
+func _on_cc_stealth_changed(value: float):   _cc_on_stat_changed(cc_stealth, value)
+func _on_cc_speed_changed(value: float):     _cc_on_stat_changed(cc_speed, value)
+func _on_cc_precision_changed(value: float): _cc_on_stat_changed(cc_precision, value)
+func _on_cc_strength_changed(value: float):  _cc_on_stat_changed(cc_strength, value)
+func _on_cc_intelligence_changed(value: float): _cc_on_stat_changed(cc_intelligence, value)
+func _on_cc_weight_changed(value: float):    _cc_on_stat_changed(cc_weight, value)
 
 func _on_cc_create_pressed():
 	Player_data.player_nickname      = cc_nickname.text.strip_edges()
@@ -554,6 +565,13 @@ func _on_cc_create_pressed():
 	Player_data.player_health_base   = int(cc_health.value)
 	Player_data.player_attack        = int(cc_attack.value)
 	Player_data.player_defense       = int(cc_defense.value)
+	Player_data.player_stamina       = int(cc_stamina.value)
+	Player_data.player_stealth       = int(cc_stealth.value)
+	Player_data.player_speed         = int(cc_speed.value)
+	Player_data.player_precision     = int(cc_precision.value)
+	Player_data.player_strength      = int(cc_strength.value)
+	Player_data.player_intelligence  = int(cc_intelligence.value)
+	Player_data.player_weight_capacity = int(cc_weight.value)
 	Player_data.appearance_body      = _cc_get_selected_key(cc_body_opt,     "body")
 	Player_data.appearance_hair      = _cc_get_selected_key(cc_hair_opt,     "hair")
 	Player_data.appearance_headwear  = _cc_get_selected_key(cc_headwear_opt, "headwear")
@@ -563,25 +581,32 @@ func _on_cc_create_pressed():
 	Player_data.appearance_legs      = _cc_get_selected_key(cc_legs_opt,     "legs")
 	Player_data.appearance_feet      = _cc_get_selected_key(cc_feet_opt,     "feet")
 	liblevel.savePlayer({
-		"player_position":      [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
-		"player_facing":        0,
-		"scene":                "",
-		"player_health":        Player_data.player_health,
-		"player_health_base":   Player_data.player_health_base,
-		"player_attack":        Player_data.player_attack,
-		"player_defense":       Player_data.player_defense,
-		"player_nickname":      Player_data.player_nickname,
-		"player_biography":     Player_data.player_biography,
-		"player_rank":          Player_data.player_rank,
-		"player_specialization": Player_data.player_specialization,
-		"appearance_body":      Player_data.appearance_body,
-		"appearance_hair":      Player_data.appearance_hair,
-		"appearance_headwear":  Player_data.appearance_headwear,
-		"appearance_arms":      Player_data.appearance_arms,
-		"appearance_hands":     Player_data.appearance_hands,
-		"appearance_torso":     Player_data.appearance_torso,
-		"appearance_legs":      Player_data.appearance_legs,
-		"appearance_feet":      Player_data.appearance_feet
+		"player_position":        [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
+		"player_facing":          0,
+		"scene":                  "",
+		"player_health":          Player_data.player_health,
+		"player_health_base":     Player_data.player_health_base,
+		"player_attack":          Player_data.player_attack,
+		"player_defense":         Player_data.player_defense,
+		"player_stamina":         Player_data.player_stamina,
+		"player_stealth":         Player_data.player_stealth,
+		"player_speed":           Player_data.player_speed,
+		"player_precision":       Player_data.player_precision,
+		"player_strength":        Player_data.player_strength,
+		"player_intelligence":    Player_data.player_intelligence,
+		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_nickname":        Player_data.player_nickname,
+		"player_biography":       Player_data.player_biography,
+		"player_rank":            Player_data.player_rank,
+		"player_specialization":  Player_data.player_specialization,
+		"appearance_body":        Player_data.appearance_body,
+		"appearance_hair":        Player_data.appearance_hair,
+		"appearance_headwear":    Player_data.appearance_headwear,
+		"appearance_arms":        Player_data.appearance_arms,
+		"appearance_hands":       Player_data.appearance_hands,
+		"appearance_torso":       Player_data.appearance_torso,
+		"appearance_legs":        Player_data.appearance_legs,
+		"appearance_feet":        Player_data.appearance_feet
 	})
 	liblevel.reinitializeLevel()
 	get_tree().paused = false
@@ -801,9 +826,16 @@ func data_to_save():
 		"scene":                 Player_data.player_previous_scene,
 		"player_health":         Player_data.player_health,
 		"player_health_base":    Player_data.player_health_base,
-		"player_attack":         Player_data.player_attack,
-		"player_defense":        Player_data.player_defense,
-		"player_nickname":       Player_data.player_nickname,
+		"player_attack":          Player_data.player_attack,
+		"player_defense":         Player_data.player_defense,
+		"player_stamina":         Player_data.player_stamina,
+		"player_stealth":         Player_data.player_stealth,
+		"player_speed":           Player_data.player_speed,
+		"player_precision":       Player_data.player_precision,
+		"player_strength":        Player_data.player_strength,
+		"player_intelligence":    Player_data.player_intelligence,
+		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_nickname":        Player_data.player_nickname,
 		"player_biography":      Player_data.player_biography,
 		"player_rank":           Player_data.player_rank,
 		"player_specialization": Player_data.player_specialization,

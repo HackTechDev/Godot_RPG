@@ -2,10 +2,17 @@ extends Node
 
 class_name Player_data
 
-static var player_health = 4
-static var player_health_base: int = 4
-static var player_attack: int = 10
-static var player_defense: int = 10
+static var player_health: int = 5
+static var player_health_base: int = 5
+static var player_attack: int = 5
+static var player_defense: int = 5
+static var player_stamina: int = 5
+static var player_stealth: int = 5
+static var player_speed: int = 5
+static var player_precision: int = 5
+static var player_strength: int = 5
+static var player_intelligence: int = 5
+static var player_weight_capacity: int = 5
 static var player_nickname: String = ""
 static var player_biography: String = ""
 static var player_rank: String = ""
