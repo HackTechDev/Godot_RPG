@@ -146,12 +146,12 @@ func _write_level(n: int, cfg: Dictionary, gnd: Array[Vector2i], wll: Array[Vect
 	ct = ct.replace(
 		'[node name="level_4" type="Node2D" unique_id=1361413524]',
 		'[node name="level_%d" type="Node2D" unique_id=%d]' % [n, nid])
+	# Scale 12.5× sur le nœud TileMap : tuile atlas 16 px → 200 px monde.
+	# Le tile_size (16 px) et les polygones de collision (±8 px) restent
+	# inchangés ; le transform du nœud les agrandit automatiquement.
 	ct = ct.replace(
-		'physics_layer_0/collision_layer = 1',
-		'tile_size = Vector2i(200, 200)\nphysics_layer_0/collision_layer = 1')
-	ct = ct.replace(
-		'PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)',
-		'PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)')
+		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ny_sort_enabled',
+		'[node name="ground" type="TileMap" parent="." unique_id=1201899630]\ntransform = Transform2D(12.5, 0, 0, 12.5, 0, 0)\ny_sort_enabled')
 
 	ct = _replace_layer(ct, "layer_0", _make_arr(gnd, GROUND_SRC, TILE_GROUND))
 	ct = _replace_layer(ct, "layer_1", _make_arr(wll, WALL_SRC,   TILE_WALL))
