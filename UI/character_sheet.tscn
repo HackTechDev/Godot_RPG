@@ -339,11 +339,10 @@ horizontal_alignment = 1
 [node name="EquipSep" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000005]
 layout_mode = 2
 
-[node name="LabelEquipList" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000006]
+[node name="EquipListContainer" type="VBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000006]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "(aucun)"
-autowrap_mode = 3
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
 [node name="EquipSpacer" type="Control" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EquipPanel" unique_id=2300000007]
 layout_mode = 2

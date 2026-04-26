@@ -133,10 +133,11 @@ func _on_btn_buy_pressed() -> void:
 		return
 	Player_data.player_credit -= price
 	Player_data.player_equipment.append({
-		"id":       item_id,
-		"name":     _current_item.get("name", ""),
-		"category": _current_item.get("category", ""),
-		"price":    price,
+		"id":          item_id,
+		"name":        _current_item.get("name", ""),
+		"category":    _current_item.get("category", ""),
+		"price":       price,
+		"description": _current_item.get("description", ""),
 	})
 	_btn_buy.text     = "Déjà possédé"
 	_btn_buy.disabled = true

@@ -17,8 +17,8 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
 @onready var _content_row    = get_node(_BASE + "/ContentRow")
 @onready var _stats_panel    = get_node(_BASE + "/StatsPanel")
-@onready var _equip_panel    = get_node(_BASE + "/EquipPanel")
-@onready var _label_equip    = get_node(_BASE + "/EquipPanel/LabelEquipList")
+@onready var _equip_panel         = get_node(_BASE + "/EquipPanel")
+@onready var _equip_list_container: VBoxContainer = get_node(_BASE + "/EquipPanel/EquipListContainer")
 
 @onready var _ls_health       = get_node(_SP + "/ColLeft/LabelStatHealth")
 @onready var _ls_attack       = get_node(_SP + "/ColLeft/LabelStatAttack")
@@ -62,14 +62,24 @@ func refresh():
 		label_inventory.text = "\n".join(lines)
 
 	var cat_fr: Dictionary = {"weapon": "Arme", "armor": "Protection", "gadget": "Matériel", "clothing": "Vêtement"}
+	for child in _equip_list_container.get_children():
+		child.queue_free()
 	if Player_data.player_equipment.is_empty():
-		_label_equip.text = "(aucun)"
+		var lbl := Label.new()
+		lbl.text = "(aucun)"
+		lbl.add_theme_font_size_override("font_size", 14)
+		_equip_list_container.add_child(lbl)
 	else:
-		var lines: Array = []
 		for eq in Player_data.player_equipment:
 			var cat: String = cat_fr.get(eq.get("category", ""), eq.get("category", ""))
-			lines.append("• [%s]  %s" % [cat, eq.get("name", "?")])
-		_label_equip.text = "\n".join(lines)
+			var lbl := Label.new()
+			lbl.text = "• [%s]  %s" % [cat, eq.get("name", "?")]
+			lbl.add_theme_font_size_override("font_size", 14)
+			var desc: String = eq.get("description", "")
+			if desc != "":
+				lbl.tooltip_text = desc
+				lbl.mouse_filter = Control.MOUSE_FILTER_PASS
+			_equip_list_container.add_child(lbl)
 
 	_ls_health.text       = "Santé : %d / 20"              % Player_data.player_health
 	_ls_attack.text       = "Attaque : %d / 20"            % Player_data.player_attack
