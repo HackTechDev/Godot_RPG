@@ -463,7 +463,7 @@ func _write_json(res_path: String, data: Variant) -> void:
 func _update_mission_spawn(level_n: int, px: int, py: int) -> void:
 	var abs  := ProjectSettings.globalize_path(MISSIONS_RES)
 	var text := FileAccess.get_file_as_string(abs)
-	var arr  := JSON.parse_string(text)
+	var arr: Array = JSON.parse_string(text) as Array
 	if arr == null: return
 	for m: Dictionary in arr:
 		var sc: String = m.get("scene", "")
