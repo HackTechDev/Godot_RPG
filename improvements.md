@@ -80,6 +80,40 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ---
 
+## Génération procédurale de niveaux
+
+### Génération reproductible (seed)
+- Passer un `seed` fixe à `RandomNumberGenerator` dans `generate_level.py` pour obtenir des maps identiques entre deux runs
+- Stocker le seed dans le JSON exporté et dans `missions.json` pour pouvoir recréer la carte à la demande
+
+### Difficulté paramétrable par niveau
+- Exposer `max_rooms`, `base_w`, `base_h` comme paramètres de `generate_level()` dans le script Python
+- Augmenter la densité de salles / la taille pour les niveaux avancés (level_11+)
+
+### Génération de niveaux 5–9
+- Actuellement seul `level_10` utilise `generate_from_file()`
+- Étendre le script GDScript pour accepter n'importe quel numéro de niveau et fichier `.txt` associé
+- Permettre de rejouer la génération sans écraser la scène existante (option `--force`)
+
+### Placement automatique d'objets dans les salles
+- Le script Python connaît déjà les positions de toutes les salles (`rooms[]`)
+- Placer automatiquement des objets (ordinateurs, robots, ennemis) dans des salles aléatoires
+- Exporter leurs positions dans `level_001.json` → le script GDScript les instancie dans la scène
+
+### Marqueur de sortie `>` comme transition réelle
+- Le caractère `>` est positionné dans le fichier `.txt` mais n'est pas encore converti en `entrance_y_2` / zone de transition
+- Créer un nœud `Area2D` à la position du `>` et connecter son signal `body_entered` pour changer de scène
+
+### Minimap générée depuis la TileMap
+- Le générateur connaît la structure exacte (salles, couloirs) — utiliser ces données pour dessiner une minimap en temps réel
+- Afficher les salles visitées vs non visitées (brouillard de guerre)
+
+### Export multi-niveaux en une passe
+- Ajouter un mode batch au script GDScript : lire une liste de fichiers `.txt` et générer plusieurs `.tscn` en séquence
+- Utile pour pré-générer 5–10 niveaux aléatoires avant une session de jeu
+
+---
+
 ## Technique
 
 ### Sons d'effets

@@ -698,6 +698,20 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Générateur de niveaux procédural (EditorScript)
+
+- Script `res://Scripts/generate_level.py` — génère une carte ASCII aléatoire (200×100) avec salles et couloirs reliés
+- Convention de caractères : `#` = sol (pièce / couloir), `S` = point de départ, `>` = sortie, ` ` = vide
+- Script `res://Scripts/generate_level.gd` — EditorScript GDScript exécutable depuis Godot (**File › Run Script**)
+- Lit `level_001.txt` (sortie du script Python) et génère un niveau Godot complet dans `Scenes/Levels/level_10/`
+- Chaque caractère ASCII → bloc **8×8 tuiles natives** (16 px × 8 = 128 px par caractère, sans scale)
+- Murs Godot (layer_1, collision) générés automatiquement : toute cellule vide adjacente à une cellule sol → bloc 8×8 de tuiles mur
+- Met à jour `missions.json` : chemin de scène et spawn (centre de la tuile `S`, en pixels) pour `mission_10`
+- Spawn positionné au centre du bloc `S` → garanti dans une salle ou un couloir
+- **Fichiers :** `Scripts/generate_level.py`, `Scripts/generate_level.gd`, `Scripts/level_001.txt`, `Scenes/Levels/level_10/`, `missions.json`
+
+---
+
 ## Référence — Statistiques de l'armurerie
 
 Chaque équipement de l'armurerie possède des statistiques communes et des statistiques spécifiques à sa catégorie. Voici la signification de chaque champ.
