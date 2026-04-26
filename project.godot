@@ -25,6 +25,7 @@ EventBus="*res://Autoload/EventBus.gd"
 SceneTransition="*res://Autoload/scene_transition.gd"
 GameConfig="*res://Autoload/game_config.gd"
 PlayerConfig="*res://Autoload/player_config.gd"
+ArmoryData="*res://Autoload/armory_data.gd"
 SpriteLibrary="*res://Autoload/sprite_library.gd"
 
 [display]

@@ -32,6 +32,9 @@ var play_button_menu = null
 var character_sheet_scene = preload("res://UI/character_sheet.tscn")
 var character_sheet_instance = null
 
+var armory_scene = preload("res://UI/armory.tscn")
+var armory_instance = null
+
 var hud_scene = preload("res://UI/hud.tscn")
 var hud_instance = null
 
@@ -118,9 +121,13 @@ func _ready():
 	character_sheet_instance = character_sheet_scene.instantiate()
 	add_child(character_sheet_instance)
 
+	armory_instance = armory_scene.instantiate()
+	add_child(armory_instance)
+
 	hud_instance = hud_scene.instantiate()
 	add_child(hud_instance)
 	hud_instance.sheet_requested.connect(_on_hud_sheet_requested)
+	hud_instance.armory_requested.connect(_on_hud_armory_requested)
 	hud_instance.setting_requested.connect(_on_hud_setting_requested)
 	hud_instance.home_requested.connect(_on_hud_home_requested)
 
@@ -360,12 +367,23 @@ func _on_hud_sheet_requested():
 		background_menu.visible = false
 		text_menu.visible = false
 		_auto_save_objects()
+	armory_instance.visible = false
 	character_sheet_instance.visible = !character_sheet_instance.visible
 	if character_sheet_instance.visible:
 		character_sheet_instance.refresh()
 		get_tree().paused = true
 	else:
 		get_tree().paused = false
+
+func _on_hud_armory_requested():
+	if display_menu:
+		display_menu = false
+		background_menu.visible = false
+		text_menu.visible = false
+		_auto_save_objects()
+	character_sheet_instance.visible = false
+	armory_instance.visible = !armory_instance.visible
+	get_tree().paused = armory_instance.visible
 
 func _on_hud_setting_requested():
 	character_sheet_instance.visible = false
