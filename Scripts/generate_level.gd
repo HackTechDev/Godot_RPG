@@ -430,10 +430,13 @@ func _update_mission_spawn(level_n: int, px: int, py: int) -> void:
 	var text := FileAccess.get_file_as_string(abs)
 	var arr: Array = JSON.parse_string(text) as Array
 	if arr == null: return
+	var target_scene := "res://Scenes/Levels/level_%d/level_%d.tscn" % [level_n, level_n]
+	var target_id    := "mission_%02d" % level_n
 	for m: Dictionary in arr:
-		var sc: String = m.get("scene", "")
-		if sc.ends_with("level_%d/level_%d.tscn" % [level_n, level_n]):
+		if m.get("id", "") == target_id:
+			m["scene"] = target_scene
 			m["spawn"] = {"x": px, "y": py}
+			break
 	var fa := FileAccess.open(abs, FileAccess.WRITE)
 	fa.store_string(JSON.stringify(arr, "\t"))
 	fa.close()
