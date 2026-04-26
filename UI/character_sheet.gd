@@ -61,13 +61,13 @@ func refresh():
 			lines.append("- " + item["label"])
 		label_inventory.text = "\n".join(lines)
 
-	const CAT_FR := {"weapon": "Arme", "armor": "Protection", "gadget": "Matériel", "clothing": "Vêtement"}
+	var cat_fr: Dictionary = {"weapon": "Arme", "armor": "Protection", "gadget": "Matériel", "clothing": "Vêtement"}
 	if Player_data.player_equipment.is_empty():
 		_label_equip.text = "(aucun)"
 	else:
 		var lines: Array = []
 		for eq in Player_data.player_equipment:
-			var cat := CAT_FR.get(eq.get("category", ""), eq.get("category", ""))
+			var cat: String = cat_fr.get(eq.get("category", ""), eq.get("category", ""))
 			lines.append("• [%s]  %s" % [cat, eq.get("name", "?")])
 		_label_equip.text = "\n".join(lines)
 
