@@ -579,6 +579,7 @@ func _on_cc_create_pressed():
 	Player_data.player_strength      = int(cc_strength.value)
 	Player_data.player_intelligence  = int(cc_intelligence.value)
 	Player_data.player_weight_capacity = int(cc_weight.value)
+	Player_data.player_credit          = 1000
 	Player_data.appearance_body      = _cc_get_selected_key(cc_body_opt,     "body")
 	Player_data.appearance_hair      = _cc_get_selected_key(cc_hair_opt,     "hair")
 	Player_data.appearance_headwear  = _cc_get_selected_key(cc_headwear_opt, "headwear")
@@ -602,6 +603,7 @@ func _on_cc_create_pressed():
 		"player_strength":        Player_data.player_strength,
 		"player_intelligence":    Player_data.player_intelligence,
 		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_credit":          Player_data.player_credit,
 		"player_nickname":        Player_data.player_nickname,
 		"player_biography":       Player_data.player_biography,
 		"player_rank":            Player_data.player_rank,
@@ -842,6 +844,7 @@ func data_to_save():
 		"player_strength":        Player_data.player_strength,
 		"player_intelligence":    Player_data.player_intelligence,
 		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_credit":          Player_data.player_credit,
 		"player_nickname":        Player_data.player_nickname,
 		"player_biography":      Player_data.player_biography,
 		"player_rank":           Player_data.player_rank,

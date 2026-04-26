@@ -212,6 +212,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Zone : "
 
+[node name="LabelCredit" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ContentRow/StatsColumn" unique_id=2300000001]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Crédit : 0 ¤"
+
 [node name="SeparatorInventory" type="HSeparator" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ContentRow/StatsColumn" unique_id=2095931802]
 layout_mode = 2
 

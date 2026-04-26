@@ -11,6 +11,7 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var label_computers = get_node(_COL + "/LabelComputers")
 @onready var label_robots    = get_node(_COL + "/LabelRobots")
 @onready var label_scene     = get_node(_COL + "/LabelScene")
+@onready var label_credit    = get_node(_COL + "/LabelCredit")
 @onready var label_inventory = get_node(_COL + "/LabelInventory")
 
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
@@ -48,6 +49,7 @@ func refresh():
 	label_computers.text = "Ordinateurs : " + str(Player_data.computer)
 	label_robots.text    = "Robots : "      + str(Player_data.robot)
 	label_scene.text     = "Zone : "        + Player_data.player_previous_scene
+	label_credit.text    = "Crédit : "      + str(Player_data.player_credit) + " ¤"
 
 	if Player_data.inventory.is_empty():
 		label_inventory.text = "(vide)"
