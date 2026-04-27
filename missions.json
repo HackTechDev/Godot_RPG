@@ -59,10 +59,10 @@
 		"description": "Des signaux radio non identifiés ont été captés dans la zone après minuit. Une unité de reconnaissance doit infiltrer le secteur, identifier la source et neutraliser toute présence ennemie.",
 		"id": "mission_05",
 		"objectives": "• Infiltrer la zone sans déclencher l'alarme\n• Localiser la source des transmissions\n• Récupérer l'équipement de communication",
-		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"scene": "res://Scenes/Levels/level_5/level_5.tscn",
 		"spawn": {
-			"x": 200.0,
-			"y": 400.0
+			"x": 11328,
+			"y": 6592
 		},
 		"start_datetime": "2024-08-17 23:45",
 		"sunrise": "05:30",
@@ -73,10 +73,10 @@
 		"description": "Le secteur Delta est une zone de transit stratégique tombée aux mains des robots ennemis. Reprenez le contrôle du couloir et rétablissez la liaison entre les deux bases alliées.",
 		"id": "mission_06",
 		"objectives": "• Traverser le couloir Delta sous couverture\n• Détruire les tourelles ennemies\n• Rétablir la liaison radio avec la base nord",
-		"scene": "res://Scenes/Levels/level_4/level_4.tscn",
+		"scene": "res://Scenes/Levels/level_6/level_6.tscn",
 		"spawn": {
-			"x": 100.0,
-			"y": 383.0
+			"x": 12864,
+			"y": 10176
 		},
 		"start_datetime": "2024-09-02 12:00",
 		"sunrise": "07:00",
@@ -87,10 +87,10 @@
 		"description": "Un groupe de civils est retranché dans un bâtiment du secteur Bravo, cerné par des hordes de zombies. L'heure tourne — chaque minute compte pour les atteindre et les conduire en sécurité.",
 		"id": "mission_07",
 		"objectives": "• Atteindre le bâtiment Bravo-7\n• Escorter les civils jusqu'au point de collecte\n• Tenir la position jusqu'à l'arrivée des renforts",
-		"scene": "res://Scenes/Levels/level_3/level_3.tscn",
+		"scene": "res://Scenes/Levels/level_7/level_7.tscn",
 		"spawn": {
-			"x": 440.0,
-			"y": 136.0
+			"x": 5696,
+			"y": 9664
 		},
 		"start_datetime": "2024-07-30 15:15",
 		"sunrise": "06:30",
@@ -101,10 +101,10 @@
 		"description": "Des informations classifiées sur le Protocole Oméga ont été volées et stockées sur des terminaux dans le secteur sud. Récupérez les données avant qu'elles ne soient transmises à l'ennemi.",
 		"id": "mission_08",
 		"objectives": "• Neutraliser les gardes du périmètre\n• Accéder aux terminaux classifiés\n• Extraire les données et quitter la zone",
-		"scene": "res://Scenes/Levels/level_2/level_2.tscn",
+		"scene": "res://Scenes/Levels/level_8/level_8.tscn",
 		"spawn": {
-			"x": 350.0,
-			"y": 200.0
+			"x": 5568,
+			"y": 7360
 		},
 		"start_datetime": "2024-12-24 20:00",
 		"sunrise": "08:00",
@@ -115,10 +115,10 @@
 		"description": "Des unités ennemies fantômes se déplacent dans le secteur en utilisant des brouilleurs de signal. Localisez et neutralisez ces unités avant qu'elles ne sabotent les infrastructures critiques.",
 		"id": "mission_09",
 		"objectives": "• Identifier les positions des unités fantômes\n• Détruire les brouilleurs de signal\n• Sécuriser les infrastructures critiques",
-		"scene": "res://Scenes/Levels/level_1/level_1.tscn",
+		"scene": "res://Scenes/Levels/level_9/level_9.tscn",
 		"spawn": {
-			"x": 550.0,
-			"y": 300.0
+			"x": 18624,
+			"y": 9408
 		},
 		"start_datetime": "2025-01-19 08:45",
 		"sunrise": "08:00",
