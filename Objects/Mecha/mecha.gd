@@ -13,9 +13,10 @@ var facing_dir: Vector2 = Vector2.UP
 var _pilot: Node2D = null
 var _smooth_velocity: Vector2 = Vector2.ZERO
 
-@onready var _hint_label: Label           = $HintLabel
-@onready var _sprite:     AnimatedSprite2D = $AnimatedSprite2D
-@onready var _col_shape:  CollisionShape2D = $CollisionShape2D
+@onready var _hint_label:   Label              = $HintLabel
+@onready var _sprite:       AnimatedSprite2D    = $AnimatedSprite2D
+@onready var _col_shape:    CollisionShape2D    = $CollisionShape2D
+@onready var _engine_sfx:   AudioStreamPlayer2D = $EngineSound
 
 signal boarded(mecha: Mecha)
 signal disembarked(mecha: Mecha, exit_pos: Vector2)
@@ -34,10 +35,14 @@ func _ready() -> void:
 	_sprite.frame = 0
 	_sprite.stop()
 
+	if _engine_sfx.stream is AudioStreamOggVorbis:
+		(_engine_sfx.stream as AudioStreamOggVorbis).loop = true
+
 
 func _physics_process(delta: float) -> void:
 	if not is_occupied:
 		velocity = Vector2.ZERO
+		_update_engine_sound(false)
 		return
 
 	var input_dir := Vector2.ZERO
@@ -57,6 +62,7 @@ func _physics_process(delta: float) -> void:
 		if _sprite.is_playing():
 			_sprite.stop()
 
+	_update_engine_sound(input_dir != Vector2.ZERO)
 	_smooth_velocity = _smooth_velocity.lerp(input_dir * mecha_speed, inertia_factor * delta)
 	velocity = _smooth_velocity
 	move_and_slide()
@@ -97,6 +103,7 @@ func disembark() -> Vector2:
 	is_occupied = false
 	_pilot = null
 	_smooth_velocity = Vector2.ZERO
+	_update_engine_sound(false)
 	disembarked.emit(self, exit_pos)
 	return exit_pos
 
@@ -109,6 +116,20 @@ func get_save_data() -> Dictionary:
 		"facing_x": facing_dir.x,
 		"facing_y": facing_dir.y
 	}
+
+
+func _update_engine_sound(moving: bool) -> void:
+	if not GameConfig.sfx_enabled:
+		if _engine_sfx.is_playing():
+			_engine_sfx.stop()
+		return
+	_engine_sfx.volume_db = linear_to_db(GameConfig.sfx_volume_linear)
+	if moving:
+		if not _engine_sfx.is_playing():
+			_engine_sfx.play()
+	else:
+		if _engine_sfx.is_playing():
+			_engine_sfx.stop()
 
 
 func _rebuild_collision_shape() -> void:

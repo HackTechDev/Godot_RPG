@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" uid="uid://p3oyk0c4tbpt" path="res://Objects/Mecha/mecha.gd" id="1_mecha"]
 [ext_resource type="Texture2D" path="res://Images/mecha_spider_sheet.png" id="2_spider"]
+[ext_resource type="AudioStream" path="res://Sounds/effect/battle-mech-walks.ogg" id="3_sfx"]
 
 [sub_resource type="AtlasTexture" id="AT_r0f0"]
 atlas = ExtResource("2_spider")
@@ -150,6 +151,10 @@ animation = &"walk_up"
 frame = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_sfx")
+autoplay = false
 
 [node name="HintLabel" type="Label" parent="."]
 position = Vector2(-36, -38)
