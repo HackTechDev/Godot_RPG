@@ -5,8 +5,8 @@ signal armory_requested
 signal setting_requested
 signal home_requested
 
-const MAX_NIGHT_ALPHA  = 0.85   # opacité maximale de la nuit
-const TRANSITION_HOURS = 1.0    # durée de la transition lever/coucher (heures de jeu)
+const MAX_NIGHT_ALPHA  = 0.85
+const TRANSITION_HOURS = 1.0
 
 @onready var label_nickname  = $Panel/Margin/VBox/LabelNickname
 @onready var label_health    = $Panel/Margin/VBox/LabelHealth
@@ -14,13 +14,72 @@ const TRANSITION_HOURS = 1.0    # durée de la transition lever/coucher (heures 
 @onready var label_robots    = $Panel/Margin/VBox/LabelRobots
 @onready var label_zone      = $Panel/Margin/VBox/LabelZone
 @onready var label_position  = $Panel/Margin/VBox/LabelPosition
-@onready var label_clock: Label       = $ClockAnchor/ClockPanel/LabelClock
+@onready var label_clock: Label       = $ClockAnchor/ClockPanel/HBox/LabelClock
 @onready var night_overlay: ColorRect = $NightOverlay
+@onready var _hbox: HBoxContainer     = $ClockAnchor/ClockPanel/HBox
 
 var _tree_was_paused: bool = false
 var _pause_start: float    = 0.0
+var _dial: Control         = null
 
-func _process(_delta):
+# ─── Cadran soleil/lune ────────────────────────────────────────────────────
+class _SunMoonDial extends Control:
+	var hud: Node
+
+	func _draw() -> void:
+		if hud == null:
+			return
+		var data := hud._get_dial_data()
+		var cx   := size.x * 0.5
+		var cy   := size.y * 0.5
+		var R    := minf(cx, cy) - 2.0
+
+		# Anneau de fond
+		draw_arc(Vector2(cx, cy), R, 0.0, TAU, 64,
+				Color(0.15, 0.15, 0.22, 0.9), 3.0, true)
+
+		# Bande diurne (lever → coucher) en or atténué
+		var rise_a := -PI * 0.5 + data.rise  * (TAU / 24.0)
+		var set_a  := -PI * 0.5 + data.set_h * (TAU / 24.0)
+		draw_arc(Vector2(cx, cy), R, rise_a, set_a, 48,
+				Color(0.75, 0.6, 0.1, 0.4), 3.0, true)
+
+		# Arc de progression minuit → heure courante
+		var cur_a := -PI * 0.5 + data.hour * (TAU / 24.0)
+		var arc_col := Color(1.0, 0.82, 0.2, 1.0) if data.is_day \
+				else Color(0.35, 0.5, 0.95, 1.0)
+		if data.active:
+			draw_arc(Vector2(cx, cy), R, -PI * 0.5, cur_a, 64,
+					arc_col, 3.0, true)
+
+		# Marqueur à la position courante
+		var tick := Vector2(cx + cos(cur_a) * R, cy + sin(cur_a) * R)
+		draw_circle(tick, 2.5, arc_col if data.active else Color(0.4, 0.4, 0.45, 0.6))
+
+		# Icône centrale
+		var icon_r := R * 0.38
+		var center := Vector2(cx, cy)
+		if not data.active:
+			draw_circle(center, icon_r, Color(0.28, 0.28, 0.32, 0.55))
+		elif data.is_day:
+			# Soleil : disque jaune
+			draw_circle(center, icon_r, Color(1.0, 0.88, 0.22, 1.0))
+		else:
+			# Lune : arc épais en croissant
+			draw_arc(center, icon_r, -PI * 0.65, PI * 0.65, 32,
+					Color(0.88, 0.92, 1.0, 1.0), icon_r * 0.7, true)
+
+# ─── Initialisation ────────────────────────────────────────────────────────
+func _ready() -> void:
+	var dial := _SunMoonDial.new()
+	dial.hud = self
+	dial.custom_minimum_size = Vector2(36.0, 36.0)
+	_hbox.add_child(dial)
+	_hbox.move_child(dial, 0)
+	_dial = dial
+
+# ─── Boucle principale ─────────────────────────────────────────────────────
+func _process(_delta: float) -> void:
 	_track_pause()
 	label_nickname.text  = "Pseudo: " + Player_data.player_nickname
 	label_health.text    = "Santé: " + str(Player_data.player_health)
@@ -30,9 +89,33 @@ func _process(_delta):
 	label_position.text  = "Pos: %d, %d" % [Player_data.player_pos_x, Player_data.player_pos_y]
 	_update_clock()
 	_update_day_night()
+	if _dial != null:
+		_dial.queue_redraw()
 
-# Détecte les transitions pause ↔ reprise et accumule la durée gelée.
-# S'exécute même quand le jeu est en pause (CanvasLayer hérite PROCESS_MODE_ALWAYS du joueur).
+# ─── Données du cadran ─────────────────────────────────────────────────────
+func _get_dial_data() -> Dictionary:
+	if Player_data.mission_real_start <= 0.0:
+		return {
+			"active": false,
+			"hour":   0.0,
+			"rise":   Player_data.mission_sunrise_hour,
+			"set_h":  Player_data.mission_sunset_hour,
+			"is_day": false
+		}
+	var game_unix := Player_data.mission_start_unix + _elapsed_real() * 60.0
+	var dt        := Time.get_datetime_dict_from_unix_time(int(game_unix))
+	var hour: float = float(dt.hour) + float(dt.minute) / 60.0
+	var rise  := Player_data.mission_sunrise_hour
+	var set_h := Player_data.mission_sunset_hour
+	return {
+		"active": true,
+		"hour":   hour,
+		"rise":   rise,
+		"set_h":  set_h,
+		"is_day": hour >= rise and hour < set_h
+	}
+
+# ─── Suivi des pauses ──────────────────────────────────────────────────────
 func _track_pause() -> void:
 	if Player_data.mission_real_start <= 0.0:
 		return
@@ -45,10 +128,10 @@ func _track_pause() -> void:
 			_pause_start = 0.0
 	_tree_was_paused = now_paused
 
-# Temps réel écoulé depuis le début de la mission, pauses exclues.
 func _elapsed_real() -> float:
 	return Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
 
+# ─── Horloge et cycle jour/nuit ────────────────────────────────────────────
 func _update_clock() -> void:
 	if Player_data.mission_real_start <= 0.0:
 		label_clock.text = "--/--/----  --h--"
@@ -66,11 +149,9 @@ func _update_day_night() -> void:
 	var game_hour: float = float(dt.hour) + float(dt.minute) / 60.0
 	night_overlay.color.a = _compute_night_alpha(game_hour)
 
-# Retourne l'alpha (0 = jour, MAX_NIGHT_ALPHA = nuit) selon l'heure de jeu.
-# Tout est ancré sur l'heure du lever du soleil.
 func _compute_night_alpha(game_hour: float) -> float:
-	var rise     := Player_data.mission_sunrise_hour
-	var set_h    := Player_data.mission_sunset_hour
+	var rise       := Player_data.mission_sunrise_hour
+	var set_h      := Player_data.mission_sunset_hour
 	var since_rise := fmod(game_hour - rise + 24.0, 24.0)
 	var day_len    := fmod(set_h - rise + 24.0, 24.0)
 
@@ -83,6 +164,7 @@ func _compute_night_alpha(game_hour: float) -> float:
 	else:
 		return MAX_NIGHT_ALPHA
 
+# ─── Boutons HUD ───────────────────────────────────────────────────────────
 func _on_btn_sheet_pressed():
 	sheet_requested.emit()
 
