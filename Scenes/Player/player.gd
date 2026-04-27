@@ -124,6 +124,7 @@ func _ready():
 
 	character_sheet_instance = character_sheet_scene.instantiate()
 	add_child(character_sheet_instance)
+	character_sheet_instance.appearance_changed.connect(_on_cs_appearance_changed)
 
 	armory_instance = armory_scene.instantiate()
 	add_child(armory_instance)
@@ -403,6 +404,10 @@ func _facing_to_vector() -> Vector2:
 		6: return Vector2(1, 0)
 		8: return Vector2(0, -1)
 	return Vector2.ZERO
+
+func _on_cs_appearance_changed() -> void:
+	_apply_appearance()
+	_auto_save_player()
 
 func _on_hud_sheet_requested():
 	if display_menu:

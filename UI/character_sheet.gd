@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal appearance_changed
+
 const _BASE  = "Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
 const _COL   = _BASE + "/ContentRow/StatsColumn"
 const _VP    = _BASE + "/ContentRow/PreviewPanel/PreviewCenter/CharPreview/PreviewViewport"
@@ -16,6 +18,7 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 
 @onready var preview_panel   = get_node(_BASE + "/ContentRow/PreviewPanel")
 @onready var _content_row    = get_node(_BASE + "/ContentRow")
+@onready var _stats_col: VBoxContainer = get_node(_COL)
 @onready var _stats_panel    = get_node(_BASE + "/StatsPanel")
 @onready var _equip_panel              = get_node(_BASE + "/EquipPanel")
 @onready var _equip_list_container: VBoxContainer = get_node(_BASE + "/EquipPanel/EquipListContainer")
@@ -43,7 +46,23 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var _spr_hair       = get_node(_VP + "/SpriteHair")
 @onready var _spr_headwear   = get_node(_VP + "/SpriteHeadwear")
 
-# --- Popup détail équipement ---
+# ─── Apparence ─────────────────────────────────────────────────────────────
+const _APP_SLOTS: Array = [
+	{"slot": "body",     "label": "Corps",           "prop": "appearance_body"},
+	{"slot": "hair",     "label": "Cheveux",          "prop": "appearance_hair"},
+	{"slot": "headwear", "label": "Couvre-chef",      "prop": "appearance_headwear"},
+	{"slot": "arms",     "label": "Bras / Brassards", "prop": "appearance_arms"},
+	{"slot": "hands",    "label": "Gants",            "prop": "appearance_hands"},
+	{"slot": "torso",    "label": "Torse",            "prop": "appearance_torso"},
+	{"slot": "legs",     "label": "Jambes",           "prop": "appearance_legs"},
+	{"slot": "feet",     "label": "Pieds",            "prop": "appearance_feet"},
+]
+
+var _app_panel:     Control    = null
+var _app_opts:      Dictionary = {}   # slot → OptionButton
+var _app_saved_lbl: Label      = null
+
+# ─── Popup détail équipement ───────────────────────────────────────────────
 var _detail_popup:  Control        = null
 var _dp_name:       Label          = null
 var _dp_model:      Label          = null
@@ -103,7 +122,40 @@ const _MODE_LABELS: Dictionary = {
 
 func _ready() -> void:
 	_build_detail_popup()
+	_build_appearance_panel()
 
+
+# ─── Onglets ───────────────────────────────────────────────────────────────
+
+func _on_tab_fiche_pressed():
+	_content_row.visible  = true
+	_stats_col.visible    = true
+	_app_panel.visible    = false
+	_stats_panel.visible  = false
+	_equip_panel.visible  = false
+
+func _on_tab_stats_pressed():
+	_content_row.visible  = false
+	_app_panel.visible    = false
+	_stats_panel.visible  = true
+	_equip_panel.visible  = false
+
+func _on_tab_equipements_pressed():
+	_content_row.visible  = false
+	_app_panel.visible    = false
+	_stats_panel.visible  = false
+	_equip_panel.visible  = true
+
+func _on_tab_apparence_pressed():
+	_content_row.visible  = true
+	_stats_col.visible    = false
+	_app_panel.visible    = true
+	_stats_panel.visible  = false
+	_equip_panel.visible  = false
+	_sync_appearance_opts()
+
+
+# ─── Données ───────────────────────────────────────────────────────────────
 
 func refresh():
 	label_health.text    = "Santé : "       + str(Player_data.player_health)
@@ -159,23 +211,157 @@ func refresh():
 	_refresh_preview()
 
 
-func _on_tab_fiche_pressed():
-	_content_row.visible = true
-	_stats_panel.visible = false
-	_equip_panel.visible = false
+# ─── Panneau Apparence ─────────────────────────────────────────────────────
 
-func _on_tab_stats_pressed():
-	_content_row.visible = false
-	_stats_panel.visible = true
-	_equip_panel.visible = false
+func _build_appearance_panel() -> void:
+	_app_panel = VBoxContainer.new()
+	_app_panel.name = "AppearancePanel"
+	_app_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_app_panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_app_panel.add_theme_constant_override("separation", 8)
+	_app_panel.visible = false
+	_content_row.add_child(_app_panel)
 
-func _on_tab_equipements_pressed():
-	_content_row.visible = false
-	_stats_panel.visible = false
-	_equip_panel.visible = true
+	var title := Label.new()
+	title.text = "Apparence du personnage"
+	title.add_theme_font_size_override("font_size", 16)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_app_panel.add_child(title)
+
+	_app_panel.add_child(HSeparator.new())
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_app_panel.add_child(scroll)
+
+	var vbox := VBoxContainer.new()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.add_theme_constant_override("separation", 6)
+	scroll.add_child(vbox)
+
+	for slot_def in _APP_SLOTS:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		vbox.add_child(row)
+
+		var lbl := Label.new()
+		lbl.text = slot_def.label + " :"
+		lbl.custom_minimum_size = Vector2(130, 0)
+		lbl.add_theme_font_size_override("font_size", 14)
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		row.add_child(lbl)
+
+		var opt := OptionButton.new()
+		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		opt.add_theme_font_size_override("font_size", 13)
+		for item in SpriteLibrary.get_slot_options(slot_def.slot):
+			opt.add_item(item.label)
+		var slot: String = slot_def.slot
+		var prop: String = slot_def.prop
+		opt.item_selected.connect(
+			func(idx: int) -> void: _on_appearance_opt_selected(slot, prop, idx)
+		)
+		row.add_child(opt)
+		_app_opts[slot] = opt
+
+	_app_saved_lbl = Label.new()
+	_app_saved_lbl.text = "✓ Apparence sauvegardée"
+	_app_saved_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_app_saved_lbl.add_theme_color_override("font_color", Color(0.3, 0.85, 0.3, 1.0))
+	_app_saved_lbl.add_theme_font_size_override("font_size", 13)
+	_app_saved_lbl.visible = false
+	_app_panel.add_child(_app_saved_lbl)
 
 
-# --- Popup détail ---
+func _sync_appearance_opts() -> void:
+	for slot_def in _APP_SLOTS:
+		var slot: String = slot_def.slot
+		var opt: OptionButton = _app_opts.get(slot)
+		if not is_instance_valid(opt):
+			continue
+		var current_key: String = _get_appearance_prop(slot_def.prop)
+		var opts: Array = SpriteLibrary.get_slot_options(slot)
+		opt.set_block_signals(true)
+		opt.selected = 0
+		for i in opts.size():
+			if opts[i].key == current_key:
+				opt.selected = i
+				break
+		opt.set_block_signals(false)
+
+
+func _on_appearance_opt_selected(slot: String, prop: String, idx: int) -> void:
+	var opts: Array = SpriteLibrary.get_slot_options(slot)
+	if idx < 0 or idx >= opts.size():
+		return
+	_set_appearance_prop(prop, opts[idx].key)
+	_refresh_preview()
+	appearance_changed.emit()
+	_app_saved_lbl.visible = true
+	get_tree().create_timer(1.5).timeout.connect(
+		func() -> void:
+			if is_instance_valid(_app_saved_lbl):
+				_app_saved_lbl.visible = false
+	)
+
+
+func _get_appearance_prop(prop: String) -> String:
+	match prop:
+		"appearance_body":     return Player_data.appearance_body
+		"appearance_hair":     return Player_data.appearance_hair
+		"appearance_headwear": return Player_data.appearance_headwear
+		"appearance_arms":     return Player_data.appearance_arms
+		"appearance_hands":    return Player_data.appearance_hands
+		"appearance_torso":    return Player_data.appearance_torso
+		"appearance_legs":     return Player_data.appearance_legs
+		"appearance_feet":     return Player_data.appearance_feet
+	return ""
+
+
+func _set_appearance_prop(prop: String, value: String) -> void:
+	match prop:
+		"appearance_body":     Player_data.appearance_body = value
+		"appearance_hair":     Player_data.appearance_hair = value
+		"appearance_headwear": Player_data.appearance_headwear = value
+		"appearance_arms":     Player_data.appearance_arms = value
+		"appearance_hands":    Player_data.appearance_hands = value
+		"appearance_torso":    Player_data.appearance_torso = value
+		"appearance_legs":     Player_data.appearance_legs = value
+		"appearance_feet":     Player_data.appearance_feet = value
+
+
+# ─── Prévisualisation ──────────────────────────────────────────────────────
+
+func _refresh_preview():
+	if Player_data.appearance_body == "":
+		preview_panel.visible = false
+		return
+	preview_panel.visible = true
+	_load(_spr_body,    Player_data.appearance_body)
+	_load(_spr_legs,    Player_data.appearance_legs)
+	_load(_spr_feet,    Player_data.appearance_feet)
+	_none(_spr_shoulders)
+	_load(_spr_torso,   Player_data.appearance_torso)
+	var arms = Player_data.appearance_arms
+	match SpriteLibrary.get_item_layer(arms):
+		"arms":    _load(_spr_arms, arms); _none(_spr_bracers)
+		"bracers": _none(_spr_arms);       _load(_spr_bracers, arms)
+		_:         _none(_spr_arms);       _none(_spr_bracers)
+	_load(_spr_gloves,  Player_data.appearance_hands)
+	SpriteLibrary.apply_head_preview(_spr_head)
+	SpriteLibrary.apply_face_preview(_spr_face)
+	_load(_spr_hair,    Player_data.appearance_hair)
+	_load(_spr_headwear, Player_data.appearance_headwear)
+
+func _load(spr: Sprite2D, key: String) -> void:
+	SpriteLibrary.apply_preview_sprite_centered(spr, key)
+
+func _none(spr: Sprite2D) -> void:
+	spr.visible = false
+
+
+# ─── Popup détail équipement ───────────────────────────────────────────────
 
 func _build_detail_popup() -> void:
 	_detail_popup = Control.new()
@@ -316,32 +502,7 @@ func _dp_format_val(key: String, val: Variant) -> String:
 	return str(val)
 
 
-func _refresh_preview():
-	if Player_data.appearance_body == "":
-		preview_panel.visible = false
-		return
-	preview_panel.visible = true
-	_load(_spr_body,    Player_data.appearance_body)
-	_load(_spr_legs,    Player_data.appearance_legs)
-	_load(_spr_feet,    Player_data.appearance_feet)
-	_none(_spr_shoulders)
-	_load(_spr_torso,   Player_data.appearance_torso)
-	var arms = Player_data.appearance_arms
-	match SpriteLibrary.get_item_layer(arms):
-		"arms":    _load(_spr_arms, arms); _none(_spr_bracers)
-		"bracers": _none(_spr_arms);       _load(_spr_bracers, arms)
-		_:         _none(_spr_arms);       _none(_spr_bracers)
-	_load(_spr_gloves,  Player_data.appearance_hands)
-	SpriteLibrary.apply_head_preview(_spr_head)
-	SpriteLibrary.apply_face_preview(_spr_face)
-	_load(_spr_hair,    Player_data.appearance_hair)
-	_load(_spr_headwear, Player_data.appearance_headwear)
-
-func _load(spr: Sprite2D, key: String) -> void:
-	SpriteLibrary.apply_preview_sprite_centered(spr, key)
-
-func _none(spr: Sprite2D) -> void:
-	spr.visible = false
+# ─── Fermeture ─────────────────────────────────────────────────────────────
 
 func _on_button_close_pressed():
 	_hide_equipment_detail()
