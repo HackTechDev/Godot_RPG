@@ -54,16 +54,20 @@ var dialogue_box_instance = null
 var radial_menu_scene = preload("res://UI/radial_menu.tscn")
 var radial_menu_instance = null
 
+var minimap_scene = preload("res://UI/minimap.tscn")
+var minimap_instance = null
+
 const RADIAL_CLICK_RADIUS = 26.0
 
 func _radial_items() -> Array:
 	return [
-		{"id": "build",  "letter": "B", "label": "Construire", "disabled": false},
-		{"id": "take",   "letter": "T", "label": "Ramasser",   "disabled": not is_instance_valid(Player_data.contact_object)},
-		{"id": "talk",   "letter": "Z", "label": "Parler",     "disabled": not is_instance_valid(Player_data.contact_npc)},
-		{"id": "combat", "letter": "C", "label": "Combat",     "disabled": not is_instance_valid(Player_data.contact_enemy)},
-		{"id": "sheet",  "letter": "P", "label": "Fiche",      "disabled": false},
-		{"id": "attack", "letter": "A", "label": "Attaquer",   "disabled": false},
+		{"id": "build",   "letter": "B", "label": "Construire", "disabled": false},
+		{"id": "take",    "letter": "T", "label": "Ramasser",   "disabled": not is_instance_valid(Player_data.contact_object)},
+		{"id": "talk",    "letter": "Z", "label": "Parler",     "disabled": not is_instance_valid(Player_data.contact_npc)},
+		{"id": "combat",  "letter": "C", "label": "Combat",     "disabled": not is_instance_valid(Player_data.contact_enemy)},
+		{"id": "sheet",   "letter": "P", "label": "Fiche",      "disabled": false},
+		{"id": "attack",  "letter": "A", "label": "Attaquer",   "disabled": false},
+		{"id": "minimap", "letter": "M", "label": "Carte",      "disabled": false},
 	]
 
 const CONE_LENGTH   = 130.0
@@ -148,6 +152,9 @@ func _ready():
 	add_child(radial_menu_instance)
 	radial_menu_instance.action_selected.connect(_handle_radial_action)
 	radial_menu_instance.closed.connect(func(): get_tree().paused = false)
+
+	minimap_instance = minimap_scene.instantiate()
+	add_child(minimap_instance)
 
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
@@ -924,3 +931,6 @@ func _handle_radial_action(action_id: String) -> void:
 				character_sheet_instance.refresh()
 		"attack":
 			_on_attack_key()
+		"minimap":
+			if minimap_instance != null:
+				minimap_instance.toggle()

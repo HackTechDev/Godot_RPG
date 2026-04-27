@@ -48,6 +48,9 @@ func _ready() -> void:
 	add_child(cam_ctrl)
 	cam_ctrl.set_follow(player)
 
+	# Minimap : émettre les cellules sol après que le joueur (et sa minimap) soient prêts
+	call_deferred("_emit_level_map")
+
 	_trigger_hint = Label.new()
 	_trigger_hint.text = "Haut du sprite = haut du trigger — appuyez sur Espace"
 	_trigger_hint.visible = false
@@ -403,6 +406,39 @@ func _load_mechas() -> void:
 		add_child(mecha)
 		mecha.global_position = Vector2(px, py)
 		print("base_level._load_mechas: mecha.global_position après add_child = ", mecha.global_position)
+
+
+func _emit_level_map() -> void:
+	var ground := get_node_or_null("ground")
+	if ground == null:
+		return
+
+	var floor_cells: Array = []
+	var map_scale: int = 16
+
+	if ground is TileMap:
+		# Niveaux générés (4-10) : layer 0 = sol, expansion 8×8 tuiles par char ASCII
+		var floor_set: Dictionary = {}
+		for cell: Vector2i in (ground as TileMap).get_used_cells(0):
+			floor_set[Vector2i(cell.x / 8, cell.y / 8)] = true
+		floor_cells = floor_set.keys()
+		map_scale = 128
+	elif ground is TileMapLayer:
+		# Niveaux natifs (1-3) : cherche la couche 'Dalle' en priorité
+		var src: TileMapLayer
+		var dalle := ground.get_node_or_null("Dalle")
+		if dalle is TileMapLayer:
+			src = dalle as TileMapLayer
+		else:
+			src = ground as TileMapLayer
+		for cell: Vector2i in src.get_used_cells():
+			floor_cells.append(cell)
+		map_scale = 16
+
+	if floor_cells.is_empty():
+		return
+
+	EventBus.level_map_ready.emit(floor_cells, map_scale)
 
 
 func _read_level_json(user_path: String, config_path: String) -> Array:

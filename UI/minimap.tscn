@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cminimaplayer1"]
+
+[ext_resource type="Script" uid="uid://cminimapscript1" path="res://UI/minimap.gd" id="1_mapscr"]
+
+[node name="MinimapLayer" type="CanvasLayer"]
+script = ExtResource("1_mapscr")

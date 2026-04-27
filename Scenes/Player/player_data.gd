@@ -70,6 +70,10 @@ static var mission_paused_duration: float = 0.0   # durée cumulée des pauses (
 static var mission_sunrise_hour: float = 6.0   # heure du lever du soleil (0-24)
 static var mission_sunset_hour:  float = 20.0  # heure du coucher du soleil (0-24)
 
+# Minimap
+static var minimap_enabled: bool = true
+static var minimap_visited: Dictionary = {}   # Vector2i → true, remis à zéro à chaque niveau
+
 # Appearance (LPC spritesheet layer keys)
 static var appearance_body: String = ""
 static var appearance_hair: String = ""
