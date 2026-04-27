@@ -152,18 +152,26 @@ def save_level_txt(level, filename="level_001.txt"):
             f.write(row + "\n")
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default="level_001", help="Basename for output files (sans extension)")
+    parser.add_argument("--seed",   type=int, default=None, help="Random seed for reproducibility")
+    args = parser.parse_args()
+
+    if args.seed is not None:
+        random.seed(args.seed)
+
     level = generate_level()
 
-    print("\n=== NIVEAU GÉNÉRÉ ===\n")
-    print_level(level)
+    txt_file  = args.output + ".txt"
+    json_file = args.output + ".json"
 
     # Export JSON
-    with open("level_001.json", "w", encoding="utf-8") as f:
+    with open(json_file, "w", encoding="utf-8") as f:
         json.dump(level, f, indent=2, ensure_ascii=False)
 
     # Export TXT
-    save_level_txt(level, "level_001.txt")
+    save_level_txt(level, txt_file)
 
-    print("\n=== EXPORTS ===")
-    print("JSON : level_001.json")
-    print("TXT  : level_001.txt")
+    print("TXT  : " + txt_file)
+    print("JSON : " + json_file)

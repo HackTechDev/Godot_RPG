@@ -27,6 +27,11 @@ const TILE_WALL    := 31
 
 # ── Point d'entrée ─────────────────────────────────────────────────────────────
 func _run() -> void:
+	generate_from_file(5,  "res://Scripts/level_005.txt")
+	generate_from_file(6,  "res://Scripts/level_006.txt")
+	generate_from_file(7,  "res://Scripts/level_007.txt")
+	generate_from_file(8,  "res://Scripts/level_008.txt")
+	generate_from_file(9,  "res://Scripts/level_009.txt")
 	generate_from_file(10, "res://Scripts/level_001.txt")
 
 # ── Configuration par niveau ──────────────────────────────────────────────────
@@ -375,42 +380,15 @@ func _design(n: int) -> Array:
 	return []
 
 # ── Objets collectables ───────────────────────────────────────────────────────
-# Pour generate_from_file, sp est la tuile 'S' lue dans le fichier.
-# Les objets sont placés à +offset depuis le spawn (en pixels).
+# Tous les niveaux générés par generate_from_file() placent les objets
+# en relatif depuis le spawn (sp), garanti dans une salle ou un couloir.
 func _get_objects(n: int, sp: Vector2i = Vector2i(0, 0)) -> Array:
 	var k := TILE_PX
-	match n:
-		5:  return [
-				{"type":"computer","x": 4*k,"y": 4*k},
-				{"type":"computer","x":36*k,"y":30*k},
-				{"type":"robot",   "x":22*k,"y": 9*k},
-				{"type":"robot",   "x":10*k,"y":26*k}]
-		6:  return [
-				{"type":"computer","x": 4*k,"y":21*k},
-				{"type":"computer","x":32*k,"y":22*k},
-				{"type":"robot",   "x":15*k,"y":21*k},
-				{"type":"robot",   "x":23*k,"y":21*k}]
-		7:  return [
-				{"type":"computer","x": 5*k,"y": 5*k},
-				{"type":"computer","x":38*k,"y":32*k},
-				{"type":"robot",   "x":10*k,"y":28*k},
-				{"type":"robot",   "x":34*k,"y": 6*k}]
-		8:  return [
-				{"type":"computer","x": 5*k,"y":20*k},
-				{"type":"computer","x":32*k,"y":21*k},
-				{"type":"robot",   "x":10*k,"y": 5*k},
-				{"type":"robot",   "x":26*k,"y":25*k}]
-		9:  return [
-				{"type":"computer","x": 4*k,"y": 4*k},
-				{"type":"computer","x":38*k,"y":28*k},
-				{"type":"robot",   "x":14*k,"y":18*k},
-				{"type":"robot",   "x":26*k,"y": 8*k}]
-		10: return [
-				{"type":"computer","x":(sp.x + 5)*k, "y":(sp.y + 0)*k},
-				{"type":"computer","x":(sp.x + 0)*k, "y":(sp.y + 5)*k},
-				{"type":"robot",   "x":(sp.x + 8)*k, "y":(sp.y + 0)*k},
-				{"type":"robot",   "x":(sp.x + 0)*k, "y":(sp.y + 8)*k}]
-	return []
+	return [
+		{"type":"computer","x":(sp.x + 5)*k, "y":(sp.y + 0)*k},
+		{"type":"computer","x":(sp.x + 0)*k, "y":(sp.y + 5)*k},
+		{"type":"robot",   "x":(sp.x + 8)*k, "y":(sp.y + 0)*k},
+		{"type":"robot",   "x":(sp.x + 0)*k, "y":(sp.y + 8)*k}]
 
 # ── I/O ───────────────────────────────────────────────────────────────────────
 func _write(res_path: String, content: String) -> void:
