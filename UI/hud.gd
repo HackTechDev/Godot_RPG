@@ -24,41 +24,45 @@ var _dial: Control         = null
 
 # ─── Cadran soleil/lune ────────────────────────────────────────────────────
 class _SunMoonDial extends Control:
-	var hud: Node
+	var hud  # non-typé : appel duck-typing sur _get_dial_data()
 
 	func _draw() -> void:
 		if hud == null:
 			return
-		var data := hud._get_dial_data()
-		var cx   := size.x * 0.5
-		var cy   := size.y * 0.5
-		var R    := minf(cx, cy) - 2.0
+		var data: Dictionary = hud._get_dial_data()
+		var cx:   float = size.x * 0.5
+		var cy:   float = size.y * 0.5
+		var R:    float = minf(cx, cy) - 2.0
 
 		# Anneau de fond
 		draw_arc(Vector2(cx, cy), R, 0.0, TAU, 64,
 				Color(0.15, 0.15, 0.22, 0.9), 3.0, true)
 
 		# Bande diurne (lever → coucher) en or atténué
-		var rise_a := -PI * 0.5 + data.rise  * (TAU / 24.0)
-		var set_a  := -PI * 0.5 + data.set_h * (TAU / 24.0)
+		var rise_a: float = -PI * 0.5 + float(data.rise)  * (TAU / 24.0)
+		var set_a:  float = -PI * 0.5 + float(data.set_h) * (TAU / 24.0)
 		draw_arc(Vector2(cx, cy), R, rise_a, set_a, 48,
 				Color(0.75, 0.6, 0.1, 0.4), 3.0, true)
 
 		# Arc de progression minuit → heure courante
-		var cur_a := -PI * 0.5 + data.hour * (TAU / 24.0)
-		var arc_col := Color(1.0, 0.82, 0.2, 1.0) if data.is_day \
-				else Color(0.35, 0.5, 0.95, 1.0)
+		var cur_a: float = -PI * 0.5 + float(data.hour) * (TAU / 24.0)
+		var arc_col: Color
+		if data.is_day:
+			arc_col = Color(1.0, 0.82, 0.2, 1.0)
+		else:
+			arc_col = Color(0.35, 0.5, 0.95, 1.0)
 		if data.active:
 			draw_arc(Vector2(cx, cy), R, -PI * 0.5, cur_a, 64,
 					arc_col, 3.0, true)
 
 		# Marqueur à la position courante
-		var tick := Vector2(cx + cos(cur_a) * R, cy + sin(cur_a) * R)
-		draw_circle(tick, 2.5, arc_col if data.active else Color(0.4, 0.4, 0.45, 0.6))
+		var tick: Vector2 = Vector2(cx + cos(cur_a) * R, cy + sin(cur_a) * R)
+		var tick_col: Color = arc_col if bool(data.active) else Color(0.4, 0.4, 0.45, 0.6)
+		draw_circle(tick, 2.5, tick_col)
 
 		# Icône centrale
-		var icon_r := R * 0.38
-		var center := Vector2(cx, cy)
+		var icon_r: float  = R * 0.38
+		var center: Vector2 = Vector2(cx, cy)
 		if not data.active:
 			draw_circle(center, icon_r, Color(0.28, 0.28, 0.32, 0.55))
 		elif data.is_day:
