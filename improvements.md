@@ -151,10 +151,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Apparence du personnage
 
-### Éditeur d'apparence en cours de partie
-- Permettre de modifier l'apparence depuis la fiche de personnage (touche P) ou le menu in-game
-- Les changements sont sauvegardés dans `rpg.json` et appliqués immédiatement via `_apply_appearance()`
-
 ### Sprites LPC supplémentaires
 - Enrichir les options de chaque slot au fil des imports (nouvelles couleurs de peau, coiffures, armures…)
 - Ajouter un ZIP LPC dans `res://Sprites/Player/` suffit — `SpriteLibrary` le découvre automatiquement au démarrage
@@ -183,10 +179,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Impact gameplay de la nuit
 - Ennemis plus nombreux ou plus rapides entre 22h00 et 05h00
 - Zones sûres uniquement accessibles le jour (portes verrouillées la nuit)
-
-### Indicateur visuel de l'heure sur le HUD
-- Petite icône soleil/lune à côté de l'horloge qui change selon la phase du jour
-- Barre de progression circulaire représentant l'avancement de la journée
 
 ---
 
@@ -219,7 +211,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Type défini par `mecha_type` dans `mechas.json`
 
 ### Son du Mecha
-- Son moteur en boucle pendant le déplacement (différent des pas du joueur)
 - Son d'impact quand le Mecha heurte un mur
 
 ### Sprite directionnel (fait)

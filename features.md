@@ -712,6 +712,44 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Indicateur visuel de l'heure (soleil / lune) sur le HUD
+
+- Cadran circulaire dessiné via la classe interne `_SunMoonDial extends Control` avec `_draw()`
+- Arc de fond sombre (360°) + arc doré entre les heures de lever et coucher définies par la mission (`sunrise` / `sunset`)
+- Aiguille-point (cercle de 2,5 px) qui progresse de minuit (haut) à minuit dans le sens horaire
+- Icône centrale : soleil (cercle jaune) de jour, croissant de lune (arc blanc) la nuit, gris si aucune mission active
+- Arc de progression coloré : doré en journée, bleu lavande la nuit, depuis minuit jusqu'à l'heure courante
+- Taille : 36×36 px, placé dans un `HBoxContainer` à gauche de l'étiquette de l'horloge
+- Se redessine à chaque frame via `queue_redraw()` ; données lues depuis `_get_dial_data()` (Dictionary)
+- **Fichiers :** `UI/hud.tscn`, `UI/hud.gd`
+
+---
+
+## Éditeur d'apparence en cours de partie
+
+- Nouvel onglet **"Apparence"** dans la fiche de personnage (touche **P**)
+- 8 slots modifiables : Corps, Cheveux, Couvre-chef, Bras, Gants, Torse, Jambes, Pieds
+- Chaque slot affiche un `OptionButton` peuplé par `SpriteLibrary.get_slot_options(slot)` — ajouter un ZIP LPC = option automatiquement disponible
+- Changements appliqués immédiatement en jeu via `_apply_appearance()` (signal `appearance_changed` émis par la fiche, reçu par `player.gd`)
+- Sauvegardés instantanément dans `user://rpg.json` via `_auto_save_player()`
+- La prévisualisation (SubViewport) est partagée avec l'onglet "Fiche" — `_stats_col` et `_app_panel` sont basculés en visibilité
+- Feedback visuel "✓ Apparence sauvegardée" affiché 1,5 s après chaque changement
+- Accès aux variables statiques de `Player_data` via `match` explicite (pas de `get()`) pour la sécurité de type
+- **Fichiers :** `UI/character_sheet.tscn`, `UI/character_sheet.gd`, `Scenes/Player/player.gd`
+
+---
+
+## Son moteur du Mecha
+
+- `AudioStreamPlayer2D` (nœud `EngineSound`) ajouté au Mecha avec `autoplay = false`
+- Fichier OGG : `res://Sounds/effect/battle-mech-walks.ogg`, mis en boucle au démarrage via `(stream as AudioStreamOggVorbis).loop = true`
+- Démarré quand le mecha se déplace (`input_dir != Vector2.ZERO`), arrêté à l'arrêt ou à la descente du pilote
+- Volume géré par `GameConfig.sfx_enabled` / `linear_to_db(GameConfig.sfx_volume_linear)` — même pattern que les pas du joueur
+- `_update_engine_sound(moving: bool)` centralise la logique démarrage / arrêt / volume
+- **Fichiers :** `Objects/Mecha/mecha.tscn`, `Objects/Mecha/mecha.gd`
+
+---
+
 ## Référence — Statistiques de l'armurerie
 
 Chaque équipement de l'armurerie possède des statistiques communes et des statistiques spécifiques à sa catégorie. Voici la signification de chaque champ.
