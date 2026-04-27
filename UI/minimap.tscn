@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cminimaplayer1"]
+[gd_scene format=3 uid="uid://c7h3s5cjywvmq"]
 
 [ext_resource type="Script" uid="uid://cminimapscript1" path="res://UI/minimap.gd" id="1_mapscr"]
 
