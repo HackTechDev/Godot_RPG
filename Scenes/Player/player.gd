@@ -116,7 +116,7 @@ func _ready():
 	text_menu.visible = false
 
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
-	play_button_menu.text = "Back to the game"
+	play_button_menu.text = "Retour à la mission"
 	play_button_menu.pressed.disconnect(text_menu._on_button_play_pressed)
 	play_button_menu.pressed.connect(_close_menu)
 	text_menu.set_in_game_mode(true)
