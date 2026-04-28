@@ -333,7 +333,7 @@ func _save_transition_state(player: Node2D) -> void:
 
 func _load_objects() -> void:
 	var entries := _read_level_json(
-		"user://%s/objects.json" % name,
+		Player_data.level_save_dir(name) + "/objects.json",
 		"res://Scenes/Levels/%s/objects.json" % name
 	)
 	for entry in entries:
@@ -353,7 +353,7 @@ func _load_objects() -> void:
 
 func _load_enemies() -> void:
 	var entries := _read_level_json(
-		"user://%s/enemies.json" % name,
+		Player_data.level_save_dir(name) + "/enemies.json",
 		"res://Scenes/Levels/%s/enemies.json" % name
 	)
 	for entry in entries:
@@ -383,7 +383,7 @@ func _load_npcs() -> void:
 
 
 func _load_mechas() -> void:
-	var user_path   := "user://%s/mechas.json" % name
+	var user_path   := Player_data.level_save_dir(name) + "/mechas.json"
 	var res_path    := "res://Scenes/Levels/%s/mechas.json" % name
 	print("base_level._load_mechas: user=", user_path, " | res=", res_path)
 	var entries := _read_level_json(user_path, res_path)

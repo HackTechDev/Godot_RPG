@@ -2,7 +2,10 @@ extends RefCounted
 
 static var version = "1"
 
-const MISSION_STATE_PATH = "user://current_mission.json"
+func _mission_state_path() -> String:
+	if Player_data.character_slug != "":
+		return "user://characters/%s/mission_state.json" % Player_data.character_slug
+	return "user://current_mission.json"
 
 func displayVersion():
 	return "LibLevel version: " + version
@@ -20,7 +23,8 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	if GameConfig.DEBUG:
 		print("saveAllObjects")
 
-	DirAccess.make_dir_absolute("user://" + current_scene)
+	var base_dir := Player_data.level_save_dir(current_scene)
+	DirAccess.make_dir_recursive_absolute(base_dir)
 
 	# objects.json — computers + robots collectibles
 	var objects_data: Array = []
@@ -28,7 +32,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 		objects_data.append({ "type": "computer", "x": computer.position.x, "y": computer.position.y })
 	for robot in robots:
 		objects_data.append({ "type": "robot", "x": robot.position.x, "y": robot.position.y })
-	var objects_file = FileAccess.open("user://%s/objects.json" % current_scene, FileAccess.WRITE)
+	var objects_file = FileAccess.open(base_dir + "/objects.json", FileAccess.WRITE)
 	objects_file.store_line(JSON.stringify(objects_data))
 	objects_file.close()
 
@@ -44,7 +48,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 			"dead":           enemy.is_dead,
 			"death_rotation": enemy.death_rotation
 		})
-	var enemies_file = FileAccess.open("user://%s/enemies.json" % current_scene, FileAccess.WRITE)
+	var enemies_file = FileAccess.open(base_dir + "/enemies.json", FileAccess.WRITE)
 	enemies_file.store_line(JSON.stringify(enemies_data))
 	enemies_file.close()
 
@@ -53,7 +57,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	for mecha in mechas:
 		if mecha.has_method("get_save_data"):
 			mechas_data.append(mecha.get_save_data())
-	var mechas_file = FileAccess.open("user://%s/mechas.json" % current_scene, FileAccess.WRITE)
+	var mechas_file = FileAccess.open(base_dir + "/mechas.json", FileAccess.WRITE)
 	mechas_file.store_line(JSON.stringify(mechas_data))
 	mechas_file.close()
 	
@@ -73,13 +77,13 @@ func save_mission_state(mission_id: String, started: bool, elapsed_real: float =
 		"saved_at": saved_at,
 		"game_datetime": game_datetime
 	}
-	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.WRITE)
+	var file := FileAccess.open(_mission_state_path(), FileAccess.WRITE)
 	if file:
 		file.store_line(JSON.stringify(data))
 		file.close()
 
 func load_mission_state() -> Dictionary:
-	var file := FileAccess.open(MISSION_STATE_PATH, FileAccess.READ)
+	var file := FileAccess.open(_mission_state_path(), FileAccess.READ)
 	if file == null:
 		return {}
 	var data = JSON.parse_string(file.get_as_text())
@@ -91,21 +95,22 @@ func load_mission_state() -> Dictionary:
 func reinitializeLevel():
 	if GameConfig.DEBUG:
 		print("Reinitialize Level")
-	if FileAccess.file_exists(MISSION_STATE_PATH):
-		DirAccess.remove_absolute(MISSION_STATE_PATH)
+	var mission_path := _mission_state_path()
+	if FileAccess.file_exists(mission_path):
+		DirAccess.remove_absolute(mission_path)
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
 		for file_name in ["objects.json", "enemies.json", "mechas.json"]:
-			var path = "user://%s/%s" % [level, file_name]
+			var path := "%s/%s/%s" % [Player_data.character_dir(), level, file_name]
 			if FileAccess.file_exists(path):
 				DirAccess.remove_absolute(path)
 
 func reinitializePlayer():
 	if GameConfig.DEBUG:
 		print("Reinitialize Player")
-	#mDirAccess.remove_absolute(Player_data.save_path)
-	
+	if Player_data.character_slug != "":
+		DirAccess.make_dir_recursive_absolute(Player_data.character_dir())
 	var dir = DirAccess.open("res://World/Default/")
-	dir.copy("res://World/Default/rpg.json", "user://rpg.json")
+	dir.copy("res://World/Default/rpg.json", Player_data.save_path)
 
 
 func load_game():

@@ -83,3 +83,17 @@ static var appearance_hands: String = ""
 static var appearance_torso: String = ""
 static var appearance_legs: String = ""
 static var appearance_feet: String = ""
+
+static var character_slug: String = ""
+
+static func set_character(slug: String) -> void:
+	character_slug = slug
+	save_path = "user://characters/%s/rpg.json" % slug if slug != "" else "user://rpg.json"
+
+static func character_dir() -> String:
+	return "user://characters/%s" % character_slug if character_slug != "" else "user://"
+
+static func level_save_dir(level_name: String) -> String:
+	if character_slug != "":
+		return "user://characters/%s/%s" % [character_slug, level_name]
+	return "user://%s" % level_name

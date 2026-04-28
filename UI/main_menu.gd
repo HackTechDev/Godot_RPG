@@ -38,7 +38,6 @@ const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/V
 
 var _missions: Array = []
 var _selected_mission: Dictionary = {}
-var _pending_mission: Dictionary = {}
 
 var _mr_panel:          Control        = null
 var _mr_title:          Label          = null
@@ -47,6 +46,13 @@ var _mr_game_datetime:  Label          = null
 var _mr_elapsed:        Label          = null
 var _mr_health:         Label          = null
 var _mr_objectives:     RichTextLabel  = null
+
+var _cs_panel:         Control  = null
+var _cs_list:          ItemList = null
+var _cs_btn_play:      Button   = null
+var _cs_empty_label:   Label    = null
+var _cs_selected_slug: String   = ""
+var _cs_characters:    Array    = []
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -126,8 +132,8 @@ const CC_SPECS: Dictionary = {
 	
 func _on_button_play_pressed():
 	main.visible = false
-	mission_select.visible = true
-	_load_missions()
+	_load_character_list()
+	_cs_panel.visible = true
 
 func _load_missions() -> void:
 	_missions = []
@@ -172,12 +178,6 @@ func _on_button_accept_pressed() -> void:
 	var state := liblevel.load_mission_state()
 	if state.get("started", false) and state.get("mission_id", "") == mission_id:
 		_show_mission_recap()
-		return
-	if not FileAccess.file_exists(Player_data.save_path):
-		_pending_mission = _selected_mission.duplicate()
-		mission_select.visible = false
-		character_creation.visible = true
-		_cc_show_page(1)
 		return
 	_launch_mission(_selected_mission, false)
 
@@ -232,7 +232,8 @@ func _show_mission_recap() -> void:
 
 func _on_recap_back_pressed() -> void:
 	_mr_panel.visible = false
-	mission_select.visible = true
+	_load_character_list()
+	_cs_panel.visible = true
 
 func _on_recap_continue_pressed() -> void:
 	_mr_panel.visible = false
@@ -337,7 +338,8 @@ func _parse_datetime_to_unix(dt_str: String) -> float:
 
 func _on_button_mission_back_pressed() -> void:
 	mission_select.visible = false
-	main.visible = true
+	_load_character_list()
+	_cs_panel.visible = true
 
 func _on_button_settings_pressed():
 	main.visible = false
@@ -598,6 +600,9 @@ func _on_cc_create_pressed():
 	Player_data.appearance_torso     = _cc_get_selected_key(cc_torso_opt,    "torso")
 	Player_data.appearance_legs      = _cc_get_selected_key(cc_legs_opt,     "legs")
 	Player_data.appearance_feet      = _cc_get_selected_key(cc_feet_opt,     "feet")
+	var slug := _slugify(Player_data.player_nickname)
+	Player_data.set_character(slug)
+	DirAccess.make_dir_recursive_absolute(Player_data.character_dir())
 	liblevel.savePlayer({
 		"player_position":        [Player_data_default.spawnpoint_position_x, Player_data_default.spawnpoint_position_y],
 		"player_facing":          0,
@@ -630,12 +635,9 @@ func _on_cc_create_pressed():
 	})
 	liblevel.reinitializeLevel()
 	get_tree().paused = false
-	if not _pending_mission.is_empty():
-		liblevel.load_game()
-		_launch_mission(_pending_mission, false)
-	else:
-		character_creation.visible = false
-		main.visible = true
+	character_creation.visible = false
+	mission_select.visible = true
+	_load_missions()
 
 func _on_check_music_toggled(toggled_on: bool):
 	music_neon_dream.stream_paused = !toggled_on
@@ -699,6 +701,8 @@ func show_main_panel() -> void:
 	character_creation.visible = false
 	if _mr_panel:
 		_mr_panel.visible = false
+	if _cs_panel:
+		_cs_panel.visible = false
 	main.visible = true
 
 func set_in_game_mode(enabled: bool) -> void:
@@ -739,8 +743,174 @@ func _on_reinitialize_pressed():
 	Player_data.player_attack = randi_range(10, 15)
 	Player_data.player_defense = randi_range(10, 15)
 	get_tree().paused = false
+	Player_data.set_character("")
 	Player_data.goto_character_creation = true
 	SceneTransition.change_scene("res://UI/main_menu.tscn")
+
+func _slugify(nickname: String) -> String:
+	var result := ""
+	for ch in nickname.to_lower():
+		var code := ch.unicode_at(0)
+		if (code >= 97 and code <= 122) or (code >= 48 and code <= 57):
+			result += ch
+		elif ch == " " or ch == "-":
+			result += "_"
+	while result.begins_with("_"): result = result.substr(1)
+	while result.ends_with("_"):   result = result.substr(0, result.length() - 1)
+	if result == "": result = "player"
+	if not DirAccess.dir_exists_absolute("user://characters/%s" % result):
+		return result
+	for i in range(2, 100):
+		var candidate := "%s_%d" % [result, i]
+		if not DirAccess.dir_exists_absolute("user://characters/%s" % candidate):
+			return candidate
+	return result
+
+
+func _load_character_list() -> void:
+	_cs_characters = []
+	_cs_list.clear()
+	_cs_selected_slug = ""
+	_cs_btn_play.disabled = true
+	var dir := DirAccess.open("user://characters/")
+	if dir != null:
+		dir.list_dir_begin()
+		var slug := dir.get_next()
+		while slug != "":
+			if dir.current_is_dir() and not slug.begins_with("."):
+				var rpg_path := "user://characters/%s/rpg.json" % slug
+				if FileAccess.file_exists(rpg_path):
+					var f := FileAccess.open(rpg_path, FileAccess.READ)
+					var data = JSON.parse_string(f.get_as_text())
+					f.close()
+					if data is Dictionary:
+						var has_mission := FileAccess.file_exists(
+							"user://characters/%s/mission_state.json" % slug)
+						_cs_characters.append({
+							"slug": slug,
+							"nickname": data.get("player_nickname", slug),
+							"has_mission": has_mission
+						})
+			slug = dir.get_next()
+	_cs_list.visible       = _cs_characters.size() > 0
+	_cs_empty_label.visible = _cs_characters.size() == 0
+	for ch in _cs_characters:
+		var label: String = ch["nickname"]
+		if ch["has_mission"]:
+			label += "  ↩ mission en cours"
+		_cs_list.add_item(label)
+
+
+func _on_cs_list_selected(idx: int) -> void:
+	if idx < 0 or idx >= _cs_characters.size():
+		return
+	_cs_selected_slug = _cs_characters[idx]["slug"]
+	_cs_btn_play.disabled = false
+
+
+func _on_cs_play_pressed() -> void:
+	if _cs_selected_slug == "":
+		return
+	Player_data.set_character(_cs_selected_slug)
+	liblevel.load_game()
+	var state := liblevel.load_mission_state()
+	if state.get("started", false):
+		var mission_id: String = state.get("mission_id", "")
+		_load_missions()
+		for i in range(_missions.size()):
+			if _missions[i].get("id", "") == mission_id:
+				_selected_mission = _missions[i]
+				_cs_panel.visible = false
+				_show_mission_recap()
+				return
+	_cs_panel.visible = false
+	mission_select.visible = true
+	_load_missions()
+
+
+func _on_cs_new_pressed() -> void:
+	Player_data.set_character("")
+	_cs_panel.visible = false
+	character_creation.visible = true
+	_cc_show_page(1)
+
+
+func _on_cs_back_pressed() -> void:
+	_cs_panel.visible = false
+	main.visible = true
+
+
+func _build_character_select_panel() -> void:
+	_cs_panel = Control.new()
+	_cs_panel.name = "CharacterSelect"
+	_cs_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cs_panel.visible = false
+	add_child(_cs_panel)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cs_panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cs_panel.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(500, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 24)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	margin.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "CHOISIR UN PERSONNAGE"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	vbox.add_child(HSeparator.new())
+
+	_cs_list = ItemList.new()
+	_cs_list.custom_minimum_size = Vector2(0, 180)
+	_cs_list.item_selected.connect(_on_cs_list_selected)
+	vbox.add_child(_cs_list)
+
+	_cs_empty_label = Label.new()
+	_cs_empty_label.text = "Aucun personnage trouvé.\nCréez un nouveau personnage pour commencer."
+	_cs_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_cs_empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_cs_empty_label.visible = false
+	vbox.add_child(_cs_empty_label)
+
+	vbox.add_child(HSeparator.new())
+
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 16)
+	vbox.add_child(buttons)
+
+	var btn_back := Button.new()
+	btn_back.text = "Retour"
+	btn_back.pressed.connect(_on_cs_back_pressed)
+	buttons.add_child(btn_back)
+
+	var btn_new := Button.new()
+	btn_new.text = "Nouveau personnage"
+	btn_new.pressed.connect(_on_cs_new_pressed)
+	buttons.add_child(btn_new)
+
+	_cs_btn_play = Button.new()
+	_cs_btn_play.text = "Jouer ▶"
+	_cs_btn_play.disabled = true
+	_cs_btn_play.pressed.connect(_on_cs_play_pressed)
+	buttons.add_child(_cs_btn_play)
+
 
 func _build_mission_recap_panel() -> void:
 	_mr_panel = Control.new()
@@ -837,6 +1007,7 @@ func _ready():
 
 	get_tree().set_auto_accept_quit(false)
 	_build_mission_recap_panel()
+	_build_character_select_panel()
 	music_neon_dream.play()
 	_load_audio_settings()
 	SceneTransition.fade_in()
