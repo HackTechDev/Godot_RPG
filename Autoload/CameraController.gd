@@ -7,7 +7,6 @@ const MECHA_ZOOM             := Vector2(0.8, 0.8)
 const DEFAULT_ZOOM           := Vector2(1.0, 1.0)
 
 const PAN_SPEED:        float = 300.0
-const PAN_MAX:          float = 300.0
 const PAN_RETURN_SPEED: float = 8.0
 
 var follow_target: Node2D = null
@@ -44,7 +43,11 @@ func _process(delta: float) -> void:
 		)
 		if pan_dir != Vector2.ZERO:
 			_pan_offset += pan_dir.normalized() * PAN_SPEED * delta
-			_pan_offset  = _pan_offset.limit_length(PAN_MAX)
+			var vp     := get_viewport().get_visible_rect().size
+			var half_w := vp.x / (_camera.zoom.x * 2.0)
+			var half_h := vp.y / (_camera.zoom.y * 2.0)
+			_pan_offset.x = clampf(_pan_offset.x, -half_w, half_w)
+			_pan_offset.y = clampf(_pan_offset.y, -half_h, half_h)
 	else:
 		_pan_offset = _pan_offset.lerp(Vector2.ZERO, PAN_RETURN_SPEED * delta)
 		if _pan_offset.length() < 0.5:
