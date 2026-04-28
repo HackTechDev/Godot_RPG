@@ -420,7 +420,7 @@ func _emit_level_map() -> void:
 		# Niveaux générés (4-10) : layer 0 = sol, expansion 8×8 tuiles par char ASCII
 		var floor_set: Dictionary = {}
 		for cell: Vector2i in (ground as TileMap).get_used_cells(0):
-			floor_set[Vector2i(cell.x / 8, cell.y / 8)] = true
+			floor_set[Vector2i(cell.x >> 3, cell.y >> 3)] = true
 		floor_cells = floor_set.keys()
 		map_scale = 128
 	elif ground is TileMapLayer:
