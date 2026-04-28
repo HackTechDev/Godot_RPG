@@ -1009,7 +1009,7 @@ func _toggle_aiming() -> void:
 func _set_hud_topbar_interactive(enabled: bool) -> void:
 	if hud_instance == null:
 		return
-	var hbox := hud_instance.get_node_or_null("TopBar/HBox")
+	var hbox: Node = hud_instance.get_node_or_null("TopBar/HBox")
 	if hbox == null:
 		return
 	for child in hbox.get_children():
