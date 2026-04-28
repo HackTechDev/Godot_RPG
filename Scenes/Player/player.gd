@@ -1004,3 +1004,14 @@ func _toggle_aiming() -> void:
 		_crosshair_draw.is_active = _aiming
 		_crosshair_draw.queue_redraw()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN if _aiming else Input.MOUSE_MODE_VISIBLE)
+	_set_hud_topbar_interactive(not _aiming)
+
+func _set_hud_topbar_interactive(enabled: bool) -> void:
+	if hud_instance == null:
+		return
+	var hbox := hud_instance.get_node_or_null("TopBar/HBox")
+	if hbox == null:
+		return
+	for child in hbox.get_children():
+		if child is Button:
+			child.disabled = not enabled
