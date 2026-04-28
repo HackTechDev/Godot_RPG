@@ -366,6 +366,8 @@ func input_move():
 
 	# Mouvement via touches fléchées / WASD uniquement (exclut le pavé numérique)
 	input_movement = Vector2.ZERO
+	if Input.is_key_pressed(KEY_SHIFT):
+		return
 	if Input.is_physical_key_pressed(KEY_LEFT)  or Input.is_physical_key_pressed(KEY_A): input_movement.x -= 1.0
 	if Input.is_physical_key_pressed(KEY_RIGHT) or Input.is_physical_key_pressed(KEY_D): input_movement.x += 1.0
 	if Input.is_physical_key_pressed(KEY_UP)    or Input.is_physical_key_pressed(KEY_W): input_movement.y -= 1.0
