@@ -59,6 +59,31 @@ var minimap_instance = null
 
 const RADIAL_CLICK_RADIUS = 26.0
 
+var _aiming: bool        = false
+var _crosshair_draw: Control = null
+
+# ─── Viseur ────────────────────────────────────────────────────────────────
+class _CrosshairDraw extends Control:
+	var is_active: bool = false
+
+	func _draw() -> void:
+		if not is_active:
+			return
+		var mpos     := get_viewport().get_mouse_position()
+		var R        := 22.0
+		var gap      := 6.0
+		var arm      := 14.0
+		var col      := Color(1.0, 0.12, 0.12, 0.95)
+		var col_dark := Color(0.0, 0.0, 0.0, 0.55)
+		draw_arc(mpos, R, 0.0, TAU, 48, col_dark, 4.0, true)
+		draw_arc(mpos, R, 0.0, TAU, 48, col,      2.0, true)
+		draw_circle(mpos, 2.0, col)
+		for off: Vector2 in [Vector2(0, -1), Vector2(0, 1), Vector2(-1, 0), Vector2(1, 0)]:
+			var p0 := mpos + off * (R + gap)
+			var p1 := mpos + off * (R + gap + arm)
+			draw_line(p0, p1, col_dark, 4.0)
+			draw_line(p0, p1, col,      2.0)
+
 func _radial_items() -> Array:
 	return [
 		{"id": "build",   "letter": "B", "label": "Construire", "disabled": false},
@@ -68,6 +93,7 @@ func _radial_items() -> Array:
 		{"id": "sheet",   "letter": "P", "label": "Fiche",      "disabled": false},
 		{"id": "attack",  "letter": "A", "label": "Attaquer",   "disabled": false},
 		{"id": "minimap", "letter": "M", "label": "Carte",      "disabled": false},
+		{"id": "shoot",   "letter": "F", "label": "Tirer",      "disabled": false},
 	]
 
 const CONE_LENGTH   = 130.0
@@ -152,10 +178,16 @@ func _ready():
 	radial_menu_instance = radial_menu_scene.instantiate()
 	add_child(radial_menu_instance)
 	radial_menu_instance.action_selected.connect(_handle_radial_action)
-	radial_menu_instance.closed.connect(func(): get_tree().paused = false)
+	radial_menu_instance.closed.connect(func():
+		get_tree().paused = false
+		if _aiming:
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	)
 
 	minimap_instance = minimap_scene.instantiate()
 	add_child(minimap_instance)
+
+	_setup_crosshair()
 
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
@@ -177,6 +209,8 @@ func _ready():
 	Performance.add_custom_monitor("Joueur/vitesse",       func(): return _debug_speed)
 
 func _exit_tree():
+	if _aiming:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Performance.remove_custom_monitor("Joueur/regard_angle")
 	Performance.remove_custom_monitor("Joueur/corps_angle")
 	Performance.remove_custom_monitor("Joueur/vitesse")
@@ -203,6 +237,8 @@ func _process(_delta):
 			if child is Sprite2D and child.visible:
 				child.frame = f
 	queue_redraw()
+	if _aiming and _crosshair_draw != null:
+		_crosshair_draw.queue_redraw()
 
 func _draw() -> void:
 	if GameConfig.debug_show_hitbox:
@@ -243,6 +279,8 @@ func _input(event):
 				get_viewport().set_input_as_handled()
 			elif not display_menu and not in_combat \
 					and not (dialogue_box_instance and dialogue_box_instance.visible):
+				if _aiming:
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 				radial_menu_instance.show_at(screen_pos, _radial_items())
 				get_tree().paused = true
 				get_viewport().set_input_as_handled()
@@ -946,3 +984,23 @@ func _handle_radial_action(action_id: String) -> void:
 		"minimap":
 			if minimap_instance != null:
 				minimap_instance.toggle()
+		"shoot":
+			_toggle_aiming()
+
+# ─── Viseur ────────────────────────────────────────────────────────────────
+func _setup_crosshair() -> void:
+	var cl := CanvasLayer.new()
+	cl.layer = 15
+	add_child(cl)
+	var dc := _CrosshairDraw.new()
+	dc.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cl.add_child(dc)
+	_crosshair_draw = dc
+
+func _toggle_aiming() -> void:
+	_aiming = not _aiming
+	if _crosshair_draw != null:
+		_crosshair_draw.is_active = _aiming
+		_crosshair_draw.queue_redraw()
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN if _aiming else Input.MOUSE_MODE_VISIBLE)
