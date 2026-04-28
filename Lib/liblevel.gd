@@ -128,6 +128,7 @@ func load_game():
 		Player_data.scene_path = "res://Scenes/Levels/%s/%s.tscn" % [saved_scene, saved_scene]
 		Player_data.player_spawnpoint_position_x = data["player_position"][0]
 		Player_data.player_spawnpoint_position_y = data["player_position"][1]
+		Player_data.player_facing = data.get("player_facing", 8)
 		Player_data.player_health = data.get("player_health", Player_data.player_health)
 		Player_data.player_health_base = data.get("player_health_base", Player_data.player_health)
 		Player_data.player_attack          = data.get("player_attack", 0)
