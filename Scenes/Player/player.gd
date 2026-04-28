@@ -68,6 +68,7 @@ class _CrosshairDraw extends Control:
 	var player_screen: Vector2 = Vector2.ZERO
 	var has_hit:       bool    = false
 	var hit_screen:    Vector2 = Vector2.ZERO
+	var line_visible:  bool    = true
 
 	func _draw() -> void:
 		if not is_active:
@@ -80,9 +81,10 @@ class _CrosshairDraw extends Control:
 		var col_dark := Color(0.0, 0.0, 0.0, 0.55)
 
 		# Ligne joueur → point d'impact (ou réticule si pas de mur)
-		var line_end := hit_screen if has_hit else mpos
-		draw_line(player_screen, line_end, Color(0.0, 0.0, 0.0, 0.45), 3.0)
-		draw_line(player_screen, line_end, Color(1.0, 0.12, 0.12, 0.75), 1.5)
+		if line_visible:
+			var line_end := hit_screen if has_hit else mpos
+			draw_line(player_screen, line_end, Color(0.0, 0.0, 0.0, 0.45), 3.0)
+			draw_line(player_screen, line_end, Color(1.0, 0.12, 0.12, 0.75), 1.5)
 
 		# Réticule à la position de la souris
 		draw_arc(mpos, R, 0.0, TAU, 48, col_dark, 4.0, true)
@@ -1016,6 +1018,11 @@ func _update_aim_line() -> void:
 	else:
 		_crosshair_draw.has_hit = true
 		_crosshair_draw.hit_screen = canvas_xform * hit["position"]
+
+	var dir_to_mouse := mouse_world - global_position
+	var angle_to_mouse := rad_to_deg(atan2(dir_to_mouse.y, dir_to_mouse.x))
+	var diff := fmod(angle_to_mouse - look_angle + 540.0, 360.0) - 180.0
+	_crosshair_draw.line_visible = absf(diff) <= CONE_FOV_HALF
 
 func _setup_crosshair() -> void:
 	var cl := CanvasLayer.new()
