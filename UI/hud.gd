@@ -14,6 +14,7 @@ const TRANSITION_HOURS = 1.0
 @onready var label_robots    = $Panel/Margin/VBox/LabelRobots
 @onready var label_zone      = $Panel/Margin/VBox/LabelZone
 @onready var label_position  = $Panel/Margin/VBox/LabelPosition
+@onready var label_mode      = $Panel/Margin/VBox/LabelMode
 @onready var label_clock: Label       = $ClockAnchor/ClockPanel/HBox/LabelClock
 @onready var night_overlay: ColorRect = $NightOverlay
 @onready var _hbox: HBoxContainer     = $ClockAnchor/ClockPanel/HBox
@@ -91,6 +92,8 @@ func _process(_delta: float) -> void:
 	label_robots.text    = "Robots: " + str(Player_data.robot)
 	label_zone.text      = "Zone: " + Player_data.player_previous_scene
 	label_position.text  = "Pos: %d, %d" % [Player_data.player_pos_x, Player_data.player_pos_y]
+	const _MODE_NAMES := ["", "1-Marche", "2-Accroupi", "3-Course"]
+	label_mode.text = "Mode: " + _MODE_NAMES[Player_data.movement_mode]
 	_update_clock()
 	_update_day_night()
 	if _dial != null:

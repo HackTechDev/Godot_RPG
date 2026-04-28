@@ -263,6 +263,9 @@ func _input(event):
 			KEY_KP_6: _rotate_body(45.0)
 			KEY_KP_7: _rotate_look(-45.0)
 			KEY_KP_9: _rotate_look(45.0)
+			KEY_1: Player_data.movement_mode = 1
+			KEY_2: Player_data.movement_mode = 2
+			KEY_3: Player_data.movement_mode = 3
 
 	if event.is_action_pressed("ui_m"):
 		if not display_menu and not in_combat \
@@ -324,7 +327,11 @@ func input_move():
 	# Vitesse réduite si : corps ≠ regard, OU si le joueur recule par rapport au corps
 	var aligned        = abs(_norm_angle(look_angle - body_angle)) < 1.0
 	var moving_forward = input_movement.dot(_angle_to_vec(body_angle)) > 1e-6
-	var current_speed  = GameConfig.player_speed_normal if (aligned and moving_forward) else GameConfig.player_speed_slow
+	var current_speed: float
+	match Player_data.movement_mode:
+		2: current_speed = 20.0
+		3: current_speed = 130.0 if (aligned and moving_forward) else 55.0
+		_: current_speed = GameConfig.player_speed_normal if (aligned and moving_forward) else GameConfig.player_speed_slow
 
 	_debug_speed = current_speed
 	if input_movement != Vector2.ZERO:

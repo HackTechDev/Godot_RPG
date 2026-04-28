@@ -60,6 +60,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Pos: "
 
+[node name="LabelMode" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Mode: Marche"
+
 [node name="TopBar" type="PanelContainer" parent="."]
 offset_left = 760.0
 offset_top = 4.0

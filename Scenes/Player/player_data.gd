@@ -84,6 +84,8 @@ static var appearance_torso: String = ""
 static var appearance_legs: String = ""
 static var appearance_feet: String = ""
 
+static var movement_mode: int = 1  # 1 = marche, 2 = accroupi, 3 = course
+
 static var character_slug: String = ""
 
 static func set_character(slug: String) -> void:
