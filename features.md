@@ -739,6 +739,97 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Option de désactivation de la musique intro / crédits
+
+- Nouvelle case à cocher **"Musique intro / crédits"** dans **Settings → Audio**
+- Stoppe la musique sur le splashscreen et la page de crédits quand décochée
+- Paramètre `intro_music_enabled` stocké dans `GameConfig` (autoload) — chargé avant n'importe quelle scène, donc effectif dès l'apparition du splashscreen
+- Persisté dans `user://settings.json` avec les autres réglages audio
+- **Fichiers :** `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `UI/splash_screen.gd`, `UI/credits.gd`
+
+---
+
+## Nom de personnage obligatoire dans le wizard de création
+
+- Le bouton **"Suivant"** de la page 1 (Identité) est désactivé tant que le champ pseudo est vide
+- Connexion au signal `text_changed` du `LineEdit` ; activation dès qu'un caractère est saisi
+- Page 4 (Statistiques) s'ouvre avec **Santé = 10** par défaut (au lieu de 0)
+- **Fichiers :** `UI/main_menu.gd`
+
+---
+
+## Système de sauvegarde multi-personnages
+
+- Chaque personnage est sauvegardé dans son propre répertoire `user://characters/<slug>/`
+- Slug généré automatiquement depuis le pseudo (minuscules, espaces/tirets → `_`, non-ASCII retirés)
+- Fonctions centralisées dans `Player_data` : `set_character(slug)`, `character_dir()`, `level_save_dir(level_name)`
+- Tous les chemins de sauvegarde (`rpg.json`, `mission_state.json`, `level_X/objects.json`, etc.) passent par ces helpers
+- **Écran de sélection de personnage** : s'affiche au clic sur **Jouer** (avant la sélection de mission)
+  - Liste les personnages existants avec nom et mission en cours
+  - Si mission en cours : récapitulatif → reprendre ou choisir une autre mission
+  - Si aucune mission : affiche directement la liste des missions
+  - Bouton **"Nouveau personnage"** → wizard de création (Cancel retourne à la sélection)
+- **Fichiers :** `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `Scenes/Levels/base_level.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `UI/game_over.gd`
+
+---
+
+## Minimap avec brouillard de guerre
+
+- Carte en coin inférieur droit (200×100 px) générée dynamiquement depuis les données de la TileMap
+- Reçoit `EventBus.level_map_ready(floor_cells, map_scale)` émis par `base_level` après le spawn du joueur
+- Rendu via `Image` + `ImageTexture` (un seul draw call par frame)
+- **Brouillard de guerre** : cellules initialement en `COL_FLOOR_FOG` (gris foncé), révélées progressivement dans un rayon de 5 cellules autour du joueur (`COL_FLOOR_VIS`, gris clair)
+- État visité persisté dans `Player_data.minimap_visited` (Dictionary), remis à zéro à chaque niveau
+- `map_scale` : 128 px pour les niveaux générés (8 tuiles × 16 px), 16 px pour les niveaux natifs
+- Toggle via l'action radiale **M — Carte** ; état persisté dans `Player_data.minimap_enabled`
+- **Fichiers :** `UI/minimap.gd`, `UI/minimap.tscn`, `Autoload/EventBus.gd`, `Scenes/Levels/base_level.gd`, `Scenes/Player/player_data.gd`
+
+---
+
+## Zoom de la minimap au clic
+
+- Clic gauche sur la minimap → agrandie à 600×400 px, centrée à l'écran (`CanvasLayer.layer = 20`)
+- Deuxième clic → retour en minimap (200×100 px, coin inférieur droit, `layer = 5`)
+- Mise à l'échelle transparente : le tracé joueur et la texture de carte sont mis à l'échelle via `ctrl.size` ; aucune image supplémentaire générée
+- Curseur main sur la minimap (`CURSOR_POINTING_HAND`) pour signaler l'interaction
+- **Fichiers :** `UI/minimap.gd`
+
+---
+
+## Modes de déplacement (touches 1 / 2 / 3)
+
+- **Touche 1 — Marche** : vitesse normale (70 px/s aligné, 35 px/s sinon)
+- **Touche 2 — Accroupi** : 20 px/s fixe quelle que soit l'orientation
+- **Touche 3 — Course** : 130 px/s aligné, 55 px/s sinon
+- Mode actuel affiché dans le HUD (panneau haut gauche) sous "Pos" : `"Mode: 1-Marche"` etc.
+- État stocké dans `Player_data.movement_mode` (int 1/2/3)
+- **Fichiers :** `Scenes/Player/player.gd`, `Scenes/Player/player_data.gd`, `UI/hud.tscn`, `UI/hud.gd`
+
+---
+
+## Restauration de la rotation du personnage au chargement
+
+- `player_facing` était bien sauvegardé dans `rpg.json` à chaque auto-save mais jamais relu dans `load_game()`
+- Le joueur se retrouvait systématiquement orienté vers le haut (direction par défaut) après reprise de partie
+- Corrigé : `Player_data.player_facing = data.get("player_facing", 8)` ajouté dans `liblevel.load_game()`
+- **Fichiers :** `Lib/liblevel.gd`
+
+---
+
+## Mode tir — Viseur et ligne de tir
+
+- Nouvelle action **"F — Tirer"** dans le menu radial ; toggle activation / désactivation
+- **Réticule** : cercle rouge (Ø 44 px) avec 4 branches et point central, dessiné en espace écran (`CanvasLayer layer = 15`) via la classe interne `_CrosshairDraw`
+- Le curseur OS est masqué en mode tir ; restauré à la fermeture du menu radial ou à la destruction du nœud
+- **Ligne de tir** : tracée du centre du joueur au réticule (en espace écran via `canvas_transform`)
+  - Si la ligne intersecte un mur (raycast physique couche 1, joueur exclu) : la ligne s'arrête au point d'impact ; le réticule reste affiché à la position de la souris
+  - Si le réticule est **hors du cône de vision** (±45° de `look_angle`) : la ligne n'est pas tracée
+- Raycast calculé dans `_process` (`_update_aim_line()`), résultat stocké dans `_CrosshairDraw` pour le dessin
+- Les boutons du HUD (Fiche / Armurerie / Paramètres / Accueil) sont désactivés tant que le mode tir est actif
+- **Fichiers :** `Scenes/Player/player.gd`
+
+---
+
 ## Son moteur du Mecha
 
 - `AudioStreamPlayer2D` (nœud `EngineSound`) ajouté au Mecha avec `autoplay = false`

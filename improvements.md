@@ -47,10 +47,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 
 ## Interface utilisateur
 
-### Minimap
-- Petite carte en coin d'écran montrant la position du joueur dans le niveau
-- Peut être générée dynamiquement depuis les données de la TileMap
-
 ### Tutoriel / première fois
 - Détecter si c'est la première partie (`user://rpg.json` absent)
 - Afficher des bulles d'aide contextuelles (ex. : "Appuyez sur T pour ramasser")
@@ -69,14 +65,6 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 - Alimenté par un fichier JSON de quête par niveau
 
 ---
-
-## Sauvegarde
-
-### Plusieurs slots de sauvegarde
-- 3 profils indépendants : `rpg_slot1.json`, `rpg_slot2.json`, `rpg_slot3.json`
-- Idem pour les niveaux : `level_01_slot1.json`, etc.
-- Interface de sélection de slot avant le bouton "Play"
-- Affichage du dernier enregistrement par slot
 
 ---
 
@@ -179,6 +167,25 @@ Pistes d'amélioration identifiées pour les prochaines versions.
 ### Impact gameplay de la nuit
 - Ennemis plus nombreux ou plus rapides entre 22h00 et 05h00
 - Zones sûres uniquement accessibles le jour (portes verrouillées la nuit)
+
+---
+
+## Mode tir
+
+### Tir effectif
+- Déclencher un projectile ou un hitscan au clic gauche quand le viseur est actif et la ligne visible
+- Dégâts basés sur `player_attack` ; portée limitée par la distance max du raycast
+
+### Munitions et rechargement
+- Compteur de munitions affiché dans le HUD pendant le mode tir
+- Rechargement automatique ou via une touche dédiée ; animation de rechargement
+
+### Indicateur visuel de la zone de tir
+- Colorier le réticule différemment selon l'état : vert = dans le cône (tir possible), gris = hors cône (tir impossible)
+- Petit texte ou icône indiquant "HORS PORTÉE" quand un mur bloque à moins de X px du joueur
+
+### Couche physique configurable
+- Actuellement le raycast utilise la couche 1 — prévoir un paramètre `GameConfig.aim_ray_mask` pour s'adapter à d'autres configurations de physique
 
 ---
 
