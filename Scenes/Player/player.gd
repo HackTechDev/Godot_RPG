@@ -64,7 +64,10 @@ var _crosshair_draw: Control = null
 
 # ─── Viseur ────────────────────────────────────────────────────────────────
 class _CrosshairDraw extends Control:
-	var is_active: bool = false
+	var is_active:     bool    = false
+	var player_screen: Vector2 = Vector2.ZERO
+	var has_hit:       bool    = false
+	var hit_screen:    Vector2 = Vector2.ZERO
 
 	func _draw() -> void:
 		if not is_active:
@@ -75,6 +78,13 @@ class _CrosshairDraw extends Control:
 		var arm      := 14.0
 		var col      := Color(1.0, 0.12, 0.12, 0.95)
 		var col_dark := Color(0.0, 0.0, 0.0, 0.55)
+
+		# Ligne joueur → point d'impact (ou réticule si pas de mur)
+		var line_end := hit_screen if has_hit else mpos
+		draw_line(player_screen, line_end, Color(0.0, 0.0, 0.0, 0.45), 3.0)
+		draw_line(player_screen, line_end, Color(1.0, 0.12, 0.12, 0.75), 1.5)
+
+		# Réticule à la position de la souris
 		draw_arc(mpos, R, 0.0, TAU, 48, col_dark, 4.0, true)
 		draw_arc(mpos, R, 0.0, TAU, 48, col,      2.0, true)
 		draw_circle(mpos, 2.0, col)
@@ -238,6 +248,7 @@ func _process(_delta):
 				child.frame = f
 	queue_redraw()
 	if _aiming and _crosshair_draw != null:
+		_update_aim_line()
 		_crosshair_draw.queue_redraw()
 
 func _draw() -> void:
@@ -988,6 +999,24 @@ func _handle_radial_action(action_id: String) -> void:
 			_toggle_aiming()
 
 # ─── Viseur ────────────────────────────────────────────────────────────────
+func _update_aim_line() -> void:
+	var canvas_xform := get_viewport().get_canvas_transform()
+	_crosshair_draw.player_screen = canvas_xform * global_position
+
+	var mpos_screen := get_viewport().get_mouse_position()
+	var mouse_world := canvas_xform.affine_inverse() * mpos_screen
+
+	var space_state := get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(global_position, mouse_world, 1)
+	query.exclude = [get_rid()]
+	var hit := space_state.intersect_ray(query)
+
+	if hit.is_empty():
+		_crosshair_draw.has_hit = false
+	else:
+		_crosshair_draw.has_hit = true
+		_crosshair_draw.hit_screen = canvas_xform * hit["position"]
+
 func _setup_crosshair() -> void:
 	var cl := CanvasLayer.new()
 	cl.layer = 15
