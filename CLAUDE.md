@@ -40,6 +40,20 @@ bash gitPush.sh   # pushes to current branch
 ```
 Commit format: `type(scope): description` with body. Types: `feat`, `fix`, `refactor`, `docs`, `chore`, `style`.
 
+**Commit automatique après chaque tâche :**
+Après chaque modification de code demandée par l'utilisateur, créer un commit git sans attendre qu'il le demande explicitement. Utiliser la commande suivante :
+```bash
+git add <fichiers modifiés> && git commit -m "$(cat <<'EOF'
+type(scope): description courte
+
+Corps optionnel si nécessaire.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+```
+Ne pas faire de `git push` automatiquement — seulement le commit local.
+
 ## Architecture
 
 ### Autoloads (all registered in project.godot)

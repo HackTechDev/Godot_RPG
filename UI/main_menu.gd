@@ -444,12 +444,15 @@ func _cc_show_page(page: int):
 	if page == 1:
 		cc_nickname.text  = ""
 		cc_biography.text = ""
+		cc_btn_next.disabled = true
+		if not cc_nickname.text_changed.is_connected(_on_cc_nickname_changed):
+			cc_nickname.text_changed.connect(_on_cc_nickname_changed)
 	elif page == 2:
 		_cc_init_appearance()
 	elif page == 3:
 		_cc_init_military()
 	elif page == 4:
-		cc_health.set_value_no_signal(0)
+		cc_health.set_value_no_signal(10)
 		cc_attack.set_value_no_signal(0)
 		cc_defense.set_value_no_signal(0)
 		cc_stamina.set_value_no_signal(0)
@@ -528,10 +531,14 @@ func _on_cc_cancel_pressed():
 	character_creation.visible = false
 	main.visible = true
 
+func _on_cc_nickname_changed(text: String) -> void:
+	cc_btn_next.disabled = text.strip_edges().is_empty()
+
 func _on_cc_back_pressed():
 	_cc_show_page(_cc_current_page - 1)
 
 func _on_cc_next_pressed():
+	cc_btn_next.disabled = false
 	_cc_show_page(_cc_current_page + 1)
 
 func _on_cc_spec_selected(index: int):
