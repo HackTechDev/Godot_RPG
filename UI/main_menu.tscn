@@ -329,6 +329,15 @@ text = "Volume effets"
 layout_mode = 2
 value = 80.0
 
+[node name="SeparatorIntroMusic" type="HSeparator" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560005]
+layout_mode = 2
+
+[node name="CheckIntroMusic" type="CheckButton" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234560006]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+button_pressed = true
+text = "Musique intro / crédits"
+
 [node name="ButtonAudioBack" type="Button" parent="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=116854048]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -1204,6 +1213,7 @@ parameters/looping = true
 [connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderVolume" to="MainMenuLayer" method="_on_slider_volume_value_changed"]
 [connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckSfx" to="MainMenuLayer" method="_on_check_sfx_toggled"]
 [connection signal="value_changed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SliderSfxVolume" to="MainMenuLayer" method="_on_slider_sfx_volume_value_changed"]
+[connection signal="toggled" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckIntroMusic" to="MainMenuLayer" method="_on_check_intro_music_toggled"]
 [connection signal="pressed" from="MainMenuLayer/AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonAudioBack" to="MainMenuLayer" method="_on_button_audio_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/ControlsSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonControlsBack" to="MainMenuLayer" method="_on_button_controls_back_pressed"]
 [connection signal="item_selected" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageAppearance/ContentRow/OptionsScroll/OptionsVBox/BodyOption" to="MainMenuLayer" method="_on_cc_body_selected"]

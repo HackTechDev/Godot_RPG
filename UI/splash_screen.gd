@@ -3,8 +3,11 @@ extends Node2D
 @onready var title_label: Label = $CanvasLayer/VBox/Title
 @onready var subtitle_label: Label = $CanvasLayer/VBox/Subtitle
 @onready var press_any_key: Label = $CanvasLayer/PressAnyKey
+@onready var _music: AudioStreamPlayer = $Music
 
 func _ready():
+	if not GameConfig.intro_music_enabled:
+		_music.stop()
 	title_label.modulate.a = 0.0
 	subtitle_label.modulate.a = 0.0
 	press_any_key.modulate.a = 0.0
