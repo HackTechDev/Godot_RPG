@@ -1,0 +1,67 @@
+# Résumé des fonctionnalités — Commando Zombi RPG v4
+
+- Fiche de personnage (touche P) : santé, stats, inventaire, apparence
+- Système de collision physique : le joueur pousse les objets (RigidBody2D)
+- Interaction objets : T = ramasser, R = pousser
+- HUD permanent : pseudo, santé, ordinateurs, robots, zone, position, mode, horloge
+- Notifications in-game temporaires à la collecte d'objets
+- Inventaire dans la fiche de personnage
+- Pause automatique à l'ouverture des menus
+- Auto-save des positions d'objets (menu, transitions de zone)
+- Transitions de scènes avec fondu au noir et barre de chargement animée
+- Identification du joueur par groupe Godot
+- Page Audio dans les paramètres : musique, effets sonores, volume
+- Option de désactivation de la musique intro et crédits
+- Bouton Réinitialiser : remet le jeu à zéro et redirige vers la création de personnage
+- Confirmation avant de quitter le jeu
+- Page Contrôles dans les paramètres
+- Sauvegarde de la santé, des stats et de la rotation du personnage
+- Robots ennemis avec IA de détection et déplacement
+- Splash screen avec titre animé en fondu, passable par touche ou clic
+- Système de combat CQB au tour par tour avec dés animés (d20)
+- Écran Game Over avec boutons Recommencer / Quitter
+- Stats de combat (attaque, défense) affichées dans la fiche de personnage
+- Écran de crédits défilant au moment de quitter
+- Menu in-game accessible en cours de partie (bouton Home ou touche M)
+- Système de combat avec enchaînements automatiques et fuite à 50 %
+- Système de PNJ avec dialogues branchés (touche Z)
+- Musique de fond sur le splashscreen et les crédits
+- Image de fond sur le splashscreen et les crédits
+- Création de personnage en wizard 4 pages (identité, apparence, profil, stats)
+- Nom de personnage obligatoire, santé par défaut à 10 dans le wizard
+- Sprite LPC du personnage composé de couches (12 slots d'apparence)
+- Chargement automatique des sprite sheets LPC depuis des ZIP (SpriteLibrary)
+- Éditeur d'apparence en cours de partie (onglet de la fiche de personnage)
+- Exclusivité des panneaux HUD (Sheet / Settings / Home)
+- Système de transitions entre niveaux par fichier JSON (level_connections.json)
+- Transition déclenchée par la touche Espace avec spawn relatif au trigger
+- Restauration du sprite et de la direction après une transition
+- Objets, ennemis et PNJ configurés par fichiers JSON par niveau
+- Suppression du système d'entrées entrance_x_2 / entrance_y_2
+- Cycle jour/nuit progressif (overlay + transitions douces lever/coucher)
+- Horloge de mission en jeu (1 min réelle = 1 h de jeu, format JJ/MM/AAAA HHhMM)
+- Indicateur visuel soleil/lune sur le HUD (cadran circulaire animé)
+- Gel du temps de jeu pendant les menus
+- Cône de vision du joueur (FOV 90°) avec rotation indépendante corps/regard
+- Cône de vision des ennemis (120°) affiché en rouge
+- Règles de vitesse liées à l'orientation (aligné = plus rapide)
+- Modes de déplacement : 1 = marche, 2 = accroupi (20 px/s), 3 = course (130 px/s)
+- Menu radial au clic sur le personnage (B, T, Z, C, P, A, M, F)
+- Menus HUD exclus du cycle nuit (layer au-dessus de l'overlay)
+- Monitors de debug dans le Debugger Godot (angles, vitesse)
+- Indicateurs de cône et flèche masquables dans les paramètres
+- Système de pilotage de Mecha (touche M) avec inertie et éjection sûre
+- Animations directionnelles du Mecha (sprite sheet 4 directions)
+- Son moteur du Mecha en boucle pendant le déplacement
+- Sauvegarde et chargement des positions des Mechas par niveau (JSON)
+- Générateur de niveaux procédural Python + EditorScript GDScript (niveaux 5–10)
+- Minimap avec brouillard de guerre (révélation progressive, rayon 5 cellules)
+- Zoom de la minimap au clic (200×100 ↔ 600×400 centré)
+- Page de sélection de mission avec titre, date, description et objectifs
+- Spawn du joueur initialisé depuis missions.json
+- Système de sauvegarde multi-personnages (user://characters/<slug>/)
+- Écran de sélection de personnage avec reprise de mission ou choix d'une nouvelle
+- Mode tir : viseur circulaire suivant la souris (touche F du menu radial)
+- Ligne de tir clippée sur les murs par raycast physique
+- Ligne de tir masquée si le viseur est hors du cône de vision
+- Boutons HUD désactivés pendant le mode tir
