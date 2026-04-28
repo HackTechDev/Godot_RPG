@@ -11,6 +11,7 @@ func _on_restart_pressed():
 	get_tree().paused = false
 	liblevel.reinitializePlayer()
 	liblevel.reinitializeLevel()
+	Player_data.set_character("")
 	Player_data.player_previous_scene = ""
 	Player_data.scene_path = ""
 	Player_data.player_pos_x = 0

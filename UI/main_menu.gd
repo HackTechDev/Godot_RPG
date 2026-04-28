@@ -53,6 +53,7 @@ var _cs_btn_play:      Button   = null
 var _cs_empty_label:   Label    = null
 var _cs_selected_slug: String   = ""
 var _cs_characters:    Array    = []
+var _cc_from_cs:       bool     = false
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -430,6 +431,7 @@ func _on_button_debug_back_pressed():
 	settings.visible = true
 
 func _on_button_create_character_pressed():
+	_cc_from_cs = false
 	main.visible = false
 	character_creation.visible = true
 	_cc_show_page(1)
@@ -531,7 +533,12 @@ func _cc_init_military():
 
 func _on_cc_cancel_pressed():
 	character_creation.visible = false
-	main.visible = true
+	if _cc_from_cs:
+		_cc_from_cs = false
+		_load_character_list()
+		_cs_panel.visible = true
+	else:
+		main.visible = true
 
 func _on_cc_nickname_changed(text: String) -> void:
 	cc_btn_next.disabled = text.strip_edges().is_empty()
@@ -758,12 +765,6 @@ func _slugify(nickname: String) -> String:
 	while result.begins_with("_"): result = result.substr(1)
 	while result.ends_with("_"):   result = result.substr(0, result.length() - 1)
 	if result == "": result = "player"
-	if not DirAccess.dir_exists_absolute("user://characters/%s" % result):
-		return result
-	for i in range(2, 100):
-		var candidate := "%s_%d" % [result, i]
-		if not DirAccess.dir_exists_absolute("user://characters/%s" % candidate):
-			return candidate
 	return result
 
 
@@ -830,6 +831,7 @@ func _on_cs_play_pressed() -> void:
 
 func _on_cs_new_pressed() -> void:
 	Player_data.set_character("")
+	_cc_from_cs = true
 	_cs_panel.visible = false
 	character_creation.visible = true
 	_cc_show_page(1)
