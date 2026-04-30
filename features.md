@@ -830,6 +830,28 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Plein écran automatique au lancement
+
+- Le jeu s'ouvre directement en plein écran (mode fenêtre sans bordures) quel que soit le bureau
+- `window/size/mode=3` (borderless fullscreen) dans `project.godot`
+- `window/stretch/aspect="expand"` : le monde visible s'adapte à la résolution sans bandes noires
+- **Fichiers :** `project.godot`
+
+---
+
+## Panoramique caméra (Shift + directions)
+
+- Maintenir **Shift** + touches de direction (Flèches / WASD) déplace la vue indépendamment du joueur
+- Le joueur reste immobile pendant le panoramique (son déplacement est bloqué quand Shift est enfoncé)
+- Retour automatique doux vers le joueur à la relâche de Shift (lerp `PAN_RETURN_SPEED = 8.0`)
+- **Limite dynamique** : le décalage est plafonné aux bords de l'écran — le personnage peut atteindre exactement le bord gauche/droit/haut/bas
+  - `half_w = viewport.size.x / (camera.zoom.x × 2)`, `half_h = viewport.size.y / (camera.zoom.y × 2)`
+  - Clamp par axe via `clampf()` pour préserver la liberté dans l'autre direction
+- `_pan_offset: Vector2` ajouté à la position cible dans `_process` de `CameraController`
+- **Fichiers :** `Autoload/CameraController.gd`, `Scenes/Player/player.gd`
+
+---
+
 ## Son moteur du Mecha
 
 - `AudioStreamPlayer2D` (nœud `EngineSound`) ajouté au Mecha avec `autoplay = false`
