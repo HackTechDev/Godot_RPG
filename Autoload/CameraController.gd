@@ -6,8 +6,7 @@ const ZOOM_LERP_SPEED: float = 3.0
 const MECHA_ZOOM             := Vector2(0.8, 0.8)
 const DEFAULT_ZOOM           := Vector2(1.0, 1.0)
 
-const PAN_SPEED:        float = 300.0
-const PAN_RETURN_SPEED: float = 8.0
+const PAN_SPEED: float = 300.0
 
 var follow_target: Node2D = null
 
@@ -48,11 +47,6 @@ func _process(delta: float) -> void:
 			var half_h := vp.y / (_camera.zoom.y * 2.0)
 			_pan_offset.x = clampf(_pan_offset.x, -half_w, half_w)
 			_pan_offset.y = clampf(_pan_offset.y, -half_h, half_h)
-	else:
-		_pan_offset = _pan_offset.lerp(Vector2.ZERO, PAN_RETURN_SPEED * delta)
-		if _pan_offset.length() < 0.5:
-			_pan_offset = Vector2.ZERO
-
 	global_position = global_position.lerp(follow_target.global_position + _pan_offset, LERP_SPEED * delta)
 	_camera.zoom = _camera.zoom.lerp(_target_zoom, ZOOM_LERP_SPEED * delta)
 
