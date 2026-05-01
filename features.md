@@ -834,7 +834,7 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - Le jeu s'ouvre directement en plein écran (mode fenêtre sans bordures) quel que soit le bureau
 - `window/size/mode=3` (borderless fullscreen) dans `project.godot`
-- `window/stretch/aspect="expand"` : le monde visible s'adapte à la résolution sans bandes noires
+- `window/stretch/mode="viewport"` + `window/stretch/aspect="keep"` : contenu rendu à la résolution conçue, bandes noires sur les côtés si le ratio de l'écran diffère
 - **Fichiers :** `project.godot`
 
 ---
