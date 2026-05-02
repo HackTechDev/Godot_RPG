@@ -758,6 +758,20 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Interface de gestion des personnages
+
+- Panneau **"Gestion des personnages"** accessible depuis l'écran de sélection (bouton **Gérer**)
+- Pour chaque personnage affiché :
+  - Nom (nickname)
+  - Mission en cours : titre, temps joué, date de dernière sauvegarde
+  - Bouton **Jouer ▶** : charge le personnage et lance la mission (même logique que l'écran de sélection)
+  - Bouton **Supprimer** : `ConfirmationDialog` puis suppression récursive de `user://characters/<slug>/`
+- `_delete_dir_recursive()` : itère les fichiers et sous-dossiers via `DirAccess`, supprime tout avant de retirer le répertoire
+- `_ensure_missions_loaded()` : charge `missions.json` sans toucher à l'`ItemList` de l'écran de sélection de mission
+- **Fichiers :** `UI/main_menu.gd`
+
+---
+
 ## Système de sauvegarde multi-personnages
 
 - Chaque personnage est sauvegardé dans son propre répertoire `user://characters/<slug>/`
@@ -816,7 +830,21 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
-## Mode tir — Viseur et ligne de tir
+## Système de tir — balle, explosion et sons
+
+- **Balle** : carré 4×4 px bleu dessiné sur `CanvasLayer layer = 15` via `_CrosshairDraw._draw()`, stocké comme dictionnaire `{pos, dir, traveled}`
+- Déplacement à 600 px/s ; portée maximale 2 000 px ; plusieurs balles simultanées possibles
+- **Raycast par frame** : `PhysicsRayQueryParameters2D` entre la position précédente et la suivante — détecte murs, objets, ennemis et PNJ
+- **Explosion à l'impact** : `AnimatedSprite2D` instancié dans le niveau (6 frames 32×32 px depuis `bullet_explosion_spritesheet.png`, 12 fps, `z_index = 100`)
+- **Sons** : `rifle_shot.wav` au moment du tir, `bullet_impact.wav` à l'impact — volume géré par `GameConfig.sfx_volume_linear`
+- **Tir conditionnel** : la balle ne part que si la ligne rouge est visible (réticule dans le cône ±45° du regard)
+- **Mort à l'impact** : un ennemi ou un PNJ touché exécute `die()` — rotation 90° de son `Sprite2D` via Tween, labels masqués
+- État mort (`is_dead`, `death_rotation`) sauvegardé immédiatement dans `user://level_X/enemies.json` et `user://level_X/npcs.json`
+- **Fichiers :** `Scenes/Player/player.gd`, `Objects/RobotEnemy/robot_enemy.gd`, `Objects/NPC/npc.gd`, `Lib/liblevel.gd`
+
+---
+
+## Mode tir — Viseur, ligne de tir et détection de partie du corps
 
 - Nouvelle action **"F — Tirer"** dans le menu radial ; toggle activation / désactivation
 - **Réticule** : cercle rouge (Ø 44 px) avec 4 branches et point central, dessiné en espace écran (`CanvasLayer layer = 15`) via la classe interne `_CrosshairDraw`
@@ -824,17 +852,27 @@ Récapitulatif de toutes les modifications apportées au projet.
 - **Ligne de tir** : tracée du centre du joueur au réticule (en espace écran via `canvas_transform`)
   - Si la ligne intersecte un mur (raycast physique couche 1, joueur exclu) : la ligne s'arrête au point d'impact ; le réticule reste affiché à la position de la souris
   - Si le réticule est **hors du cône de vision** (±45° de `look_angle`) : la ligne n'est pas tracée
+  - Affichage de la ligne rouge activable / désactivable dans **Settings → Debug → Afficher la ligne rouge de la cible** (`GameConfig.show_aim_line`, persisté dans `user://settings.json`)
 - Raycast calculé dans `_process` (`_update_aim_line()`), résultat stocké dans `_CrosshairDraw` pour le dessin
+- **Détection de partie du corps** : quand le réticule survole un ennemi ou un PNJ, la partie ciblée est affichée en texte jaune à droite du réticule
+  - `intersect_point()` au centre du curseur → identifie le collider (groupe `robot_enemy` ou `npc`)
+  - `_body_part_at()` : conversion en repère local via `global_transform.affine_inverse()`, dimensions réelles du frame via `texture.get_size() / hframes / vframes`
+  - Seuils calibrés par analyse pixel du frame LPC 64×64 (idle_down) :
+    - **Tête** : `ly < 0` (largeur sprite ≤ 22 px — moitié supérieure du frame)
+    - **Torse** : `0 ≤ ly < +10` (saut à 26–30 px : niveau des épaules)
+    - **Bras** : zone `0 à +20`, si `|lx| > 11 px` (au-delà du torse central)
+    - **Mains** : `+10 ≤ ly < +20`
+    - **Jambes** : `+20 ≤ ly < +26` (largeur chute à 12–14 px : deux colonnes)
+    - **Pieds** : `ly ≥ +26`
 - Les boutons du HUD (Fiche / Armurerie / Paramètres / Accueil) sont désactivés tant que le mode tir est actif
-- **Fichiers :** `Scenes/Player/player.gd`
+- **Fichiers :** `Scenes/Player/player.gd`, `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`
 
 ---
 
-## Plein écran automatique au lancement
+## Mode d'affichage configurable
 
-- Le jeu s'ouvre directement en plein écran (mode fenêtre sans bordures) quel que soit le bureau
-- `window/size/mode=3` (borderless fullscreen) dans `project.godot`
-- `window/stretch/mode="viewport"` + `window/stretch/aspect="keep"` : contenu rendu à la résolution conçue, bandes noires sur les côtés si le ratio de l'écran diffère
+- Le jeu s'ouvre en **mode fenêtré** (`window/size/mode=0`) à la résolution 1280×720
+- `window/stretch/mode="canvas_items"` + `window/stretch/scale_mode="integer"` : contenu mis à l'échelle par pas entiers, sans flou
 - **Fichiers :** `project.godot`
 
 ---
