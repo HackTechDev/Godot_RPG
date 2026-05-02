@@ -858,12 +858,12 @@ Récapitulatif de toutes les modifications apportées au projet.
   - `intersect_point()` au centre du curseur → identifie le collider (groupe `robot_enemy` ou `npc`)
   - `_body_part_at()` : conversion en repère local via `global_transform.affine_inverse()`, dimensions réelles du frame via `texture.get_size() / hframes / vframes`
   - Seuils calibrés par analyse pixel du frame LPC 64×64 (idle_down) :
-    - **Tête** : `ly < 0` (largeur sprite ≤ 22 px — moitié supérieure du frame)
-    - **Torse** : `0 ≤ ly < +10` (saut à 26–30 px : niveau des épaules)
-    - **Bras** : zone `0 à +20`, si `|lx| > 11 px` (au-delà du torse central)
-    - **Mains** : `+10 ≤ ly < +20`
-    - **Jambes** : `+20 ≤ ly < +26` (largeur chute à 12–14 px : deux colonnes)
-    - **Pieds** : `ly ≥ +26`
+	- **Tête** : `ly < 0` (largeur sprite ≤ 22 px — moitié supérieure du frame)
+	- **Torse** : `0 ≤ ly < +10` (saut à 26–30 px : niveau des épaules)
+	- **Bras** : zone `0 à +20`, si `|lx| > 11 px` (au-delà du torse central)
+	- **Mains** : `+10 ≤ ly < +20`
+	- **Jambes** : `+20 ≤ ly < +26` (largeur chute à 12–14 px : deux colonnes)
+	- **Pieds** : `ly ≥ +26`
 - Les boutons du HUD (Fiche / Armurerie / Paramètres / Accueil) sont désactivés tant que le mode tir est actif
 - **Fichiers :** `Scenes/Player/player.gd`, `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`
 
