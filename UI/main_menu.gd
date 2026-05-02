@@ -55,6 +55,12 @@ var _cs_empty_label:   Label    = null
 var _cs_selected_slug: String   = ""
 var _cs_characters:    Array    = []
 var _cc_from_cs:       bool     = false
+
+var _cm_panel:         Control            = null
+var _cm_rows_vbox:     VBoxContainer      = null
+var _cm_delete_dialog: ConfirmationDialog = null
+var _cm_delete_slug:   String             = ""
+
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -136,6 +142,18 @@ func _on_button_play_pressed():
 	main.visible = false
 	_load_character_list()
 	_cs_panel.visible = true
+
+func _ensure_missions_loaded() -> void:
+	if not _missions.is_empty():
+		return
+	var path := "res://missions.json"
+	if not FileAccess.file_exists(path):
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	file.close()
+	if data is Array:
+		_missions = data
 
 func _load_missions() -> void:
 	_missions = []
@@ -719,6 +737,8 @@ func show_main_panel() -> void:
 		_mr_panel.visible = false
 	if _cs_panel:
 		_cs_panel.visible = false
+	if _cm_panel:
+		_cm_panel.visible = false
 	main.visible = true
 
 func set_in_game_mode(enabled: bool) -> void:
@@ -916,6 +936,11 @@ func _build_character_select_panel() -> void:
 	btn_new.pressed.connect(_on_cs_new_pressed)
 	buttons.add_child(btn_new)
 
+	var btn_manage := Button.new()
+	btn_manage.text = "Gérer"
+	btn_manage.pressed.connect(_on_cm_manage_pressed)
+	buttons.add_child(btn_manage)
+
 	_cs_btn_play = Button.new()
 	_cs_btn_play.text = "Jouer ▶"
 	_cs_btn_play.disabled = true
@@ -1010,6 +1035,222 @@ func _build_mission_recap_panel() -> void:
 	btn_continue.pressed.connect(_on_recap_continue_pressed)
 	buttons.add_child(btn_continue)
 
+func _build_character_manager_panel() -> void:
+	_cm_panel = Control.new()
+	_cm_panel.name = "CharacterManager"
+	_cm_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cm_panel.visible = false
+	add_child(_cm_panel)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cm_panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cm_panel.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(620, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 24)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	margin.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "GESTION DES PERSONNAGES"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	vbox.add_child(HSeparator.new())
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 340)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vbox.add_child(scroll)
+
+	_cm_rows_vbox = VBoxContainer.new()
+	_cm_rows_vbox.add_theme_constant_override("separation", 8)
+	_cm_rows_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(_cm_rows_vbox)
+
+	vbox.add_child(HSeparator.new())
+
+	var btn_back := Button.new()
+	btn_back.text = "Retour"
+	btn_back.pressed.connect(_on_cm_back_pressed)
+	vbox.add_child(btn_back)
+
+	_cm_delete_dialog = ConfirmationDialog.new()
+	_cm_delete_dialog.title = "Supprimer le personnage"
+	_cm_delete_dialog.dialog_text = "Êtes-vous sûr de vouloir supprimer ce personnage ?\nCette action est irréversible."
+	_cm_delete_dialog.confirmed.connect(_on_cm_delete_confirmed)
+	add_child(_cm_delete_dialog)
+
+
+func _load_character_manager() -> void:
+	for child in _cm_rows_vbox.get_children():
+		child.queue_free()
+
+	_ensure_missions_loaded()
+
+	var dir := DirAccess.open("user://characters/")
+	var slugs: Array = []
+	if dir != null:
+		dir.list_dir_begin()
+		var slug := dir.get_next()
+		while slug != "":
+			if dir.current_is_dir() and not slug.begins_with("."):
+				if FileAccess.file_exists("user://characters/%s/rpg.json" % slug):
+					slugs.append(slug)
+			slug = dir.get_next()
+		dir.list_dir_end()
+
+	if slugs.is_empty():
+		var empty_lbl := Label.new()
+		empty_lbl.text = "Aucun personnage trouvé."
+		empty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_cm_rows_vbox.add_child(empty_lbl)
+		return
+
+	for sl in slugs:
+		_cm_rows_vbox.add_child(_build_character_row(sl))
+
+
+func _build_character_row(slug: String) -> Control:
+	var nickname := slug
+	var rpg_path := "user://characters/%s/rpg.json" % slug
+	if FileAccess.file_exists(rpg_path):
+		var f := FileAccess.open(rpg_path, FileAccess.READ)
+		var data = JSON.parse_string(f.get_as_text())
+		f.close()
+		if data is Dictionary:
+			nickname = data.get("player_nickname", slug)
+
+	var mission_summary := "Aucune mission en cours"
+	var ms_path := "user://characters/%s/mission_state.json" % slug
+	if FileAccess.file_exists(ms_path):
+		var f2 := FileAccess.open(ms_path, FileAccess.READ)
+		var ms_data = JSON.parse_string(f2.get_as_text())
+		f2.close()
+		if ms_data is Dictionary and ms_data.get("started", false):
+			var mission_id: String = ms_data.get("mission_id", "")
+			var mission_title := mission_id
+			for m in _missions:
+				if m.get("id", "") == mission_id:
+					mission_title = m.get("title", mission_id)
+					break
+			var elapsed: float = ms_data.get("mission_elapsed_real", 0.0)
+			var saved_at: String = ms_data.get("saved_at", "")
+			mission_summary = mission_title + "  —  " + _format_elapsed(elapsed)
+			if saved_at != "":
+				mission_summary += "  (" + _format_saved_at(saved_at) + ")"
+
+	var row_panel := PanelContainer.new()
+	var row_margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		row_margin.add_theme_constant_override("margin_" + side, 8)
+	row_panel.add_child(row_margin)
+
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 12)
+	row_margin.add_child(hbox)
+
+	var info_vbox := VBoxContainer.new()
+	info_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.add_child(info_vbox)
+
+	var name_lbl := Label.new()
+	name_lbl.text = nickname
+	info_vbox.add_child(name_lbl)
+
+	var mission_lbl := Label.new()
+	mission_lbl.text = mission_summary
+	mission_lbl.add_theme_color_override("font_color", Color(0.65, 0.65, 0.65))
+	mission_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_vbox.add_child(mission_lbl)
+
+	var btn_play := Button.new()
+	btn_play.text = "Jouer ▶"
+	btn_play.pressed.connect(_on_cm_play_pressed.bind(slug))
+	hbox.add_child(btn_play)
+
+	var btn_delete := Button.new()
+	btn_delete.text = "Supprimer"
+	btn_delete.pressed.connect(_on_cm_delete_pressed.bind(slug))
+	hbox.add_child(btn_delete)
+
+	return row_panel
+
+
+func _on_cm_manage_pressed() -> void:
+	_cs_panel.visible = false
+	_load_character_manager()
+	_cm_panel.visible = true
+
+
+func _on_cm_back_pressed() -> void:
+	_cm_panel.visible = false
+	_load_character_list()
+	_cs_panel.visible = true
+
+
+func _on_cm_play_pressed(slug: String) -> void:
+	Player_data.set_character(slug)
+	liblevel.load_game()
+	var state := liblevel.load_mission_state()
+	if state.get("started", false):
+		var mission_id: String = state.get("mission_id", "")
+		_ensure_missions_loaded()
+		for i in range(_missions.size()):
+			if _missions[i].get("id", "") == mission_id:
+				_selected_mission = _missions[i]
+				_cm_panel.visible = false
+				_show_mission_recap()
+				return
+	_cm_panel.visible = false
+	mission_select.visible = true
+	_load_missions()
+
+
+func _on_cm_delete_pressed(slug: String) -> void:
+	_cm_delete_slug = slug
+	_cm_delete_dialog.popup_centered()
+
+
+func _on_cm_delete_confirmed() -> void:
+	if _cm_delete_slug == "":
+		return
+	_delete_dir_recursive("user://characters/" + _cm_delete_slug)
+	_cm_delete_slug = ""
+	_load_character_manager()
+
+
+func _delete_dir_recursive(path: String) -> void:
+	var dir := DirAccess.open(path)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var name := dir.get_next()
+	while name != "":
+		if name != "." and name != "..":
+			var full := path + "/" + name
+			if dir.current_is_dir():
+				_delete_dir_recursive(full)
+			else:
+				DirAccess.remove_absolute(full)
+		name = dir.get_next()
+	dir.list_dir_end()
+	DirAccess.remove_absolute(path)
+
+
 func _ready():
 	if GameConfig.DEBUG:
 		print("Init Game")
@@ -1019,6 +1260,7 @@ func _ready():
 	get_tree().set_auto_accept_quit(false)
 	_build_mission_recap_panel()
 	_build_character_select_panel()
+	_build_character_manager_panel()
 	music_neon_dream.play()
 	_load_audio_settings()
 	SceneTransition.fade_in()
