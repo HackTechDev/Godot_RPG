@@ -173,13 +173,11 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 text = "Audio"
 
-[node name="Video" type="Label" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1146480439]
+[node name="Video" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1146480439]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 text = "Vidéo"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Controls" type="Button" parent="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1383968741]
 layout_mode = 2
@@ -1102,6 +1100,65 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retour"
 
+[node name="VideoSettings" type="Control" parent="MainMenuLayer" unique_id=1234580001]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuLayer/VideoSettings" unique_id=1234580002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenuLayer/VideoSettings/CenterContainer" unique_id=1234580003]
+custom_minimum_size = Vector2(400, 220)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer" unique_id=1234580004]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer" unique_id=1234580005]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580006]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Vidéo"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580007]
+layout_mode = 2
+
+[node name="CheckFullscreen" type="CheckButton" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580008]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Plein écran"
+
+[node name="SeparatorButtons" type="HSeparator" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580009]
+layout_mode = 2
+
+[node name="ButtonVideoApply" type="Button" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580010]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Appliquer"
+
+[node name="ButtonVideoBack" type="Button" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580011]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Retour"
+
 [node name="MissionSelect" type="Control" parent="MainMenuLayer" unique_id=1234570001]
 visible = false
 layout_mode = 3
@@ -1260,4 +1317,7 @@ parameters/looping = true
 [connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
 [connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonAccept" to="MainMenuLayer" method="_on_button_accept_pressed"]
+[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Video" to="MainMenuLayer" method="_on_button_video_pressed"]
+[connection signal="pressed" from="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoApply" to="MainMenuLayer" method="_on_button_video_apply_pressed"]
+[connection signal="pressed" from="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoBack" to="MainMenuLayer" method="_on_button_video_back_pressed"]
 [connection signal="confirmed" from="MainMenuLayer/QuitDialog" to="MainMenuLayer" method="_on_quit_dialog_confirmed"]

@@ -22,6 +22,8 @@ var _in_game: bool = false
 @onready var check_intro_music: CheckButton = $AudioSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckIntroMusic
 @onready var mission_select: Control = $MissionSelect
 @onready var debug_settings: Control = $DebugSettings
+@onready var video_settings: Control = $VideoSettings
+@onready var check_fullscreen: CheckButton = $VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckFullscreen
 @onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
 @onready var check_show_cone: CheckButton     = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone
@@ -455,6 +457,22 @@ func _on_button_debug_back_pressed():
 	debug_settings.visible = false
 	settings.visible = true
 
+func _on_button_video_pressed():
+	settings.visible = false
+	video_settings.visible = true
+	check_fullscreen.button_pressed = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+func _on_button_video_apply_pressed():
+	if check_fullscreen.button_pressed:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	_save_audio_settings()
+
+func _on_button_video_back_pressed():
+	video_settings.visible = false
+	settings.visible = true
+
 func _on_button_create_character_pressed():
 	_cc_from_cs = false
 	main.visible = false
@@ -701,7 +719,8 @@ func _save_audio_settings():
 		"debug_show_hitbox": GameConfig.debug_show_hitbox,
 		"debug_show_collision": GameConfig.debug_show_collision,
 		"show_cone": GameConfig.show_cone,
-		"show_aim_line": GameConfig.show_aim_line
+		"show_aim_line": GameConfig.show_aim_line,
+		"fullscreen": DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 	}
 	var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	file.store_line(JSON.stringify(data))
@@ -724,6 +743,8 @@ func _load_audio_settings():
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
 	GameConfig.show_cone      = data.get("show_cone", true)
 	GameConfig.show_aim_line  = data.get("show_aim_line", true)
+	if data.get("fullscreen", false):
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func show_main_panel() -> void:
 	settings.visible = false
@@ -731,6 +752,7 @@ func show_main_panel() -> void:
 	audio_settings.visible = false
 	controls_settings.visible = false
 	debug_settings.visible = false
+	video_settings.visible = false
 	mission_select.visible = false
 	character_creation.visible = false
 	if _mr_panel:
@@ -751,6 +773,7 @@ func _on_button_settings_back_pressed():
 	help.visible = false
 	audio_settings.visible = false
 	controls_settings.visible = false
+	video_settings.visible = false
 	if _in_game:
 		return_to_game.emit()
 	else:
