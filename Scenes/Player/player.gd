@@ -63,8 +63,11 @@ var _aiming: bool        = false
 var _crosshair_draw: Control = null
 var _bullets: Array      = []
 
-const _BULLET_SPEED     := 600.0
+const _BULLET_SPEED      := 600.0
 const _BULLET_MAX_TRAVEL := 2000.0
+const _EXPLOSION_TEX     := preload("res://Sprites/Bullet/bullet_explosion_spritesheet.png")
+const _EXPLOSION_FRAMES  := 6
+const _EXPLOSION_SIZE    := 32
 
 # ─── Viseur ────────────────────────────────────────────────────────────────
 class _CrosshairDraw extends Control:
@@ -1071,17 +1074,46 @@ func _set_hud_topbar_interactive(enabled: bool) -> void:
 func _update_bullets(delta: float) -> void:
 	if _crosshair_draw != null:
 		_crosshair_draw.bullet_positions.clear()
+	var space_state := get_world_2d().direct_space_state
 	for b in _bullets.duplicate():
 		b["traveled"] += _BULLET_SPEED * delta
 		if b["traveled"] > _BULLET_MAX_TRAVEL:
 			_bullets.erase(b)
 			continue
-		b["pos"] += (b["dir"] as Vector2) * _BULLET_SPEED * delta
+		var prev: Vector2 = b["pos"]
+		var next: Vector2 = prev + (b["dir"] as Vector2) * _BULLET_SPEED * delta
+		var query := PhysicsRayQueryParameters2D.create(prev, next)
+		query.exclude = [get_rid()]
+		var hit := space_state.intersect_ray(query)
+		if not hit.is_empty():
+			_bullets.erase(b)
+			_spawn_explosion(hit["position"])
+			continue
+		b["pos"] = next
 		if _crosshair_draw != null:
-			var screen_pos: Vector2 = get_viewport().get_canvas_transform() * (b["pos"] as Vector2)
+			var screen_pos: Vector2 = get_viewport().get_canvas_transform() * next
 			_crosshair_draw.bullet_positions.append(screen_pos)
 	if _crosshair_draw != null:
 		_crosshair_draw.queue_redraw()
+
+func _spawn_explosion(world_pos: Vector2) -> void:
+	var frames := SpriteFrames.new()
+	frames.add_animation("exp")
+	frames.set_animation_loop("exp", false)
+	frames.set_animation_speed("exp", 12.0)
+	for i in _EXPLOSION_FRAMES:
+		var at := AtlasTexture.new()
+		at.atlas  = _EXPLOSION_TEX
+		at.region = Rect2(i * _EXPLOSION_SIZE, 0, _EXPLOSION_SIZE, _EXPLOSION_SIZE)
+		frames.add_frame("exp", at)
+	var anim := AnimatedSprite2D.new()
+	anim.sprite_frames  = frames
+	anim.animation      = "exp"
+	anim.z_index        = 100
+	anim.global_position = world_pos
+	get_parent().add_child(anim)
+	anim.play()
+	anim.animation_finished.connect(anim.queue_free)
 
 func _fire_bullet() -> void:
 	var canvas_xform := get_viewport().get_canvas_transform()
