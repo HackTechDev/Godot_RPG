@@ -62,10 +62,14 @@ const RADIAL_CLICK_RADIUS = 26.0
 var _aiming: bool        = false
 var _crosshair_draw: Control = null
 var _bullets: Array      = []
+var _sfx_shot:   AudioStreamPlayer = null
+var _sfx_impact: AudioStreamPlayer = null
 
 const _BULLET_SPEED      := 600.0
 const _BULLET_MAX_TRAVEL := 2000.0
 const _EXPLOSION_TEX     := preload("res://Sprites/Bullet/bullet_explosion_spritesheet.png")
+const _SHOT_WAV          := preload("res://Sprites/Bullet/rifle_shot.wav")
+const _IMPACT_WAV        := preload("res://Sprites/Bullet/bullet_impact.wav")
 const _EXPLOSION_FRAMES  := 6
 const _EXPLOSION_SIZE    := 32
 
@@ -209,6 +213,13 @@ func _ready():
 
 	minimap_instance = minimap_scene.instantiate()
 	add_child(minimap_instance)
+
+	_sfx_shot = AudioStreamPlayer.new()
+	_sfx_shot.stream = _SHOT_WAV
+	add_child(_sfx_shot)
+	_sfx_impact = AudioStreamPlayer.new()
+	_sfx_impact.stream = _IMPACT_WAV
+	add_child(_sfx_impact)
 
 	_setup_crosshair()
 
@@ -1098,6 +1109,8 @@ func _update_bullets(delta: float) -> void:
 		_crosshair_draw.queue_redraw()
 
 func _spawn_explosion(world_pos: Vector2) -> void:
+	if GameConfig.sfx_enabled and _sfx_impact != null:
+		_sfx_impact.play()
 	var frames := SpriteFrames.new()
 	frames.add_animation("exp")
 	frames.set_animation_loop("exp", false)
@@ -1121,3 +1134,5 @@ func _fire_bullet() -> void:
 	var mouse_world  := canvas_xform.affine_inverse() * get_viewport().get_mouse_position()
 	var dir          := (mouse_world - global_position).normalized()
 	_bullets.append({"pos": global_position, "dir": dir, "traveled": 0.0})
+	if GameConfig.sfx_enabled and _sfx_shot != null:
+		_sfx_shot.play()
