@@ -458,18 +458,25 @@ func _on_button_debug_back_pressed():
 	settings.visible = true
 
 func _on_button_video_pressed():
+	print("[VIDEO] _on_button_video_pressed — mode actuel=", DisplayServer.window_get_mode())
 	settings.visible = false
 	video_settings.visible = true
 	check_fullscreen.button_pressed = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
+	print("[VIDEO] check_fullscreen=", check_fullscreen.button_pressed)
 
 func _on_button_video_apply_pressed():
+	print("[VIDEO] _on_button_video_apply_pressed — check_fullscreen=", check_fullscreen.button_pressed)
 	if check_fullscreen.button_pressed:
+		print("[VIDEO] → passage en plein écran")
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
+		print("[VIDEO] → passage en fenêtré")
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	print("[VIDEO] mode après changement=", DisplayServer.window_get_mode())
 	_save_audio_settings()
 
 func _on_button_video_back_pressed():
+	print("[VIDEO] _on_button_video_back_pressed")
 	video_settings.visible = false
 	settings.visible = true
 
@@ -1278,12 +1285,16 @@ func _connect_video_settings() -> void:
 	var btn_video: Button = $Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Video
 	var btn_apply: Button = $VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoApply
 	var btn_back:  Button = $VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoBack
+	print("[VIDEO] _connect_video_settings — btn_video=", btn_video, " btn_apply=", btn_apply, " btn_back=", btn_back)
 	if btn_video and not btn_video.pressed.is_connected(_on_button_video_pressed):
 		btn_video.pressed.connect(_on_button_video_pressed)
+		print("[VIDEO] btn_video connecté")
 	if btn_apply and not btn_apply.pressed.is_connected(_on_button_video_apply_pressed):
 		btn_apply.pressed.connect(_on_button_video_apply_pressed)
+		print("[VIDEO] btn_apply connecté")
 	if btn_back and not btn_back.pressed.is_connected(_on_button_video_back_pressed):
 		btn_back.pressed.connect(_on_button_video_back_pressed)
+		print("[VIDEO] btn_back connecté")
 
 func _ready():
 	if GameConfig.DEBUG:
