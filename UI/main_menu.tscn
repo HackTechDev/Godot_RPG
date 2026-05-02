@@ -1146,6 +1146,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Plein écran"
 
+[node name="LabelHint" type="Label" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580012]
+layout_mode = 2
+visible = false
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.7, 0.2, 1)
+autowrap_mode = 3
+
 [node name="SeparatorButtons" type="HSeparator" parent="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1234580009]
 layout_mode = 2
 
