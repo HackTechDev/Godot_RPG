@@ -81,6 +81,7 @@ class _CrosshairDraw extends Control:
 	var hit_screen:       Vector2 = Vector2.ZERO
 	var line_visible:     bool    = true
 	var bullet_positions: Array   = []
+	var aimed_body_part:  String  = ""
 
 	func _draw() -> void:
 		for bp: Vector2 in bullet_positions:
@@ -110,6 +111,14 @@ class _CrosshairDraw extends Control:
 			var p1 := mpos + off * (R + gap + arm)
 			draw_line(p0, p1, col_dark, 4.0)
 			draw_line(p0, p1, col,      2.0)
+
+		# Partie du corps visée
+		if aimed_body_part != "":
+			var font := ThemeDB.fallback_font
+			var fs   := 13
+			var tp   := mpos + Vector2(R + gap + 4.0, 5.0)
+			draw_string(font, tp + Vector2(1, 1), aimed_body_part, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(0.0, 0.0, 0.0, 0.85))
+			draw_string(font, tp, aimed_body_part, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1.0, 0.88, 0.15, 1.0))
 
 func _radial_items() -> Array:
 	return [
@@ -1055,6 +1064,62 @@ func _update_aim_line() -> void:
 	var angle_to_mouse := rad_to_deg(atan2(dir_to_mouse.y, dir_to_mouse.x))
 	var diff := fmod(angle_to_mouse - look_angle + 540.0, 360.0) - 180.0
 	_crosshair_draw.line_visible = absf(diff) <= CONE_FOV_HALF
+	_crosshair_draw.aimed_body_part = _get_aimed_body_part(mouse_world)
+
+func _get_aimed_body_part(mouse_world: Vector2) -> String:
+	var space_state := get_world_2d().direct_space_state
+	var point_query := PhysicsPointQueryParameters2D.new()
+	point_query.position    = mouse_world
+	point_query.exclude     = [get_rid()]
+	for result in space_state.intersect_point(point_query):
+		var body = result["collider"]
+		if not (body is Node):
+			continue
+		if (body as Node).is_in_group("robot_enemy") or (body as Node).is_in_group("npc"):
+			return _body_part_at(body as Node2D, mouse_world)
+	return ""
+
+func _body_part_at(entity: Node2D, world_pos: Vector2) -> String:
+	var spr := entity.get_node_or_null("Sprite2D") as Sprite2D
+
+	# Position du curseur dans le repère local de l'entité
+	# (gère la translation, la rotation et l'échelle de l'entité)
+	var lpos := entity.global_transform.affine_inverse() * world_pos
+
+	# Dimensions du frame dans l'espace local du sprite
+	var frame_w := 64.0
+	var frame_h := 64.0
+	var spr_off := Vector2.ZERO
+	if spr != null and spr.texture != null:
+		var tex_sz  := spr.texture.get_size()
+		frame_w = tex_sz.x / maxf(float(spr.hframes), 1.0) * absf(spr.scale.x)
+		frame_h = tex_sz.y / maxf(float(spr.vframes), 1.0) * absf(spr.scale.y)
+		spr_off = spr.position   # décalage du nœud Sprite2D dans l'entité
+
+	# Coordonnées relatives au centre du sprite (centered=true par défaut)
+	var ly := lpos.y - spr_off.y
+	var lx := lpos.x - spr_off.x
+
+	# Seuils calibrés par analyse pixel du frame LPC 64×64 (idle_down) :
+	#   Tête   : ly < 0          → lignes 13–31 (la largeur reste ≤ 22 px, tête+cheveux)
+	#   Torse  : 0 ≤ ly < +10    → lignes 32–41 (la largeur monte à 26–30 px : épaules)
+	#   Mains  : +10 ≤ ly < +20  → lignes 42–51 (avant-bras + mains)
+	#   Bras   : bande 0–+20, si |lx| > frame_w*0.17 (~11 px) → hors torse central
+	#   Jambes : +20 ≤ ly < +26  → lignes 52–57 (largeur tombe à 12–14 px : deux jambes)
+	#   Pieds  : ly ≥ +26        → lignes 58–61
+	var hh       := frame_h * 0.5
+	var arm_half := frame_w * 0.17    # ~11 px hors du torse central sur un frame 64 px
+	if ly < 0.0:
+		return "Tête"
+	if ly < -hh + frame_h * 0.81:    # 0 à +20 → zone torse / bras / mains
+		if absf(lx) > arm_half:
+			return "Bras"
+		if ly < -hh + frame_h * 0.66: # 0 à +10 → torse
+			return "Torse"
+		return "Mains"                 # +10 à +20
+	if ly < -hh + frame_h * 0.91:    # +20 à +26 → jambes
+		return "Jambes"
+	return "Pieds"
 
 func _setup_crosshair() -> void:
 	var cl := CanvasLayer.new()
@@ -1070,6 +1135,8 @@ func _toggle_aiming() -> void:
 	_aiming = not _aiming
 	if _crosshair_draw != null:
 		_crosshair_draw.is_active = _aiming
+		if not _aiming:
+			_crosshair_draw.aimed_body_part = ""
 		_crosshair_draw.queue_redraw()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN if _aiming else Input.MOUSE_MODE_VISIBLE)
 	_set_hud_topbar_interactive(not _aiming)
