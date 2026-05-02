@@ -371,8 +371,9 @@ func _on_quit_dialog_confirmed():
 	var robots = get_tree().get_nodes_in_group("robot")
 	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
 	var mechas = get_tree().get_nodes_in_group("mecha")
+	var npcs = get_tree().get_nodes_in_group("npc")
 	var current_scene = get_tree().get_current_scene().get_name()
-	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
+	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas, npcs)
 
 	if Player_data.current_mission_id != "":
 		var elapsed: float

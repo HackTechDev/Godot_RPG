@@ -299,7 +299,8 @@ func _save_transition_state(player: Node2D) -> void:
 	var robots        := get_tree().get_nodes_in_group("robot")
 	var robot_enemies := get_tree().get_nodes_in_group("robot_enemy")
 	var mechas        := get_tree().get_nodes_in_group("mecha")
-	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies, mechas)
+	var npcs          := get_tree().get_nodes_in_group("npc")
+	_liblevel.saveAllObjects(Player_data.player_previous_scene, computers, robots, robot_enemies, mechas, npcs)
 	if Player_data.current_mission_id != "" and Player_data.mission_real_start > 0.0:
 		var elapsed := Time.get_unix_time_from_system() - Player_data.mission_real_start - Player_data.mission_paused_duration
 		var game_datetime := _compute_game_datetime(elapsed)
@@ -372,7 +373,7 @@ func _load_enemies() -> void:
 
 func _load_npcs() -> void:
 	var entries := _read_level_json(
-		"",
+		Player_data.level_save_dir(name) + "/npcs.json",
 		"res://Scenes/Levels/%s/npcs.json" % name
 	)
 	for entry in entries:

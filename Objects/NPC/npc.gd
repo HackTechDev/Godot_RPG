@@ -1,17 +1,45 @@
 extends CharacterBody2D
 
-var npc_id: String = ""
-var npc_name: String = ""
-var dialogue: Dictionary = {}
+var npc_id: String        = ""
+var npc_name: String      = ""
+var dialogue: Dictionary  = {}
+var is_dead: bool         = false
+var death_rotation: float = 0.0
 
 @onready var name_label: Label = $NameLabel
 @onready var interaction_label: Label = $InteractionLabel
+
+func _ready() -> void:
+	add_to_group("npc")
+
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	death_rotation = PI / 2.0 * (1 if randi_range(0, 1) == 0 else -1)
+	var spr := get_node_or_null("Sprite2D") as Node2D
+	if spr:
+		var tw := create_tween()
+		tw.tween_property(spr, "rotation", death_rotation, 0.3)
+	name_label.visible        = false
+	interaction_label.visible = false
+
+func apply_dead_state() -> void:
+	is_dead = true
+	var spr := get_node_or_null("Sprite2D") as Node2D
+	if spr:
+		spr.rotation = death_rotation
+	name_label.visible        = false
+	interaction_label.visible = false
 
 func setup(config: Dictionary) -> void:
 	npc_id = config.get("id", "npc_00")
 	npc_name = config.get("name", "NPC")
 	dialogue = config.get("dialogue", {})
 	name_label.text = npc_name
+	if config.get("dead", false):
+		death_rotation = float(config.get("death_rotation", PI / 2.0))
+		apply_dead_state()
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

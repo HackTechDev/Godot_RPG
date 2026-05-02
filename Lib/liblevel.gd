@@ -19,7 +19,7 @@ func savePlayer(data_to_save):
 	file.store_line(to_json)
 	file.close()
 	
-func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas = []):
+func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas = [], npcs = []):
 	if GameConfig.DEBUG:
 		print("saveAllObjects")
 
@@ -60,6 +60,23 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	var mechas_file = FileAccess.open(base_dir + "/mechas.json", FileAccess.WRITE)
 	mechas_file.store_line(JSON.stringify(mechas_data))
 	mechas_file.close()
+
+	# npcs.json — état vivant/mort des PNJ
+	var npcs_data: Array = []
+	for npc in npcs:
+		npcs_data.append({
+			"x":              npc.position.x,
+			"y":              npc.position.y,
+			"id":             npc.npc_id,
+			"name":           npc.npc_name,
+			"dialogue":       npc.dialogue,
+			"dead":           npc.is_dead,
+			"death_rotation": npc.death_rotation
+		})
+	var npcs_file = FileAccess.open(base_dir + "/npcs.json", FileAccess.WRITE)
+	if npcs_file != null:
+		npcs_file.store_line(JSON.stringify(npcs_data))
+		npcs_file.close()
 	
 func save_mission_state(mission_id: String, started: bool, elapsed_real: float = 0.0, started_at: String = "", game_datetime: String = "") -> void:
 	var prev := load_mission_state()
@@ -99,7 +116,7 @@ func reinitializeLevel():
 	if FileAccess.file_exists(mission_path):
 		DirAccess.remove_absolute(mission_path)
 	for level in ["level_1", "level_2", "level_3", "level_4"]:
-		for file_name in ["objects.json", "enemies.json", "mechas.json"]:
+		for file_name in ["objects.json", "enemies.json", "mechas.json", "npcs.json"]:
 			var path := "%s/%s/%s" % [Player_data.character_dir(), level, file_name]
 			if FileAccess.file_exists(path):
 				DirAccess.remove_absolute(path)

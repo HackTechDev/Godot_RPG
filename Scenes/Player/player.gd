@@ -448,8 +448,9 @@ func _auto_save_objects():
 	var robots = get_tree().get_nodes_in_group("robot")
 	var robot_enemies = get_tree().get_nodes_in_group("robot_enemy")
 	var mechas = get_tree().get_nodes_in_group("mecha")
+	var npcs = get_tree().get_nodes_in_group("npc")
 	var current_scene = get_tree().get_current_scene().get_name()
-	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas)
+	liblevel.saveAllObjects(current_scene, computers, robots, robot_enemies, mechas, npcs)
 
 func _auto_save_player():
 	liblevel.savePlayer({
@@ -1099,7 +1100,7 @@ func _update_bullets(delta: float) -> void:
 		var hit := space_state.intersect_ray(query)
 		if not hit.is_empty():
 			_bullets.erase(b)
-			_spawn_explosion(hit["position"])
+			_spawn_explosion(hit["position"], hit["collider"])
 			continue
 		b["pos"] = next
 		if _crosshair_draw != null:
@@ -1108,9 +1109,19 @@ func _update_bullets(delta: float) -> void:
 	if _crosshair_draw != null:
 		_crosshair_draw.queue_redraw()
 
-func _spawn_explosion(world_pos: Vector2) -> void:
+func _spawn_explosion(world_pos: Vector2, collider: Object = null) -> void:
 	if GameConfig.sfx_enabled and _sfx_impact != null:
 		_sfx_impact.play()
+	if is_instance_valid(collider):
+		var hit_living := false
+		if collider.is_in_group("robot_enemy"):
+			collider.die()
+			hit_living = true
+		elif collider.is_in_group("npc") and collider.has_method("die"):
+			collider.die()
+			hit_living = true
+		if hit_living:
+			_auto_save_objects()
 	var frames := SpriteFrames.new()
 	frames.add_animation("exp")
 	frames.set_animation_loop("exp", false)
