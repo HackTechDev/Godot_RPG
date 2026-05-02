@@ -61,16 +61,24 @@ const RADIAL_CLICK_RADIUS = 26.0
 
 var _aiming: bool        = false
 var _crosshair_draw: Control = null
+var _bullets: Array      = []
+
+const _BULLET_SPEED     := 600.0
+const _BULLET_MAX_TRAVEL := 2000.0
 
 # ─── Viseur ────────────────────────────────────────────────────────────────
 class _CrosshairDraw extends Control:
-	var is_active:     bool    = false
-	var player_screen: Vector2 = Vector2.ZERO
-	var has_hit:       bool    = false
-	var hit_screen:    Vector2 = Vector2.ZERO
-	var line_visible:  bool    = true
+	var is_active:        bool    = false
+	var player_screen:    Vector2 = Vector2.ZERO
+	var has_hit:          bool    = false
+	var hit_screen:       Vector2 = Vector2.ZERO
+	var line_visible:     bool    = true
+	var bullet_positions: Array   = []
 
 	func _draw() -> void:
+		for bp: Vector2 in bullet_positions:
+			draw_rect(Rect2(bp - Vector2(2.0, 2.0), Vector2(4.0, 4.0)), Color(0.3, 0.6, 1.0, 1.0), true)
+
 		if not is_active:
 			return
 		var mpos     := get_viewport().get_mouse_position()
@@ -232,7 +240,7 @@ func _physics_process(delta: float) -> void:
 		_mecha_cooldown -= delta
 	input_move()
 
-func _process(_delta):
+func _process(_delta: float):
 	if not _in_mecha:
 		_update_nearby_mecha()
 	if in_combat and is_instance_valid(combat_enemy):
@@ -252,6 +260,7 @@ func _process(_delta):
 	if _aiming and _crosshair_draw != null:
 		_update_aim_line()
 		_crosshair_draw.queue_redraw()
+	_update_bullets(_delta)
 
 func _draw() -> void:
 	if GameConfig.debug_show_hitbox:
@@ -298,6 +307,11 @@ func _input(event):
 				get_tree().paused = true
 				get_viewport().set_input_as_handled()
 			return
+
+	if _aiming and event.is_action_pressed("ui_space"):
+		_fire_bullet()
+		get_viewport().set_input_as_handled()
+		return
 
 	if event.is_action_pressed("ui_pause"):
 		if radial_menu_instance and radial_menu_instance.visible:
@@ -1053,3 +1067,24 @@ func _set_hud_topbar_interactive(enabled: bool) -> void:
 	for child in hbox.get_children():
 		if child is Button:
 			child.disabled = not enabled
+
+func _update_bullets(delta: float) -> void:
+	if _crosshair_draw != null:
+		_crosshair_draw.bullet_positions.clear()
+	for b in _bullets.duplicate():
+		b["traveled"] += _BULLET_SPEED * delta
+		if b["traveled"] > _BULLET_MAX_TRAVEL:
+			_bullets.erase(b)
+			continue
+		b["pos"] += (b["dir"] as Vector2) * _BULLET_SPEED * delta
+		if _crosshair_draw != null:
+			var screen_pos: Vector2 = get_viewport().get_canvas_transform() * (b["pos"] as Vector2)
+			_crosshair_draw.bullet_positions.append(screen_pos)
+	if _crosshair_draw != null:
+		_crosshair_draw.queue_redraw()
+
+func _fire_bullet() -> void:
+	var canvas_xform := get_viewport().get_canvas_transform()
+	var mouse_world  := canvas_xform.affine_inverse() * get_viewport().get_mouse_position()
+	var dir          := (mouse_world - global_position).normalized()
+	_bullets.append({"pos": global_position, "dir": dir, "traveled": 0.0})
