@@ -24,7 +24,8 @@ var _in_game: bool = false
 @onready var debug_settings: Control = $DebugSettings
 @onready var check_debug_hitbox: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugHitbox
 @onready var check_debug_collision: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckDebugCollision
-@onready var check_show_cone: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone
+@onready var check_show_cone: CheckButton     = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowCone
+@onready var check_show_aim_line: CheckButton = $DebugSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CheckShowAimLine
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
 @onready var _btn_settings_back: Button = $Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack
 
@@ -412,7 +413,8 @@ func _on_button_debug_pressed():
 	debug_settings.visible = true
 	check_debug_hitbox.button_pressed = GameConfig.debug_show_hitbox
 	check_debug_collision.button_pressed = GameConfig.debug_show_collision
-	check_show_cone.button_pressed = GameConfig.show_cone
+	check_show_cone.button_pressed     = GameConfig.show_cone
+	check_show_aim_line.button_pressed = GameConfig.show_aim_line
 
 func _on_check_debug_hitbox_toggled(toggled_on: bool):
 	GameConfig.debug_show_hitbox = toggled_on
@@ -424,6 +426,10 @@ func _on_check_debug_collision_toggled(toggled_on: bool):
 
 func _on_check_show_cone_toggled(toggled_on: bool):
 	GameConfig.show_cone = toggled_on
+	_save_audio_settings()
+
+func _on_check_show_aim_line_toggled(toggled_on: bool):
+	GameConfig.show_aim_line = toggled_on
 	_save_audio_settings()
 
 func _on_button_debug_back_pressed():
@@ -675,7 +681,8 @@ func _save_audio_settings():
 		"intro_music_enabled": GameConfig.intro_music_enabled,
 		"debug_show_hitbox": GameConfig.debug_show_hitbox,
 		"debug_show_collision": GameConfig.debug_show_collision,
-		"show_cone": GameConfig.show_cone
+		"show_cone": GameConfig.show_cone,
+		"show_aim_line": GameConfig.show_aim_line
 	}
 	var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	file.store_line(JSON.stringify(data))
@@ -696,7 +703,8 @@ func _load_audio_settings():
 	GameConfig.intro_music_enabled = data.get("intro_music_enabled", true)
 	GameConfig.debug_show_hitbox = data.get("debug_show_hitbox", false)
 	GameConfig.debug_show_collision = data.get("debug_show_collision", false)
-	GameConfig.show_cone = data.get("show_cone", true)
+	GameConfig.show_cone      = data.get("show_cone", true)
+	GameConfig.show_aim_line  = data.get("show_aim_line", true)
 
 func show_main_panel() -> void:
 	settings.visible = false

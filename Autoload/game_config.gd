@@ -18,7 +18,8 @@ var player_speed_normal: int = 70
 var player_speed_slow: int = 35
 
 # Indicateurs visuels joueur
-var show_cone: bool = true
+var show_cone: bool      = true
+var show_aim_line: bool  = true
 
 func _ready() -> void:
 	if not FileAccess.file_exists(_SETTINGS_PATH):
@@ -34,3 +35,4 @@ func _ready() -> void:
 	debug_show_hitbox    = data.get("debug_show_hitbox", false)
 	debug_show_collision = data.get("debug_show_collision", false)
 	show_cone            = data.get("show_cone", true)
+	show_aim_line        = data.get("show_aim_line", true)

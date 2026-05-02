@@ -96,7 +96,7 @@ class _CrosshairDraw extends Control:
 		var col_dark := Color(0.0, 0.0, 0.0, 0.55)
 
 		# Ligne joueur → point d'impact (ou réticule si pas de mur)
-		if line_visible:
+		if line_visible and GameConfig.show_aim_line:
 			var line_end := hit_screen if has_hit else mpos
 			draw_line(player_screen, line_end, Color(0.0, 0.0, 0.0, 0.45), 3.0)
 			draw_line(player_screen, line_end, Color(1.0, 0.12, 0.12, 0.75), 1.5)
