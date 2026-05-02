@@ -312,7 +312,8 @@ func _input(event):
 			return
 
 	if _aiming and event.is_action_pressed("ui_space"):
-		_fire_bullet()
+		if _crosshair_draw != null and _crosshair_draw.line_visible:
+			_fire_bullet()
 		get_viewport().set_input_as_handled()
 		return
 
