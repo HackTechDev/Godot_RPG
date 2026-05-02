@@ -1317,7 +1317,4 @@ parameters/looping = true
 [connection signal="item_selected" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MissionList" to="MainMenuLayer" method="_on_mission_list_item_selected"]
 [connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonMissionBack" to="MainMenuLayer" method="_on_button_mission_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRow/ButtonAccept" to="MainMenuLayer" method="_on_button_accept_pressed"]
-[connection signal="pressed" from="MainMenuLayer/Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Video" to="MainMenuLayer" method="_on_button_video_pressed"]
-[connection signal="pressed" from="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoApply" to="MainMenuLayer" method="_on_button_video_apply_pressed"]
-[connection signal="pressed" from="MainMenuLayer/VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoBack" to="MainMenuLayer" method="_on_button_video_back_pressed"]
 [connection signal="confirmed" from="MainMenuLayer/QuitDialog" to="MainMenuLayer" method="_on_quit_dialog_confirmed"]

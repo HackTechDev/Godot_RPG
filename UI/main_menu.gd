@@ -1274,6 +1274,17 @@ func _delete_dir_recursive(path: String) -> void:
 	DirAccess.remove_absolute(path)
 
 
+func _connect_video_settings() -> void:
+	var btn_video: Button = $Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Video
+	var btn_apply: Button = $VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoApply
+	var btn_back:  Button = $VideoSettings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonVideoBack
+	if btn_video and not btn_video.pressed.is_connected(_on_button_video_pressed):
+		btn_video.pressed.connect(_on_button_video_pressed)
+	if btn_apply and not btn_apply.pressed.is_connected(_on_button_video_apply_pressed):
+		btn_apply.pressed.connect(_on_button_video_apply_pressed)
+	if btn_back and not btn_back.pressed.is_connected(_on_button_video_back_pressed):
+		btn_back.pressed.connect(_on_button_video_back_pressed)
+
 func _ready():
 	if GameConfig.DEBUG:
 		print("Init Game")
@@ -1284,6 +1295,7 @@ func _ready():
 	_build_mission_recap_panel()
 	_build_character_select_panel()
 	_build_character_manager_panel()
+	_connect_video_settings()
 	music_neon_dream.play()
 	_load_audio_settings()
 	SceneTransition.fade_in()
