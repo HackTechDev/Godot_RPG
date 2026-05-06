@@ -983,6 +983,19 @@ text = "Capacité de charge"
 layout_mode = 2
 max_value = 20.0
 
+[node name="MovementRow" type="HBoxContainer" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer" unique_id=1111110022]
+layout_mode = 2
+
+[node name="LabelMovement" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/MovementRow" unique_id=1111110023]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Mouvement (×20 pts)"
+
+[node name="MovementSpinBox" type="SpinBox" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/MovementRow" unique_id=1111110024]
+layout_mode = 2
+max_value = 20.0
+
 [node name="LabelRemaining" type="Label" parent="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats" unique_id=1785024605]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
@@ -1312,6 +1325,7 @@ parameters/looping = true
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/StrengthRow/StrengthSpinBox" to="MainMenuLayer" method="_on_cc_strength_changed"]
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/IntelligenceRow/IntelligenceSpinBox" to="MainMenuLayer" method="_on_cc_intelligence_changed"]
 [connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/WeightRow/WeightSpinBox" to="MainMenuLayer" method="_on_cc_weight_changed"]
+[connection signal="value_changed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PageStats/StatsContainer/MovementRow/MovementSpinBox" to="MainMenuLayer" method="_on_cc_movement_changed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/CancelButton" to="MainMenuLayer" method="_on_cc_cancel_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/BackButton" to="MainMenuLayer" method="_on_cc_back_pressed"]
 [connection signal="pressed" from="MainMenuLayer/CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsRowShared/NextButton" to="MainMenuLayer" method="_on_cc_next_pressed"]

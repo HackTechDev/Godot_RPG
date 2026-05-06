@@ -94,6 +94,7 @@ var _cc_current_page: int = 1
 @onready var cc_strength:     SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/StrengthRow/StrengthSpinBox")
 @onready var cc_intelligence: SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/IntelligenceRow/IntelligenceSpinBox")
 @onready var cc_weight:       SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/WeightRow/WeightSpinBox")
+@onready var cc_movement:     SpinBox = get_node(_CC_BASE + "/PageStats/StatsContainer/MovementRow/MovementSpinBox")
 @onready var cc_remaining:    Label   = get_node(_CC_BASE + "/PageStats/LabelRemaining")
 
 # Appearance page option buttons
@@ -521,6 +522,7 @@ func _cc_show_page(page: int):
 		cc_strength.set_value_no_signal(0)
 		cc_intelligence.set_value_no_signal(0)
 		cc_weight.set_value_no_signal(0)
+		cc_movement.set_value_no_signal(0)
 		_cc_update_remaining()
 
 func _cc_init_appearance():
@@ -613,7 +615,7 @@ func _cc_all_stats_sum() -> int:
 	return int(cc_health.value) + int(cc_attack.value) + int(cc_defense.value) \
 		+ int(cc_stamina.value) + int(cc_stealth.value) + int(cc_speed.value) \
 		+ int(cc_precision.value) + int(cc_strength.value) \
-		+ int(cc_intelligence.value) + int(cc_weight.value)
+		+ int(cc_intelligence.value) + int(cc_weight.value) + int(cc_movement.value)
 
 func _cc_update_remaining():
 	cc_remaining.text = "Points restants : " + str(TOTAL_POINTS - _cc_all_stats_sum())
@@ -634,6 +636,7 @@ func _on_cc_precision_changed(value: float): _cc_on_stat_changed(cc_precision, v
 func _on_cc_strength_changed(value: float):  _cc_on_stat_changed(cc_strength, value)
 func _on_cc_intelligence_changed(value: float): _cc_on_stat_changed(cc_intelligence, value)
 func _on_cc_weight_changed(value: float):    _cc_on_stat_changed(cc_weight, value)
+func _on_cc_movement_changed(value: float):  _cc_on_stat_changed(cc_movement, value)
 
 func _on_cc_create_pressed():
 	Player_data.player_nickname      = cc_nickname.text.strip_edges()
@@ -643,8 +646,8 @@ func _on_cc_create_pressed():
 	Player_data.player_specialization = cc_spec_list.get_item_text(sel[0]) if sel.size() > 0 else ""
 	Player_data.player_health        = int(cc_health.value)
 	Player_data.player_health_base   = int(cc_health.value)
-	Player_data.player_movement      = 50
-	Player_data.player_movement_base = 50
+	Player_data.player_movement      = 50 + int(cc_movement.value) * 20
+	Player_data.player_movement_base = 50 + int(cc_movement.value) * 20
 	Player_data.player_attack        = int(cc_attack.value)
 	Player_data.player_defense       = int(cc_defense.value)
 	Player_data.player_stamina       = int(cc_stamina.value)
