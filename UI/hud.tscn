@@ -40,6 +40,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Santé: 4"
 
+[node name="LabelMovement" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Mvt: 50"
+
 [node name="LabelComputers" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14

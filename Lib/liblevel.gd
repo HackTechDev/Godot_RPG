@@ -148,6 +148,8 @@ func load_game():
 		Player_data.player_facing = data.get("player_facing", 8)
 		Player_data.player_health = data.get("player_health", Player_data.player_health)
 		Player_data.player_health_base = data.get("player_health_base", Player_data.player_health)
+		Player_data.player_movement      = data.get("player_movement", 50)
+		Player_data.player_movement_base = data.get("player_movement_base", 50)
 		Player_data.player_attack          = data.get("player_attack", 0)
 		Player_data.player_defense         = data.get("player_defense", 0)
 		Player_data.player_stamina         = data.get("player_stamina", 0)
@@ -178,6 +180,8 @@ func load_game():
 		Player_data.scene_path = "res://Scenes/Levels/%s/%s.tscn" % [Player_data_default.scene_start, Player_data_default.scene_start]
 		Player_data.player_spawnpoint_position_x = Player_data_default.spawnpoint_position_x
 		Player_data.player_spawnpoint_position_y = Player_data_default.spawnpoint_position_y
+		Player_data.player_movement      = 50
+		Player_data.player_movement_base = 50
 		Player_data.player_attack          = 0
 		Player_data.player_defense         = 0
 		Player_data.player_stamina         = 0

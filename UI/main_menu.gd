@@ -643,6 +643,8 @@ func _on_cc_create_pressed():
 	Player_data.player_specialization = cc_spec_list.get_item_text(sel[0]) if sel.size() > 0 else ""
 	Player_data.player_health        = int(cc_health.value)
 	Player_data.player_health_base   = int(cc_health.value)
+	Player_data.player_movement      = 50
+	Player_data.player_movement_base = 50
 	Player_data.player_attack        = int(cc_attack.value)
 	Player_data.player_defense       = int(cc_defense.value)
 	Player_data.player_stamina       = int(cc_stamina.value)
@@ -671,6 +673,8 @@ func _on_cc_create_pressed():
 		"scene":                  "",
 		"player_health":          Player_data.player_health,
 		"player_health_base":     Player_data.player_health_base,
+		"player_movement":        Player_data.player_movement,
+		"player_movement_base":   Player_data.player_movement_base,
 		"player_attack":          Player_data.player_attack,
 		"player_defense":         Player_data.player_defense,
 		"player_stamina":         Player_data.player_stamina,
@@ -1323,6 +1327,8 @@ func data_to_save():
 		"scene":                 Player_data.player_previous_scene,
 		"player_health":         Player_data.player_health,
 		"player_health_base":    Player_data.player_health_base,
+		"player_movement":        Player_data.player_movement,
+		"player_movement_base":   Player_data.player_movement_base,
 		"player_attack":          Player_data.player_attack,
 		"player_defense":         Player_data.player_defense,
 		"player_stamina":         Player_data.player_stamina,

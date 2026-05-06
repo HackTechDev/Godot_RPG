@@ -151,6 +151,7 @@ const MECHA_PROXIMITY: float = 50.0
 var body_angle: float = -90.0   # direction du corps (pavé 4/6)
 var look_angle: float = -90.0   # direction du regard/cône (pavé 7/9)
 var _debug_speed: float = 0.0
+var _movement_accumulator: float = 0.0
 
 var display_menu = false
 var direction = 5
@@ -440,10 +441,16 @@ func input_move():
 
 	direction = _angle_to_dir4(body_angle)
 	Player_data.player_facing = direction
+
+	var _prev_pos := position
+	move_and_slide()
 	Player_data.player_pos_x = position.x
 	Player_data.player_pos_y = position.y
-
-	move_and_slide()
+	if input_movement != Vector2.ZERO:
+		_movement_accumulator += _prev_pos.distance_to(position)
+		while _movement_accumulator >= 2.0:
+			_movement_accumulator -= 2.0
+			Player_data.player_movement = max(0, Player_data.player_movement - 1)
 
 func _close_menu():
 	display_menu = false
@@ -468,6 +475,8 @@ func _auto_save_player():
 		"scene":                  Player_data.player_previous_scene,
 		"player_health":          Player_data.player_health,
 		"player_health_base":     Player_data.player_health_base,
+		"player_movement":        Player_data.player_movement,
+		"player_movement_base":   Player_data.player_movement_base,
 		"player_attack":          Player_data.player_attack,
 		"player_defense":         Player_data.player_defense,
 		"player_stamina":         Player_data.player_stamina,
@@ -989,6 +998,8 @@ func _restart_game():
 		"scene":                  "",
 		"player_health":          Player_data.player_health,
 		"player_health_base":     Player_data.player_health_base,
+		"player_movement":        Player_data.player_movement_base,
+		"player_movement_base":   Player_data.player_movement_base,
 		"player_attack":          Player_data.player_attack,
 		"player_defense":         Player_data.player_defense,
 		"player_stamina":         Player_data.player_stamina,

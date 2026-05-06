@@ -33,6 +33,7 @@ const _SP    = _BASE + "/StatsPanel/StatsGrid"
 @onready var _ls_strength     = get_node(_SP + "/ColRight/LabelStatStrength")
 @onready var _ls_intelligence = get_node(_SP + "/ColRight/LabelStatIntelligence")
 @onready var _ls_weight       = get_node(_SP + "/ColRight/LabelStatWeight")
+@onready var _ls_movement     = get_node(_SP + "/ColRight/LabelStatMovement")
 @onready var _spr_body       = get_node(_VP + "/SpriteBody")
 @onready var _spr_legs       = get_node(_VP + "/SpriteLegs")
 @onready var _spr_feet       = get_node(_VP + "/SpriteFeet")
@@ -207,6 +208,7 @@ func refresh():
 	_ls_strength.text     = "Force : %d / 20"              % Player_data.player_strength
 	_ls_intelligence.text = "Intelligence : %d / 20"       % Player_data.player_intelligence
 	_ls_weight.text       = "Capacité de charge : %d / 20" % Player_data.player_weight_capacity
+	_ls_movement.text     = "Mouvement : %d / %d"         % [Player_data.player_movement, Player_data.player_movement_base]
 
 	_refresh_preview()
 

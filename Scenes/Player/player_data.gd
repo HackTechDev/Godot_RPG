@@ -4,6 +4,8 @@ class_name Player_data
 
 static var player_health: int = 0
 static var player_health_base: int = 0
+static var player_movement: int = 50
+static var player_movement_base: int = 50
 static var player_attack: int = 0
 static var player_defense: int = 0
 static var player_stamina: int = 0

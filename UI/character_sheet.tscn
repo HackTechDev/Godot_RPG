@@ -325,6 +325,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Capacité de charge : –"
 
+[node name="LabelStatMovement" type="Label" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/StatsGrid/ColRight" unique_id=2200000021]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Mouvement : –"
+
 [node name="StatsSpacer" type="Control" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel" unique_id=2200000020]
 layout_mode = 2
 size_flags_vertical = 3
