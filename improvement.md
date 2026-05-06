@@ -82,3 +82,42 @@ Améliorations apportées à des fonctionnalités existantes.
 - Appliquée en temps réel dans `_CrosshairDraw._draw()` : `if line_visible and GameConfig.show_aim_line:`
 
 **Fichiers :** `Autoload/game_config.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player.gd`
+
+---
+
+## Page Vidéo — connexions signal branchées programmatiquement
+
+**Problème initial :** les connexions ajoutées manuellement dans le `.tscn` pour les boutons Vidéo/Appliquer/Retour n'étaient pas prises en compte par Godot (scène potentiellement mise en cache avec l'ancien état du nœud `Video` qui était un `Label`).
+
+**Amélioration apportée :**
+
+- Suppression des 3 connexions du `.tscn`
+- Branchement dans `_connect_video_settings()` appelé depuis `_ready()` avec `is_connected()` pour éviter les doublons — même pattern que les éléments UI créés dynamiquement
+
+**Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`
+
+---
+
+## Page Vidéo — gestion de la limitation mode éditeur
+
+**Problème initial :** `DisplayServer.window_set_mode(WINDOW_MODE_FULLSCREEN)` est refusé dans la fenêtre embarquée de l'éditeur Godot (`Embedded window only supports Windowed mode`) — le bouton "Appliquer" semblait sans effet.
+
+**Amélioration apportée :**
+
+- Détection via `OS.has_feature("editor")` : en mode éditeur, le changement de mode est sauté mais la préférence est quand même écrite dans `user://settings.json`
+- `LabelHint` (orange) affiché sur le panel Vidéo en mode éditeur : *"Plein écran non disponible dans l'éditeur. Le réglage sera appliqué au lancement du jeu."*
+- En build standalone, le bouton "Appliquer" fonctionne normalement
+
+**Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`
+
+---
+
+## Création de personnage — variable `name` renommée en `entry`
+
+**Problème initial :** warning GDScript `SHADOWED_VARIABLE_BASE_CLASS` sur `main_menu.gd:1276` — la variable locale `name` dans `_delete_dir_recursive()` masquait la propriété `Node.name`.
+
+**Amélioration apportée :**
+
+- Variable locale renommée `entry` dans la boucle `DirAccess` de `_delete_dir_recursive()`
+
+**Fichiers :** `UI/main_menu.gd`

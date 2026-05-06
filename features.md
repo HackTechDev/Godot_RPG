@@ -380,9 +380,9 @@ Récapitulatif de toutes les modifications apportées au projet.
   - Menu déroulant Grade : Militaires du rang / Sous-officiers / Officiers / Officiers généraux
   - Liste de 8 spécialisations (ItemList) : Opérateur FS, Tireur de précision, Transmetteur, Démineur/EOD, Médecin de combat, Renseignement, Spéc. insertion, Spéc. appuis
   - Panneau description BBCode à droite, mis à jour en temps réel à la sélection
-- **Page 4 — Statistiques** : répartition de 30 points entre Santé, Attaque et Défense via SpinBoxes ; compteur de points restants en temps réel
+- **Page 4 — Statistiques** : répartition de 60 points entre 11 statistiques via SpinBoxes (max 20 par stat) ; compteur de points restants en temps réel — Santé, Attaque, Défense, Endurance, Discrétion, Vitesse, Précision, Force, Intelligence, Capacité de charge, **Mouvement (×20 pts)**
 - À la validation ("Créer le personnage") : données sauvegardées dans `user://rpg.json`, niveaux réinitialisés depuis les défauts, jeu lancé directement sur `level_1`
-- Données persistées dans `Player_data` et `rpg.json` : `player_nickname`, `player_biography`, `player_rank`, `player_specialization`, `player_health`, `player_health_base`, `player_attack`, `player_defense`, `appearance_body/hair/headwear/arms/hands/torso/legs/feet`
+- Données persistées dans `Player_data` et `rpg.json` : `player_nickname`, `player_biography`, `player_rank`, `player_specialization`, `player_health`, `player_health_base`, `player_movement`, `player_movement_base`, `player_attack`, `player_defense`, `appearance_body/hair/headwear/arms/hands/torso/legs/feet`
 - Le surnom est affiché en temps réel dans le panneau HUD gauche ("Pseudo : …")
 - **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`, `Scenes/Player/player_data.gd`, `Lib/liblevel.gd`, `UI/hud.tscn`, `UI/hud.gd`
 
@@ -821,6 +821,19 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Statistique Mouvement
+
+- Nouvelle caractéristique `player_movement` / `player_movement_base` : jauge d'endurance de déplacement
+- **Valeur par défaut** : 50 points (base fixe) + 20 points par point alloué en création de personnage
+- **Déduction** : −1 point par tranche de 2 pixels réellement parcourus (`_prev_pos.distance_to(position)` post-`move_and_slide()`) via un accumulateur `_movement_accumulator`
+- **HUD** : label `"Mvt: X / 50"` affiché sous Santé dans le panneau haut gauche, mis à jour en temps réel
+- **Fiche de personnage** : `"Mouvement : X / Y"` dans la colonne droite des statistiques
+- **Création de personnage (page 4)** : SpinBox `"Mouvement (×20 pts)"` dans le pool de 60 points partagés — 1 point alloué = +20 pts de mouvement de base
+- **Sauvegarde** : `player_movement` et `player_movement_base` persistés dans `rpg.json` (tous les callsites de `savePlayer`) ; fallback 50 au chargement
+- **Fichiers :** `Scenes/Player/player_data.gd`, `Scenes/Player/player.gd`, `Lib/liblevel.gd`, `UI/main_menu.tscn`, `UI/main_menu.gd`, `UI/hud.tscn`, `UI/hud.gd`, `UI/character_sheet.tscn`, `UI/character_sheet.gd`
+
+---
+
 ## Restauration de la rotation du personnage au chargement
 
 - `player_facing` était bien sauvegardé dans `rpg.json` à chaque auto-save mais jamais relu dans `load_game()`
@@ -874,6 +887,18 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Le jeu s'ouvre en **mode fenêtré** (`window/size/mode=0`) à la résolution 1280×720
 - `window/stretch/mode="canvas_items"` + `window/stretch/scale_mode="integer"` : contenu mis à l'échelle par pas entiers, sans flou
 - **Fichiers :** `project.godot`
+
+---
+
+## Page Vidéo dans les Paramètres
+
+- Accessible depuis **Settings → Vidéo** (ex-placeholder `Label` converti en `Button`)
+- **CheckButton "Plein écran"** : reflète le mode courant via `DisplayServer.window_get_mode()`
+- **Bouton "Appliquer"** : appelle `DisplayServer.window_set_mode(FULLSCREEN ou WINDOWED)` et sauvegarde dans `user://settings.json`
+- Préférence rechargée au démarrage par `_load_audio_settings()` — mode plein écran restauré automatiquement
+- En mode éditeur Godot (`OS.has_feature("editor")`) : un label orange explique que le changement s'appliquera au lancement standalone ; la préférence est quand même sauvegardée
+- Connexions signal branchées programmatiquement dans `_connect_video_settings()` (appelé depuis `_ready()`)
+- **Fichiers :** `UI/main_menu.tscn`, `UI/main_menu.gd`
 
 ---
 
