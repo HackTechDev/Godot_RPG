@@ -54,17 +54,26 @@ const _MODE_LABELS := {
 
 const _CAT_KEYS := ["weapon", "armor", "gadget", "clothing"]
 
-@onready var _item_list:  ItemList      = $Main/Center/Panel/Margin/VBox/ContentRow/LeftPanel/ItemList
-@onready var _det_name:   Label         = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetName
-@onready var _det_model:  Label         = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetModel
-@onready var _det_desc:   RichTextLabel = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetDesc
-@onready var _det_stats:  VBoxContainer = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetStats
-@onready var _btn_buy:    Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy
-@onready var _btn_sell:   Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell
+const _DET_BASE := "Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"
 
-var _current_cat:   int        = 0
-var _current_items: Array      = []
-var _current_item:  Dictionary = {}
+@onready var _item_list:     ItemList      = $Main/Center/Panel/Margin/VBox/ContentRow/LeftPanel/ItemList
+@onready var _det_name:      Label         = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetName
+@onready var _det_model:     Label         = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetModel
+@onready var _det_img_box:   VBoxContainer = get_node(_DET_BASE + "/DetImgBox")
+@onready var _det_img:       TextureRect   = get_node(_DET_BASE + "/DetImgBox/DetImg")
+@onready var _img_nav_label: Label         = get_node(_DET_BASE + "/DetImgBox/ImgNav/ImgNavLabel")
+@onready var _btn_img_prev:  Button        = get_node(_DET_BASE + "/DetImgBox/ImgNav/BtnImgPrev")
+@onready var _btn_img_next:  Button        = get_node(_DET_BASE + "/DetImgBox/ImgNav/BtnImgNext")
+@onready var _det_desc:      RichTextLabel = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetDesc
+@onready var _det_stats:     VBoxContainer = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetStats
+@onready var _btn_buy:       Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy
+@onready var _btn_sell:      Button        = $Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell
+
+var _current_cat:     int        = 0
+var _current_items:   Array      = []
+var _current_item:    Dictionary = {}
+var _current_images:  Array      = []
+var _current_img_idx: int        = 0
 
 func _ready() -> void:
 	_show_category(0)
@@ -95,6 +104,7 @@ func _show_item(item: Dictionary) -> void:
 	var model: String = item.get("model", "")
 	var ver:   String = item.get("version", "")
 	_det_model.text = ("%s — %s" % [model, ver]) if ver != "" else model
+	_load_item_images(item)
 	_det_desc.text  = item.get("description", "")
 
 	for child in _det_stats.get_children():
@@ -180,10 +190,46 @@ func _format_val(key: String, val) -> String:
 		return ("%.1f" % val) if val != float(int(val)) else str(int(val))
 	return str(val)
 
+func _load_item_images(item: Dictionary) -> void:
+	_current_images = []
+	_current_img_idx = 0
+	for img_rel in item.get("images", []):
+		var full_path: String = "res://Armory/" + img_rel
+		if ResourceLoader.exists(full_path):
+			_current_images.append(full_path)
+	_show_current_image()
+
+func _show_current_image() -> void:
+	if _current_images.is_empty():
+		_det_img_box.visible = false
+		return
+	_det_img_box.visible = true
+	_det_img.texture = load(_current_images[_current_img_idx])
+	var count: int = _current_images.size()
+	var multi := count > 1
+	_img_nav_label.visible  = multi
+	_btn_img_prev.visible   = multi
+	_btn_img_next.visible   = multi
+	if multi:
+		_img_nav_label.text   = "%d / %d" % [_current_img_idx + 1, count]
+		_btn_img_prev.disabled = _current_img_idx == 0
+		_btn_img_next.disabled = _current_img_idx == count - 1
+
+func _on_btn_img_prev_pressed() -> void:
+	if _current_img_idx > 0:
+		_current_img_idx -= 1
+		_show_current_image()
+
+func _on_btn_img_next_pressed() -> void:
+	if _current_img_idx < _current_images.size() - 1:
+		_current_img_idx += 1
+		_show_current_image()
+
 func _clear_detail() -> void:
 	_det_name.text  = ""
 	_det_model.text = ""
 	_det_desc.text  = ""
+	_det_img_box.visible = false
 	for child in _det_stats.get_children():
 		child.queue_free()
 

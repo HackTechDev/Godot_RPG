@@ -111,6 +111,41 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = ""
 
+[node name="DetImgBox" type="VBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 4
+
+[node name="DetImg" type="TextureRect" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ImgNav" type="HBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="BtnImgPrev" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+text = "<"
+
+[node name="ImgNavLabel" type="Label" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+custom_minimum_size = Vector2(50, 0)
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+text = "1 / 1"
+
+[node name="BtnImgNext" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+text = ">"
+
 [node name="DetDesc" type="RichTextLabel" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -149,6 +184,8 @@ text = "Fermer"
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnArmors" to="." method="_on_btn_armors_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnGadgets" to="." method="_on_btn_gadgets_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnClothes" to="." method="_on_btn_clothes_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav/BtnImgPrev" to="." method="_on_btn_img_prev_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav/BtnImgNext" to="." method="_on_btn_img_next_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy" to="." method="_on_btn_buy_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell" to="." method="_on_btn_sell_pressed"]
 [connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ButtonClose" to="." method="_on_button_close_pressed"]
