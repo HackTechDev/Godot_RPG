@@ -126,6 +126,7 @@ offset_bottom = 40.0
 grow_horizontal = 2
 
 [node name="HBox" type="HBoxContainer" parent="ClockAnchor/ClockPanel"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
