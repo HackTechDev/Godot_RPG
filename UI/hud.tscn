@@ -1,110 +1,109 @@
-[gd_scene format=3 uid="uid://hud_overlay"]
+[gd_scene format=3 uid="uid://caegmgi1cviiy"]
 
-[ext_resource type="Script" path="res://UI/hud.gd" id="1_hudgd"]
+[ext_resource type="Script" uid="uid://bottemmfy5ia0" path="res://UI/hud.gd" id="1_hudgd"]
 
-[node name="HUD" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer" unique_id=1183031277]
 script = ExtResource("1_hudgd")
 
-[node name="NightOverlay" type="ColorRect" parent="."]
-layout_mode = 3
+[node name="NightOverlay" type="ColorRect" parent="." unique_id=1804510641]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.02, 0.08, 0)
 mouse_filter = 2
+color = Color(0, 0.02, 0.08, 0)
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=160985030]
 offset_right = 180.0
 offset_bottom = 88.0
 
-[node name="Margin" type="MarginContainer" parent="Panel"]
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=1143009773]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 6
 
-[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin" unique_id=861115822]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="LabelNickname" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelNickname" type="Label" parent="Panel/Margin/VBox" unique_id=601697756]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Pseudo: "
 
-[node name="LabelHealth" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelHealth" type="Label" parent="Panel/Margin/VBox" unique_id=2087709299]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Santé: 4"
 
-[node name="LabelMovement" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelMovement" type="Label" parent="Panel/Margin/VBox" unique_id=1626495632]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Mvt: 50"
 
-[node name="LabelComputers" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelComputers" type="Label" parent="Panel/Margin/VBox" unique_id=248775776]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Ordinateurs: 0"
 
-[node name="LabelRobots" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelRobots" type="Label" parent="Panel/Margin/VBox" unique_id=1504145429]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Robots: 0"
 
-[node name="LabelZone" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelZone" type="Label" parent="Panel/Margin/VBox" unique_id=1663751416]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Zone: "
 
-[node name="LabelPosition" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelPosition" type="Label" parent="Panel/Margin/VBox" unique_id=1275389651]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Pos: "
 
-[node name="LabelMode" type="Label" parent="Panel/Margin/VBox"]
+[node name="LabelMode" type="Label" parent="Panel/Margin/VBox" unique_id=543068220]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Mode: Marche"
 
-[node name="TopBar" type="PanelContainer" parent="."]
+[node name="TopBar" type="PanelContainer" parent="." unique_id=912424741]
 offset_left = 760.0
 offset_top = 4.0
 offset_right = 1088.0
 offset_bottom = 36.0
 
-[node name="HBox" type="HBoxContainer" parent="TopBar"]
+[node name="HBox" type="HBoxContainer" parent="TopBar" unique_id=1862976308]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="BtnSheet" type="Button" parent="TopBar/HBox"]
-layout_mode = 2
+[node name="BtnSheet" type="Button" parent="TopBar/HBox" unique_id=572176450]
 custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "Fiche"
 
-[node name="BtnArmory" type="Button" parent="TopBar/HBox"]
-layout_mode = 2
+[node name="BtnArmory" type="Button" parent="TopBar/HBox" unique_id=397532234]
 custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "Armurerie"
 
-[node name="BtnSetting" type="Button" parent="TopBar/HBox"]
-layout_mode = 2
+[node name="BtnSetting" type="Button" parent="TopBar/HBox" unique_id=1872273749]
 custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "Paramètres"
 
-[node name="BtnHome" type="Button" parent="TopBar/HBox"]
-layout_mode = 2
+[node name="BtnHome" type="Button" parent="TopBar/HBox" unique_id=901023480]
 custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "Accueil"
 
-[node name="ClockAnchor" type="Control" parent="."]
+[node name="ClockAnchor" type="Control" parent="." unique_id=436802734]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -113,26 +112,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ClockPanel" type="PanelContainer" parent="ClockAnchor"]
+[node name="ClockPanel" type="PanelContainer" parent="ClockAnchor" unique_id=1942453357]
 layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-anchor_top = 0.0
-anchor_bottom = 0.0
 offset_left = -170.0
 offset_top = 4.0
-offset_right = 170.0
+offset_right = 30.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="HBox" type="HBoxContainer" parent="ClockAnchor/ClockPanel"]
+[node name="HBox" type="HBoxContainer" parent="ClockAnchor/ClockPanel" unique_id=1434202010]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="LabelClock" type="Label" parent="ClockAnchor/ClockPanel/HBox"]
+[node name="LabelClock" type="Label" parent="ClockAnchor/ClockPanel/HBox" unique_id=1094375905]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_font_sizes/font_size = 18
 text = "--/--/----  --h--"
 horizontal_alignment = 1
