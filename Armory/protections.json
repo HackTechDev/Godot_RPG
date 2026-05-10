@@ -7,8 +7,12 @@
     "description": "Gilet tactique équilibré offrant protection et modularité.",
     "category": "armor",
     "weight": 6.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_plate_carrier_mk2_1.jpg",
+      "images/armor_plate_carrier_mk2_2.jpg",
+      "images/armor_plate_carrier_mk2_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 30,
       "damage_reduction": 0.25,
@@ -25,8 +29,12 @@
     "description": "Protection légère qui conserve une bonne mobilité.",
     "category": "armor",
     "weight": 3.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_light_vest_mk1_1.jpg",
+      "images/armor_light_vest_mk1_2.jpg",
+      "images/armor_light_vest_mk1_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 14,
       "damage_reduction": 0.12,
@@ -43,8 +51,12 @@
     "description": "Protection maximale au prix d'une forte perte de mobilité et de discrétion.",
     "category": "armor",
     "weight": 11.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_heavy_assault_mk3_1.jpg",
+      "images/armor_heavy_assault_mk3_2.jpg",
+      "images/armor_heavy_assault_mk3_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 55,
       "damage_reduction": 0.45,
@@ -61,8 +73,12 @@
     "description": "Gilet compact conçu pour l'infiltration avec une protection modérée.",
     "category": "armor",
     "weight": 4.2,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_stealth_carrier_v1_1.jpg",
+      "images/armor_stealth_carrier_v1_2.jpg",
+      "images/armor_stealth_carrier_v1_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 20,
       "damage_reduction": 0.18,
@@ -79,8 +95,12 @@
     "description": "Protection frontale très élevée, très encombrante.",
     "category": "armor",
     "weight": 9.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_riot_shield_v2_1.jpg",
+      "images/armor_riot_shield_v2_2.jpg",
+      "images/armor_riot_shield_v2_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 65,
       "damage_reduction": 0.55,
@@ -97,8 +117,12 @@
     "description": "Casque léger compatible avec les accessoires tactiques.",
     "category": "armor",
     "weight": 1.4,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_helmet_fast_mk1_1.jpg",
+      "images/armor_helmet_fast_mk1_2.jpg",
+      "images/armor_helmet_fast_mk1_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 12,
       "damage_reduction": 0.08,
@@ -115,8 +139,12 @@
     "description": "Casque renforcé offrant une excellente protection de la tête.",
     "category": "armor",
     "weight": 2.6,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_helmet_heavy_mk2_1.jpg",
+      "images/armor_helmet_heavy_mk2_2.jpg",
+      "images/armor_helmet_heavy_mk2_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 22,
       "damage_reduction": 0.16,
@@ -133,8 +161,12 @@
     "description": "Genouillères et coudières réduisant les dégâts liés aux chutes et impacts.",
     "category": "armor",
     "weight": 0.9,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/armor_knee_elbow_pads_v1_1.jpg",
+      "images/armor_knee_elbow_pads_v1_2.jpg",
+      "images/armor_knee_elbow_pads_v1_3.jpg"
+    ],
+    "price": 30,
     "armor": {
       "defense": 6,
       "damage_reduction": 0.04,

@@ -7,8 +7,12 @@
     "category": "clothing",
     "description": "Tenue légère adaptée aux environnements urbains, favorisant la discrétion.",
     "weight": 2.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_urban_stealth_v1_1.jpg",
+      "images/clothing_urban_stealth_v1_2.jpg",
+      "images/clothing_urban_stealth_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 3,
       "stealth_bonus": 6,
@@ -29,8 +33,12 @@
     "category": "clothing",
     "description": "Tenue optimisée pour les opérations de nuit avec réduction maximale du bruit.",
     "weight": 2.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_night_ops_v3_1.jpg",
+      "images/clothing_night_ops_v3_2.jpg",
+      "images/clothing_night_ops_v3_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 4,
       "stealth_bonus": 10,
@@ -51,8 +59,12 @@
     "category": "clothing",
     "description": "Tenue renforcée offrant une bonne protection mais réduisant la mobilité.",
     "weight": 6.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_combat_heavy_mk2_1.jpg",
+      "images/clothing_combat_heavy_mk2_2.jpg",
+      "images/clothing_combat_heavy_mk2_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 18,
       "stealth_bonus": 0,
@@ -73,8 +85,12 @@
     "category": "clothing",
     "description": "Tenue adaptée aux missions en forêt et zones végétales.",
     "weight": 3.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_forest_camo_v2_1.jpg",
+      "images/clothing_forest_camo_v2_2.jpg",
+      "images/clothing_forest_camo_v2_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 5,
       "stealth_bonus": 7,
@@ -95,8 +111,12 @@
     "category": "clothing",
     "description": "Tenue légère conçue pour les environnements chauds et sablonneux.",
     "weight": 2.8,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_desert_camo_v1_1.jpg",
+      "images/clothing_desert_camo_v1_2.jpg",
+      "images/clothing_desert_camo_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 4,
       "stealth_bonus": 5,
@@ -117,8 +137,12 @@
     "category": "clothing",
     "description": "Tenue isolante pour les missions en montagne ou zones enneigées.",
     "weight": 4.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_arctic_ops_v1_1.jpg",
+      "images/clothing_arctic_ops_v1_2.jpg",
+      "images/clothing_arctic_ops_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 6,
       "stealth_bonus": 4,
@@ -139,8 +163,12 @@
     "category": "clothing",
     "description": "Tenue civile permettant de se fondre dans certains environnements industriels.",
     "weight": 2.2,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_civilian_worker_v1_1.jpg",
+      "images/clothing_civilian_worker_v1_2.jpg",
+      "images/clothing_civilian_worker_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 2,
       "stealth_bonus": 3,
@@ -161,8 +189,12 @@
     "category": "clothing",
     "description": "Tenue légère avec poches de rangement pour matériel médical.",
     "weight": 2.7,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_medic_field_v1_1.jpg",
+      "images/clothing_medic_field_v1_2.jpg",
+      "images/clothing_medic_field_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 3,
       "stealth_bonus": 2,
@@ -183,8 +215,12 @@
     "category": "clothing",
     "description": "Tenue tactique sombre pensée pour les opérations rapides et discrètes.",
     "weight": 3.4,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_black_ops_mk1_1.jpg",
+      "images/clothing_black_ops_mk1_2.jpg",
+      "images/clothing_black_ops_mk1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 8,
       "stealth_bonus": 8,
@@ -205,8 +241,12 @@
     "category": "clothing",
     "description": "Combinaison expérimentale améliorant la mobilité mais augmentant le bruit.",
     "weight": 5.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/clothing_exosuit_light_v1_1.jpg",
+      "images/clothing_exosuit_light_v1_2.jpg",
+      "images/clothing_exosuit_light_v1_3.jpg"
+    ],
+    "price": 30,
     "clothing": {
       "defense": 10,
       "stealth_bonus": 0,

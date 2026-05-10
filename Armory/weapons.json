@@ -7,8 +7,12 @@
     "category": "weapon",
     "description": "Fusil d'assaut polyvalent, précis et fiable, adapté aux opérations tactiques.",
     "weight": 4.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_hk416_a5_1.jpg",
+      "images/weapon_hk416_a5_2.jpg",
+      "images/weapon_hk416_a5_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 35,
       "precision": 8,
@@ -20,7 +24,11 @@
       "recoil": 5,
       "mobility_penalty": 2,
       "stealth_modifier": -3,
-      "fire_modes": ["semi", "burst", "auto"],
+      "fire_modes": [
+        "semi",
+        "burst",
+        "auto"
+      ],
       "ammo_type": "5.56mm",
       "can_attach_silencer": true
     }
@@ -33,9 +41,12 @@
     "category": "weapon",
     "description": "Carabine légère et modulable, idéale pour les combats rapprochés et urbains.",
     "weight": 3.4,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
-    "price" : 30,
+    "images": [
+      "images/weapon_m4a1_sopmod_1.jpg",
+      "images/weapon_m4a1_sopmod_2.jpg",
+      "images/weapon_m4a1_sopmod_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 32,
       "precision": 7,
@@ -47,7 +58,10 @@
       "recoil": 4,
       "mobility_penalty": 1,
       "stealth_modifier": -2,
-      "fire_modes": ["semi", "auto"],
+      "fire_modes": [
+        "semi",
+        "auto"
+      ],
       "ammo_type": "5.56mm",
       "can_attach_silencer": true
     }
@@ -60,8 +74,12 @@
     "category": "weapon",
     "description": "Fusil puissant à longue portée, efficace contre les ennemis protégés.",
     "weight": 4.8,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_scar_h_mk17_1.jpg",
+      "images/weapon_scar_h_mk17_2.jpg",
+      "images/weapon_scar_h_mk17_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 48,
       "precision": 7,
@@ -73,7 +91,10 @@
       "recoil": 7,
       "mobility_penalty": 3,
       "stealth_modifier": -4,
-      "fire_modes": ["semi", "auto"],
+      "fire_modes": [
+        "semi",
+        "auto"
+      ],
       "ammo_type": "7.62mm",
       "can_attach_silencer": true
     }
@@ -86,8 +107,12 @@
     "category": "weapon",
     "description": "Arme compacte avec silencieux intégré, parfaite pour l'infiltration.",
     "weight": 3.1,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_mp5sd6_1.jpg",
+      "images/weapon_mp5sd6_2.jpg",
+      "images/weapon_mp5sd6_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 24,
       "precision": 7,
@@ -99,7 +124,11 @@
       "recoil": 3,
       "mobility_penalty": 0,
       "stealth_modifier": 3,
-      "fire_modes": ["semi", "burst", "auto"],
+      "fire_modes": [
+        "semi",
+        "burst",
+        "auto"
+      ],
       "ammo_type": "9mm",
       "can_attach_silencer": false
     }
@@ -112,8 +141,12 @@
     "category": "weapon",
     "description": "Arme compacte à grande capacité, efficace en combat rapproché.",
     "weight": 2.9,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_p90_tr_1.jpg",
+      "images/weapon_p90_tr_2.jpg",
+      "images/weapon_p90_tr_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 22,
       "precision": 6,
@@ -125,7 +158,10 @@
       "recoil": 3,
       "mobility_penalty": 0,
       "stealth_modifier": -1,
-      "fire_modes": ["semi", "auto"],
+      "fire_modes": [
+        "semi",
+        "auto"
+      ],
       "ammo_type": "5.7mm",
       "can_attach_silencer": true
     }
@@ -138,8 +174,12 @@
     "category": "weapon",
     "description": "Pistolet fiable et léger, utile comme arme secondaire.",
     "weight": 0.9,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_glock17_gen5_1.jpg",
+      "images/weapon_glock17_gen5_2.jpg",
+      "images/weapon_glock17_gen5_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 18,
       "precision": 6,
@@ -151,7 +191,9 @@
       "recoil": 2,
       "mobility_penalty": 0,
       "stealth_modifier": 0,
-      "fire_modes": ["semi"],
+      "fire_modes": [
+        "semi"
+      ],
       "ammo_type": "9mm",
       "can_attach_silencer": true
     }
@@ -164,8 +206,12 @@
     "category": "weapon",
     "description": "Pistolet précis, robuste et apprécié pour les missions tactiques.",
     "weight": 1.0,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_sig_p226_mk25_1.jpg",
+      "images/weapon_sig_p226_mk25_2.jpg",
+      "images/weapon_sig_p226_mk25_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 20,
       "precision": 7,
@@ -177,7 +223,9 @@
       "recoil": 3,
       "mobility_penalty": 0,
       "stealth_modifier": 0,
-      "fire_modes": ["semi"],
+      "fire_modes": [
+        "semi"
+      ],
       "ammo_type": "9mm",
       "can_attach_silencer": true
     }
@@ -190,8 +238,12 @@
     "category": "weapon",
     "description": "Pistolet lourd et puissant, adapté aux tirs discrets avec silencieux.",
     "weight": 1.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_mk23_socom_1.jpg",
+      "images/weapon_mk23_socom_2.jpg",
+      "images/weapon_mk23_socom_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 28,
       "precision": 7,
@@ -203,7 +255,9 @@
       "recoil": 5,
       "mobility_penalty": 1,
       "stealth_modifier": -1,
-      "fire_modes": ["semi"],
+      "fire_modes": [
+        "semi"
+      ],
       "ammo_type": ".45 ACP",
       "can_attach_silencer": true
     }
@@ -216,8 +270,12 @@
     "category": "weapon",
     "description": "Fusil semi-automatique de précision, efficace à moyenne et longue distance.",
     "weight": 5.2,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_m110_sass_1.jpg",
+      "images/weapon_m110_sass_2.jpg",
+      "images/weapon_m110_sass_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 60,
       "precision": 9,
@@ -229,7 +287,9 @@
       "recoil": 6,
       "mobility_penalty": 4,
       "stealth_modifier": -5,
-      "fire_modes": ["semi"],
+      "fire_modes": [
+        "semi"
+      ],
       "ammo_type": "7.62mm",
       "can_attach_silencer": true
     }
@@ -242,8 +302,12 @@
     "category": "weapon",
     "description": "Fusil sniper très précis mais lent, conçu pour les éliminations longue distance.",
     "weight": 6.5,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_l96a1_1.jpg",
+      "images/weapon_l96a1_2.jpg",
+      "images/weapon_l96a1_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 85,
       "precision": 10,
@@ -255,7 +319,9 @@
       "recoil": 8,
       "mobility_penalty": 5,
       "stealth_modifier": -6,
-      "fire_modes": ["bolt_action"],
+      "fire_modes": [
+        "bolt_action"
+      ],
       "ammo_type": "7.62mm",
       "can_attach_silencer": true
     }
@@ -268,8 +334,12 @@
     "category": "weapon",
     "description": "Fusil à pompe puissant à courte portée, redoutable en intérieur.",
     "weight": 3.8,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_benelli_m4_1.jpg",
+      "images/weapon_benelli_m4_2.jpg",
+      "images/weapon_benelli_m4_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 70,
       "precision": 4,
@@ -281,7 +351,9 @@
       "recoil": 8,
       "mobility_penalty": 2,
       "stealth_modifier": -5,
-      "fire_modes": ["semi"],
+      "fire_modes": [
+        "semi"
+      ],
       "ammo_type": "12 gauge",
       "can_attach_silencer": false
     }
@@ -294,8 +366,12 @@
     "category": "weapon",
     "description": "Arme de corps-à-corps silencieuse, utile pour les neutralisations discrètes.",
     "weight": 0.4,
-    "images" : ["image1.jpg", "image2.jpg", "image3.jpg"],
-    "price" : 30,
+    "images": [
+      "images/weapon_knife_tactical_mk1_1.jpg",
+      "images/weapon_knife_tactical_mk1_2.jpg",
+      "images/weapon_knife_tactical_mk1_3.jpg"
+    ],
+    "price": 30,
     "weapon": {
       "damage": 30,
       "precision": 10,
@@ -307,7 +383,9 @@
       "recoil": 0,
       "mobility_penalty": 0,
       "stealth_modifier": 5,
-      "fire_modes": ["melee"],
+      "fire_modes": [
+        "melee"
+      ],
       "ammo_type": "none",
       "can_attach_silencer": false
     }

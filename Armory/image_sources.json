@@ -1,0 +1,56 @@
+{
+  "_comment": "Pour chaque item, 'queries' contient des termes de recherche Wikimedia Commons par ordre de préférence. Le script tente la 1ère, puis la 2ème en fallback, etc. 'count' = nombre d'images souhaitées.",
+  "_count_per_item": 3,
+
+  "weapons": {
+    "weapon_hk416_a5":         {"queries": ["HK416 rifle", "Heckler Koch HK416", "HK416 assault"]},
+    "weapon_m4a1_sopmod":      {"queries": ["M4A1 carbine SOPMOD", "M4A1 carbine", "M4 carbine rifle"]},
+    "weapon_scar_h_mk17":      {"queries": ["FN SCAR-H MK17", "SCAR-H rifle", "FN SCAR rifle"]},
+    "weapon_mp5sd6":           {"queries": ["MP5SD submachine", "Heckler Koch MP5SD", "MP5 submachine gun"]},
+    "weapon_p90_tr":           {"queries": ["FN P90 submachine", "P90 personal defense weapon", "FN P90"]},
+    "weapon_glock17_gen5":     {"queries": ["Glock 17 pistol", "Glock 17 Gen5", "Glock 17"]},
+    "weapon_sig_p226_mk25":    {"queries": ["SIG Sauer P226", "SIG P226 MK25", "P226 pistol"]},
+    "weapon_mk23_socom":       {"queries": ["HK Mark 23", "MK23 SOCOM pistol", "Heckler Koch Mark 23"]},
+    "weapon_m110_sass":        {"queries": ["M110 SASS rifle", "M110 sniper rifle", "M110 semi-automatic sniper"]},
+    "weapon_l96a1":            {"queries": ["L96A1 sniper", "Accuracy International L96", "British L96 sniper rifle"]},
+    "weapon_benelli_m4":       {"queries": ["Benelli M4 shotgun", "M1014 shotgun", "Benelli M4 Super 90"]},
+    "weapon_knife_tactical_mk1": {"queries": ["combat knife military", "tactical combat knife", "KA-BAR knife"]}
+  },
+
+  "gears": {
+    "drone_recon_dr1_v2":          {"queries": ["military reconnaissance drone", "small UAV military", "RQ-11 Raven drone"]},
+    "gadget_nvg_pvs31":             {"queries": ["AN PVS-31 night vision", "PVS-31 goggles", "night vision binocular military"]},
+    "gadget_thermal_scope_ts1":     {"queries": ["thermal weapon sight", "thermal imaging scope military", "FLIR thermal scope"]},
+    "gadget_flashbang_m84":         {"queries": ["M84 stun grenade", "flashbang grenade", "M84 flashbang"]},
+    "gadget_smoke_grenade_m18":     {"queries": ["M18 smoke grenade", "smoke grenade military", "colored smoke grenade"]},
+    "gadget_medkit_field_v1":       {"queries": ["IFAK individual first aid kit", "military medical kit", "combat lifesaver bag"]},
+    "gadget_lockpick_kit_v2":       {"queries": ["lock picking tools", "lockpick set", "tubular lock pick"]},
+    "gadget_breaching_charge_bc1":  {"queries": ["breaching charge military", "door breaching explosive", "explosive door breach"]},
+    "gadget_jammer_jm2":             {"queries": ["military signal jammer", "electronic warfare jammer", "RF jammer device"]},
+    "gadget_tactical_radio_tr5":    {"queries": ["AN PRC radio", "military handheld radio", "tactical radio Harris"]}
+  },
+
+  "protections": {
+    "armor_plate_carrier_mk2":  {"queries": ["plate carrier vest military", "tactical plate carrier", "IOTV plate carrier"]},
+    "armor_light_vest_mk1":      {"queries": ["light tactical vest", "minimalist plate carrier", "load bearing vest"]},
+    "armor_heavy_assault_mk3":  {"queries": ["heavy body armor military", "EOD bomb suit", "tactical breaching armor"]},
+    "armor_stealth_carrier_v1": {"queries": ["concealable plate carrier", "covert body armor", "low profile plate carrier"]},
+    "armor_riot_shield_v2":      {"queries": ["ballistic riot shield", "tactical ballistic shield", "police riot shield"]},
+    "armor_helmet_fast_mk1":    {"queries": ["FAST helmet Ops-Core", "MICH helmet military", "tactical FAST helmet"]},
+    "armor_helmet_heavy_mk2":  {"queries": ["combat helmet military", "ballistic helmet kevlar", "ACH helmet army"]},
+    "armor_knee_elbow_pads_v1": {"queries": ["tactical knee pads military", "combat knee pads", "knee elbow pads tactical"]}
+  },
+
+  "clothes": {
+    "clothing_urban_stealth_v1":  {"queries": ["urban tactical operator", "plainclothes special forces", "civilian tactical clothing"]},
+    "clothing_night_ops_v3":       {"queries": ["black tactical uniform special forces", "night operations soldier", "black ops uniform"]},
+    "clothing_combat_heavy_mk2":  {"queries": ["soldier full combat gear", "infantry combat uniform", "heavy combat soldier"]},
+    "clothing_forest_camo_v2":     {"queries": ["woodland camouflage uniform", "M81 woodland uniform", "forest camouflage soldier"]},
+    "clothing_desert_camo_v1":     {"queries": ["desert camouflage uniform", "DCU desert uniform", "tan camouflage soldier"]},
+    "clothing_arctic_ops_v1":       {"queries": ["arctic camouflage soldier", "winter military uniform snow", "snow camouflage"]},
+    "clothing_civilian_worker_v1":  {"queries": ["industrial worker uniform", "factory worker overall", "construction worker uniform"]},
+    "clothing_medic_field_v1":      {"queries": ["combat medic uniform", "military field medic", "army medic gear"]},
+    "clothing_black_ops_mk1":       {"queries": ["black tactical operator", "stealth special forces uniform", "GIGN tactical gear"]},
+    "clothing_exosuit_light_v1":    {"queries": ["military exoskeleton", "powered exoskeleton soldier", "TALOS exosuit"]}
+  }
+}
