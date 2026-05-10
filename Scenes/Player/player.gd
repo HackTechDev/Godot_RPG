@@ -294,12 +294,12 @@ func _process(_delta: float):
 	if _nvg_active and _nvg_mat != null:
 		_nvg_time += _delta
 		var _canvas_xform := get_viewport().get_canvas_transform()
-		var _scale        := _canvas_xform.get_scale().x
+		var _vp_size      := get_viewport().get_visible_rect().size
 		_nvg_mat.set_shader_parameter("time_seed",         _nvg_time)
-		_nvg_mat.set_shader_parameter("viewport_size",     get_viewport().get_visible_rect().size)
+		_nvg_mat.set_shader_parameter("viewport_size",     _vp_size)
 		_nvg_mat.set_shader_parameter("player_screen_pos", _canvas_xform * global_position)
 		_nvg_mat.set_shader_parameter("look_angle_rad",    deg_to_rad(look_angle))
-		_nvg_mat.set_shader_parameter("cone_length_px",    CONE_LENGTH * _scale)
+		_nvg_mat.set_shader_parameter("cone_length_px",    _vp_size.length())
 		_nvg_mat.set_shader_parameter("cone_fov_half_rad", deg_to_rad(CONE_FOV_HALF))
 	_update_bullets(_delta)
 
