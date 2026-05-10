@@ -61,6 +61,11 @@ const RADIAL_CLICK_RADIUS = 26.0
 
 var _aiming: bool        = false
 var _crosshair_draw: Control = null
+
+var _nvg_active:  bool           = false
+var _nvg_overlay: ColorRect      = null
+var _nvg_mat:     ShaderMaterial = null
+var _nvg_time:    float          = 0.0
 var _bullets: Array      = []
 var _sfx_shot:   AudioStreamPlayer = null
 var _sfx_impact: AudioStreamPlayer = null
@@ -130,6 +135,7 @@ func _radial_items() -> Array:
 		{"id": "attack",  "letter": "A", "label": "Attaquer",   "disabled": false},
 		{"id": "minimap", "letter": "M", "label": "Carte",      "disabled": false},
 		{"id": "shoot",   "letter": "F", "label": "Tirer",      "disabled": false},
+	{"id": "nvg",     "letter": "N", "label": "Nuit",       "disabled": false},
 	]
 
 const CONE_LENGTH   = 130.0
@@ -232,6 +238,7 @@ func _ready():
 	add_child(_sfx_impact)
 
 	_setup_crosshair()
+	_setup_nvg()
 
 	player_combat_label = Label.new()
 	player_combat_label.position = Vector2(-55, -78)
@@ -284,6 +291,9 @@ func _process(_delta: float):
 	if _aiming and _crosshair_draw != null:
 		_update_aim_line()
 		_crosshair_draw.queue_redraw()
+	if _nvg_active and _nvg_mat != null:
+		_nvg_time += _delta
+		_nvg_mat.set_shader_parameter("time_seed", _nvg_time)
 	_update_bullets(_delta)
 
 func _draw() -> void:
@@ -1051,6 +1061,8 @@ func _handle_radial_action(action_id: String) -> void:
 				minimap_instance.toggle()
 		"shoot":
 			_toggle_aiming()
+		"nvg":
+			_toggle_nvg()
 
 # ─── Viseur ────────────────────────────────────────────────────────────────
 func _update_aim_line() -> void:
@@ -1141,6 +1153,26 @@ func _setup_crosshair() -> void:
 	dc.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cl.add_child(dc)
 	_crosshair_draw = dc
+
+func _setup_nvg() -> void:
+	var cl := CanvasLayer.new()
+	cl.layer = 20
+	add_child(cl)
+	var rect := ColorRect.new()
+	rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.visible = false
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://Shaders/night_vision.gdshader")
+	rect.material = mat
+	cl.add_child(rect)
+	_nvg_overlay = rect
+	_nvg_mat = mat
+
+func _toggle_nvg() -> void:
+	_nvg_active = not _nvg_active
+	if _nvg_overlay != null:
+		_nvg_overlay.visible = _nvg_active
 
 func _toggle_aiming() -> void:
 	_aiming = not _aiming
