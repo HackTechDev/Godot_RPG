@@ -35,20 +35,19 @@ void fragment() {
 	float angular_fade = 1.0 - smoothstep(cone_fov_half_rad * 0.88, cone_fov_half_rad, abs(diff));
 	float factor       = radial_fade * angular_fade;
 
-	if (factor <= 0.0) {
+	if (factor > 0.0) {
+		// Grayscale + grain
+		float g     = dot(s.rgb, vec3(0.299, 0.587, 0.114));
+		float grain = hash(pixel_pos + vec2(time_seed * 17.37, time_seed * 31.11));
+		g = clamp(g + (grain - 0.5) * noise_strength, 0.0, 1.0);
+
+		// Teinte verte NVG + légères scanlines
+		vec3 nvg  = vec3(g * 0.08, g * 1.0, g * 0.10);
+		nvg      *= 1.0 + sin(uv.y * 720.0 * PI) * 0.025;
+		nvg       = clamp(nvg, 0.0, 1.0);
+
+		COLOR = vec4(mix(s.rgb, nvg, factor), 1.0);
+	} else {
 		COLOR = s;
-		return;
 	}
-
-	// Grayscale + grain
-	float g     = dot(s.rgb, vec3(0.299, 0.587, 0.114));
-	float grain = hash(pixel_pos + vec2(time_seed * 17.37, time_seed * 31.11));
-	g = clamp(g + (grain - 0.5) * noise_strength, 0.0, 1.0);
-
-	// Teinte verte NVG + légères scanlines
-	vec3 nvg  = vec3(g * 0.08, g * 1.0, g * 0.10);
-	nvg      *= 1.0 + sin(uv.y * 720.0 * PI) * 0.025;
-	nvg       = clamp(nvg, 0.0, 1.0);
-
-	COLOR = vec4(mix(s.rgb, nvg, factor), 1.0);
 }
