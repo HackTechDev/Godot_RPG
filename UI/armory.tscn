@@ -120,8 +120,9 @@ theme_override_constants/separation = 4
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_horizontal = 3
-expand_mode = 1
-stretch_mode = 6
+size_flags_vertical = 0
+expand_mode = 0
+stretch_mode = 5
 
 [node name="ImgNav" type="HBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox"]
 layout_mode = 2
