@@ -132,6 +132,30 @@ Améliorations apportées à des fonctionnalités existantes.
 
 ---
 
+## Vision nocturne — shader : `return` interdit dans `fragment()`
+
+**Problème initial :** le shader utilisait `return` pour court-circuiter le traitement des pixels hors-cône, ce qui provoquait une erreur de compilation Godot (`Using 'return' in the 'fragment' processor function is incorrect`).
+
+**Amélioration apportée :**
+
+- `return` remplacé par un `if/else` équivalent : les pixels hors-cône reçoivent directement la couleur originale de l'écran (`COLOR = s`), les pixels dans le cône reçoivent le filtre NVG
+
+**Fichiers :** `Shaders/night_vision.gdshader`
+
+---
+
+## HUD — largeur du ClockPanel HBox fixée à 200 px
+
+**Contexte :** la largeur du `HBoxContainer` du panneau horloge variait selon le contenu, ce qui pouvait provoquer des décalages visuels.
+
+**Amélioration apportée :**
+
+- `custom_minimum_size = Vector2(200, 0)` ajouté sur le nœud `HBox` de `ClockAnchor/ClockPanel`
+
+**Fichiers :** `UI/hud.tscn`
+
+---
+
 ## Création de personnage — variable `name` renommée en `entry`
 
 **Problème initial :** warning GDScript `SHADOWED_VARIABLE_BASE_CLASS` sur `main_menu.gd:1276` — la variable locale `name` dans `_delete_dir_recursive()` masquait la propriété `Node.name`.

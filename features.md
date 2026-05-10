@@ -926,6 +926,30 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Vision nocturne (menu radial — touche N)
+
+- Item **"N — Nuit"** ajouté au menu radial ; toggle activation / désactivation
+- Quand active, un `CanvasLayer` (layer 20) avec un `ColorRect` plein écran + `ShaderMaterial` est superposé à la scène
+- L'effet est limité au **cône de vision** du personnage (même angle que le cône vert, 90° de FOV) et s'étend jusqu'aux bords de l'écran
+- Shader `Shaders/night_vision.gdshader` : conversion en niveaux de gris, teinte verte NVG (`r×0.08, g×1.0, b×0.10`), grain animé par frame (hash pseudo-aléatoire + `time_seed`), légères scanlines horizontales
+- Fondu doux sur les bords radial et angulaire du cône (88 %→100 %) pour un rendu réaliste
+- Les paramètres du cône (`player_screen_pos`, `look_angle_rad`, `cone_fov_half_rad`, `viewport_size`) sont mis à jour à chaque frame depuis `_process()` via `canvas_transform` — le cône suit la caméra et la rotation du regard en temps réel
+- **Fichiers :** `Shaders/night_vision.gdshader`, `Scenes/Player/player.gd`
+
+---
+
+## Menu radial — position adaptative des labels
+
+- Le texte de chaque bouton du menu radial est positionné selon sa place dans le cercle :
+  - **Bouton du haut** (axe vertical pur, `|sin(a)| > 0.98`, sin < 0) → label **au-dessus**, centré
+  - **Demi-cercle droit** (`cos(a) > 0`) → label **à droite**, aligné à gauche
+  - **Demi-cercle gauche** (`cos(a) < 0`) → label **à gauche**, aligné à droite
+  - **Bouton du bas** (`|sin(a)| > 0.98`, sin > 0) → label **en-dessous**, centré
+- L'angle `a` calculé dans `_build()` est transmis à `_make_item()` pour déterminer la position
+- **Fichiers :** `UI/radial_menu.gd`
+
+---
+
 ## Photos des armes dans l'Armurerie
 
 - Chaque article de l'armurerie peut disposer d'une ou plusieurs photos référencées dans le champ `images` de son JSON (ex. : `["images/weapon_hk416_a5_1.jpg", ...]`)
