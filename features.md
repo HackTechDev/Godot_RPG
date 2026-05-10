@@ -926,6 +926,18 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Photos des armes dans l'Armurerie
+
+- Chaque article de l'armurerie peut disposer d'une ou plusieurs photos référencées dans le champ `images` de son JSON (ex. : `["images/weapon_hk416_a5_1.jpg", ...]`)
+- Les images sont stockées dans `res://Armory/images/` et téléchargeables via `Armory/download_images.py`
+- Zone d'affichage insérée dans le panneau de détail entre le modèle et la description : `TextureRect` de **180 px de hauteur** fixe, largeur variable selon la place disponible
+- `ResourceLoader.exists()` : si l'image n'a pas encore été importée dans Godot, la zone est masquée (aucune erreur)
+- Navigation **< N / total >** affichée sous l'image quand plusieurs photos sont disponibles (masquée si une seule)
+- Les boutons de navigation sont désactivés aux extrémités pour éviter les sorties de tableau
+- **Fichiers :** `UI/armory.tscn`, `UI/armory.gd`, `Armory/weapons.json`, `Armory/images/`
+
+---
+
 ## Référence — Statistiques de l'armurerie
 
 Chaque équipement de l'armurerie possède des statistiques communes et des statistiques spécifiques à sa catégorie. Voici la signification de chaque champ.

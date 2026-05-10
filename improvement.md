@@ -112,6 +112,26 @@ Améliorations apportées à des fonctionnalités existantes.
 
 ---
 
+## Armurerie — affichage image à hauteur fixe (TextureRect)
+
+**Problème initial :** la zone d'affichage de la photo d'arme ne respectait pas la hauteur de 180 px définie par `custom_minimum_size`.
+
+**Cause :**
+
+- Premier essai (`expand_mode = 1` + `stretch_mode = 6`) : `EXPAND_IGNORE_SIZE` avec `STRETCH_KEEP_ASPECT_COVERED` affichait l'image à sa taille naturelle ou la recadrait sans respecter les contraintes de layout.
+- Deuxième essai (`expand_mode = 0` + `stretch_mode = 5`) : `EXPAND_KEEP_SIZE` force la taille minimale du nœud à égaler la taille de la texture — une image 800×600 écrasait le `custom_minimum_size = (0, 180)`.
+
+**Solution retenue :**
+
+- `expand_mode = 1` (IGNORE_SIZE) : la taille de la texture n'influence pas le layout du nœud
+- `stretch_mode = 5` (KEEP_ASPECT_CENTERED) : l'image est mise à l'échelle pour tenir dans les bornes du nœud en conservant son ratio, centrée
+- `size_flags_vertical = 0` (SHRINK_BEGIN) : le nœud ne s'étire pas au-delà de son `custom_minimum_size`
+- `custom_minimum_size = Vector2(0, 180)` : hauteur garantie à 180 px
+
+**Fichiers :** `UI/armory.tscn`
+
+---
+
 ## Création de personnage — variable `name` renommée en `entry`
 
 **Problème initial :** warning GDScript `SHADOWED_VARIABLE_BASE_CLASS` sur `main_menu.gd:1276` — la variable locale `name` dans `_delete_dir_recursive()` masquait la propriété `Node.name`.
