@@ -44,11 +44,11 @@ func _build(items: Array) -> void:
 	for i in range(n):
 		var a      = -PI / 2.0 + 2.0 * PI * i / float(n)
 		var off    = Vector2(cos(a), sin(a)) * RADIUS
-		var wrapper = _make_item(items[i])
+		var wrapper = _make_item(items[i], a)
 		wrapper.position = off - Vector2(BTN_DIAM / 2.0, BTN_DIAM / 2.0)
 		_container.add_child(wrapper)
 
-func _make_item(item: Dictionary) -> Control:
+func _make_item(item: Dictionary, angle: float = 0.0) -> Control:
 	var is_disabled: bool = item.get("disabled", false)
 	var wrapper = Control.new()
 	wrapper.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -57,12 +57,28 @@ func _make_item(item: Dictionary) -> Control:
 	wrapper.add_child(btn)
 
 	const LBL_W = 70.0
+	const LBL_H = 14.0
+	const PAD   = 3.0
 	var lbl = Label.new()
 	lbl.text = item.get("label", "")
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.position = Vector2((BTN_DIAM - LBL_W) / 2.0, BTN_DIAM + 3.0)
-	lbl.size = Vector2(LBL_W, 14.0)
+	lbl.size = Vector2(LBL_W, LBL_H)
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	# Position et alignement du label selon la position angulaire du bouton
+	var sa := sin(angle)
+	var ca := cos(angle)
+	if abs(sa) > 0.98:                                   # axe vertical pur (haut / bas)
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if sa < 0.0:                                     # bouton du haut → label au-dessus
+			lbl.position = Vector2((BTN_DIAM - LBL_W) / 2.0, -LBL_H - PAD)
+		else:                                            # bouton du bas → label en-dessous
+			lbl.position = Vector2((BTN_DIAM - LBL_W) / 2.0, BTN_DIAM + PAD)
+	elif ca > 0.0:                                       # demi-cercle droit → label à droite
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		lbl.position = Vector2(BTN_DIAM + PAD, (BTN_DIAM - LBL_H) / 2.0)
+	else:                                                # demi-cercle gauche → label à gauche
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		lbl.position = Vector2(-LBL_W - PAD, (BTN_DIAM - LBL_H) / 2.0)
 	lbl.add_theme_font_size_override("font_size", 10)
 	var lbl_color = Color(0.45, 0.45, 0.45, 0.7) if is_disabled else Color(0.92, 0.92, 0.92, 1.0)
 	lbl.add_theme_color_override("font_color", lbl_color)
