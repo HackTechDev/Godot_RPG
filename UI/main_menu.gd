@@ -1363,7 +1363,6 @@ func _load_slot_data_for_party() -> void:
 		var existing: Dictionary = PartyData.slots[i].get("data", {})
 		var saved_pos_x = existing.get("pos_x", null)
 		var saved_pos_y = existing.get("pos_y", null)
-		print("[PARTY] _load_slot_data_for_party slot %d '%s' pos_x_avant=%s" % [i, slot_slug, saved_pos_x])
 		var saved := Player_data.character_slug
 		Player_data.set_character(slot_slug)
 		liblevel.load_game()
@@ -1373,7 +1372,6 @@ func _load_slot_data_for_party() -> void:
 		if saved_pos_y != null:
 			fresh["pos_y"] = saved_pos_y
 		PartyData.slots[i]["data"] = fresh
-		print("[PARTY] _load_slot_data_for_party slot %d '%s' pos_x_après=%s" % [i, slot_slug, fresh.get("pos_x", "ABSENT")])
 		Player_data.set_character(saved)
 		liblevel.load_game()
 

@@ -139,14 +139,12 @@ static func save_party() -> void:
 # Capture l'état courant de tous les membres de l'équipe puis écrit party.json.
 # À appeler à chaque point de sauvegarde (transition, quit, auto-save).
 static func save_full_party() -> void:
-	print("[PARTY] save_full_party — slots=%d active=%d" % [slots.size(), active_slot])
 	# Slot actif : snapshot complet depuis Player_data + position courante
 	if active_slot < slots.size():
 		var snap := snapshot_player_data()
 		snap["pos_x"] = Player_data.player_pos_x
 		snap["pos_y"] = Player_data.player_pos_y
 		slots[active_slot]["data"] = snap
-		print("[PARTY]   slot %d (actif) pos=(%.1f, %.1f)" % [active_slot, snap["pos_x"], snap["pos_y"]])
 	# Slots inactifs : mise à jour de la position depuis le nœud de scène
 	for i in range(slots.size()):
 		if i == active_slot:
@@ -157,14 +155,10 @@ static func save_full_party() -> void:
 			d["pos_x"] = node.global_position.x
 			d["pos_y"] = node.global_position.y
 			slots[i]["data"] = d
-			print("[PARTY]   slot %d (inactif) nœud valide pos=(%.1f, %.1f)" % [i, d["pos_x"], d["pos_y"]])
-		else:
-			print("[PARTY]   slot %d (inactif) nœud INVALIDE — position non mise à jour" % i)
 	save_party()
 
 static func load_party() -> bool:
 	if not FileAccess.file_exists(SAVE_PATH):
-		print("[PARTY] load_party — fichier introuvable")
 		return false
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
 	if file == null:
@@ -177,9 +171,7 @@ static func load_party() -> bool:
 	for s in data.get("slots", []):
 		var slug: String = s.get("slug", "")
 		if slug != "":
-			var d: Dictionary = s.get("data", {})
-			new_slots.append({"slug": slug, "data": d})
-			print("[PARTY] load_party — slot '%s' pos_x=%s pos_y=%s" % [slug, d.get("pos_x", "ABSENT"), d.get("pos_y", "ABSENT")])
+			new_slots.append({"slug": slug, "data": s.get("data", {})})
 	if new_slots.is_empty():
 		return false
 	slots = new_slots
