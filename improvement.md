@@ -184,6 +184,110 @@ Améliorations apportées à des fonctionnalités existantes.
 
 ---
 
+## Idées d'amélioration — Jeu en équipe
+
+Pistes d'évolution futures pour le système multi-personnages. Aucune n'est encore implémentée.
+
+---
+
+### 1. Mini-portraits de l'équipe dans le HUD
+
+Afficher une barre horizontale compacte en bas ou en haut de l'écran, avec un mini-portrait par membre :
+- Indicateur de santé sous chaque portrait (barre ou fraction)
+- Surbrillance du portrait du personnage actif
+- Clic sur un portrait = switch vers ce personnage (équivalent Shift+N)
+- Grisé + icône ☠ si le membre est mort
+
+**Fichiers concernés :** `UI/hud.tscn`, `UI/hud.gd`, `Scenes/Player/player.gd`
+
+---
+
+### 2. Indicateur hors-écran des membres inactifs
+
+Quand un membre de l'équipe se trouve hors des limites de l'écran, afficher une petite flèche colorée (couleur du slot) sur le bord de l'écran pointant vers sa position — comme un radar de bord. Utile après un switch si les personnages étaient loin les uns des autres.
+
+**Implémentation suggérée :** `CanvasLayer` sur la caméra active ; calcul de direction `world_to_screen()` → si hors viewport, projeter sur le bord et placer une `Polygon2D` triangle.
+
+**Fichiers concernés :** `Scenes/Player/player.gd` (actif) ou nouveau `UI/party_compass.gd`
+
+---
+
+### 3. Mode suivi automatique pour les membres inactifs
+
+Ajouter un toggle (raccourci ou menu radial) pour que les membres inactifs suivent automatiquement le personnage actif à distance fixe (formation). En mode suivi :
+- Chaque inactif se déplace vers la position du chef avec un `NavigationAgent2D` ou un lerp simple
+- Ils conservent leur propre `CollisionShape2D` pour ne pas traverser les murs
+- Un offset par slot évite qu'ils se superposent (ex. : −40 px à gauche, +40 px à droite)
+
+**Fichiers concernés :** `Scenes/Player/player.gd` (inactif, `_physics_process`), `EventBus.gd` (signal position chef), `Autoload/player_data.gd` (flag `party_follow_mode`)
+
+---
+
+### 4. Partage de ressources entre membres
+
+Option pour que les crédits et l'inventaire soient partagés entre tous les membres de l'équipe plutôt qu'individuels :
+- `PartyData` exposerait `shared_credits` et `shared_inventory`
+- Achats à l'armurerie débitent le pool commun
+- Collectes incrémentent le pool commun
+- Activable/désactivable depuis le gestionnaire de personnages
+
+**Fichiers concernés :** `Scenes/Player/party_data.gd`, `UI/armory.gd`, `Scenes/Player/player.gd`
+
+---
+
+### 5. Cooldown et animation de switch
+
+Empêcher le spam de Shift+1/2/3/4 en ajoutant un délai entre deux switchs (ex. : 0,5 s) avec un indicateur visuel sur les portraits HUD (barre de recharge). Optionnellement, une animation de fondu (flash blanc rapide) au moment du switch pour signaler visuellement le changement.
+
+**Implémentation suggérée :** timer `_switch_cooldown` dans `base_level.gd` ou `player.gd` ; signal `party_switch_blocked` pour animer le HUD.
+
+**Fichiers concernés :** `Scenes/Levels/base_level.gd`, `UI/hud.gd`
+
+---
+
+### 6. Assistance au combat par les membres inactifs
+
+Quand le personnage actif engage un combat, les membres inactifs à portée participent passivement :
+- Bonus de dés (ex. : +2 à l'attaque ou la défense) selon les stats de chaque allié présent
+- Message dans le `CombatUI` : *"[Nom] vous couvre — Défense +2"*
+- Portée configurable (ex. : 80 px)
+
+**Fichiers concernés :** `Scenes/Player/player.gd` (`_start_combat()`), `UI/combat_ui.gd`, `Scenes/Player/party_data.gd`
+
+---
+
+### 7. Transfert d'équipement entre membres
+
+Interface dans le gestionnaire de personnages (ou pendant une pause in-game) pour déplacer des objets de l'inventaire d'un membre vers un autre :
+- Liste déroulante "De : [membre A]" / "Vers : [membre B]"
+- Chaque objet affiché avec bouton "Transférer"
+- Mis à jour dans `PartyData.slots[i]["data"]["player_equipment"]`
+
+**Fichiers concernés :** `UI/main_menu.gd`, `Scenes/Player/party_data.gd`
+
+---
+
+### 8. Statut de mission partagé dans le récapitulatif
+
+Sur l'écran de récapitulatif de mission, afficher une ligne par membre de l'équipe avec sa contribution (ex. : ordinateurs collectés, ennemis vaincus, distance parcourue) pour donner un sens au jeu en équipe.
+
+**Implémentation suggérée :** tracker par slot dans `PartyData` (`kills`, `objects_collected`, `distance`) ; section "Équipe" dans `_show_mission_recap()`.
+
+**Fichiers concernés :** `Scenes/Player/party_data.gd`, `UI/main_menu.gd`
+
+---
+
+### 9. Santé individuelle et soins entre membres
+
+Actuellement tous les membres partagent `Player_data.player_health`. Gérer une santé distincte par slot :
+- `PartyData.slots[i]["data"]["player_health"]` persiste la santé de chaque membre
+- Un membre à 0 PV devient indisponible (portrait grisé, impossible à sélectionner)
+- Action "Soigner" (touche ou menu radial) à portée d'un allié : transfère des PV du chef vers le blessé
+
+**Fichiers concernés :** `Scenes/Player/party_data.gd`, `Scenes/Levels/base_level.gd`, `Scenes/Player/player.gd`
+
+---
+
 ## Création de personnage — variable `name` renommée en `entry`
 
 **Problème initial :** warning GDScript `SHADOWED_VARIABLE_BASE_CLASS` sur `main_menu.gd:1276` — la variable locale `name` dans `_delete_dir_recursive()` masquait la propriété `Node.name`.
