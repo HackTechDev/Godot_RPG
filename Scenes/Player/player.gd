@@ -67,6 +67,12 @@ var _nvg_overlay: ColorRect      = null
 var _nvg_mat:     ShaderMaterial = null
 var _nvg_time:    float          = 0.0
 var _bullets: Array      = []
+
+# Équipe multi-personnages
+var is_active_player:    bool       = true   # défini AVANT add_child par base_level
+var _party_slot:         int        = 0      # index dans PartyData.slots
+var _slot_data:          Dictionary = {}     # snapshot données du perso non-actif
+var _perf_monitors_added: bool      = false
 var _sfx_shot:   AudioStreamPlayer = null
 var _sfx_impact: AudioStreamPlayer = null
 
@@ -169,8 +175,30 @@ var _combat_busy: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	add_to_group("player")
+	PartyData.register_node(_party_slot, self)
 
+	# La minimap est créée pour tous les joueurs afin de recevoir level_map_ready
+	minimap_instance = minimap_scene.instantiate()
+	add_child(minimap_instance)
+
+	if not is_active_player:
+		minimap_instance.visible = false
+		_apply_appearance_dict(_slot_data)
+		_restore_sprite_from_dict(_slot_data)
+		return
+
+	add_to_group("player")
+	_setup_active_ui()
+	_apply_appearance()
+	_restore_sprite_state()
+	call_deferred("_disable_own_camera_if_controller")
+	SceneTransition.fade_in()
+	_perf_monitors_added = true
+	Performance.add_custom_monitor("Joueur/regard_angle",  func(): return look_angle)
+	Performance.add_custom_monitor("Joueur/corps_angle",   func(): return body_angle)
+	Performance.add_custom_monitor("Joueur/vitesse",       func(): return _debug_speed)
+
+func _setup_active_ui() -> void:
 	menu_instance = main_menu.instantiate()
 	add_child(menu_instance)
 	background_menu = menu_instance.get_node("Background")
@@ -183,7 +211,6 @@ func _ready():
 			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text_menu = menu_instance.get_node("MainMenuLayer")
 	text_menu.visible = false
-
 	play_button_menu = menu_instance.get_node("MainMenuLayer/Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonPlay")
 	play_button_menu.text = "Retour à la mission"
 	play_button_menu.pressed.disconnect(text_menu._on_button_play_pressed)
@@ -227,9 +254,6 @@ func _ready():
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	)
 
-	minimap_instance = minimap_scene.instantiate()
-	add_child(minimap_instance)
-
 	_sfx_shot = AudioStreamPlayer.new()
 	_sfx_shot.stream = _SHOT_WAV
 	add_child(_sfx_shot)
@@ -250,28 +274,74 @@ func _ready():
 	player_combat_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4))
 	add_child(player_combat_label)
 
+# Appelé par base_level lors du switch vers ce personnage
+func activate_as_primary() -> void:
+	is_active_player = true
+	add_to_group("player")
+	if hud_instance == null:
+		_setup_active_ui()
+		if not _perf_monitors_added:
+			_perf_monitors_added = true
+			Performance.add_custom_monitor("Joueur/regard_angle", func(): return look_angle)
+			Performance.add_custom_monitor("Joueur/corps_angle",  func(): return body_angle)
+			Performance.add_custom_monitor("Joueur/vitesse",      func(): return _debug_speed)
+	else:
+		if menu_instance:    menu_instance.visible    = true
+		if hud_instance:     hud_instance.visible     = true
+		if minimap_instance: minimap_instance.visible = true
 	_apply_appearance()
-	_restore_sprite_state()
-	# Désactive la caméra embarquée si CameraController gère la caméra
-	call_deferred("_disable_own_camera_if_controller")
-	SceneTransition.fade_in()
-	Performance.add_custom_monitor("Joueur/regard_angle",  func(): return look_angle)
-	Performance.add_custom_monitor("Joueur/corps_angle",   func(): return body_angle)
-	Performance.add_custom_monitor("Joueur/vitesse",       func(): return _debug_speed)
+
+# Appelé par base_level lors du switch vers un autre personnage
+func deactivate_as_primary() -> void:
+	is_active_player = false
+	remove_from_group("player")
+	if in_combat:
+		_end_combat()
+	if _aiming:
+		_aiming = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_nvg_active = false
+	if _nvg_overlay:
+		_nvg_overlay.visible = false
+	if menu_instance:           menu_instance.visible           = false
+	if character_sheet_instance: character_sheet_instance.visible = false
+	if armory_instance:         armory_instance.visible         = false
+	if hud_instance:            hud_instance.visible            = false
+	if notification_instance:   notification_instance.visible   = false
+	if game_over_instance:      game_over_instance.visible      = false
+	if combat_ui_instance:      combat_ui_instance.visible      = false
+	if dialogue_box_instance:   dialogue_box_instance.visible   = false
+	if radial_menu_instance:    radial_menu_instance.visible    = false
+	if minimap_instance:        minimap_instance.visible        = false
+	get_tree().paused = false
 
 func _exit_tree():
 	if _aiming:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	Performance.remove_custom_monitor("Joueur/regard_angle")
-	Performance.remove_custom_monitor("Joueur/corps_angle")
-	Performance.remove_custom_monitor("Joueur/vitesse")
+	if _perf_monitors_added:
+		Performance.remove_custom_monitor("Joueur/regard_angle")
+		Performance.remove_custom_monitor("Joueur/corps_angle")
+		Performance.remove_custom_monitor("Joueur/vitesse")
 
 func _physics_process(delta: float) -> void:
+	if not is_active_player:
+		velocity = Vector2.ZERO
+		return
 	if _mecha_cooldown > 0.0:
 		_mecha_cooldown -= delta
 	input_move()
 
 func _process(_delta: float):
+	# Sync LPC layers — actif pour tous les joueurs (animation idle des non-actifs)
+	if appearance_layers.visible:
+		var f = master_sprite.frame
+		for child in appearance_layers.get_children():
+			if child is Sprite2D and child.visible:
+				child.frame = f
+
+	if not is_active_player:
+		return
+
 	if not _in_mecha:
 		_update_nearby_mecha()
 	if in_combat and is_instance_valid(combat_enemy):
@@ -281,12 +351,6 @@ func _process(_delta: float):
 		if in_combat:
 			_end_combat()
 		game_over_instance.show_game_over()
-	# Sync LPC layers to the animation frame driven by AnimationPlayer
-	if appearance_layers.visible:
-		var f = master_sprite.frame
-		for child in appearance_layers.get_children():
-			if child is Sprite2D and child.visible:
-				child.frame = f
 	queue_redraw()
 	if _aiming and _crosshair_draw != null:
 		_update_aim_line()
@@ -334,6 +398,18 @@ func _draw() -> void:
 		)
 
 func _input(event):
+	if not is_active_player:
+		return
+
+	# Shift+1/2 : basculer vers un autre personnage de l'équipe
+	if event is InputEventKey and event.pressed and not event.echo \
+			and Input.is_key_pressed(KEY_SHIFT):
+		match event.physical_keycode:
+			KEY_1: EventBus.party_switch_requested.emit(0); return
+			KEY_2: EventBus.party_switch_requested.emit(1); return
+			KEY_3: EventBus.party_switch_requested.emit(2); return
+			KEY_4: EventBus.party_switch_requested.emit(3); return
+
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var screen_pos = get_global_transform_with_canvas().origin
 		if event.position.distance_to(screen_pos) <= RADIAL_CLICK_RADIUS:
@@ -873,6 +949,42 @@ func _restore_sprite_state() -> void:
 	for child in appearance_layers.get_children():
 		if child is Sprite2D:
 			child.frame = Player_data.player_sprite_frame
+
+func _apply_appearance_dict(d: Dictionary) -> void:
+	var body: String = d.get("appearance_body", "")
+	if body == "":
+		appearance_layers.visible = false
+		master_sprite.visible = true
+		return
+	_spr_load(_lyr_body,     body)
+	_spr_load(_lyr_legs,     d.get("appearance_legs", ""))
+	_spr_load(_lyr_feet,     d.get("appearance_feet", ""))
+	_spr_none(_lyr_shoulders)
+	_spr_load(_lyr_torso,    d.get("appearance_torso", ""))
+	var arms: String = d.get("appearance_arms", "")
+	match SpriteLibrary.get_item_layer(arms):
+		"arms":    _spr_load(_lyr_arms, arms); _spr_none(_lyr_bracers)
+		"bracers": _spr_none(_lyr_arms);        _spr_load(_lyr_bracers, arms)
+		_:         _spr_none(_lyr_arms);        _spr_none(_lyr_bracers)
+	_spr_load(_lyr_gloves,   d.get("appearance_hands", ""))
+	SpriteLibrary.apply_head_sprite(_lyr_head)
+	SpriteLibrary.apply_face_sprite(_lyr_face)
+	_spr_load(_lyr_hair,     d.get("appearance_hair", ""))
+	_spr_load(_lyr_headwear, d.get("appearance_headwear", ""))
+	var f: int = master_sprite.frame
+	for child in appearance_layers.get_children():
+		if child is Sprite2D:
+			child.frame = f
+	appearance_layers.visible = true
+	master_sprite.visible = false
+
+func _restore_sprite_from_dict(d: Dictionary) -> void:
+	body_angle = _dir_to_angle(d.get("player_facing", 2))
+	look_angle = body_angle
+	var look_vec := _angle_to_vec(look_angle)
+	anim_tree.set("parameters/Idle/blend_position", look_vec)
+	anim_tree.set("parameters/Move/blend_position", look_vec)
+	anim_state.travel("Idle")
 
 # --- Helpers angle / direction ---
 

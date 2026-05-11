@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var player_scene = preload("res://Scenes/Player/player.tscn")
 var _liblevel = preload("res://Lib/liblevel.gd").new()
+var _cam_ctrl: CameraController = null   # référence au CameraController
 
 func _compute_game_datetime(elapsed: float) -> String:
 	if Player_data.mission_start_unix <= 0.0:
@@ -39,14 +40,17 @@ func _ready() -> void:
 	_load_npcs()
 	_load_mechas()
 
-	var player = player_scene.instantiate()
-	_place_player(player)
-	add_child(player)
-
-	# CameraController remplace la Camera2D embarquée dans player.tscn
-	var cam_ctrl = _camera_controller_script.new()
+	# CameraController
+	var cam_ctrl := _camera_controller_script.new() as CameraController
 	add_child(cam_ctrl)
-	cam_ctrl.set_follow(player)
+	_cam_ctrl = cam_ctrl
+
+	# Spawn de tous les membres de l'équipe
+	_spawn_party(cam_ctrl)
+
+	# Écoute les demandes de switch de personnage
+	if not EventBus.party_switch_requested.is_connected(_on_party_switch_requested):
+		EventBus.party_switch_requested.connect(_on_party_switch_requested)
 
 	# Minimap : émettre les cellules sol après que le joueur (et sa minimap) soient prêts
 	call_deferred("_emit_level_map")
@@ -65,6 +69,86 @@ func _ready() -> void:
 	_cl.add_child(_trigger_hint)
 	add_child(_cl)
 
+
+# ---------------------------------------------------------------------------
+# Spawn multi-personnages
+# ---------------------------------------------------------------------------
+
+func _spawn_party(cam_ctrl: CameraController) -> void:
+	PartyData.clear_nodes()
+	var n := PartyData.slot_count()
+	var spawn_pos := _get_spawn_position()
+
+	if n == 0:
+		# Mode héritage : pas de données d'équipe
+		var player := player_scene.instantiate()
+		_place_player(player)
+		add_child(player)
+		cam_ctrl.set_follow(player)
+		return
+
+	for i in range(n):
+		var player := player_scene.instantiate() as Node2D
+		player.set("_party_slot", i)
+		var is_active := (i == PartyData.active_slot)
+		player.set("is_active_player", is_active)
+
+		if is_active:
+			_place_player(player)
+		else:
+			var d: Dictionary = PartyData.slots[i].get("data", {})
+			player.set("_slot_data", d)
+			var px := float(d.get("pos_x", spawn_pos.x + float(i) * 40.0))
+			var py := float(d.get("pos_y", spawn_pos.y))
+			player.position = Vector2(px, py)
+
+		add_child(player)
+
+	var active_player := PartyData.get_node_at(PartyData.active_slot)
+	if active_player:
+		cam_ctrl.set_follow(active_player)
+
+func _exit_tree() -> void:
+	if EventBus.party_switch_requested.is_connected(_on_party_switch_requested):
+		EventBus.party_switch_requested.disconnect(_on_party_switch_requested)
+
+func _get_spawn_position() -> Vector2:
+	if Player_data.use_json_spawn:
+		return Player_data.json_spawn
+	return Vector2(Player_data.player_spawnpoint_position_x,
+				   Player_data.player_spawnpoint_position_y)
+
+func _on_party_switch_requested(slot: int) -> void:
+	if slot == PartyData.active_slot or slot >= PartyData.slot_count():
+		return
+	if get_tree().paused:
+		return  # interdit pendant un menu / combat en pause
+	var old_node := PartyData.get_node_at(PartyData.active_slot)
+	var new_node := PartyData.get_node_at(slot)
+	if not is_instance_valid(old_node) or not is_instance_valid(new_node):
+		return
+
+	# Sauvegarde position + données du personnage actif dans son slot
+	var snap := PartyData.snapshot_player_data()
+	snap["pos_x"] = old_node.global_position.x
+	snap["pos_y"] = old_node.global_position.y
+	PartyData.slots[PartyData.active_slot]["data"] = snap
+
+	# Désactiver l'ancien personnage
+	if old_node.has_method("deactivate_as_primary"):
+		old_node.deactivate_as_primary()
+
+	# Charger les données du nouveau personnage dans Player_data
+	var new_data: Dictionary = PartyData.slots[slot].get("data", {})
+	PartyData.restore_to_player_data(new_data)
+	Player_data.set_character(PartyData.slots[slot].get("slug", ""))
+
+	# Activer le nouveau personnage
+	if new_node.has_method("activate_as_primary"):
+		new_node.activate_as_primary()
+
+	_cam_ctrl.set_follow(new_node)
+	PartyData.active_slot = slot
 
 # ---------------------------------------------------------------------------
 # Placement du joueur — trois systèmes par ordre de priorité
@@ -287,6 +371,17 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 # ---------------------------------------------------------------------------
 
 func _save_transition_state(player: Node2D) -> void:
+	# Sauvegarder les positions des membres non-actifs de l'équipe
+	for i in range(PartyData.slot_count()):
+		if i == PartyData.active_slot:
+			continue
+		var node := PartyData.get_node_at(i)
+		if is_instance_valid(node):
+			var d: Dictionary = PartyData.slots[i].get("data", {})
+			d["pos_x"] = node.global_position.x
+			d["pos_y"] = node.global_position.y
+			PartyData.slots[i]["data"] = d
+
 	# Forcer le démontage avant la transition pour assurer un état propre
 	if Player_data.in_mecha and player.has_method("force_dismount"):
 		player.force_dismount()

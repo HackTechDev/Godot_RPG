@@ -62,6 +62,7 @@ var _cm_panel:         Control            = null
 var _cm_rows_vbox:     VBoxContainer      = null
 var _cm_delete_dialog: ConfirmationDialog = null
 var _cm_delete_slug:   String             = ""
+var _cm_party_vbox:    VBoxContainer      = null   # section équipe dans le panel
 
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
@@ -885,6 +886,8 @@ func _on_cs_play_pressed() -> void:
 		return
 	Player_data.set_character(_cs_selected_slug)
 	liblevel.load_game()
+	PartyData.setup_solo(_cs_selected_slug)
+	PartyData.save_party()
 	var state := liblevel.load_mission_state()
 	if state.get("started", false):
 		var mission_id: String = state.get("mission_id", "")
@@ -1125,6 +1128,17 @@ func _build_character_manager_panel() -> void:
 
 	vbox.add_child(HSeparator.new())
 
+	var party_title := Label.new()
+	party_title.text = "ÉQUIPE ACTIVE"
+	party_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(party_title)
+
+	_cm_party_vbox = VBoxContainer.new()
+	_cm_party_vbox.add_theme_constant_override("separation", 4)
+	vbox.add_child(_cm_party_vbox)
+
+	vbox.add_child(HSeparator.new())
+
 	var btn_back := Button.new()
 	btn_back.text = "Retour"
 	btn_back.pressed.connect(_on_cm_back_pressed)
@@ -1140,6 +1154,7 @@ func _build_character_manager_panel() -> void:
 func _load_character_manager() -> void:
 	for child in _cm_rows_vbox.get_children():
 		child.queue_free()
+	_rebuild_party_panel()
 
 	_ensure_missions_loaded()
 
@@ -1165,6 +1180,41 @@ func _load_character_manager() -> void:
 	for sl in slugs:
 		_cm_rows_vbox.add_child(_build_character_row(sl))
 
+
+func _rebuild_party_panel() -> void:
+	if _cm_party_vbox == null:
+		return
+	for c in _cm_party_vbox.get_children():
+		c.queue_free()
+	if PartyData.slot_count() == 0:
+		var lbl := Label.new()
+		lbl.text = "Aucune équipe configurée — cliquez 'Jouer' pour choisir un chef."
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+		_cm_party_vbox.add_child(lbl)
+		return
+	for i in range(PartyData.slot_count()):
+		var slug: String = PartyData.slots[i].get("slug", "")
+		var nickname := slug
+		var rpg_path := "user://characters/%s/rpg.json" % slug
+		if FileAccess.file_exists(rpg_path):
+			var f := FileAccess.open(rpg_path, FileAccess.READ)
+			var d = JSON.parse_string(f.get_as_text())
+			f.close()
+			if d is Dictionary:
+				nickname = d.get("player_nickname", slug)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		var slot_lbl := Label.new()
+		slot_lbl.text = "Slot %d  — %s%s" % [i + 1, nickname, "  (chef)" if i == 0 else ""]
+		slot_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(slot_lbl)
+		if i == PartyData.active_slot:
+			var active_lbl := Label.new()
+			active_lbl.text = "✓ actif"
+			active_lbl.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+			row.add_child(active_lbl)
+		_cm_party_vbox.add_child(row)
 
 func _build_character_row(slug: String) -> Control:
 	var nickname := slug
@@ -1224,6 +1274,24 @@ func _build_character_row(slug: String) -> Control:
 	btn_play.pressed.connect(_on_cm_play_pressed.bind(slug))
 	hbox.add_child(btn_play)
 
+	var can_join := PartyData.slot_count() > 0 \
+		and not PartyData.has_slot(slug) \
+		and PartyData.slot_count() < PartyData.MAX_SLOTS
+	var is_leader := PartyData.slot_count() > 0 \
+		and PartyData.slots[0].get("slug", "") == slug
+
+	if not is_leader and PartyData.has_slot(slug):
+		var btn_leave := Button.new()
+		btn_leave.text = "Quitter équipe"
+		btn_leave.pressed.connect(_on_cm_leave_pressed.bind(slug))
+		hbox.add_child(btn_leave)
+	elif can_join:
+		var btn_join := Button.new()
+		btn_join.text = "Équipe +"
+		btn_join.tooltip_text = "Ajouter à l'équipe du personnage chef"
+		btn_join.pressed.connect(_on_cm_join_pressed.bind(slug))
+		hbox.add_child(btn_join)
+
 	var btn_delete := Button.new()
 	btn_delete.text = "Supprimer"
 	btn_delete.pressed.connect(_on_cm_delete_pressed.bind(slug))
@@ -1247,6 +1315,15 @@ func _on_cm_back_pressed() -> void:
 func _on_cm_play_pressed(slug: String) -> void:
 	Player_data.set_character(slug)
 	liblevel.load_game()
+	# Si ce personnage est déjà chef → conserver l'équipe ; sinon démarrer en solo
+	if PartyData.slot_count() == 0 or PartyData.slots[0].get("slug", "") != slug:
+		PartyData.slots.clear()
+		PartyData.active_slot = 0
+		PartyData.slots.append({"slug": slug, "data": PartyData.snapshot_player_data()})
+	else:
+		PartyData.slots[0]["data"] = PartyData.snapshot_player_data()
+		_load_slot_data_for_party()
+	PartyData.save_party()
 	var state := liblevel.load_mission_state()
 	if state.get("started", false):
 		var mission_id: String = state.get("mission_id", "")
@@ -1260,6 +1337,39 @@ func _on_cm_play_pressed(slug: String) -> void:
 	_cm_panel.visible = false
 	mission_select.visible = true
 	_load_missions()
+
+func _load_slot_data_for_party() -> void:
+	for i in range(1, PartyData.slots.size()):
+		var slot_slug: String = PartyData.slots[i].get("slug", "")
+		if slot_slug == "":
+			continue
+		var saved := Player_data.character_slug
+		Player_data.set_character(slot_slug)
+		liblevel.load_game()
+		PartyData.slots[i]["data"] = PartyData.snapshot_player_data()
+		Player_data.set_character(saved)
+		liblevel.load_game()
+
+func _on_cm_join_pressed(slug: String) -> void:
+	if PartyData.slot_count() == 0:
+		return  # pas de chef défini
+	if PartyData.has_slot(slug) or PartyData.slot_count() >= PartyData.MAX_SLOTS:
+		return
+	var saved := Player_data.character_slug
+	Player_data.set_character(slug)
+	liblevel.load_game()
+	var data := PartyData.snapshot_player_data()
+	Player_data.set_character(saved)
+	if saved != "":
+		liblevel.load_game()
+	PartyData.add_slot(slug, data)
+	PartyData.save_party()
+	_load_character_manager()
+
+func _on_cm_leave_pressed(slug: String) -> void:
+	PartyData.remove_slot_by_slug(slug)
+	PartyData.save_party()
+	_load_character_manager()
 
 
 func _on_cm_delete_pressed(slug: String) -> void:
