@@ -8,12 +8,25 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - Depuis le gestionnaire de personnages (menu principal) : bouton **"Équipe +"** pour ajouter un personnage à l'équipe du chef ; **"Quitter équipe"** pour le retirer
 - La section **"ÉQUIPE ACTIVE"** du gestionnaire affiche les slots de l'équipe et le slot actif
-- Cliquer **"Jouer ▶"** sur un personnage qui n'est pas le chef réinitialise l'équipe en solo ; si c'est déjà le chef, les membres sont conservés
+- Cliquer **"Jouer ▶"** sur un personnage qui n'est pas le chef réinitialise l'équipe en solo ; si c'est déjà le chef, les membres sont conservés et l'`active_slot` est remis à 0
 - En jeu : **Shift+1 / Shift+2** (jusqu'à Shift+4) pour basculer vers le personnage du slot correspondant
 - La caméra se recentre automatiquement sur le personnage actif via `CameraController.set_follow()`
 - Le HUD, le menu radial, l'armurerie, etc. n'appartiennent qu'au personnage actif — les autres personnages ont seulement leur apparence et leur animation de marche
 - Les personnages non-actifs restent visibles en idle dans le niveau
-- La composition de l'équipe est persistée dans `user://party.json` (slugs uniquement)
+
+**Persistance complète de l'équipe (`user://party.json`) :**
+- Stats et position de chaque membre sauvegardés à chaque point de sauvegarde (quit, auto-save, transition de niveau, switch de personnage)
+- Slot actif : snapshot depuis `Player_data` + `player_pos_x/y` (mis à jour chaque frame)
+- Slots inactifs : position lue depuis leur nœud de scène (`PartyData._nodes`)
+- Au rechargement : `load_party()` appelé au démarrage du menu principal (si les slots sont vides) ; `_spawn_party()` utilise la position de `party.json` en priorité sur `rpg.json` pour tous les slots
+- `PartyData.save_full_party()` centralise toute la logique de capture avant `save_party()`
+
+**Indicateur visuel des membres de l'équipe :**
+- Label flottant au-dessus de la tête de chaque personnage (z_index absolu = 10)
+- Couleur par slot : cyan-vert (chef), orange (slot 2), violet (slot 3), jaune (slot 4)
+- Texte : `▶ Nom` pour le personnage actif, `N Nom` pour les inactifs
+- Contour noir (3 px) pour lisibilité sur tous les fonds
+- Absent en mode solo (`slot_count ≤ 1`) ; mis à jour automatiquement lors des switches
 
 **Fichiers :** `Scenes/Player/party_data.gd` (nouveau), `Autoload/EventBus.gd`, `Scenes/Player/player.gd`, `Scenes/Levels/base_level.gd`, `UI/main_menu.gd`
 

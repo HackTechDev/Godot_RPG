@@ -156,6 +156,34 @@ Améliorations apportées à des fonctionnalités existantes.
 
 ---
 
+## Système multi-personnages — persistance et restauration des positions
+
+**Problèmes initiaux (plusieurs bugs cumulés) :**
+
+1. `save_party()` n'enregistrait que les slugs — aucune position ni stat des membres non-actifs
+2. `save_full_party()` ne lisait pas les nœuds inactifs → leurs positions n'étaient jamais mises à jour avant l'écriture sur disque
+3. `load_party()` n'était jamais appelé au démarrage → `PartyData.slots` vide à chaque lancement
+4. `_on_cs_play_pressed()` appelait `setup_solo()` inconditionnellement, écrasant l'équipe sauvegardée
+5. `_load_slot_data_for_party()` remplaçait le dict `data` de chaque membre sans préserver `pos_x/pos_y`
+6. `PartyData.slots[0]["data"] = snapshot_player_data()` dans les deux chemins "Jouer" écrasait la position du chef sans la conserver
+7. `active_slot` n'était jamais remis à 0 au clic "Jouer" → si le joueur avait basculé sur le perso 2 en fin de session, le chef redevenait inactif au rechargement
+8. `_spawn_party()` utilisait toujours `rpg.json` pour le slot actif, ignorant la position (plus récente) de `party.json`
+
+**Améliorations apportées :**
+
+- `save_party()` : enregistre le dict `data` complet (`pos_x`, `pos_y`, toutes les stats) pour chaque slot
+- `save_full_party()` : snapshot du slot actif depuis `Player_data` + `player_pos_x/y` ; slots inactifs mis à jour depuis `PartyData.get_node_at(i).global_position`
+- `load_party()` : restaure le dict `data` depuis le JSON ; appelé dans `main_menu._ready()` si `slot_count() == 0`
+- `_on_cs_play_pressed()` : ne réinitialise en solo que si le slug diffère du chef actuel ; appelle `_load_slot_data_for_party()` dans le cas contraire
+- `_update_slot0_preserving_pos()` : nouvelle fonction — lit `pos_x/pos_y` existants avant de remplacer le dict du chef
+- `PartyData.active_slot = 0` ajouté dans les deux chemins "Jouer" (character select et character manager)
+- `_load_slot_data_for_party()` : préserve `saved_pos_x/y` des slots avant de les remplacer par le snapshot frais de `rpg.json`
+- `_spawn_party()` : utilise `party.json` (`d["pos_x/y"]`) pour le slot actif si disponible et hors transition JSON ; repli sur `_place_player()` sinon
+
+**Fichiers :** `Scenes/Player/party_data.gd`, `Scenes/Levels/base_level.gd`, `UI/main_menu.gd`
+
+---
+
 ## Création de personnage — variable `name` renommée en `entry`
 
 **Problème initial :** warning GDScript `SHADOWED_VARIABLE_BASE_CLASS` sur `main_menu.gd:1276` — la variable locale `name` dans `_delete_dir_recursive()` masquait la propriété `Node.name`.
