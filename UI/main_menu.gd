@@ -891,6 +891,7 @@ func _on_cs_play_pressed() -> void:
 		PartyData.setup_solo(_cs_selected_slug)
 	else:
 		PartyData.slots[0]["data"] = PartyData.snapshot_player_data()
+		_load_slot_data_for_party()
 	PartyData.save_party()
 	var state := liblevel.load_mission_state()
 	if state.get("started", false):
@@ -1347,10 +1348,19 @@ func _load_slot_data_for_party() -> void:
 		var slot_slug: String = PartyData.slots[i].get("slug", "")
 		if slot_slug == "":
 			continue
+		# Conserver les positions sauvegardées avant de recharger les stats
+		var existing: Dictionary = PartyData.slots[i].get("data", {})
+		var saved_pos_x = existing.get("pos_x", null)
+		var saved_pos_y = existing.get("pos_y", null)
 		var saved := Player_data.character_slug
 		Player_data.set_character(slot_slug)
 		liblevel.load_game()
-		PartyData.slots[i]["data"] = PartyData.snapshot_player_data()
+		var fresh := PartyData.snapshot_player_data()
+		if saved_pos_x != null:
+			fresh["pos_x"] = saved_pos_x
+		if saved_pos_y != null:
+			fresh["pos_y"] = saved_pos_y
+		PartyData.slots[i]["data"] = fresh
 		Player_data.set_character(saved)
 		liblevel.load_game()
 
