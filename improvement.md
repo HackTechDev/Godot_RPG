@@ -297,3 +297,29 @@ Actuellement tous les membres partagent `Player_data.player_health`. Gérer une 
 - Variable locale renommée `entry` dans la boucle `DirAccess` de `_delete_dir_recursive()`
 
 **Fichiers :** `UI/main_menu.gd`
+
+● 9 idées ajoutées dans improvement.md, toutes ancrées dans l'architecture actuelle avec les fichiers concernés et des
+  pistes d'implémentation concrètes :
+
+  ┌─────┬────────────────────────────────────────────────────────────────────┬────────────┐
+  │  #  │                                Idée                                │ Complexité │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 1   │ Mini-portraits HUD avec santé de chaque membre + clic pour switch  │ Moyenne    │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 2   │ Flèche hors-écran pointant vers les membres inactifs               │ Moyenne    │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 3   │ Mode suivi automatique — les inactifs suivent le chef en formation │ Élevée     │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 4   │ Crédits et inventaire partagés entre tous les membres              │ Faible     │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 5   │ Cooldown de switch avec animation de transition                    │ Faible     │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 6   │ Assistance passive au combat — bonus de dés si alliés à portée     │ Faible     │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 7   │ Transfert d'équipement entre membres depuis le menu                │ Moyenne    │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 8   │ Statistiques par membre dans le récapitulatif de mission           │ Moyenne    │
+  ├─────┼────────────────────────────────────────────────────────────────────┼────────────┤
+  │ 9   │ Santé individuelle par slot + soins entre membres                  │ Élevée     │
+  └─────┴────────────────────────────────────────────────────────────────────┴────────────┘
+
