@@ -599,6 +599,7 @@ func _auto_save_player():
 		"appearance_legs":        Player_data.appearance_legs,
 		"appearance_feet":        Player_data.appearance_feet,
 	})
+	PartyData.save_full_party()
 
 func _on_armory_item_purchased() -> void:
 	_auto_save_player()

@@ -149,6 +149,7 @@ func _on_party_switch_requested(slot: int) -> void:
 
 	_cam_ctrl.set_follow(new_node)
 	PartyData.active_slot = slot
+	PartyData.save_party()
 
 # ---------------------------------------------------------------------------
 # Placement du joueur — trois systèmes par ordre de priorité
@@ -381,6 +382,7 @@ func _save_transition_state(player: Node2D) -> void:
 			d["pos_x"] = node.global_position.x
 			d["pos_y"] = node.global_position.y
 			PartyData.slots[i]["data"] = d
+	PartyData.save_full_party()
 
 	# Forcer le démontage avant la transition pour assurer un état propre
 	if Player_data.in_mecha and player.has_method("force_dismount"):

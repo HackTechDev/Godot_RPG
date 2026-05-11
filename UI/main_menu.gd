@@ -386,6 +386,7 @@ func _on_quit_dialog_confirmed():
 		Player_data.player_pos_x = players[0].position.x
 		Player_data.player_pos_y = players[0].position.y
 	liblevel.savePlayer(data_to_save())
+	PartyData.save_full_party()
 
 	if GameConfig.DEBUG:
 		print("Save all objects")

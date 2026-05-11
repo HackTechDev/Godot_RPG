@@ -130,11 +130,21 @@ static func restore_to_player_data(d: Dictionary) -> void:
 static func save_party() -> void:
 	var out: Dictionary = {"active_slot": active_slot, "slots": []}
 	for s: Dictionary in slots:
-		out["slots"].append({"slug": s.get("slug", "")})
+		out["slots"].append({"slug": s.get("slug", ""), "data": s.get("data", {})})
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(out))
 		file.close()
+
+# Capture l'état courant du joueur actif puis écrit party.json sur disque.
+# À appeler à chaque point de sauvegarde (transition, quit, auto-save).
+static func save_full_party() -> void:
+	if active_slot < slots.size():
+		var snap := snapshot_player_data()
+		snap["pos_x"] = Player_data.player_pos_x
+		snap["pos_y"] = Player_data.player_pos_y
+		slots[active_slot]["data"] = snap
+	save_party()
 
 static func load_party() -> bool:
 	if not FileAccess.file_exists(SAVE_PATH):
@@ -150,7 +160,7 @@ static func load_party() -> bool:
 	for s in data.get("slots", []):
 		var slug: String = s.get("slug", "")
 		if slug != "":
-			new_slots.append({"slug": slug, "data": {}})
+			new_slots.append({"slug": slug, "data": s.get("data", {})})
 	if new_slots.is_empty():
 		return false
 	slots = new_slots
