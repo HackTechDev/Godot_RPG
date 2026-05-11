@@ -1274,11 +1274,11 @@ func _build_character_row(slug: String) -> Control:
 	btn_play.pressed.connect(_on_cm_play_pressed.bind(slug))
 	hbox.add_child(btn_play)
 
-	var can_join := PartyData.slot_count() > 0 \
-		and not PartyData.has_slot(slug) \
-		and PartyData.slot_count() < PartyData.MAX_SLOTS
-	var is_leader := PartyData.slot_count() > 0 \
-		and PartyData.slots[0].get("slug", "") == slug
+	var can_join: bool = (PartyData.slot_count() > 0
+		and not PartyData.has_slot(slug)
+		and PartyData.slot_count() < PartyData.MAX_SLOTS)
+	var is_leader: bool = (PartyData.slot_count() > 0
+		and PartyData.slots[0].get("slug", "") == slug)
 
 	if not is_leader and PartyData.has_slot(slug):
 		var btn_leave := Button.new()
