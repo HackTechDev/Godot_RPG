@@ -280,15 +280,15 @@ func activate_as_primary() -> void:
 	add_to_group("player")
 	if hud_instance == null:
 		_setup_active_ui()
-		if not _perf_monitors_added:
-			_perf_monitors_added = true
-			Performance.add_custom_monitor("Joueur/regard_angle", func(): return look_angle)
-			Performance.add_custom_monitor("Joueur/corps_angle",  func(): return body_angle)
-			Performance.add_custom_monitor("Joueur/vitesse",      func(): return _debug_speed)
 	else:
 		if menu_instance:    menu_instance.visible    = true
 		if hud_instance:     hud_instance.visible     = true
 		if minimap_instance: minimap_instance.visible = true
+	if not _perf_monitors_added:
+		_perf_monitors_added = true
+		Performance.add_custom_monitor("Joueur/regard_angle", func(): return look_angle)
+		Performance.add_custom_monitor("Joueur/corps_angle",  func(): return body_angle)
+		Performance.add_custom_monitor("Joueur/vitesse",      func(): return _debug_speed)
 	_apply_appearance()
 
 # Appelé par base_level lors du switch vers un autre personnage
@@ -314,6 +314,11 @@ func deactivate_as_primary() -> void:
 	if radial_menu_instance:    radial_menu_instance.visible    = false
 	if minimap_instance:        minimap_instance.visible        = false
 	get_tree().paused = false
+	if _perf_monitors_added:
+		_perf_monitors_added = false
+		Performance.remove_custom_monitor("Joueur/regard_angle")
+		Performance.remove_custom_monitor("Joueur/corps_angle")
+		Performance.remove_custom_monitor("Joueur/vitesse")
 
 func _exit_tree():
 	if _aiming:
