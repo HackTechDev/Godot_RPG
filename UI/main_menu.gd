@@ -887,7 +887,10 @@ func _on_cs_play_pressed() -> void:
 		return
 	Player_data.set_character(_cs_selected_slug)
 	liblevel.load_game()
-	PartyData.setup_solo(_cs_selected_slug)
+	if PartyData.slot_count() == 0 or PartyData.slots[0].get("slug", "") != _cs_selected_slug:
+		PartyData.setup_solo(_cs_selected_slug)
+	else:
+		PartyData.slots[0]["data"] = PartyData.snapshot_player_data()
 	PartyData.save_party()
 	var state := liblevel.load_mission_state()
 	if state.get("started", false):
@@ -1420,6 +1423,10 @@ func _ready():
 		print("Init Game")
 	if GameConfig.DEBUG:
 		print(liblevel.displayVersion())
+
+	# Restaurer l'équipe depuis party.json si elle n'est pas déjà en mémoire
+	if PartyData.slot_count() == 0:
+		PartyData.load_party()
 
 	get_tree().set_auto_accept_quit(false)
 	_build_mission_recap_panel()
