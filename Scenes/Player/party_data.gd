@@ -136,14 +136,25 @@ static func save_party() -> void:
 		file.store_string(JSON.stringify(out))
 		file.close()
 
-# Capture l'état courant du joueur actif puis écrit party.json sur disque.
+# Capture l'état courant de tous les membres de l'équipe puis écrit party.json.
 # À appeler à chaque point de sauvegarde (transition, quit, auto-save).
 static func save_full_party() -> void:
+	# Slot actif : snapshot complet depuis Player_data + position courante
 	if active_slot < slots.size():
 		var snap := snapshot_player_data()
 		snap["pos_x"] = Player_data.player_pos_x
 		snap["pos_y"] = Player_data.player_pos_y
 		slots[active_slot]["data"] = snap
+	# Slots inactifs : mise à jour de la position depuis le nœud de scène
+	for i in range(slots.size()):
+		if i == active_slot:
+			continue
+		var node := get_node_at(i)
+		if is_instance_valid(node):
+			var d: Dictionary = slots[i].get("data", {})
+			d["pos_x"] = node.global_position.x
+			d["pos_y"] = node.global_position.y
+			slots[i]["data"] = d
 	save_party()
 
 static func load_party() -> bool:

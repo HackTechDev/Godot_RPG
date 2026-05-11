@@ -372,16 +372,6 @@ func _compute_arrival_spawn(target_scene: String, offset: Vector2, src_horizonta
 # ---------------------------------------------------------------------------
 
 func _save_transition_state(player: Node2D) -> void:
-	# Sauvegarder les positions des membres non-actifs de l'équipe
-	for i in range(PartyData.slot_count()):
-		if i == PartyData.active_slot:
-			continue
-		var node := PartyData.get_node_at(i)
-		if is_instance_valid(node):
-			var d: Dictionary = PartyData.slots[i].get("data", {})
-			d["pos_x"] = node.global_position.x
-			d["pos_y"] = node.global_position.y
-			PartyData.slots[i]["data"] = d
 	PartyData.save_full_party()
 
 	# Forcer le démontage avant la transition pour assurer un état propre
