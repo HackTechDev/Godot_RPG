@@ -4,6 +4,21 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
+## Système multi-personnages — équipe jusqu'à 4 membres
+
+- Depuis le gestionnaire de personnages (menu principal) : bouton **"Équipe +"** pour ajouter un personnage à l'équipe du chef ; **"Quitter équipe"** pour le retirer
+- La section **"ÉQUIPE ACTIVE"** du gestionnaire affiche les slots de l'équipe et le slot actif
+- Cliquer **"Jouer ▶"** sur un personnage qui n'est pas le chef réinitialise l'équipe en solo ; si c'est déjà le chef, les membres sont conservés
+- En jeu : **Shift+1 / Shift+2** (jusqu'à Shift+4) pour basculer vers le personnage du slot correspondant
+- La caméra se recentre automatiquement sur le personnage actif via `CameraController.set_follow()`
+- Le HUD, le menu radial, l'armurerie, etc. n'appartiennent qu'au personnage actif — les autres personnages ont seulement leur apparence et leur animation de marche
+- Les personnages non-actifs restent visibles en idle dans le niveau
+- La composition de l'équipe est persistée dans `user://party.json` (slugs uniquement)
+
+**Fichiers :** `Scenes/Player/party_data.gd` (nouveau), `Autoload/EventBus.gd`, `Scenes/Player/player.gd`, `Scenes/Levels/base_level.gd`, `UI/main_menu.gd`
+
+---
+
 ## Fiche de personnage (touche P)
 
 - Affiche un panneau centré avec : santé, ordinateurs collectés, robots collectés, zone actuelle, inventaire
