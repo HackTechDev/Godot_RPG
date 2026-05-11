@@ -95,12 +95,14 @@ func _spawn_party(cam_ctrl: CameraController) -> void:
 
 		if is_active:
 			_place_player(player)
+			print("[PARTY] spawn slot %d (actif) pos=(%s, %s)" % [i, player.position.x, player.position.y])
 		else:
 			var d: Dictionary = PartyData.slots[i].get("data", {})
 			player.set("_slot_data", d)
 			var px := float(d.get("pos_x", spawn_pos.x + float(i) * 40.0))
 			var py := float(d.get("pos_y", spawn_pos.y))
 			player.position = Vector2(px, py)
+			print("[PARTY] spawn slot %d (inactif) pos=(%.1f, %.1f) — pos_x_sauvé=%s" % [i, px, py, d.get("pos_x", "ABSENT")])
 
 		add_child(player)
 
