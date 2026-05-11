@@ -73,6 +73,14 @@ var is_active_player:    bool       = true   # défini AVANT add_child par base_
 var _party_slot:         int        = 0      # index dans PartyData.slots
 var _slot_data:          Dictionary = {}     # snapshot données du perso non-actif
 var _perf_monitors_added: bool      = false
+var _party_indicator:    Label      = null
+
+const _SLOT_COLORS := [
+	Color(0.20, 1.00, 0.60),  # slot 0 : cyan-vert
+	Color(1.00, 0.55, 0.10),  # slot 1 : orange
+	Color(0.80, 0.30, 1.00),  # slot 2 : violet
+	Color(1.00, 1.00, 0.15),  # slot 3 : jaune
+]
 var _sfx_shot:   AudioStreamPlayer = null
 var _sfx_impact: AudioStreamPlayer = null
 
@@ -180,6 +188,8 @@ func _ready():
 	# La minimap est créée pour tous les joueurs afin de recevoir level_map_ready
 	minimap_instance = minimap_scene.instantiate()
 	add_child(minimap_instance)
+
+	_create_party_indicator()
 
 	if not is_active_player:
 		minimap_instance.visible = false
@@ -290,6 +300,7 @@ func activate_as_primary() -> void:
 		Performance.add_custom_monitor("Joueur/corps_angle",  func(): return body_angle)
 		Performance.add_custom_monitor("Joueur/vitesse",      func(): return _debug_speed)
 	_apply_appearance()
+	_update_party_indicator()
 
 # Appelé par base_level lors du switch vers un autre personnage
 func deactivate_as_primary() -> void:
@@ -314,11 +325,41 @@ func deactivate_as_primary() -> void:
 	if radial_menu_instance:    radial_menu_instance.visible    = false
 	if minimap_instance:        minimap_instance.visible        = false
 	get_tree().paused = false
+	_update_party_indicator()
 	if _perf_monitors_added:
 		_perf_monitors_added = false
 		Performance.remove_custom_monitor("Joueur/regard_angle")
 		Performance.remove_custom_monitor("Joueur/corps_angle")
 		Performance.remove_custom_monitor("Joueur/vitesse")
+
+func _create_party_indicator() -> void:
+	if PartyData.slot_count() <= 1:
+		return
+	_party_indicator = Label.new()
+	_party_indicator.z_index = 10
+	_party_indicator.z_as_relative = false
+	_party_indicator.add_theme_font_size_override("font_size", 11)
+	_party_indicator.add_theme_color_override("font_outline_color", Color.BLACK)
+	_party_indicator.add_theme_constant_override("outline_size", 3)
+	_party_indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_party_indicator.custom_minimum_size = Vector2(80, 0)
+	_party_indicator.position = Vector2(-40, -62)
+	add_child(_party_indicator)
+	_update_party_indicator()
+
+func _update_party_indicator() -> void:
+	if _party_indicator == null:
+		return
+	var col: Color = _SLOT_COLORS[_party_slot % _SLOT_COLORS.size()]
+	_party_indicator.add_theme_color_override("font_color", col)
+	var nickname: String
+	if is_active_player:
+		nickname = Player_data.player_nickname.left(10)
+		_party_indicator.text = "▶ " + nickname
+	else:
+		var d: Dictionary = PartyData.slots[_party_slot].get("data", {}) if _party_slot < PartyData.slot_count() else _slot_data
+		nickname = d.get("player_nickname", _slot_data.get("player_nickname", "?")).left(10)
+		_party_indicator.text = str(_party_slot + 1) + " " + nickname
 
 func _exit_tree():
 	if _aiming:
