@@ -138,6 +138,41 @@ func _on_party_switch_requested(slot: int) -> void:
 	snap["pos_y"] = old_node.global_position.y
 	PartyData.slots[PartyData.active_slot]["data"] = snap
 
+	# Persiste les stats de l'ancien personnage dans son rpg.json individuel.
+	# Player_data.save_path pointe encore vers l'ancien personnage ici.
+	_liblevel.savePlayer({
+		"player_position":        [old_node.global_position.x, old_node.global_position.y],
+		"player_facing":          snap.get("player_facing", 2),
+		"scene":                  Player_data.player_previous_scene,
+		"player_health":          snap["player_health"],
+		"player_health_base":     snap["player_health_base"],
+		"player_movement":        snap["player_movement"],
+		"player_movement_base":   snap["player_movement_base"],
+		"player_attack":          snap["player_attack"],
+		"player_defense":         snap["player_defense"],
+		"player_stamina":         snap["player_stamina"],
+		"player_stealth":         snap["player_stealth"],
+		"player_speed":           snap["player_speed"],
+		"player_precision":       snap["player_precision"],
+		"player_strength":        snap["player_strength"],
+		"player_intelligence":    snap["player_intelligence"],
+		"player_weight_capacity": snap["player_weight_capacity"],
+		"player_credit":          snap["player_credit"],
+		"player_equipment":       Player_data.player_equipment,
+		"player_nickname":        snap["player_nickname"],
+		"player_biography":       snap["player_biography"],
+		"player_rank":            snap["player_rank"],
+		"player_specialization":  snap["player_specialization"],
+		"appearance_body":        snap["appearance_body"],
+		"appearance_hair":        snap["appearance_hair"],
+		"appearance_headwear":    snap["appearance_headwear"],
+		"appearance_arms":        snap["appearance_arms"],
+		"appearance_hands":       snap["appearance_hands"],
+		"appearance_torso":       snap["appearance_torso"],
+		"appearance_legs":        snap["appearance_legs"],
+		"appearance_feet":        snap["appearance_feet"],
+	})
+
 	# Désactiver l'ancien personnage
 	if old_node.has_method("deactivate_as_primary"):
 		old_node.deactivate_as_primary()
@@ -397,25 +432,36 @@ func _save_transition_state(player: Node2D) -> void:
 		var game_datetime := _compute_game_datetime(elapsed)
 		_liblevel.save_mission_state(Player_data.current_mission_id, true, elapsed, "", game_datetime)
 	_liblevel.savePlayer({
-		"player_position":    [player.position.x, player.position.y],
-		"player_facing":      Player_data.player_facing,
-		"scene":              Player_data.player_previous_scene,
-		"player_health":      Player_data.player_health,
-		"player_health_base": Player_data.player_health_base,
-		"player_attack":      Player_data.player_attack,
-		"player_defense":     Player_data.player_defense,
-		"player_nickname":    Player_data.player_nickname,
-		"player_biography":   Player_data.player_biography,
-		"player_rank":        Player_data.player_rank,
-		"player_specialization": Player_data.player_specialization,
-		"appearance_body":     Player_data.appearance_body,
-		"appearance_hair":     Player_data.appearance_hair,
-		"appearance_headwear": Player_data.appearance_headwear,
-		"appearance_arms":     Player_data.appearance_arms,
-		"appearance_hands":    Player_data.appearance_hands,
-		"appearance_torso":    Player_data.appearance_torso,
-		"appearance_legs":     Player_data.appearance_legs,
-		"appearance_feet":     Player_data.appearance_feet,
+		"player_position":        [player.position.x, player.position.y],
+		"player_facing":          Player_data.player_facing,
+		"scene":                  Player_data.player_previous_scene,
+		"player_health":          Player_data.player_health,
+		"player_health_base":     Player_data.player_health_base,
+		"player_movement":        Player_data.player_movement,
+		"player_movement_base":   Player_data.player_movement_base,
+		"player_attack":          Player_data.player_attack,
+		"player_defense":         Player_data.player_defense,
+		"player_stamina":         Player_data.player_stamina,
+		"player_stealth":         Player_data.player_stealth,
+		"player_speed":           Player_data.player_speed,
+		"player_precision":       Player_data.player_precision,
+		"player_strength":        Player_data.player_strength,
+		"player_intelligence":    Player_data.player_intelligence,
+		"player_weight_capacity": Player_data.player_weight_capacity,
+		"player_credit":          Player_data.player_credit,
+		"player_equipment":       Player_data.player_equipment,
+		"player_nickname":        Player_data.player_nickname,
+		"player_biography":       Player_data.player_biography,
+		"player_rank":            Player_data.player_rank,
+		"player_specialization":  Player_data.player_specialization,
+		"appearance_body":        Player_data.appearance_body,
+		"appearance_hair":        Player_data.appearance_hair,
+		"appearance_headwear":    Player_data.appearance_headwear,
+		"appearance_arms":        Player_data.appearance_arms,
+		"appearance_hands":       Player_data.appearance_hands,
+		"appearance_torso":       Player_data.appearance_torso,
+		"appearance_legs":        Player_data.appearance_legs,
+		"appearance_feet":        Player_data.appearance_feet,
 	})
 
 
