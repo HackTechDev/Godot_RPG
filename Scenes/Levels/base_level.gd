@@ -93,11 +93,15 @@ func _spawn_party(cam_ctrl: CameraController) -> void:
 		var is_active := (i == PartyData.active_slot)
 		player.set("is_active_player", is_active)
 
+		var d: Dictionary = PartyData.slots[i].get("data", {})
 		if is_active:
-			_place_player(player)
-			print("[PARTY] spawn slot %d (actif) pos=(%s, %s)" % [i, player.position.x, player.position.y])
+			# Priorité : position party.json si disponible et pas de transition JSON
+			if not Player_data.use_json_spawn and d.has("pos_x") and d.has("pos_y"):
+				player.position = Vector2(float(d["pos_x"]), float(d["pos_y"]))
+			else:
+				_place_player(player)
+			print("[PARTY] spawn slot %d (actif) pos=(%.1f, %.1f) — source=%s" % [i, player.position.x, player.position.y, "party.json" if d.has("pos_x") and not Player_data.use_json_spawn else "rpg.json"])
 		else:
-			var d: Dictionary = PartyData.slots[i].get("data", {})
 			player.set("_slot_data", d)
 			var px := float(d.get("pos_x", spawn_pos.x + float(i) * 40.0))
 			var py := float(d.get("pos_y", spawn_pos.y))

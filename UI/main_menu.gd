@@ -890,7 +890,8 @@ func _on_cs_play_pressed() -> void:
 	if PartyData.slot_count() == 0 or PartyData.slots[0].get("slug", "") != _cs_selected_slug:
 		PartyData.setup_solo(_cs_selected_slug)
 	else:
-		PartyData.slots[0]["data"] = PartyData.snapshot_player_data()
+		_update_slot0_preserving_pos()
+		PartyData.active_slot = 0
 		_load_slot_data_for_party()
 	PartyData.save_party()
 	var state := liblevel.load_mission_state()
@@ -1326,7 +1327,8 @@ func _on_cm_play_pressed(slug: String) -> void:
 		PartyData.active_slot = 0
 		PartyData.slots.append({"slug": slug, "data": PartyData.snapshot_player_data()})
 	else:
-		PartyData.slots[0]["data"] = PartyData.snapshot_player_data()
+		_update_slot0_preserving_pos()
+		PartyData.active_slot = 0
 		_load_slot_data_for_party()
 	PartyData.save_party()
 	var state := liblevel.load_mission_state()
@@ -1342,6 +1344,15 @@ func _on_cm_play_pressed(slug: String) -> void:
 	_cm_panel.visible = false
 	mission_select.visible = true
 	_load_missions()
+
+func _update_slot0_preserving_pos() -> void:
+	var existing: Dictionary = PartyData.slots[0].get("data", {})
+	var snap := PartyData.snapshot_player_data()
+	if existing.has("pos_x"):
+		snap["pos_x"] = existing["pos_x"]
+	if existing.has("pos_y"):
+		snap["pos_y"] = existing["pos_y"]
+	PartyData.slots[0]["data"] = snap
 
 func _load_slot_data_for_party() -> void:
 	for i in range(1, PartyData.slots.size()):
