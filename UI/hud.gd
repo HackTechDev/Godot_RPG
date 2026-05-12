@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal sheet_requested
+signal transfer_requested
 signal armory_requested
 signal setting_requested
 signal home_requested
@@ -176,6 +177,9 @@ func _compute_night_alpha(game_hour: float) -> float:
 # ─── Boutons HUD ───────────────────────────────────────────────────────────
 func _on_btn_sheet_pressed():
 	sheet_requested.emit()
+
+func _on_btn_transfer_pressed():
+	transfer_requested.emit()
 
 func _on_btn_armory_pressed():
 	armory_requested.emit()
