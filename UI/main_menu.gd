@@ -161,6 +161,11 @@ const CC_SPECS: Dictionary = {
 	
 func _on_button_play_pressed():
 	main.visible = false
+	mission_select.visible = false
+	character_creation.visible = false
+	if _mr_panel: _mr_panel.visible = false
+	if _cm_panel: _cm_panel.visible = false
+	if _tr_panel: _tr_panel.visible = false
 	_load_character_list()
 	_cs_panel.visible = true
 
@@ -938,6 +943,7 @@ func _on_cs_new_pressed() -> void:
 
 func _on_cs_back_pressed() -> void:
 	_cs_panel.visible = false
+	mission_select.visible = false
 	main.visible = true
 
 
@@ -1527,6 +1533,7 @@ func _connect_video_settings() -> void:
 		btn_back.pressed.connect(_on_button_video_back_pressed)
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if GameConfig.DEBUG:
 		print("Init Game")
 	if GameConfig.DEBUG:
