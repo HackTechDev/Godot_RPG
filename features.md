@@ -4,15 +4,21 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 ---
 
-## Système multi-personnages — équipe jusqu'à 4 membres
+## Système multi-personnages — équipe jusqu'à 5 membres
 
 - Depuis le gestionnaire de personnages (menu principal) : bouton **"Équipe +"** pour ajouter un personnage à l'équipe du chef ; **"Quitter équipe"** pour le retirer
-- La section **"ÉQUIPE ACTIVE"** du gestionnaire affiche les slots de l'équipe et le slot actif
+- La section **"ÉQUIPE ACTIVE"** du gestionnaire affiche toujours les 5 slots (remplis ou vides)
 - Cliquer **"Jouer ▶"** sur un personnage qui n'est pas le chef réinitialise l'équipe en solo ; si c'est déjà le chef, les membres sont conservés et l'`active_slot` est remis à 0
-- En jeu : **Shift+1 / Shift+2** (jusqu'à Shift+4) pour basculer vers le personnage du slot correspondant
+- En jeu : **Shift+1 / Shift+2** (jusqu'à Shift+5) pour basculer vers le personnage du slot correspondant
 - La caméra se recentre automatiquement sur le personnage actif via `CameraController.set_follow()`
 - Le HUD, le menu radial, l'armurerie, etc. n'appartiennent qu'au personnage actif — les autres personnages ont seulement leur apparence et leur animation de marche
 - Les personnages non-actifs restent visibles en idle dans le niveau
+
+**Stats individuels par personnage :**
+- Chaque membre de l'équipe possède ses propres statistiques (santé, mouvement, attaque, défense, etc.) indépendantes
+- Au moment d'un switch, les stats du personnage sortant sont sauvegardées dans son `rpg.json` individuel **avant** que `Player_data.save_path` soit redirigé vers le nouveau personnage
+- `_execute_party_switch(slot)` centralise l'ordre : snapshot → save → restore du nouveau slot
+- **Fichiers :** `Scenes/Levels/base_level.gd`, `Lib/liblevel.gd`
 
 **Persistance complète de l'équipe (`user://party.json`) :**
 - Stats et position de chaque membre sauvegardés à chaque point de sauvegarde (quit, auto-save, transition de niveau, switch de personnage)
@@ -23,10 +29,15 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 **Indicateur visuel des membres de l'équipe :**
 - Label flottant au-dessus de la tête de chaque personnage (z_index absolu = 10)
-- Couleur par slot : cyan-vert (chef), orange (slot 2), violet (slot 3), jaune (slot 4)
+- Couleur par slot : cyan-vert (chef), orange (slot 2), violet (slot 3), jaune (slot 4), rouge (slot 5)
 - Texte : `▶ Nom` pour le personnage actif, `N Nom` pour les inactifs
 - Contour noir (3 px) pour lisibilité sur tous les fonds
 - Absent en mode solo (`slot_count ≤ 1`) ; mis à jour automatiquement lors des switches
+
+**Indicateur compact des slots dans les menus :**
+- Pastilles colorées affichées dans le panneau de sélection de personnage et le gestionnaire de personnages
+- Toujours 5 pastilles visibles : couleur du slot si occupé, gris si vide ; `✓` sur la pastille du slot actif
+- **Fichiers :** `UI/main_menu.gd`
 
 **Fichiers :** `Scenes/Player/party_data.gd` (nouveau), `Autoload/EventBus.gd`, `Scenes/Player/player.gd`, `Scenes/Levels/base_level.gd`, `UI/main_menu.gd`
 
@@ -987,6 +998,49 @@ Récapitulatif de toutes les modifications apportées au projet.
 - Navigation **< N / total >** affichée sous l'image quand plusieurs photos sont disponibles (masquée si une seule)
 - Les boutons de navigation sont désactivés aux extrémités pour éviter les sorties de tableau
 - **Fichiers :** `UI/armory.tscn`, `UI/armory.gd`, `Armory/weapons.json`, `Armory/images/`
+
+---
+
+## Onglet Photos dans la fiche de personnage
+
+- Nouvel onglet **"Photos"** dans la fiche de personnage (touche **P**), accessible via le bouton `BtnPhotos` dans la barre d'onglets
+- **3 slots photo** par personnage, affichés en ligne (140×140 px chacun, fond gris, bordure arrondie)
+- **Importer** : bouton "+" sous chaque slot → `FileDialog` (mode `ACCESS_FILESYSTEM`, filtres PNG/JPG/JPEG) → l'image est chargée avec `Image.load_from_file()` et normalisée en PNG via `img.save_png()`
+- **Supprimer** : bouton "✕" sous chaque slot → suppression du fichier et remise à zéro du `TextureRect`
+- Stockage : `user://characters/<slug>/photos/photo_N.png` (répertoire créé automatiquement si absent)
+- `_photos_dir()` et `_photo_path(slot)` centralisent la construction des chemins depuis `Player_data.character_slug`
+- Les photos sont rechargées à chaque ouverture de l'onglet si les fichiers existent
+- **Fichiers :** `UI/character_sheet.tscn`, `UI/character_sheet.gd`
+
+---
+
+## Cooldown de switch avec animation de transition
+
+- Au switch de personnage (Shift+1…5) : flash au noir (0,15 s) → exécution du switch → retour depuis le noir (0,25 s)
+- **Cooldown de 1,5 s** : pendant cette période, toute tentative de switch est refusée par un flash orange à la place
+- Overlay dédié (`CanvasLayer layer = 15`, `ColorRect`) construit dans `_build_switch_overlay()` depuis `base_level.gd` — au-dessus du jeu (layer 0), sous `SceneTransition` (layer 100)
+- Séquence entièrement gérée par un seul `Tween` : `tween_property(alpha 1.0, 0.15s)` → `tween_callback(_execute_party_switch)` → `tween_property(alpha 0.0, 0.25s)` → `tween_interval(1.1s)` → `tween_callback(unlock)`
+- `_switch_locked: bool` empêche le spam ; flash orange (`Color(1, 0.5, 0, 0.4)`) affiché 0,15 s si tentative pendant le verrouillage
+- **Fichiers :** `Scenes/Levels/base_level.gd`
+
+---
+
+## Transfert d'équipement entre membres de l'équipe
+
+- Panneau **"Transfert d'équipement ↔"** accessible depuis deux points d'entrée :
+  - Bouton dans le gestionnaire de personnages (menu principal)
+  - Bouton **"Transfert ↔"** dans la barre du HUD (à droite de "Fiche")
+- **Interface** : deux dropdowns FROM / TO peuplés avec les membres actifs de l'équipe ; liste des objets de l'inventaire source avec un bouton "Transférer ↔" par item
+- À la sélection du dropdown FROM, la liste est mise à jour ; si FROM = TO, le dropdown TO bascule automatiquement sur le membre suivant disponible
+- **Lecture de l'équipement** :
+  - Membre actif : `Player_data.player_equipment` (en mémoire)
+  - Membre inactif : lecture de `user://characters/<slug>/rpg.json` → champ `player_equipment`
+- **Écriture de l'équipement** (`_set_member_equipment`) :
+  - Membre actif : mise à jour de `Player_data.player_equipment` + écriture dans `rpg.json`
+  - Membre inactif : lecture du `rpg.json`, mise à jour du champ `player_equipment`, réécriture complète
+- **Fermeture** : en mode in-game, émet `return_to_game` → ferme le menu et dépause ; en mode menu, retourne au gestionnaire de personnages
+- `show_transfer_panel()` (méthode publique de `MainMenuLayer`) appelée directement par `player.gd` via `text_menu.show_transfer_panel()`
+- **Fichiers :** `UI/main_menu.gd`, `UI/hud.tscn`, `UI/hud.gd`, `Scenes/Player/player.gd`
 
 ---
 
