@@ -1007,7 +1007,7 @@ func _build_character_select_panel() -> void:
 		lbl.add_theme_font_size_override("font_size", 11)
 		if is_filled:
 			var slug: String = PartyData.slots[i].get("slug", "")
-			var d := PartyData.slots[i].get("data", {})
+			var d: Dictionary = PartyData.slots[i].get("data", {})
 			var nick: String = d.get("player_nickname", slug).left(8)
 			lbl.text = nick if nick != "" else slug.left(8)
 			lbl.add_theme_color_override("font_color", _SLOT_COLORS[i])
