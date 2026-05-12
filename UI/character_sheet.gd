@@ -63,6 +63,15 @@ var _app_panel:     Control    = null
 var _app_opts:      Dictionary = {}   # slot → OptionButton
 var _app_saved_lbl: Label      = null
 
+# ─── Photos ────────────────────────────────────────────────────────────────
+const MAX_PHOTOS := 3
+
+var _photos_panel:        VBoxContainer = null
+var _photo_rects:         Array         = []   # TextureRect par slot
+var _photo_del_btns:      Array         = []   # Button par slot
+var _file_dialog:         FileDialog    = null
+var _pending_photo_slot:  int           = -1
+
 # ─── Popup détail équipement ───────────────────────────────────────────────
 var _detail_popup:  Control        = null
 var _dp_name:       Label          = null
@@ -124,6 +133,7 @@ const _MODE_LABELS: Dictionary = {
 func _ready() -> void:
 	_build_detail_popup()
 	_build_appearance_panel()
+	_build_photos_panel()
 
 
 # ─── Onglets ───────────────────────────────────────────────────────────────
@@ -134,18 +144,21 @@ func _on_tab_fiche_pressed():
 	_app_panel.visible    = false
 	_stats_panel.visible  = false
 	_equip_panel.visible  = false
+	_photos_panel.visible = false
 
 func _on_tab_stats_pressed():
 	_content_row.visible  = false
 	_app_panel.visible    = false
 	_stats_panel.visible  = true
 	_equip_panel.visible  = false
+	_photos_panel.visible = false
 
 func _on_tab_equipements_pressed():
 	_content_row.visible  = false
 	_app_panel.visible    = false
 	_stats_panel.visible  = false
 	_equip_panel.visible  = true
+	_photos_panel.visible = false
 
 func _on_tab_apparence_pressed():
 	_content_row.visible  = true
@@ -153,6 +166,7 @@ func _on_tab_apparence_pressed():
 	_app_panel.visible    = true
 	_stats_panel.visible  = false
 	_equip_panel.visible  = false
+	_photos_panel.visible = false
 	_sync_appearance_opts()
 
 
@@ -502,6 +516,176 @@ func _dp_format_val(key: String, val: Variant) -> String:
 	if val is float:
 		return ("%.1f" % val) if val != float(int(val)) else str(int(val))
 	return str(val)
+
+
+# ─── Photos ────────────────────────────────────────────────────────────────
+
+func _photos_dir() -> String:
+	var slug := Player_data.character_slug
+	if slug == "":
+		return ""
+	return "user://characters/%s/photos" % slug
+
+func _photo_path(slot: int) -> String:
+	var d := _photos_dir()
+	if d == "":
+		return ""
+	return "%s/photo_%d.png" % [d, slot]
+
+func _build_photos_panel() -> void:
+	_photos_panel = VBoxContainer.new()
+	_photos_panel.name = "PhotosPanel"
+	_photos_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_photos_panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_photos_panel.add_theme_constant_override("separation", 10)
+	_photos_panel.visible = false
+
+	var vbox_parent: Control = _content_row.get_parent()
+	vbox_parent.add_child(_photos_panel)
+	var btn_close := get_node_or_null(_BASE + "/ButtonClose")
+	if btn_close:
+		vbox_parent.move_child(_photos_panel, btn_close.get_index())
+
+	var title := Label.new()
+	title.text = "Photos du personnage"
+	title.add_theme_font_size_override("font_size", 16)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_photos_panel.add_child(title)
+
+	var hint := Label.new()
+	hint.text = "Ajoutez jusqu'à 3 photos pour illustrer votre personnage (PNG ou JPG)."
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_color_override("font_color", Color(0.65, 0.65, 0.65))
+	hint.add_theme_font_size_override("font_size", 12)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_photos_panel.add_child(hint)
+
+	_photos_panel.add_child(HSeparator.new())
+
+	var hbox := HBoxContainer.new()
+	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	hbox.add_theme_constant_override("separation", 14)
+	_photos_panel.add_child(hbox)
+
+	_photo_rects.clear()
+	_photo_del_btns.clear()
+
+	for i in range(MAX_PHOTOS):
+		var col := VBoxContainer.new()
+		col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		col.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+		col.add_theme_constant_override("separation", 6)
+		hbox.add_child(col)
+
+		var num_lbl := Label.new()
+		num_lbl.text = "Photo %d" % (i + 1)
+		num_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		num_lbl.add_theme_font_size_override("font_size", 13)
+		col.add_child(num_lbl)
+
+		var photo_frame := PanelContainer.new()
+		photo_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		photo_frame.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+		photo_frame.custom_minimum_size   = Vector2(0, 110)
+		col.add_child(photo_frame)
+
+		var rect := TextureRect.new()
+		rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		rect.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+		rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		rect.expand_mode  = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		photo_frame.add_child(rect)
+		_photo_rects.append(rect)
+
+		var btn_add := Button.new()
+		btn_add.text = "Ajouter"
+		btn_add.pressed.connect(_on_add_photo_pressed.bind(i))
+		col.add_child(btn_add)
+
+		var btn_del := Button.new()
+		btn_del.text = "Supprimer"
+		btn_del.disabled = true
+		btn_del.pressed.connect(_on_delete_photo_pressed.bind(i))
+		col.add_child(btn_del)
+		_photo_del_btns.append(btn_del)
+
+	_file_dialog = FileDialog.new()
+	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_file_dialog.access    = FileDialog.ACCESS_FILESYSTEM
+	_file_dialog.filters   = PackedStringArray(["*.png,*.jpg,*.jpeg ; Images (PNG / JPG)"])
+	_file_dialog.min_size  = Vector2i(700, 500)
+	_file_dialog.file_selected.connect(_on_photo_file_selected)
+	add_child(_file_dialog)
+
+
+func _on_tab_photos_pressed() -> void:
+	_content_row.visible  = false
+	_app_panel.visible    = false
+	_stats_panel.visible  = false
+	_equip_panel.visible  = false
+	_photos_panel.visible = true
+	_load_photos()
+
+
+func _load_photos() -> void:
+	if Player_data.character_slug == "":
+		return
+	for i in range(MAX_PHOTOS):
+		var path := _photo_path(i)
+		var has_photo := path != "" and FileAccess.file_exists(path)
+		if has_photo:
+			var img := Image.load_from_file(path)
+			if img:
+				_photo_rects[i].texture = ImageTexture.create_from_image(img)
+			else:
+				_photo_rects[i].texture = null
+				has_photo = false
+		else:
+			_photo_rects[i].texture = null
+		(_photo_del_btns[i] as Button).disabled = not has_photo
+
+
+func _on_add_photo_pressed(slot: int) -> void:
+	_pending_photo_slot = slot
+	_file_dialog.popup_centered_ratio(0.65)
+
+
+func _on_photo_file_selected(path: String) -> void:
+	if _pending_photo_slot < 0 or _pending_photo_slot >= MAX_PHOTOS:
+		return
+	var dest_dir := _photos_dir()
+	if dest_dir == "":
+		_pending_photo_slot = -1
+		return
+	DirAccess.make_dir_recursive_absolute(dest_dir)
+
+	var img := Image.load_from_file(path)
+	if img == null:
+		push_warning("character_sheet: impossible de charger %s" % path)
+		_pending_photo_slot = -1
+		return
+
+	var dest := _photo_path(_pending_photo_slot)
+	var err := img.save_png(dest)
+	if err != OK:
+		push_warning("character_sheet: impossible de sauvegarder photo (err=%d)" % err)
+		_pending_photo_slot = -1
+		return
+
+	_photo_rects[_pending_photo_slot].texture = ImageTexture.create_from_image(img)
+	(_photo_del_btns[_pending_photo_slot] as Button).disabled = false
+	_pending_photo_slot = -1
+
+
+func _on_delete_photo_pressed(slot: int) -> void:
+	var path := _photo_path(slot)
+	if path != "" and FileAccess.file_exists(path):
+		var dir := DirAccess.open(_photos_dir())
+		if dir:
+			dir.remove("photo_%d.png" % slot)
+	_photo_rects[slot].texture = null
+	(_photo_del_btns[slot] as Button).disabled = true
 
 
 # ─── Fermeture ─────────────────────────────────────────────────────────────

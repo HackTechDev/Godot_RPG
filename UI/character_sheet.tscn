@@ -71,6 +71,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Apparence"
 
+[node name="BtnPhotos" type="Button" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar" unique_id=2500000001]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Photos"
+
 [node name="ContentRow" type="HBoxContainer" parent="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1797863708]
 layout_mode = 2
 size_flags_vertical = 3
@@ -366,4 +371,5 @@ text = "Fermer"
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnStats" to="." method="_on_tab_stats_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnEquipements" to="." method="_on_tab_equipements_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnApparence" to="." method="_on_tab_apparence_pressed"]
+[connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabBar/BtnPhotos" to="." method="_on_tab_photos_pressed"]
 [connection signal="pressed" from="Main/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
