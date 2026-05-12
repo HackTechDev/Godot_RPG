@@ -1765,10 +1765,25 @@ func _on_tr_transfer_pressed() -> void:
 	_tr_btn_transfer.disabled = true
 
 
+func show_transfer_panel() -> void:
+	if PartyData.slot_count() < 2:
+		return
+	settings.visible = false
+	help.visible = false
+	if _mr_panel: _mr_panel.visible = false
+	if _cs_panel: _cs_panel.visible = false
+	if _cm_panel: _cm_panel.visible = false
+	main.visible = false
+	_populate_transfer_dropdowns()
+	_tr_panel.visible = true
+
 func _on_tr_close_pressed() -> void:
 	_tr_panel.visible = false
-	_load_character_manager()
-	_cm_panel.visible = true
+	if _in_game:
+		return_to_game.emit()
+	else:
+		_load_character_manager()
+		_cm_panel.visible = true
 
 
 func _tr_eq_label(eq: Dictionary) -> String:

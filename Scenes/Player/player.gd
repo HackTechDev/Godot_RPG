@@ -240,6 +240,7 @@ func _setup_active_ui() -> void:
 	hud_instance = hud_scene.instantiate()
 	add_child(hud_instance)
 	hud_instance.sheet_requested.connect(_on_hud_sheet_requested)
+	hud_instance.transfer_requested.connect(_on_hud_transfer_requested)
 	hud_instance.armory_requested.connect(_on_hud_armory_requested)
 	hud_instance.setting_requested.connect(_on_hud_setting_requested)
 	hud_instance.home_requested.connect(_on_hud_home_requested)
@@ -697,6 +698,17 @@ func _on_hud_setting_requested():
 		text_menu.visible = true
 		get_tree().paused = true
 		text_menu._on_button_settings_pressed()
+
+func _on_hud_transfer_requested():
+	if PartyData.slot_count() < 2:
+		return
+	character_sheet_instance.visible = false
+	armory_instance.visible = false
+	display_menu = true
+	background_menu.visible = true
+	text_menu.visible = true
+	get_tree().paused = true
+	text_menu.show_transfer_panel()
 
 func _on_hud_home_requested():
 	character_sheet_instance.visible = false
