@@ -31,6 +31,14 @@ var _in_game: bool = false
 @onready var quit_dialog: ConfirmationDialog = $QuitDialog
 @onready var _btn_settings_back: Button = $Settings/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonSettingsBack
 
+const _SLOT_COLORS := [
+	Color(0.20, 1.00, 0.60),  # slot 0 : cyan-vert
+	Color(1.00, 0.55, 0.10),  # slot 1 : orange
+	Color(0.80, 0.30, 1.00),  # slot 2 : violet
+	Color(1.00, 1.00, 0.15),  # slot 3 : jaune
+	Color(1.00, 0.30, 0.30),  # slot 4 : rouge
+]
+
 const _MS_BASE = "MissionSelect/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
 @onready var ms_list:        ItemList      = get_node(_MS_BASE + "/MissionList")
 @onready var ms_title:       Label         = get_node(_MS_BASE + "/LabelMissionTitle")
@@ -972,6 +980,46 @@ func _build_character_select_panel() -> void:
 
 	vbox.add_child(HSeparator.new())
 
+	var party_header := Label.new()
+	party_header.text = "ÉQUIPE ACTIVE"
+	party_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	party_header.add_theme_color_override("font_color", Color(0.75, 0.75, 0.75))
+	vbox.add_child(party_header)
+
+	var slots_hbox := HBoxContainer.new()
+	slots_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	slots_hbox.add_theme_constant_override("separation", 6)
+	for i in range(PartyData.MAX_SLOTS):
+		var is_filled := i < PartyData.slot_count()
+		var pill := PanelContainer.new()
+		var pill_margin := MarginContainer.new()
+		for side in ["left", "right", "top", "bottom"]:
+			pill_margin.add_theme_constant_override("margin_" + side, 4)
+		pill.add_child(pill_margin)
+		var pill_hbox := HBoxContainer.new()
+		pill_hbox.add_theme_constant_override("separation", 4)
+		pill_margin.add_child(pill_hbox)
+		var dot := ColorRect.new()
+		dot.color = _SLOT_COLORS[i] if is_filled else Color(0.25, 0.25, 0.25)
+		dot.custom_minimum_size = Vector2(8, 16)
+		pill_hbox.add_child(dot)
+		var lbl := Label.new()
+		lbl.add_theme_font_size_override("font_size", 11)
+		if is_filled:
+			var slug: String = PartyData.slots[i].get("slug", "")
+			var d := PartyData.slots[i].get("data", {})
+			var nick: String = d.get("player_nickname", slug).left(8)
+			lbl.text = nick if nick != "" else slug.left(8)
+			lbl.add_theme_color_override("font_color", _SLOT_COLORS[i])
+		else:
+			lbl.text = "vide"
+			lbl.add_theme_color_override("font_color", Color(0.35, 0.35, 0.35))
+		pill_hbox.add_child(lbl)
+		slots_hbox.add_child(pill)
+	vbox.add_child(slots_hbox)
+
+	vbox.add_child(HSeparator.new())
+
 	var buttons := HBoxContainer.new()
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	buttons.add_theme_constant_override("separation", 16)
@@ -1192,34 +1240,57 @@ func _rebuild_party_panel() -> void:
 		return
 	for c in _cm_party_vbox.get_children():
 		c.queue_free()
+
 	if PartyData.slot_count() == 0:
-		var lbl := Label.new()
-		lbl.text = "Aucune équipe configurée — cliquez 'Jouer' pour choisir un chef."
-		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-		_cm_party_vbox.add_child(lbl)
-		return
-	for i in range(PartyData.slot_count()):
-		var slug: String = PartyData.slots[i].get("slug", "")
+		var hint := Label.new()
+		hint.text = "Aucune équipe — cliquez 'Jouer' pour choisir un chef."
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		hint.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55))
+		_cm_party_vbox.add_child(hint)
+
+	for i in range(PartyData.MAX_SLOTS):
+		var is_filled := i < PartyData.slot_count()
+		var slug: String = PartyData.slots[i].get("slug", "") if is_filled else ""
 		var nickname := slug
-		var rpg_path := "user://characters/%s/rpg.json" % slug
-		if FileAccess.file_exists(rpg_path):
-			var f := FileAccess.open(rpg_path, FileAccess.READ)
-			var d = JSON.parse_string(f.get_as_text())
-			f.close()
-			if d is Dictionary:
-				nickname = d.get("player_nickname", slug)
+		if is_filled and slug != "":
+			var rpg_path := "user://characters/%s/rpg.json" % slug
+			if FileAccess.file_exists(rpg_path):
+				var f := FileAccess.open(rpg_path, FileAccess.READ)
+				var d = JSON.parse_string(f.get_as_text())
+				f.close()
+				if d is Dictionary:
+					nickname = d.get("player_nickname", slug)
+
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 8)
-		var slot_lbl := Label.new()
-		slot_lbl.text = "Slot %d  — %s%s" % [i + 1, nickname, "  (chef)" if i == 0 else ""]
-		slot_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(slot_lbl)
-		if i == PartyData.active_slot:
+
+		var dot := ColorRect.new()
+		dot.color = _SLOT_COLORS[i] if is_filled else Color(0.25, 0.25, 0.25)
+		dot.custom_minimum_size = Vector2(10, 20)
+		row.add_child(dot)
+
+		var num_lbl := Label.new()
+		num_lbl.text = "Slot %d" % (i + 1)
+		num_lbl.custom_minimum_size = Vector2(52, 0)
+		if not is_filled:
+			num_lbl.add_theme_color_override("font_color", Color(0.40, 0.40, 0.40))
+		row.add_child(num_lbl)
+
+		var name_lbl := Label.new()
+		name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if is_filled:
+			name_lbl.text = nickname + ("  (chef)" if i == 0 else "")
+		else:
+			name_lbl.text = "— vide —"
+			name_lbl.add_theme_color_override("font_color", Color(0.32, 0.32, 0.32))
+		row.add_child(name_lbl)
+
+		if is_filled and i == PartyData.active_slot:
 			var active_lbl := Label.new()
 			active_lbl.text = "✓ actif"
 			active_lbl.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
 			row.add_child(active_lbl)
+
 		_cm_party_vbox.add_child(row)
 
 func _build_character_row(slug: String) -> Control:
