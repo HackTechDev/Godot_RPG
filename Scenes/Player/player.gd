@@ -456,6 +456,7 @@ func _input(event):
 			KEY_2: EventBus.party_switch_requested.emit(1); return
 			KEY_3: EventBus.party_switch_requested.emit(2); return
 			KEY_4: EventBus.party_switch_requested.emit(3); return
+			KEY_5: EventBus.party_switch_requested.emit(4); return
 
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var screen_pos = get_global_transform_with_canvas().origin

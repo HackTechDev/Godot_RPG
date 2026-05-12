@@ -24,9 +24,13 @@ var _transition_cooldown := false
 # Tous les triggers du niveau (détection basée sur le sprite, sans body_entered)
 var _all_triggers: Array[Dictionary] = []
 
-
 # Label de debug affiché quand le bord du sprite touche le bord du trigger
 var _trigger_hint: Label = null
+
+# Cooldown + animation de switch de personnage
+const SWITCH_COOLDOWN := 1.5          # secondes bloquées après un switch réussi
+var _switch_locked:  bool      = false # true pendant l'animation + cooldown
+var _switch_overlay: ColorRect = null  # overlay plein-écran pour le flash
 
 
 func _ready() -> void:
@@ -51,6 +55,9 @@ func _ready() -> void:
 	# Écoute les demandes de switch de personnage
 	if not EventBus.party_switch_requested.is_connected(_on_party_switch_requested):
 		EventBus.party_switch_requested.connect(_on_party_switch_requested)
+
+	# Overlay plein-écran pour le flash de switch
+	_build_switch_overlay()
 
 	# Minimap : émettre les cellules sol après que le joueur (et sa minimap) soient prêts
 	call_deferred("_emit_level_map")
@@ -122,14 +129,53 @@ func _get_spawn_position() -> Vector2:
 	return Vector2(Player_data.player_spawnpoint_position_x,
 				   Player_data.player_spawnpoint_position_y)
 
+func _build_switch_overlay() -> void:
+	var cl := CanvasLayer.new()
+	cl.layer = 15   # au-dessus du jeu, en-dessous de SceneTransition (layer 100)
+	add_child(cl)
+	_switch_overlay = ColorRect.new()
+	_switch_overlay.color = Color(0.0, 0.0, 0.0, 0.0)
+	_switch_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_switch_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	cl.add_child(_switch_overlay)
+
+
 func _on_party_switch_requested(slot: int) -> void:
 	if slot == PartyData.active_slot or slot >= PartyData.slot_count():
 		return
 	if get_tree().paused:
-		return  # interdit pendant un menu / combat en pause
+		return
+
+	# Cooldown actif → flash orange de refus
+	if _switch_locked:
+		if is_instance_valid(_switch_overlay):
+			_switch_overlay.color = Color(1.0, 0.45, 0.0, 0.0)
+			var tw_deny := create_tween()
+			tw_deny.tween_property(_switch_overlay, "color:a", 0.28, 0.07)
+			tw_deny.tween_property(_switch_overlay, "color:a", 0.0,  0.20)
+			tw_deny.tween_callback(func() -> void: _switch_overlay.color = Color(0, 0, 0, 0))
+		return
+
 	var old_node := PartyData.get_node_at(PartyData.active_slot)
 	var new_node := PartyData.get_node_at(slot)
 	if not is_instance_valid(old_node) or not is_instance_valid(new_node):
+		return
+
+	_switch_locked = true
+	_switch_overlay.color = Color(0.0, 0.0, 0.0, 0.0)
+	var tw := create_tween()
+	tw.tween_property(_switch_overlay, "color:a", 1.0, 0.15)
+	tw.tween_callback(func() -> void: _execute_party_switch(slot))
+	tw.tween_property(_switch_overlay, "color:a", 0.0, 0.25)
+	tw.tween_interval(SWITCH_COOLDOWN - 0.40)   # total lock = 0.15+0.25+reste = SWITCH_COOLDOWN
+	tw.tween_callback(func() -> void: _switch_locked = false)
+
+
+func _execute_party_switch(slot: int) -> void:
+	var old_node := PartyData.get_node_at(PartyData.active_slot)
+	var new_node := PartyData.get_node_at(slot)
+	if not is_instance_valid(old_node) or not is_instance_valid(new_node):
+		_switch_locked = false
 		return
 
 	# Sauvegarde position + données du personnage actif dans son slot
