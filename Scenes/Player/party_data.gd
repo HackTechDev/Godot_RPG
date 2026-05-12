@@ -2,7 +2,7 @@ extends Node
 
 class_name PartyData
 
-const MAX_SLOTS := 4
+const MAX_SLOTS := 5
 const SAVE_PATH := "user://party.json"
 
 # Each slot: { "slug": String, "data": Dictionary }

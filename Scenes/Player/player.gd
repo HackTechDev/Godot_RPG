@@ -80,6 +80,7 @@ const _SLOT_COLORS := [
 	Color(1.00, 0.55, 0.10),  # slot 1 : orange
 	Color(0.80, 0.30, 1.00),  # slot 2 : violet
 	Color(1.00, 1.00, 0.15),  # slot 3 : jaune
+	Color(1.00, 0.30, 0.30),  # slot 4 : rouge
 ]
 var _sfx_shot:   AudioStreamPlayer = null
 var _sfx_impact: AudioStreamPlayer = null
