@@ -72,6 +72,15 @@ var _cm_delete_dialog: ConfirmationDialog = null
 var _cm_delete_slug:   String             = ""
 var _cm_party_vbox:    VBoxContainer      = null   # section équipe dans le panel
 
+var _tr_panel:         Control       = null
+var _tr_from_option:   OptionButton  = null
+var _tr_to_option:     OptionButton  = null
+var _tr_from_list:     ItemList      = null
+var _tr_to_list:       ItemList      = null
+var _tr_btn_transfer:  Button        = null
+var _tr_from_equip:    Array         = []
+var _tr_to_equip:      Array         = []
+
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -790,6 +799,8 @@ func show_main_panel() -> void:
 		_cs_panel.visible = false
 	if _cm_panel:
 		_cm_panel.visible = false
+	if _tr_panel:
+		_tr_panel.visible = false
 	main.visible = true
 
 func set_in_game_mode(enabled: bool) -> void:
@@ -1193,6 +1204,11 @@ func _build_character_manager_panel() -> void:
 
 	vbox.add_child(HSeparator.new())
 
+	var btn_transfer := Button.new()
+	btn_transfer.text = "Transfert d'équipement ↔"
+	btn_transfer.pressed.connect(_on_cm_transfer_pressed)
+	vbox.add_child(btn_transfer)
+
 	var btn_back := Button.new()
 	btn_back.text = "Retour"
 	btn_back.pressed.connect(_on_cm_back_pressed)
@@ -1524,6 +1540,7 @@ func _ready():
 	_build_mission_recap_panel()
 	_build_character_select_panel()
 	_build_character_manager_panel()
+	_build_transfer_panel()
 	_connect_video_settings()
 	music_neon_dream.play()
 	_load_audio_settings()
@@ -1532,6 +1549,268 @@ func _ready():
 	if Player_data.goto_character_creation:
 		Player_data.goto_character_creation = false
 		_on_button_create_character_pressed()
+
+# ---------------------------------------------------------------------------
+# Transfert d'équipement entre membres de l'équipe
+# ---------------------------------------------------------------------------
+
+func _build_transfer_panel() -> void:
+	_tr_panel = Control.new()
+	_tr_panel.name = "TransferPanel"
+	_tr_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_tr_panel.visible = false
+	add_child(_tr_panel)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_tr_panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_tr_panel.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(700, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 24)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	margin.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "TRANSFERT D'ÉQUIPEMENT"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	vbox.add_child(HSeparator.new())
+
+	# ── Ligne dropdowns ──────────────────────────────────────────────────────
+	var header_row := HBoxContainer.new()
+	header_row.add_theme_constant_override("separation", 20)
+	vbox.add_child(header_row)
+
+	var from_header := VBoxContainer.new()
+	from_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_row.add_child(from_header)
+
+	var lbl_from := Label.new()
+	lbl_from.text = "De :"
+	from_header.add_child(lbl_from)
+
+	_tr_from_option = OptionButton.new()
+	_tr_from_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tr_from_option.item_selected.connect(_on_tr_from_changed)
+	from_header.add_child(_tr_from_option)
+
+	# colonne centrale (bouton transfert)
+	var mid_col := VBoxContainer.new()
+	mid_col.alignment = BoxContainer.ALIGNMENT_END
+	header_row.add_child(mid_col)
+
+	_tr_btn_transfer = Button.new()
+	_tr_btn_transfer.text = "→ Transférer"
+	_tr_btn_transfer.disabled = true
+	_tr_btn_transfer.custom_minimum_size = Vector2(110, 0)
+	_tr_btn_transfer.pressed.connect(_on_tr_transfer_pressed)
+	mid_col.add_child(_tr_btn_transfer)
+
+	var to_header := VBoxContainer.new()
+	to_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_row.add_child(to_header)
+
+	var lbl_to := Label.new()
+	lbl_to.text = "Vers :"
+	to_header.add_child(lbl_to)
+
+	_tr_to_option = OptionButton.new()
+	_tr_to_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tr_to_option.item_selected.connect(_on_tr_to_changed)
+	to_header.add_child(_tr_to_option)
+
+	# ── Listes d'équipements ─────────────────────────────────────────────────
+	var lists_row := HBoxContainer.new()
+	lists_row.add_theme_constant_override("separation", 20)
+	lists_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(lists_row)
+
+	_tr_from_list = ItemList.new()
+	_tr_from_list.custom_minimum_size = Vector2(0, 180)
+	_tr_from_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tr_from_list.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_tr_from_list.item_selected.connect(_on_tr_item_selected)
+	lists_row.add_child(_tr_from_list)
+
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(110, 0)
+	lists_row.add_child(spacer)
+
+	_tr_to_list = ItemList.new()
+	_tr_to_list.custom_minimum_size = Vector2(0, 180)
+	_tr_to_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tr_to_list.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_tr_to_list.item_selected.connect(func(_i: int) -> void: pass)
+	lists_row.add_child(_tr_to_list)
+
+	vbox.add_child(HSeparator.new())
+
+	var btn_close := Button.new()
+	btn_close.text = "Fermer"
+	btn_close.pressed.connect(_on_tr_close_pressed)
+	vbox.add_child(btn_close)
+
+
+func _on_cm_transfer_pressed() -> void:
+	if PartyData.slot_count() < 2:
+		return
+	_cm_panel.visible = false
+	_populate_transfer_dropdowns()
+	_tr_panel.visible = true
+
+
+func _populate_transfer_dropdowns() -> void:
+	_tr_from_option.clear()
+	_tr_to_option.clear()
+	_tr_from_list.clear()
+	_tr_to_list.clear()
+	_tr_from_equip.clear()
+	_tr_to_equip.clear()
+	_tr_btn_transfer.disabled = true
+
+	for i in range(PartyData.slot_count()):
+		var slug: String = PartyData.slots[i].get("slug", "")
+		var d: Dictionary = PartyData.slots[i].get("data", {})
+		var nick: String = d.get("player_nickname", slug)
+		var label := "Slot %d — %s%s" % [i + 1, nick, " (chef)" if i == 0 else ""]
+		_tr_from_option.add_item(label)
+		_tr_to_option.add_item(label)
+
+	if _tr_from_option.item_count > 0:
+		_tr_from_option.selected = 0
+		_on_tr_from_changed(0)
+	if _tr_to_option.item_count > 1:
+		_tr_to_option.selected = 1
+		_on_tr_to_changed(1)
+
+
+func _on_tr_from_changed(idx: int) -> void:
+	_tr_from_list.clear()
+	_tr_from_equip.clear()
+	_tr_btn_transfer.disabled = true
+	if idx < 0 or idx >= PartyData.slot_count():
+		return
+	# Auto-changer "vers" si même personnage
+	if _tr_to_option.selected == idx:
+		for i in range(PartyData.slot_count()):
+			if i != idx:
+				_tr_to_option.selected = i
+				_on_tr_to_changed(i)
+				break
+	var slug: String = PartyData.slots[idx].get("slug", "")
+	_tr_from_equip = _get_member_equipment(slug)
+	for eq in _tr_from_equip:
+		_tr_from_list.add_item(_tr_eq_label(eq))
+
+
+func _on_tr_to_changed(idx: int) -> void:
+	_tr_to_list.clear()
+	_tr_to_equip.clear()
+	if idx < 0 or idx >= PartyData.slot_count():
+		return
+	var slug: String = PartyData.slots[idx].get("slug", "")
+	_tr_to_equip = _get_member_equipment(slug)
+	for eq in _tr_to_equip:
+		_tr_to_list.add_item(_tr_eq_label(eq))
+	_tr_btn_transfer.disabled = true
+
+
+func _on_tr_item_selected(_idx: int) -> void:
+	_tr_btn_transfer.disabled = (_tr_from_option.selected == _tr_to_option.selected)
+
+
+func _on_tr_transfer_pressed() -> void:
+	var from_slot := _tr_from_option.selected
+	var to_slot   := _tr_to_option.selected
+	if from_slot == to_slot:
+		return
+	var sel := _tr_from_list.get_selected_items()
+	if sel.is_empty():
+		return
+	var eq_idx: int = sel[0]
+	if eq_idx >= _tr_from_equip.size():
+		return
+
+	var item: Dictionary = (_tr_from_equip[eq_idx] as Dictionary).duplicate(true)
+	_tr_from_equip.remove_at(eq_idx)
+	_tr_to_equip.append(item)
+
+	_set_member_equipment(
+		PartyData.slots[from_slot].get("slug", ""), _tr_from_equip)
+	_set_member_equipment(
+		PartyData.slots[to_slot].get("slug", ""),   _tr_to_equip)
+
+	_tr_from_list.clear()
+	for eq in _tr_from_equip:
+		_tr_from_list.add_item(_tr_eq_label(eq))
+
+	_tr_to_list.clear()
+	for eq in _tr_to_equip:
+		_tr_to_list.add_item(_tr_eq_label(eq))
+
+	_tr_btn_transfer.disabled = true
+
+
+func _on_tr_close_pressed() -> void:
+	_tr_panel.visible = false
+	_load_character_manager()
+	_cm_panel.visible = true
+
+
+func _tr_eq_label(eq: Dictionary) -> String:
+	var cat_fr := {"weapon": "Arme", "armor": "Protection", "gadget": "Matériel", "clothing": "Vêtement"}
+	var cat: String = cat_fr.get(eq.get("category", ""), eq.get("category", "?"))
+	return "[%s]  %s" % [cat, eq.get("name", "?")]
+
+
+func _get_member_equipment(slug: String) -> Array:
+	if slug == Player_data.character_slug:
+		return Player_data.player_equipment.duplicate(true)
+	var path := "user://characters/%s/rpg.json" % slug
+	if not FileAccess.file_exists(path):
+		return []
+	var f := FileAccess.open(path, FileAccess.READ)
+	var data = JSON.parse_string(f.get_as_text())
+	f.close()
+	if not data is Dictionary:
+		return []
+	var eq: Variant = data.get("player_equipment", [])
+	return (eq as Array).duplicate(true) if eq is Array else []
+
+
+func _set_member_equipment(slug: String, equipment: Array) -> void:
+	if slug == Player_data.character_slug:
+		Player_data.player_equipment = equipment.duplicate(true)
+	# Persistance dans rpg.json
+	var path := "user://characters/%s/rpg.json" % slug
+	if not FileAccess.file_exists(path):
+		return
+	var f := FileAccess.open(path, FileAccess.READ)
+	var raw := f.get_as_text()
+	f.close()
+	var data = JSON.parse_string(raw)
+	if not data is Dictionary:
+		return
+	(data as Dictionary)["player_equipment"] = equipment
+	var fw := FileAccess.open(path, FileAccess.WRITE)
+	if fw:
+		fw.store_string(JSON.stringify(data))
+		fw.close()
+
 
 func data_to_save():
 	return {
