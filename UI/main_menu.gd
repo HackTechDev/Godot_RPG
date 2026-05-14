@@ -2035,8 +2035,8 @@ L'overlay de combat s'affiche et le mouvement est bloqué.
 [b]2. L'ennemi se défend[/b] (automatique)
    Défense réussie → attaque bloquée → l'ennemi attaque à son tour
    Défense échouée → l'ennemi perd 1 PV
-      PV ennemi ≤ 0 → victoire !
-      Sinon → vous contre-attaquez (retour à l'étape 1)
+	  PV ennemi ≤ 0 → victoire !
+	  Sinon → vous contre-attaquez (retour à l'étape 1)
 
 [b]3. L'ennemi attaque[/b] (automatique)
    Attaque réussie → vous devez défendre
@@ -2044,8 +2044,8 @@ L'overlay de combat s'affiche et le mouvement est bloqué.
 [b]4. Vous défendez[/b] → [Espace] pour lancer 1d20
    Défense réussie → vous contre-attaquez
    Défense échouée → vous perdez 1 PV
-      PV ≤ 0 → GAME OVER
-      Sinon → l'ennemi attaque à nouveau
+	  PV ≤ 0 → GAME OVER
+	  Sinon → l'ennemi attaque à nouveau
 
 [b]FUIR[/b] → [b]C[/b] pendant le combat
 Tirage (1–10) > 5 → fuite réussie. ≤ 5 → l'ennemi contre-attaque.
