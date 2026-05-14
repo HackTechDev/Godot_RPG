@@ -1188,7 +1188,7 @@ func _build_character_manager_panel() -> void:
 	vbox.add_child(HSeparator.new())
 
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 340)
+	scroll.custom_minimum_size = Vector2(0, 160)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	vbox.add_child(scroll)
 
