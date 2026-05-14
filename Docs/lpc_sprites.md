@@ -146,9 +146,7 @@ Les couches `head` et `expression` sont **fixes** — elles ne sont pas sélecti
 Si plusieurs PNG ont été ajoutés ou renommés, régénérer l'index depuis la racine du projet :
 
 ```bash
-ls Sprites/Player/items/*.png | xargs -I{} basename {} | \
-  python3 -c "import sys,json; files=[l.strip() for l in sys.stdin]; print(json.dumps(files, indent=2))" \
-  > Sprites/Player/sprite_index.json
+bash Scripts/update_sprite_index.sh
 ```
 
 ---
