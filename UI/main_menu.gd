@@ -81,6 +81,8 @@ var _tr_btn_transfer:  Button        = null
 var _tr_from_equip:    Array         = []
 var _tr_to_equip:      Array         = []
 
+var _help_panel: Control = null
+
 @onready var music_neon_dream: AudioStreamPlayer = $"../Music_Neon_Dream"
 
 const _CC_BASE = "CharacterCreation/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"
@@ -395,7 +397,8 @@ func _on_button_settings_pressed():
 func _on_button_help_pressed():
 	main.visible = false
 	settings.visible = false
-	help.visible = true
+	if _help_panel:
+		_help_panel.visible = true
 	
 func _on_button_quit_pressed():
 	quit_dialog.popup_centered()
@@ -798,14 +801,11 @@ func show_main_panel() -> void:
 	video_settings.visible = false
 	mission_select.visible = false
 	character_creation.visible = false
-	if _mr_panel:
-		_mr_panel.visible = false
-	if _cs_panel:
-		_cs_panel.visible = false
-	if _cm_panel:
-		_cm_panel.visible = false
-	if _tr_panel:
-		_tr_panel.visible = false
+	if _mr_panel:    _mr_panel.visible = false
+	if _cs_panel:    _cs_panel.visible = false
+	if _cm_panel:    _cm_panel.visible = false
+	if _tr_panel:    _tr_panel.visible = false
+	if _help_panel:  _help_panel.visible = false
 	main.visible = true
 
 func set_in_game_mode(enabled: bool) -> void:
@@ -825,9 +825,10 @@ func _on_button_settings_back_pressed():
 		main.visible = true
 
 func _on_button_help_back_pressed() -> void:
+	if _help_panel:
+		_help_panel.visible = false
 	main.visible = true
 	settings.visible = false
-	help.visible = false
 	
 	
 func _on_reinitialize_pressed():
@@ -1548,6 +1549,7 @@ func _ready():
 	_build_character_select_panel()
 	_build_character_manager_panel()
 	_build_transfer_panel()
+	_build_help_panel()
 	_connect_video_settings()
 	music_neon_dream.play()
 	_load_audio_settings()
@@ -1777,9 +1779,10 @@ func show_transfer_panel() -> void:
 		return
 	settings.visible = false
 	help.visible = false
-	if _mr_panel: _mr_panel.visible = false
-	if _cs_panel: _cs_panel.visible = false
-	if _cm_panel: _cm_panel.visible = false
+	if _mr_panel:   _mr_panel.visible = false
+	if _cs_panel:   _cs_panel.visible = false
+	if _cm_panel:   _cm_panel.visible = false
+	if _help_panel: _help_panel.visible = false
 	main.visible = false
 	_populate_transfer_dropdowns()
 	_tr_panel.visible = true
@@ -1867,6 +1870,317 @@ func data_to_save():
 		"appearance_legs":       Player_data.appearance_legs,
 		"appearance_feet":       Player_data.appearance_feet
 	}
+
+# ---------------------------------------------------------------------------
+# Panneau d'aide
+# ---------------------------------------------------------------------------
+
+func _build_help_panel() -> void:
+	_help_panel = Control.new()
+	_help_panel.name = "HelpPanel"
+	_help_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_help_panel.visible = false
+	add_child(_help_panel)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.7)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_help_panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_help_panel.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(780, 0)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 20)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 10)
+	margin.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "AIDE — COMMANDO ZOMBI RPG"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	vbox.add_child(HSeparator.new())
+
+	var tabs := TabContainer.new()
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.custom_minimum_size = Vector2(0, 430)
+	vbox.add_child(tabs)
+
+	_add_help_tab(tabs, "Contrôles",  _help_text_controls())
+	_add_help_tab(tabs, "Déplacement", _help_text_movement())
+	_add_help_tab(tabs, "Combat",     _help_text_combat())
+	_add_help_tab(tabs, "Équipe",     _help_text_party())
+	_add_help_tab(tabs, "Interface",  _help_text_ui())
+	_add_help_tab(tabs, "Astuces",    _help_text_tips())
+
+	vbox.add_child(HSeparator.new())
+
+	var btn_back := Button.new()
+	btn_back.text = "Retour"
+	btn_back.pressed.connect(_on_button_help_back_pressed)
+	vbox.add_child(btn_back)
+
+
+func _add_help_tab(tabs: TabContainer, tab_name: String, content: String) -> void:
+	var scroll := ScrollContainer.new()
+	scroll.name = tab_name
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.add_child(scroll)
+
+	var rtl := RichTextLabel.new()
+	rtl.bbcode_enabled = true
+	rtl.fit_content = true
+	rtl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rtl.text = content
+	scroll.add_child(rtl)
+
+
+func _help_text_controls() -> String:
+	return """[b]DÉPLACEMENT[/b]
+[table=2]
+[cell]Flèches / ZQSD[/cell][cell]Déplacer le personnage[/cell]
+[cell]Pavé num. 4 / 6[/cell][cell]Pivoter le corps (±45°)[/cell]
+[cell]Pavé num. 7 / 9[/cell][cell]Pivoter le regard (±45°, max ±90° du corps)[/cell]
+[cell]1 / 2 / 3[/cell][cell]Mode Marche / Accroupi / Course[/cell]
+[cell]Shift + direction[/cell][cell]Panoramique caméra[/cell]
+[/table]
+
+[b]ACTIONS EN JEU[/b]
+[table=2]
+[cell]T[/cell][cell]Ramasser un objet à portée[/cell]
+[cell]R[/cell][cell]Pousser un objet dans la direction du regard[/cell]
+[cell]Z[/cell][cell]Parler à un PNJ à portée[/cell]
+[cell]C[/cell][cell]Engager / fuir un combat[/cell]
+[cell]A[/cell][cell]Attaquer (en combat uniquement)[/cell]
+[cell]Espace[/cell][cell]Lancer les dés / Confirmer transition de zone[/cell]
+[cell]B[/cell][cell]Construire un ordinateur[/cell]
+[cell]M[/cell][cell]Monter / descendre d'un Mecha[/cell]
+[cell]Échap[/cell][cell]Quitter le combat / Fermer le menu radial[/cell]
+[cell]P[/cell][cell]Fiche de personnage (toggle)[/cell]
+[cell]H[/cell][cell]Afficher l'aide[/cell]
+[/table]
+
+[b]ÉQUIPE[/b]
+[table=2]
+[cell]Shift + 1 … 5[/cell][cell]Basculer vers le membre du slot N[/cell]
+[/table]
+
+[b]MENU RADIAL[/b]  (clic gauche sur votre personnage)
+[table=2]
+[cell]B — Construire[/cell][cell]Place un ordinateur à la position du joueur[/cell]
+[cell]T — Ramasser[/cell][cell]Collecte l'objet au contact[/cell]
+[cell]Z — Parler[/cell][cell]Ouvre le dialogue PNJ[/cell]
+[cell]C — Combat[/cell][cell]Engage l'ennemi proche[/cell]
+[cell]P — Fiche[/cell][cell]Ouvre / ferme la fiche de personnage[/cell]
+[cell]A — Attaquer[/cell][cell]Attaque en combat[/cell]
+[cell]F — Tirer[/cell][cell]Active / désactive le mode tir[/cell]
+[cell]N — Nuit[/cell][cell]Active / désactive la vision nocturne[/cell]
+[cell]M — Carte[/cell][cell]Affiche / masque la minimap[/cell]
+[/table]"""
+
+
+func _help_text_movement() -> String:
+	return """[b]MODES DE DÉPLACEMENT[/b]
+[table=3]
+[cell][b]Touche[/b][/cell][cell][b]Mode[/b][/cell][cell][b]Vitesse (aligné / décalé)[/b][/cell]
+[cell]1[/cell][cell]Marche[/cell][cell]70 px/s / 35 px/s[/cell]
+[cell]2[/cell][cell]Accroupi[/cell][cell]20 px/s (fixe)[/cell]
+[cell]3[/cell][cell]Course[/cell][cell]130 px/s / 55 px/s[/cell]
+[/table]
+Le mode actif est affiché dans le HUD sous « Pos ».
+
+[b]ORIENTATION DU PERSONNAGE[/b]
+Le corps (pavé 4/6) et le regard (pavé 7/9) pivotent indépendamment.
+Gardez-les alignés pour vous déplacer à pleine vitesse.
+Le regard est limité à ±90° par rapport au corps.
+
+[b]PANORAMIQUE CAMÉRA[/b]
+Maintenez [b]Shift[/b] + direction pour déplacer la vue sans bouger votre personnage.
+La caméra revient doucement sur le joueur à la relâche de Shift.
+
+[b]CHANGER DE ZONE[/b]
+1. Repérez le rectangle [color=orange]orange[/color] semi-transparent sur le sol.
+2. Positionnez votre personnage à l'intérieur.
+3. Appuyez sur [b]Espace[/b] pour déclencher la transition.
+Votre position relative dans la zone est préservée à l'arrivée.
+Un délai de 0,5 s s'applique après l'arrivée pour éviter les transitions accidentelles.
+
+[b]MINIMAP[/b]
+Menu radial → [b]M — Carte[/b]. Brouillard de guerre : seules les zones visitées sont révélées.
+Cliquez sur la minimap pour l'agrandir (600×400 px). Second clic pour la réduire.
+La minimap se réinitialise à l'entrée dans chaque nouveau niveau."""
+
+
+func _help_text_combat() -> String:
+	return """[b]ENGAGER LE COMBAT[/b]
+Approchez un ennemi (≈ 70 px) → appuyez sur [b]C[/b].
+L'overlay de combat s'affiche et le mouvement est bloqué.
+
+[b]DÉROULEMENT D'UN ROUND[/b]
+[b]1. Vous attaquez[/b] → [Espace] pour lancer 1d20
+   Résultat < votre Attaque → succès → l'ennemi défend
+   Résultat ≥ votre Attaque → raté → l'ennemi contre-attaque
+
+[b]2. L'ennemi se défend[/b] (automatique)
+   Défense réussie → attaque bloquée → l'ennemi attaque à son tour
+   Défense échouée → l'ennemi perd 1 PV
+      PV ennemi ≤ 0 → victoire !
+      Sinon → vous contre-attaquez (retour à l'étape 1)
+
+[b]3. L'ennemi attaque[/b] (automatique)
+   Attaque réussie → vous devez défendre
+
+[b]4. Vous défendez[/b] → [Espace] pour lancer 1d20
+   Défense réussie → vous contre-attaquez
+   Défense échouée → vous perdez 1 PV
+      PV ≤ 0 → GAME OVER
+      Sinon → l'ennemi attaque à nouveau
+
+[b]FUIR[/b] → [b]C[/b] pendant le combat
+Tirage (1–10) > 5 → fuite réussie. ≤ 5 → l'ennemi contre-attaque.
+
+[b]QUITTER SANS RÉSOLUTION[/b] → [b]Échap[/b] (aucune pénalité)
+
+[b]MODE TIR[/b]  (menu radial → F — Tirer)
+Un réticule rouge apparaît. Déplacez la souris pour viser.
+La ligne de tir s'arrête sur les murs. Le tir n'est possible que dans le cône de vision (±45° du regard).
+Clic gauche pour tirer. La partie du corps ciblée est affichée en jaune près du réticule.
+Désactivez le mode tir via le menu radial ou [b]Échap[/b].
+
+[b]GAME OVER[/b]
+Si vos PV tombent à 0, un écran Game Over s'affiche.
+Appuyez sur [b]Espace[/b] pour recommencer — vous repartez à la création de personnage."""
+
+
+func _help_text_party() -> String:
+	return """[b]CONSTITUER UNE ÉQUIPE (max 5 membres)[/b]
+Menu principal → Jouer → sélectionner un personnage → Gérer
+→ [b]Équipe +[/b] pour ajouter un membre
+→ [b]Quitter équipe[/b] pour retirer un membre
+
+[b]BASCULER ENTRE MEMBRES[/b]
+[b]Shift + 1 … 5[/b] → flash au noir (0,15 s) + cooldown de 1,5 s.
+Si vous tentez un switch pendant le cooldown → flash orange de refus.
+La caméra se recentre automatiquement sur le nouveau personnage actif.
+
+[b]INDICATEURS DE SLOT[/b]
+[table=2]
+[cell][color=#33ff99]■ Slot 1[/color][/cell][cell]Chef — cyan-vert[/cell]
+[cell][color=#ff8c1a]■ Slot 2[/color][/cell][cell]Orange[/cell]
+[cell][color=#cc4dff]■ Slot 3[/color][/cell][cell]Violet[/cell]
+[cell][color=#ffff26]■ Slot 4[/color][/cell][cell]Jaune[/cell]
+[cell][color=#ff4d4d]■ Slot 5[/color][/cell][cell]Rouge[/cell]
+[/table]
+Le membre actif affiche [b]▶ Nom[/b], les inactifs affichent [b]N Nom[/b].
+Les membres inactifs restent visibles dans le niveau en animation idle.
+
+[b]TRANSFERT D'ÉQUIPEMENT[/b]
+Bouton [b]Transfert ↔[/b] dans la barre du HUD, ou depuis le gestionnaire de personnages.
+1. Choisissez le membre source (De :) et le membre cible (Vers :).
+2. Sélectionnez un objet dans la liste.
+3. Cliquez sur [b]→ Transférer[/b].
+
+[b]STATISTIQUES INDIVIDUELLES[/b]
+Chaque membre possède ses propres PV, Attaque, Défense et Mouvement,
+sauvegardés indépendamment lors des switches et des transitions de niveau."""
+
+
+func _help_text_ui() -> String:
+	return """[b]HUD — PANNEAU HAUT GAUCHE[/b]
+[table=2]
+[cell]Pseudo[/cell][cell]Surnom du personnage actif[/cell]
+[cell]Santé[/cell][cell]Points de vie actuels[/cell]
+[cell]Mvt[/cell][cell]Jauge de mouvement (se consomme en marchant)[/cell]
+[cell]Ordinateurs[/cell][cell]Compteur de collecte[/cell]
+[cell]Robots[/cell][cell]Compteur de collecte[/cell]
+[cell]Zone[/cell][cell]Nom du secteur actuel[/cell]
+[cell]Pos[/cell][cell]Coordonnées x, y du joueur[/cell]
+[cell]Mode[/cell][cell]Mode de déplacement actif (1 / 2 / 3)[/cell]
+[/table]
+
+[b]HORLOGE DE MISSION[/b]
+Haut centre — format JJ/MM/AAAA HHhMM. 1 min réelle = 1 h de jeu.
+Le cadran à gauche de l'heure représente la position du soleil.
+L'horloge se met en [b]pause[/b] lorsqu'un menu est ouvert.
+
+[b]BARRE DE BOUTONS (haut droite)[/b]
+[table=2]
+[cell]Fiche[/cell][cell]Fiche de personnage[/cell]
+[cell]Transfert ↔[/cell][cell]Transfert d'équipement entre membres[/cell]
+[cell]Armurerie[/cell][cell]Achat / vente d'équipement[/cell]
+[cell]Paramètres[/cell][cell]Audio, Vidéo, Contrôles, Debug[/cell]
+[cell]Accueil[/cell][cell]Menu principal[/cell]
+[/table]
+
+[b]FICHE DE PERSONNAGE[/b]  (touche P ou bouton Fiche)
+[b]Statistiques[/b] — PV, Mouvement, Attaque, Défense, Grade, Spécialisation, Crédits
+[b]Inventaire[/b] — objets collectés (ordinateurs, robots)
+[b]Apparence[/b] — modifiez l'aspect visuel en cours de partie (8 slots, prévisualisation en temps réel)
+[b]Photos[/b] — importez jusqu'à 3 photos par personnage (PNG / JPG)
+
+[b]VISION NOCTURNE[/b]  (menu radial → N — Nuit)
+Filtre vert NVG appliqué dans le cône de vision. Désactivez par le même bouton.
+
+[b]PARAMÈTRES[/b]
+[b]Audio[/b] — musique, volume, effets sonores, musique intro
+[b]Vidéo[/b] — mode plein écran / fenêtré
+[b]Debug[/b] — afficher le cône et la flèche / la ligne rouge de la cible
+
+[b]INDICATEURS VISUELS[/b]
+[table=2]
+[cell][color=green]Cône vert[/color][/cell][cell]Champ de vision du joueur[/cell]
+[cell][color=orange]Flèche orange[/color][/cell][cell]Direction du corps[/cell]
+[cell][color=red]Cône rouge[/color][/cell][cell]Champ de vision d'un ennemi[/cell]
+[cell][color=orange]Rectangle orange[/color][/cell][cell]Zone de transition vers un autre secteur[/cell]
+[cell][color=green]Filtre vert NVG[/color][/cell][cell]Vision nocturne active[/cell]
+[/table]"""
+
+
+func _help_text_tips() -> String:
+	return """[b]DÉBUTANT[/b]
+• Commencez par la mission 01 (Opération Aube Rouge) — début en plein jour à 06h00.
+• Parlez au Commandant Dubois dans la zone 1 : il donne des renseignements utiles.
+• Gardez corps et regard alignés pour vous déplacer à pleine vitesse (70 px/s).
+• Utilisez le panoramique (Shift + direction) pour observer la zone avant d'avancer.
+
+[b]COMBAT[/b]
+• Investissez dans la [b]Défense[/b] à la création : bloquer est aussi crucial qu'attaquer.
+• Prenez le temps de lire chaque message avant d'appuyer sur Espace.
+• Utilisez la fuite [b]C[/b] si vous êtes en mauvaise posture (50 % de réussite).
+• Évitez le contact passif : les ennemis infligent des dégâts au contact hors combat.
+  Engagez le CQB (C) plutôt que de vous laisser toucher sans réagir.
+
+[b]DÉPLACEMENT[/b]
+• Mode accroupi [b]2[/b] pour vous faufiler discrètement près des ennemis.
+• Consultez la minimap (menu radial → M) dans les grands niveaux générés.
+• Contournez les ennemis par les flancs — leur cône de vision est limité à 120°.
+
+[b]ARMURERIE[/b]
+• Priorité aux [b]protections[/b] : réduire les dégâts reçus allonge considérablement la survie.
+• Comparez les pénalités de mobilité : une armure lourde ralentit et compromet les retraites.
+• Vision nocturne indispensable pour les missions 03, 05 et 10 (départ nocturne).
+
+[b]JEU EN ÉQUIPE[/b]
+• Répartissez les stats entre membres : un orienté Défense, un autre Attaque.
+• Fuyez (C → Échap) puis switchez (Shift+N) si un membre est en danger.
+• Le transfert d'équipement (bouton Transfert ↔ dans le HUD) optimise la répartition du matériel.
+
+[b]SAUVEGARDE[/b]
+• La progression est sauvegardée automatiquement à chaque changement de zone,
+  switch de personnage, achat à l'armurerie et fermeture du menu principal.
+• Chaque personnage dispose de son propre dossier de sauvegarde."""
+
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
