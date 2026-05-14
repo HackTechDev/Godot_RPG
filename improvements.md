@@ -141,7 +141,7 @@ Ce fichier regroupe les pistes d'amélioration futures et l'historique des amél
 
 #### Sprites LPC supplémentaires
 - Enrichir les options de chaque slot au fil des imports (nouvelles couleurs de peau, coiffures, armures…)
-- Ajouter un ZIP LPC dans `res://Sprites/Player/` suffit — `SpriteLibrary` le découvre automatiquement au démarrage
+- Procédure : copier les PNG extraits dans `Sprites/Player/items/`, ouvrir Godot (import auto), lancer `bash Scripts/update_sprite_index.sh`, mettre à jour `character.json` — voir `Docs/lpc_sprites.md`
 
 #### Sprite LPC pour les PNJ et ennemis
 - Utiliser le même système de layers LPC pour habiller les PNJ et les `RobotEnemy`
@@ -443,3 +443,53 @@ Panneau "Transfert d'équipement ↔" dans le gestionnaire de personnages et dan
 **Amélioration apportée :** variable locale renommée `entry` dans la boucle `DirAccess` de `_delete_dir_recursive()`.
 
 **Fichiers :** `UI/main_menu.gd`
+
+---
+
+### Menu principal — bouton Gérer cliquable en cours de partie
+
+**Problème initial :** le bouton **Gérer** sur l'écran de sélection de personnage n'était pas cliquable quand le jeu était en pause (`get_tree().paused = true`).
+
+**Améliorations apportées :**
+- `process_mode = Node.PROCESS_MODE_ALWAYS` ajouté au début de `_ready()` dans `main_menu.gd` — le menu reste réactif même quand l'arbre est mis en pause
+- Isolation des panneaux : `_on_button_play_pressed()` masque tous les panneaux secondaires avant d'afficher `character_select` ; `_on_cs_back_pressed()` masque `mission_select` avant de revenir à l'écran de sélection
+
+**Fichiers :** `UI/main_menu.gd`
+
+---
+
+### Export web — SpriteLibrary réécrite (`ZIPReader` → `load()` + `sprite_index.json`)
+
+**Problème initial :** à l'export web, aucun graphisme n'apparaissait dans la création de personnage. Deux causes cumulées : `DirAccess.open("res://…")` renvoie `null` dans les exports web (le PCK est un système de fichiers virtuel plat, non itérable) ; les archives ZIP n'ont pas de fichier `.import` et sont silencieusement exclues par `export_filter="all_resources"`.
+
+**Améliorations apportées :**
+- `SpriteLibrary` entièrement réécrit : plus de `ZIPReader` ni de `DirAccess` — les textures sont chargées via `load()` directement depuis `Sprites/Player/items/`
+- `sprite_index.json` créé : liste statique des noms de PNG présents dans `items/` — remplace le scan de répertoire, inclus dans tous les exports comme fichier texte importé normalement par Godot
+- `_load_catalogue()` lit `character.json` (catalogue LPC) + `sprite_index.json`, puis charge chaque texture avec `ResourceLoader.exists()` + `load()`
+- Script bash `Scripts/update_sprite_index.sh` créé pour régénérer `sprite_index.json` automatiquement après ajout ou retrait de PNG
+
+**Fichiers :** `Autoload/sprite_library.gd`, `Sprites/Player/sprite_index.json`, `Scripts/update_sprite_index.sh`
+
+---
+
+### Export web — mise à l'échelle fractionnaire + hauteur du ScrollContainer
+
+**Problème initial :** sur la version web, la page "Gestion des personnages" débordait en bas — le bouton "Retour" était visible en dehors de la zone de jeu. Causes : `ScrollContainer.custom_minimum_size = Vector2(0, 340)` rendait le panneau trop haut avec 5 membres, et `scale_mode="integer"` empêchait une mise à l'échelle sub-entière quand le chrome du navigateur réduisait la hauteur disponible sous 720 px.
+
+**Améliorations apportées :**
+- `window/stretch/scale_mode` passé de `"integer"` à `"fractional"` dans `project.godot` — permet tout ratio de mise à l'échelle sur web
+- `ScrollContainer.custom_minimum_size` réduit de 340 à 160 px dans `_build_character_manager_panel()` — le panneau total reste sous les 720 px avec 5 membres
+
+**Fichiers :** `project.godot`, `UI/main_menu.gd`
+
+---
+
+### `level_3.tscn` — suppression du nœud orphelin `level_2_11_20`
+
+**Problème initial :** erreur à l'export — `Parse Error: res://Scenes/Levels/level_3/level_3.tscn:5206` — due à une référence vers `ExtResource("3_mwivg")` non déclaré.
+
+**Cause :** le commit `55319f1` avait supprimé la déclaration `[ext_resource … id="3_mwivg"]` (entrance_y_2.tscn) de l'en-tête du fichier mais avait laissé le nœud `[node name="level_2_11_20" instance=ExtResource("3_mwivg")]` et sa ligne `position` en fin de fichier.
+
+**Amélioration apportée :** les deux lignes orphelines ont été supprimées de `level_3.tscn`.
+
+**Fichiers :** `Scenes/Levels/level_3/level_3.tscn`

@@ -462,11 +462,12 @@ Récapitulatif de toutes les modifications apportées au projet.
 ## Chargement automatique des sprite sheets LPC (SpriteLibrary)
 
 - Les sprite sheets ne sont plus codées en dur dans les scripts
-- Au démarrage, `SpriteLibrary` scanne `res://Sprites/Player/*.zip` et charge chaque archive
-- Pour chaque ZIP : lecture de `character.json` (format générateur LPC), correspondance automatique zPos → fichier PNG
+- Au démarrage, `SpriteLibrary` lit `character.json` (catalogue des couches LPC) et `sprite_index.json` (liste des PNG présents dans `items/`), puis charge chaque texture via `load()`
+- Correspondance automatique : `zPos` de chaque couche dans `character.json` → fichier PNG dans `Sprites/Player/items/` → `Texture2D` associée au slot de jeu
+- Mécanisme compatible web : `DirAccess` ne fonctionne pas dans les exports web (PCK non itérable) ; `sprite_index.json` remplace le scan de répertoire — c'est un fichier texte importé normalement par Godot, inclus dans tous les exports
 - API exposée : `apply_sprite()`, `apply_preview_sprite_centered()`, `apply_head_sprite()`, `apply_face_sprite()`, `get_slot_options()`, `get_item_layer()`, `get_texture()`
-- Ajouter un nouveau sprite = déposer un ZIP LPC dans `res://Sprites/Player/`, aucune modification de code
-- **Fichiers :** `Autoload/sprite_library.gd`, `project.godot`
+- Ajouter un nouveau sprite : copier le PNG dans `Sprites/Player/items/`, ouvrir Godot (import auto), lancer `bash Scripts/update_sprite_index.sh`, mettre à jour `character.json` — voir `Docs/lpc_sprites.md`
+- **Fichiers :** `Autoload/sprite_library.gd`, `Sprites/Player/sprite_index.json`, `Sprites/Player/character.json`, `Scripts/update_sprite_index.sh`, `Docs/lpc_sprites.md`
 
 ---
 
@@ -768,7 +769,7 @@ Récapitulatif de toutes les modifications apportées au projet.
 
 - Nouvel onglet **"Apparence"** dans la fiche de personnage (touche **P**)
 - 8 slots modifiables : Corps, Cheveux, Couvre-chef, Bras, Gants, Torse, Jambes, Pieds
-- Chaque slot affiche un `OptionButton` peuplé par `SpriteLibrary.get_slot_options(slot)` — ajouter un ZIP LPC = option automatiquement disponible
+- Chaque slot affiche un `OptionButton` peuplé par `SpriteLibrary.get_slot_options(slot)` — ajouter un PNG dans `items/` + `sprite_index.json` + `character.json` = option automatiquement disponible
 - Changements appliqués immédiatement en jeu via `_apply_appearance()` (signal `appearance_changed` émis par la fiche, reçu par `player.gd`)
 - Sauvegardés instantanément dans `user://rpg.json` via `_auto_save_player()`
 - La prévisualisation (SubViewport) est partagée avec l'onglet "Fiche" — `_stats_col` et `_app_panel` sont basculés en visibilité
