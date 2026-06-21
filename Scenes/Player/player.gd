@@ -192,6 +192,8 @@ func _ready():
 	_col.position = Vector2(Player_data.player_collision_offset_x, Player_data.player_collision_offset_y)
 
 	# La minimap est créée pour tous les joueurs afin de recevoir level_map_ready
+	anim_tree.active = true
+
 	minimap_instance = minimap_scene.instantiate()
 	add_child(minimap_instance)
 
@@ -1019,6 +1021,7 @@ func _restore_sprite_state() -> void:
 	var look_vec = _angle_to_vec(look_angle)
 	anim_tree.set("parameters/Idle/blend_position", look_vec)
 	anim_tree.set("parameters/Move/blend_position", look_vec)
+	anim_state.travel("Idle")
 	master_sprite.frame = Player_data.player_sprite_frame
 	for child in appearance_layers.get_children():
 		if child is Sprite2D:
