@@ -620,6 +620,12 @@ func _load_enemies() -> void:
 			enemy.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 
 		add_child(enemy)
+		enemy.set_collision_shape(
+			float(entry.get("collision_width",    32.0)),
+			float(entry.get("collision_height",   50.0)),
+			float(entry.get("collision_offset_x",  0.0)),
+			float(entry.get("collision_offset_y",  5.0))
+		)
 		if entry.has("attack"):
 			enemy.enemy_attack  = int(entry.get("attack",  10))
 			enemy.enemy_defense = int(entry.get("defense", 10))

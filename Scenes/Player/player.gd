@@ -185,6 +185,9 @@ var _combat_busy: bool = false
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	PartyData.register_node(_party_slot, self)
+	var _col := $CollisionShape2D as CollisionShape2D
+	(_col.shape as RectangleShape2D).size = Vector2(Player_data.player_collision_width, Player_data.player_collision_height)
+	_col.position = Vector2(Player_data.player_collision_offset_x, Player_data.player_collision_offset_y)
 
 	# La minimap est créée pour tous les joueurs afin de recevoir level_map_ready
 	minimap_instance = minimap_scene.instantiate()
@@ -646,6 +649,10 @@ func _auto_save_player():
 		"appearance_torso":       Player_data.appearance_torso,
 		"appearance_legs":        Player_data.appearance_legs,
 		"appearance_feet":        Player_data.appearance_feet,
+		"collision_width":        ($CollisionShape2D.shape as RectangleShape2D).size.x,
+		"collision_height":       ($CollisionShape2D.shape as RectangleShape2D).size.y,
+		"collision_offset_x":     $CollisionShape2D.position.x,
+		"collision_offset_y":     $CollisionShape2D.position.y,
 	})
 	PartyData.save_full_party()
 

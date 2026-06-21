@@ -39,16 +39,21 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	# enemies.json — robot enemies
 	var enemies_data: Array = []
 	for enemy in robot_enemies:
+		var col_data := enemy.get_collision_data()
 		enemies_data.append({
 			"x": enemy.position.x,
 			"y": enemy.position.y,
-			"attack":         enemy.enemy_attack,
-			"defense":        enemy.enemy_defense,
-			"health":         enemy.enemy_health,
-			"follow_player":  1 if enemy.follow_player else 0,
-			"facing_angle":   enemy.facing_angle,
-			"dead":           enemy.is_dead,
-			"death_rotation": enemy.death_rotation
+			"attack":            enemy.enemy_attack,
+			"defense":           enemy.enemy_defense,
+			"health":            enemy.enemy_health,
+			"follow_player":     1 if enemy.follow_player else 0,
+			"facing_angle":      enemy.facing_angle,
+			"dead":              enemy.is_dead,
+			"death_rotation":    enemy.death_rotation,
+			"collision_width":   col_data["collision_width"],
+			"collision_height":  col_data["collision_height"],
+			"collision_offset_x": col_data["collision_offset_x"],
+			"collision_offset_y": col_data["collision_offset_y"],
 		})
 	var enemies_file = FileAccess.open(base_dir + "/enemies.json", FileAccess.WRITE)
 	enemies_file.store_line(JSON.stringify(enemies_data))
@@ -191,6 +196,10 @@ func load_game():
 		Player_data.appearance_torso    = data.get("appearance_torso", "")
 		Player_data.appearance_legs     = data.get("appearance_legs", "")
 		Player_data.appearance_feet     = data.get("appearance_feet", "")
+		Player_data.player_collision_width    = float(data.get("collision_width",    32.0))
+		Player_data.player_collision_height   = float(data.get("collision_height",   50.0))
+		Player_data.player_collision_offset_x = float(data.get("collision_offset_x",  0.0))
+		Player_data.player_collision_offset_y = float(data.get("collision_offset_y",  5.0))
 
 	else:
 		if GameConfig.DEBUG:

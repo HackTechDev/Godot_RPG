@@ -88,6 +88,11 @@ static var appearance_feet: String = ""
 
 static var movement_mode: int = 1  # 1 = marche, 2 = accroupi, 3 = course
 
+static var player_collision_width: float    = 32.0
+static var player_collision_height: float   = 50.0
+static var player_collision_offset_x: float =  0.0
+static var player_collision_offset_y: float =  5.0
+
 static var character_slug: String = ""
 
 static func set_character(slug: String) -> void:

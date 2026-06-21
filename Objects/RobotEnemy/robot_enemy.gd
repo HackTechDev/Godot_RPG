@@ -185,6 +185,17 @@ func die():
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "rotation", death_rotation, 0.3)
 
+func set_collision_shape(width: float, height: float, offset_x: float, offset_y: float) -> void:
+	var col := $CollisionShape2D as CollisionShape2D
+	(col.shape as RectangleShape2D).size = Vector2(width, height)
+	col.position = Vector2(offset_x, offset_y)
+
+func get_collision_data() -> Dictionary:
+	var col := $CollisionShape2D as CollisionShape2D
+	var sz: Vector2 = (col.shape as RectangleShape2D).size
+	return { "collision_width": sz.x, "collision_height": sz.y,
+			 "collision_offset_x": col.position.x, "collision_offset_y": col.position.y }
+
 func apply_dead_state():
 	if Player_data.contact_enemy == self:
 		Player_data.contact_enemy = null
