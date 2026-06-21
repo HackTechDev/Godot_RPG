@@ -620,11 +620,13 @@ func _load_enemies() -> void:
 			enemy.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 
 		add_child(enemy)
+		# Paramètres de shape depuis res:// (valeurs de design, jamais écrasées par le cache)
+		var shape_src: Dictionary = res_entries[i] if i < res_entries.size() else entry
 		enemy.set_collision_shape(
-			float(entry.get("collision_width",    32.0)),
-			float(entry.get("collision_height",   50.0)),
-			float(entry.get("collision_offset_x",  0.0)),
-			float(entry.get("collision_offset_y",  5.0))
+			float(shape_src.get("collision_width",    32.0)),
+			float(shape_src.get("collision_height",   50.0)),
+			float(shape_src.get("collision_offset_x",  0.0)),
+			float(shape_src.get("collision_offset_y",  5.0))
 		)
 		if entry.has("attack"):
 			enemy.enemy_attack  = int(entry.get("attack",  10))
