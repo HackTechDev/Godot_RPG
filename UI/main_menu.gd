@@ -485,7 +485,6 @@ func _on_check_show_aim_line_toggled(toggled_on: bool):
 
 func _on_check_debug_tile_collisions_toggled(toggled_on: bool):
 	GameConfig.debug_show_tile_collisions = toggled_on
-	get_tree().debug_collisions_hint = toggled_on
 	_save_audio_settings()
 
 func _on_button_debug_back_pressed():
@@ -798,7 +797,6 @@ func _load_audio_settings():
 	GameConfig.debug_show_tile_collisions = data.get("debug_show_tile_collisions", false)
 	GameConfig.show_cone                  = data.get("show_cone", true)
 	GameConfig.show_aim_line              = data.get("show_aim_line", true)
-	get_tree().debug_collisions_hint = GameConfig.debug_show_tile_collisions
 	if data.get("fullscreen", false):
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 

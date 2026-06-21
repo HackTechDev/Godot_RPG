@@ -36,7 +36,6 @@ var _switch_overlay: ColorRect = null  # overlay plein-écran pour le flash
 func _ready() -> void:
 	if GameConfig.DEBUG:
 		print("Scene: " + self.name)
-	get_tree().debug_collisions_hint = GameConfig.debug_show_tile_collisions
 	Player_data.player_previous_scene = self.name
 	SceneTransition.fade_in()
 	_setup_json_transitions()
@@ -326,6 +325,8 @@ func _create_json_trigger(conn: Dictionary) -> void:
 
 
 func _process(_delta: float) -> void:
+	if GameConfig.debug_show_tile_collisions:
+		queue_redraw()
 	if _trigger_hint == null or _all_triggers.is_empty():
 		return
 	if not GameConfig.debug_show_collision:
@@ -373,6 +374,61 @@ func _process(_delta: float) -> void:
 		_trigger_hint.visible = true
 	else:
 		_trigger_hint.visible = false
+
+
+func _draw() -> void:
+	if not GameConfig.debug_show_tile_collisions:
+		return
+	var ground := get_node_or_null("ground")
+	if ground == null:
+		return
+	if ground is TileMapLayer:
+		var wall := ground.get_node_or_null("Wall")
+		if wall is TileMapLayer:
+			_draw_tilemap_layer_collisions(wall as TileMapLayer)
+	elif ground is TileMap:
+		_draw_tilemap_collisions(ground as TileMap, 1)
+
+
+func _draw_tilemap_layer_collisions(layer: TileMapLayer) -> void:
+	if layer.tile_set == null:
+		return
+	var physics_count := layer.tile_set.get_physics_layers_count()
+	for cell in layer.get_used_cells():
+		var td: TileData = layer.get_cell_tile_data(cell)
+		if td == null:
+			continue
+		for pl in range(physics_count):
+			for pi in range(td.get_collision_polygons_count(pl)):
+				var pts: PackedVector2Array = td.get_collision_polygon_points(pl, pi)
+				if pts.size() < 2:
+					continue
+				var local_pts := PackedVector2Array()
+				for p in pts:
+					local_pts.append(to_local(layer.to_global(layer.map_to_local(cell) + p)))
+				for i in range(local_pts.size()):
+					draw_line(local_pts[i], local_pts[(i + 1) % local_pts.size()], Color(1, 0, 0, 0.8), 1.5)
+
+
+func _draw_tilemap_collisions(tm: TileMap, layer_idx: int) -> void:
+	if tm.tile_set == null:
+		return
+	var physics_count := tm.tile_set.get_physics_layers_count()
+	for cell in tm.get_used_cells(layer_idx):
+		var td: TileData = tm.get_cell_tile_data(layer_idx, cell)
+		if td == null:
+			continue
+		for pl in range(physics_count):
+			for pi in range(td.get_collision_polygons_count(pl)):
+				var pts: PackedVector2Array = td.get_collision_polygon_points(pl, pi)
+				if pts.size() < 2:
+					continue
+				var local_pts := PackedVector2Array()
+				for p in pts:
+					local_pts.append(to_local(tm.to_global(tm.map_to_local(cell) + p)))
+				for i in range(local_pts.size()):
+					draw_line(local_pts[i], local_pts[(i + 1) % local_pts.size()], Color(1, 0, 0, 0.8), 1.5)
+
 
 
 func _unhandled_input(event: InputEvent) -> void:
