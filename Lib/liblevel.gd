@@ -197,6 +197,7 @@ func load_game():
 		Player_data.player_spawnpoint_position_y = data["player_position"][1]
 		Player_data.player_facing = data.get("player_facing", 8)
 		Player_data.player_body_angle = float(data.get("body_angle", -90.0))
+		Player_data.player_look_angle = float(data.get("look_angle", -90.0))
 		Player_data.player_health = data.get("player_health", Player_data.player_health)
 		Player_data.player_health_base = data.get("player_health_base", Player_data.player_health)
 		Player_data.player_movement      = data.get("player_movement", 50)
@@ -249,6 +250,7 @@ func load_game():
 		Player_data.player_credit          = 1000
 		Player_data.player_equipment       = []
 		Player_data.player_body_angle         = -90.0
+		Player_data.player_look_angle         = -90.0
 		Player_data.player_collision_width    = float(defaults.get("collision_width",    32.0))
 		Player_data.player_collision_height   = float(defaults.get("collision_height",   50.0))
 		Player_data.player_collision_offset_x = float(defaults.get("collision_offset_x",  0.0))
