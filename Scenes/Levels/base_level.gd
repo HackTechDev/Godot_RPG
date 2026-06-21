@@ -717,7 +717,10 @@ func _load_mechas() -> void:
 		if entry.has("inertia"):      mecha.inertia_factor = float(entry["inertia"])
 		if entry.has("proximity"):    mecha.proximity_range = float(entry["proximity"])
 		if entry.has("hitbox_scale"): mecha.hitbox_scale   = float(entry["hitbox_scale"])
-		if entry.has("facing_x") and entry.has("facing_y"):
+		if entry.has("facing_angle"):
+			var fa := float(entry["facing_angle"])
+			mecha.facing_dir = Vector2(cos(deg_to_rad(fa)), sin(deg_to_rad(fa)))
+		elif entry.has("facing_x") and entry.has("facing_y"):
 			mecha.facing_dir = Vector2(float(entry["facing_x"]), float(entry["facing_y"])).normalized()
 		var px := float(entry.get("x", 0.0))
 		var py := float(entry.get("y", 0.0))

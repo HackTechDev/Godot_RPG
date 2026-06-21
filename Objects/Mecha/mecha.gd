@@ -134,6 +134,7 @@ func get_save_data() -> Dictionary:
 		"y":                   position.y,
 		"facing_x":            facing_dir.x,
 		"facing_y":            facing_dir.y,
+		"facing_angle":        rad_to_deg(facing_dir.angle()),
 		"collision_radius":    col["collision_radius"],
 		"collision_offset_x":  col["collision_offset_x"],
 		"collision_offset_y":  col["collision_offset_y"],
