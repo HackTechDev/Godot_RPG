@@ -10,7 +10,7 @@ func _mission_state_path() -> String:
 func displayVersion():
 	return "LibLevel version: " + version
 
-# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
+# ~/.local/share/godot/app_userdata/rpg_v1/player.json
 func savePlayer(data_to_save):
 	if GameConfig.DEBUG:
 		print("SavePlayer")
@@ -154,7 +154,7 @@ func reinitializePlayer():
 
 
 func load_game():
-	# ~/.local/share/godot/app_userdata/rpg_v1/rpg.json
+	# ~/.local/share/godot/app_userdata/rpg_v1/player.json
 	if FileAccess.file_exists(Player_data.save_path):
 		if GameConfig.DEBUG:
 			print("Character file found")

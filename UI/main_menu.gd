@@ -883,7 +883,7 @@ func _load_character_list() -> void:
 		var slug := dir.get_next()
 		while slug != "":
 			if dir.current_is_dir() and not slug.begins_with("."):
-				var rpg_path := "user://characters/%s/rpg.json" % slug
+				var rpg_path := "user://characters/%s/player.json" % slug
 				if FileAccess.file_exists(rpg_path):
 					var f := FileAccess.open(rpg_path, FileAccess.READ)
 					var data = JSON.parse_string(f.get_as_text())
@@ -1248,7 +1248,7 @@ func _load_character_manager() -> void:
 		var slug := dir.get_next()
 		while slug != "":
 			if dir.current_is_dir() and not slug.begins_with("."):
-				if FileAccess.file_exists("user://characters/%s/rpg.json" % slug):
+				if FileAccess.file_exists("user://characters/%s/player.json" % slug):
 					slugs.append(slug)
 			slug = dir.get_next()
 		dir.list_dir_end()
@@ -1282,7 +1282,7 @@ func _rebuild_party_panel() -> void:
 		var slug: String = PartyData.slots[i].get("slug", "") if is_filled else ""
 		var nickname := slug
 		if is_filled and slug != "":
-			var rpg_path := "user://characters/%s/rpg.json" % slug
+			var rpg_path := "user://characters/%s/player.json" % slug
 			if FileAccess.file_exists(rpg_path):
 				var f := FileAccess.open(rpg_path, FileAccess.READ)
 				var d = JSON.parse_string(f.get_as_text())
@@ -1324,7 +1324,7 @@ func _rebuild_party_panel() -> void:
 
 func _build_character_row(slug: String) -> Control:
 	var nickname := slug
-	var rpg_path := "user://characters/%s/rpg.json" % slug
+	var rpg_path := "user://characters/%s/player.json" % slug
 	if FileAccess.file_exists(rpg_path):
 		var f := FileAccess.open(rpg_path, FileAccess.READ)
 		var data = JSON.parse_string(f.get_as_text())
@@ -1811,7 +1811,7 @@ func _tr_eq_label(eq: Dictionary) -> String:
 func _get_member_equipment(slug: String) -> Array:
 	if slug == Player_data.character_slug:
 		return Player_data.player_equipment.duplicate(true)
-	var path := "user://characters/%s/rpg.json" % slug
+	var path := "user://characters/%s/player.json" % slug
 	if not FileAccess.file_exists(path):
 		return []
 	var f := FileAccess.open(path, FileAccess.READ)
@@ -1826,8 +1826,8 @@ func _get_member_equipment(slug: String) -> Array:
 func _set_member_equipment(slug: String, equipment: Array) -> void:
 	if slug == Player_data.character_slug:
 		Player_data.player_equipment = equipment.duplicate(true)
-	# Persistance dans rpg.json
-	var path := "user://characters/%s/rpg.json" % slug
+	# Persistance dans player.json
+	var path := "user://characters/%s/player.json" % slug
 	if not FileAccess.file_exists(path):
 		return
 	var f := FileAccess.open(path, FileAccess.READ)

@@ -33,7 +33,7 @@ static var player_previous_scene = ""
 static var player_spawnpoint_position_x = 0
 static var player_spawnpoint_position_y = 0
 
-static var save_path = "user://rpg.json"
+static var save_path = "user://player.json"
 
 static var scene_path = ""
 
@@ -97,7 +97,7 @@ static var character_slug: String = ""
 
 static func set_character(slug: String) -> void:
 	character_slug = slug
-	save_path = "user://characters/%s/rpg.json" % slug if slug != "" else "user://rpg.json"
+	save_path = "user://characters/%s/player.json" % slug if slug != "" else "user://player.json"
 
 static func character_dir() -> String:
 	return "user://characters/%s" % character_slug if character_slug != "" else "user://"

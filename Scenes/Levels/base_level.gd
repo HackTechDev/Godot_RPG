@@ -184,7 +184,7 @@ func _execute_party_switch(slot: int) -> void:
 	snap["pos_y"] = old_node.global_position.y
 	PartyData.slots[PartyData.active_slot]["data"] = snap
 
-	# Persiste les stats de l'ancien personnage dans son rpg.json individuel.
+	# Persiste les stats de l'ancien personnage dans son player.json individuel.
 	# Player_data.save_path pointe encore vers l'ancien personnage ici.
 	_liblevel.savePlayer({
 		"player_position":        [old_node.global_position.x, old_node.global_position.y],
