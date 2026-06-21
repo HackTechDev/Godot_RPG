@@ -2,6 +2,16 @@ extends RigidBody2D
 
 @onready var interaction_label = $InteractionLabel
 
+func _process(_delta: float) -> void:
+	if GameConfig.debug_show_collision:
+		queue_redraw()
+
+func _draw() -> void:
+	if GameConfig.debug_show_collision:
+		var col_pos: Vector2 = $CollisionShape2D.position
+		var radius: float = ($CollisionShape2D.shape as CircleShape2D).radius
+		draw_arc(col_pos, radius, 0.0, TAU, 32, Color(1, 0, 0, 0.9), 1.5)
+
 func _on_interaction_area_body_entered(body):
 	if body.is_in_group("player"):
 		Player_data.contact_object = self
