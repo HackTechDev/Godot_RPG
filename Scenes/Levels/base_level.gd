@@ -676,7 +676,7 @@ func _load_npcs() -> void:
 				res_entries = parsed
 
 	for i in range(entries.size()):
-		var entry := entries[i]
+		var entry: Dictionary = entries[i]
 		var npc = _npc_scene.instantiate()
 		npc.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(npc)
@@ -707,7 +707,7 @@ func _load_mechas() -> void:
 				res_entries = parsed
 
 	for i in range(entries.size()):
-		var entry := entries[i]
+		var entry: Dictionary = entries[i]
 		var mecha := _mecha_scene.instantiate() as Mecha
 		if mecha == null:
 			push_error("base_level._load_mechas: instantiate() as Mecha a retourné null — vérifier mecha.tscn/mecha.gd")
