@@ -117,7 +117,12 @@ func reinitializeLevel():
 	var mission_path := _mission_state_path()
 	if FileAccess.file_exists(mission_path):
 		DirAccess.remove_absolute(mission_path)
-	for level in ["level_1", "level_2", "level_3", "level_4"]:
+	var party_path := PartyData.SAVE_PATH
+	if FileAccess.file_exists(party_path):
+		DirAccess.remove_absolute(party_path)
+	PartyData.slots.clear()
+	PartyData.active_slot = 0
+	for level in ["level_1", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9", "level_10"]:
 		for file_name in ["objects.json", "enemies.json", "mechas.json", "npcs.json"]:
 			var path := "%s/%s/%s" % [Player_data.character_dir(), level, file_name]
 			if FileAccess.file_exists(path):
@@ -126,10 +131,21 @@ func reinitializeLevel():
 func reinitializePlayer():
 	if GameConfig.DEBUG:
 		print("Reinitialize Player")
-	if Player_data.character_slug != "":
-		DirAccess.make_dir_recursive_absolute(Player_data.character_dir())
-	var dir = DirAccess.open("res://World/Default/")
-	dir.copy("res://World/Default/rpg.json", Player_data.save_path)
+	if Player_data.character_slug == "":
+		return
+	DirAccess.make_dir_recursive_absolute(Player_data.character_dir())
+	var src := FileAccess.open("res://World/Default/rpg.json", FileAccess.READ)
+	if src == null:
+		push_error("reinitializePlayer: fichier source introuvable: res://World/Default/rpg.json")
+		return
+	var content := src.get_as_text()
+	src.close()
+	var dst := FileAccess.open(Player_data.save_path, FileAccess.WRITE)
+	if dst == null:
+		push_error("reinitializePlayer: impossible d'écrire: " + Player_data.save_path)
+		return
+	dst.store_string(content)
+	dst.close()
 
 
 func load_game():
