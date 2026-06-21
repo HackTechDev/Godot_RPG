@@ -12,6 +12,17 @@ var death_rotation: float = 0.0
 func _ready() -> void:
 	add_to_group("npc")
 
+func _process(_delta: float) -> void:
+	if GameConfig.debug_show_collision:
+		queue_redraw()
+
+func _draw() -> void:
+	if GameConfig.debug_show_collision:
+		var col := $CollisionShape2D
+		var col_pos: Vector2  = col.position
+		var col_size: Vector2 = (col.shape as RectangleShape2D).size
+		draw_rect(Rect2(col_pos - col_size / 2.0, col_size), Color(1, 0, 0, 0.9), false, 1.5)
+
 func die() -> void:
 	if is_dead:
 		return
