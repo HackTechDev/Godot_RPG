@@ -1,5 +1,41 @@
 [
-  { "x": 400, "y": 180, "attack": 10, "defense": 10, "health": 2, "follow_player": 1, "collision_width": 32.0, "collision_height": 50.0, "collision_offset_x": 0.0, "collision_offset_y": 5.0 },
-  { "x": 500, "y": 400, "attack": 10, "defense": 10, "health": 2, "follow_player": 1, "collision_width": 32.0, "collision_height": 50.0, "collision_offset_x": 0.0, "collision_offset_y": 5.0 },
-  { "x": 150, "y": 300, "attack": 10, "defense": 10, "health": 2, "follow_player": 1, "collision_width": 32.0, "collision_height": 50.0, "collision_offset_x": 0.0, "collision_offset_y": 5.0 }
+  {
+    "x": 400,
+    "y": 180,
+    "attack": 10,
+    "defense": 10,
+    "health": 2,
+    "follow_player": 1,
+    "collision_width": 32.0,
+    "collision_height": 50.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 5.0,
+    "facing_angle": -90.0
+  },
+  {
+    "x": 500,
+    "y": 400,
+    "attack": 10,
+    "defense": 10,
+    "health": 2,
+    "follow_player": 1,
+    "collision_width": 32.0,
+    "collision_height": 50.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 5.0,
+    "facing_angle": -90.0
+  },
+  {
+    "x": 150,
+    "y": 300,
+    "attack": 10,
+    "defense": 10,
+    "health": 2,
+    "follow_player": 1,
+    "collision_width": 32.0,
+    "collision_height": 50.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 5.0,
+    "facing_angle": -90.0
+  }
 ]
