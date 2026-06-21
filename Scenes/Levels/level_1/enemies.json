@@ -1,15 +1,15 @@
 [
   {
-    "x": 400,
-    "y": 300,
-    "attack": 10,
-    "defense": 10,
-    "health": 2,
-    "follow_player": 0,
-    "collision_width": 32.0,
-    "collision_height": 10.0,
-    "collision_offset_x": 0.0,
-    "collision_offset_y": 25.0,
-    "facing_angle": -90.0
+	"x": 400,
+	"y": 300,
+	"attack": 10,
+	"defense": 10,
+	"health": 2,
+	"follow_player": 0,
+	"collision_width": 32.0,
+	"collision_height": 10.0,
+	"collision_offset_x": 0.0,
+	"collision_offset_y": 25.0,
+	"facing_angle": -90.0
   }
 ]

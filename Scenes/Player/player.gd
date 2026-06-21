@@ -568,9 +568,9 @@ func input_move():
 		input_movement = input_movement.normalized()
 
 	# Règles de vitesse : body_angle contrôlé uniquement par pavé num 4/6
-	var look_vec := _angle_to_vec(look_angle)
-	var aligned        := abs(_norm_angle(look_angle - body_angle)) < 1.0
-	var moving_forward := input_movement.dot(_angle_to_vec(body_angle)) > 1e-6
+	var look_vec: Vector2 = _angle_to_vec(look_angle)
+	var aligned: bool        = abs(_norm_angle(look_angle - body_angle)) < 1.0
+	var moving_forward: bool = input_movement.dot(_angle_to_vec(body_angle)) > 1e-6
 	var current_speed: float
 	match Player_data.movement_mode:
 		2: current_speed = 20.0
