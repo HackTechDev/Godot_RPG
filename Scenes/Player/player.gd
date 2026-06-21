@@ -567,18 +567,10 @@ func input_move():
 	if input_movement.length() > 1.0:
 		input_movement = input_movement.normalized()
 
-	# Le corps tourne dans la direction du mouvement (WASD/flèches)
-	if input_movement != Vector2.ZERO:
-		var move_angle := _norm_angle(rad_to_deg(atan2(input_movement.y, input_movement.x)))
-		body_angle = move_angle
-		if abs(_norm_angle(look_angle - body_angle)) > 45.0:
-			look_angle = body_angle
-
-	# L'animation suit la direction du regard (≈ direction du corps en marche normale)
-	var look_vec = _angle_to_vec(look_angle)
-	# Vitesse réduite si : corps ≠ regard, OU si le joueur recule par rapport au corps
-	var aligned        = abs(_norm_angle(look_angle - body_angle)) < 1.0
-	var moving_forward = input_movement.dot(_angle_to_vec(body_angle)) > 1e-6
+	# Règles de vitesse : body_angle contrôlé uniquement par pavé num 4/6
+	var look_vec := _angle_to_vec(look_angle)
+	var aligned        := abs(_norm_angle(look_angle - body_angle)) < 1.0
+	var moving_forward := input_movement.dot(_angle_to_vec(body_angle)) > 1e-6
 	var current_speed: float
 	match Player_data.movement_mode:
 		2: current_speed = 20.0
@@ -589,7 +581,8 @@ func input_move():
 	if input_movement != Vector2.ZERO:
 		movement_sounds()
 		anim_tree.set("parameters/Idle/blend_position", look_vec)
-		anim_tree.set("parameters/Move/blend_position", look_vec)
+		# Blend Move depuis input_movement → animation correcte dans toutes les directions
+		anim_tree.set("parameters/Move/blend_position", input_movement)
 		anim_state.travel("Move")
 		velocity = input_movement * current_speed
 	else:
