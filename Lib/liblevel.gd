@@ -39,7 +39,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	# enemies.json — robot enemies
 	var enemies_data: Array = []
 	for enemy in robot_enemies:
-		var col_data := enemy.get_collision_data()
+		var col_data: Dictionary = enemy.get_collision_data()
 		enemies_data.append({
 			"x": enemy.position.x,
 			"y": enemy.position.y,
