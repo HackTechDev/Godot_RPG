@@ -71,14 +71,19 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	# npcs.json — état vivant/mort des PNJ
 	var npcs_data: Array = []
 	for npc in npcs:
+		var npc_col: Dictionary = npc.get_collision_data()
 		npcs_data.append({
-			"x":              npc.position.x,
-			"y":              npc.position.y,
-			"id":             npc.npc_id,
-			"name":           npc.npc_name,
-			"dialogue":       npc.dialogue,
-			"dead":           npc.is_dead,
-			"death_rotation": npc.death_rotation
+			"x":               npc.position.x,
+			"y":               npc.position.y,
+			"id":              npc.npc_id,
+			"name":            npc.npc_name,
+			"dialogue":        npc.dialogue,
+			"dead":            npc.is_dead,
+			"death_rotation":  npc.death_rotation,
+			"collision_width":    npc_col["collision_width"],
+			"collision_height":   npc_col["collision_height"],
+			"collision_offset_x": npc_col["collision_offset_x"],
+			"collision_offset_y": npc_col["collision_offset_y"],
 		})
 	var npcs_file = FileAccess.open(base_dir + "/npcs.json", FileAccess.WRITE)
 	if npcs_file != null:

@@ -4,6 +4,7 @@
 	"name": "Commandant Dubois",
 	"x": 520,
 	"y": 300,
+	"collision_width": 26.0, "collision_height": 46.0, "collision_offset_x": 0.0, "collision_offset_y": 0.0,
 	"dialogue": {
 	  "start": {
 		"text": "Bonjour soldat ! Quelle est ta mission aujourd'hui ?",

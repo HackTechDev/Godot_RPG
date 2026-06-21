@@ -643,14 +643,31 @@ func _load_enemies() -> void:
 
 
 func _load_npcs() -> void:
-	var entries := _read_level_json(
-		Player_data.level_save_dir(name) + "/npcs.json",
-		"res://Scenes/Levels/%s/npcs.json" % name
-	)
-	for entry in entries:
+	var user_path := Player_data.level_save_dir(name) + "/npcs.json"
+	var res_path  := "res://Scenes/Levels/%s/npcs.json" % name
+	var entries   := _read_level_json(user_path, res_path)
+
+	var res_entries: Array = []
+	if FileAccess.file_exists(user_path):
+		var f := FileAccess.open(res_path, FileAccess.READ)
+		if f:
+			var parsed = JSON.parse_string(f.get_as_text())
+			f.close()
+			if parsed is Array:
+				res_entries = parsed
+
+	for i in range(entries.size()):
+		var entry := entries[i]
 		var npc = _npc_scene.instantiate()
 		npc.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(npc)
+		var shape_src: Dictionary = res_entries[i] if i < res_entries.size() else entry
+		npc.set_collision_shape(
+			float(shape_src.get("collision_width",    26.0)),
+			float(shape_src.get("collision_height",   46.0)),
+			float(shape_src.get("collision_offset_x",  0.0)),
+			float(shape_src.get("collision_offset_y",  0.0))
+		)
 		npc.setup(entry)
 
 
