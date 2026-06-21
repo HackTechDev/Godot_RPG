@@ -5,6 +5,7 @@ var npc_name: String      = ""
 var dialogue: Dictionary  = {}
 var is_dead: bool         = false
 var death_rotation: float = 0.0
+var facing_angle: float   = -90.0
 
 @onready var name_label: Label = $NameLabel
 @onready var interaction_label: Label = $InteractionLabel
@@ -47,6 +48,7 @@ func setup(config: Dictionary) -> void:
 	npc_id = config.get("id", "npc_00")
 	npc_name = config.get("name", "NPC")
 	dialogue = config.get("dialogue", {})
+	facing_angle = float(config.get("facing_angle", -90.0))
 	name_label.text = npc_name
 	if config.get("dead", false):
 		death_rotation = float(config.get("death_rotation", PI / 2.0))

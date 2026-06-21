@@ -90,6 +90,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 			"id":              npc.npc_id,
 			"name":            npc.npc_name,
 			"dialogue":        npc.dialogue,
+			"facing_angle":    npc.facing_angle,
 			"dead":            npc.is_dead,
 			"death_rotation":  npc.death_rotation,
 			"collision_width":    npc_col["collision_width"],
