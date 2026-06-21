@@ -139,9 +139,9 @@ func reinitializePlayer():
 	if Player_data.character_slug == "":
 		return
 	DirAccess.make_dir_recursive_absolute(Player_data.character_dir())
-	var src := FileAccess.open("res://World/Default/rpg.json", FileAccess.READ)
+	var src := FileAccess.open("res://World/Default/player.json", FileAccess.READ)
 	if src == null:
-		push_error("reinitializePlayer: fichier source introuvable: res://World/Default/rpg.json")
+		push_error("reinitializePlayer: fichier source introuvable: res://World/Default/player.json")
 		return
 	var content := src.get_as_text()
 	src.close()
