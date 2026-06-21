@@ -32,6 +32,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 		var col_data: Dictionary = computer.get_collision_data()
 		objects_data.append({
 			"type": "computer", "x": computer.position.x, "y": computer.position.y,
+			"facing_angle":        rad_to_deg(computer.rotation),
 			"collision_radius":    col_data["collision_radius"],
 			"collision_offset_x":  col_data["collision_offset_x"],
 			"collision_offset_y":  col_data["collision_offset_y"],
@@ -40,6 +41,7 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 		var col_data: Dictionary = robot.get_collision_data()
 		objects_data.append({
 			"type": "robot", "x": robot.position.x, "y": robot.position.y,
+			"facing_angle":        rad_to_deg(robot.rotation),
 			"collision_radius":    col_data["collision_radius"],
 			"collision_offset_x":  col_data["collision_offset_x"],
 			"collision_offset_y":  col_data["collision_offset_y"],

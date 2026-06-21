@@ -5,7 +5,8 @@
     "y": 200,
     "collision_radius": 10.0,
     "collision_offset_x": 0.0,
-    "collision_offset_y": 0.0
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0
   },
   {
     "type": "computer",
@@ -13,7 +14,8 @@
     "y": 400,
     "collision_radius": 10.0,
     "collision_offset_x": 0.0,
-    "collision_offset_y": 0.0
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0
   },
   {
     "type": "robot",
@@ -21,7 +23,8 @@
     "y": 350,
     "collision_radius": 10.0,
     "collision_offset_x": 0.0,
-    "collision_offset_y": 0.0
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0
   },
   {
     "type": "robot",
@@ -29,6 +32,7 @@
     "y": 300,
     "collision_radius": 10.0,
     "collision_offset_x": 0.0,
-    "collision_offset_y": 0.0
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0
   }
 ]

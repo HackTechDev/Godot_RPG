@@ -602,6 +602,7 @@ func _load_objects() -> void:
 			_:
 				continue
 		obj.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+		obj.rotation = deg_to_rad(float(entry.get("facing_angle", 0.0)))
 		add_child(obj)
 		var shape_src: Dictionary = res_shapes.get(obj_type, entry)
 		obj.set_collision_shape(
