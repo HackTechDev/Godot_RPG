@@ -660,6 +660,7 @@ func _auto_save_player():
 		"appearance_torso":       Player_data.appearance_torso,
 		"appearance_legs":        Player_data.appearance_legs,
 		"appearance_feet":        Player_data.appearance_feet,
+		"body_angle":             body_angle,
 		"collision_width":        ($CollisionShape2D.shape as RectangleShape2D).size.x,
 		"collision_height":       ($CollisionShape2D.shape as RectangleShape2D).size.y,
 		"collision_offset_x":     $CollisionShape2D.position.x,
@@ -1023,7 +1024,7 @@ func _apply_appearance():
 	master_sprite.visible = false
 
 func _restore_sprite_state() -> void:
-	body_angle = _dir_to_angle(Player_data.player_facing)
+	body_angle = Player_data.player_body_angle
 	look_angle = body_angle
 	var look_vec = _angle_to_vec(look_angle)
 	anim_tree.set("parameters/Idle/blend_position", look_vec)

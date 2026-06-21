@@ -24,6 +24,7 @@ static var player_specialization: String = ""
 
 static var player_position = Vector2()
 static var player_facing = 0
+static var player_body_angle: float = -90.0
 
 static var player_pos_x = 0
 static var player_pos_y = 0
