@@ -135,7 +135,7 @@ func _draw() -> void:
 	draw_colored_polygon(pts, Color(1.0, 0.15, 0.05, 0.10))
 	draw_line(Vector2.ZERO, Vector2(cos(look_rad - half_fov), sin(look_rad - half_fov)) * DETECTION_RADIUS, Color(1.0, 0.15, 0.05, 0.28), 1.0)
 	draw_line(Vector2.ZERO, Vector2(cos(look_rad + half_fov), sin(look_rad + half_fov)) * DETECTION_RADIUS, Color(1.0, 0.15, 0.05, 0.28), 1.0)
-	if GameConfig.DEBUG:
+	if GameConfig.debug_show_collision:
 		var col_pos: Vector2  = $CollisionShape2D.position
 		var col_size: Vector2 = ($CollisionShape2D.shape as RectangleShape2D).size
 		draw_rect(Rect2(col_pos - col_size / 2.0, col_size), Color(1, 0, 0, 0.9), false, 1.5)
