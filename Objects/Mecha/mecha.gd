@@ -24,8 +24,6 @@ signal disembarked(mecha: Mecha, exit_pos: Vector2)
 func _ready() -> void:
 	add_to_group("mecha")
 	_hint_label.visible = false
-	z_index = 12
-
 	collision_layer = 4
 	collision_mask  = 1
 
