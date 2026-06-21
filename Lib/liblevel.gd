@@ -153,8 +153,18 @@ func reinitializePlayer():
 	dst.close()
 
 
+func _load_default_player_json() -> Dictionary:
+	var src := FileAccess.open("res://World/Default/player.json", FileAccess.READ)
+	if src == null:
+		return {}
+	var data = JSON.parse_string(src.get_as_text())
+	src.close()
+	return data if data is Dictionary else {}
+
+
 func load_game():
 	# ~/.local/share/godot/app_userdata/rpg_v1/player.json
+	var defaults: Dictionary = _load_default_player_json()
 	if FileAccess.file_exists(Player_data.save_path):
 		if GameConfig.DEBUG:
 			print("Character file found")
@@ -196,10 +206,10 @@ func load_game():
 		Player_data.appearance_torso    = data.get("appearance_torso", "")
 		Player_data.appearance_legs     = data.get("appearance_legs", "")
 		Player_data.appearance_feet     = data.get("appearance_feet", "")
-		Player_data.player_collision_width    = float(data.get("collision_width",    32.0))
-		Player_data.player_collision_height   = float(data.get("collision_height",   50.0))
-		Player_data.player_collision_offset_x = float(data.get("collision_offset_x",  0.0))
-		Player_data.player_collision_offset_y = float(data.get("collision_offset_y",  5.0))
+		Player_data.player_collision_width    = float(data.get("collision_width",    defaults.get("collision_width",    32.0)))
+		Player_data.player_collision_height   = float(data.get("collision_height",   defaults.get("collision_height",   50.0)))
+		Player_data.player_collision_offset_x = float(data.get("collision_offset_x", defaults.get("collision_offset_x",  0.0)))
+		Player_data.player_collision_offset_y = float(data.get("collision_offset_y", defaults.get("collision_offset_y",  5.0)))
 
 	else:
 		if GameConfig.DEBUG:
@@ -220,3 +230,7 @@ func load_game():
 		Player_data.player_weight_capacity = 0
 		Player_data.player_credit          = 1000
 		Player_data.player_equipment       = []
+		Player_data.player_collision_width    = float(defaults.get("collision_width",    32.0))
+		Player_data.player_collision_height   = float(defaults.get("collision_height",   50.0))
+		Player_data.player_collision_offset_x = float(defaults.get("collision_offset_x",  0.0))
+		Player_data.player_collision_offset_y = float(defaults.get("collision_offset_y",  5.0))
