@@ -567,7 +567,14 @@ func input_move():
 	if input_movement.length() > 1.0:
 		input_movement = input_movement.normalized()
 
-	# L'animation suit toujours la direction du regard
+	# Le corps tourne dans la direction du mouvement (WASD/flèches)
+	if input_movement != Vector2.ZERO:
+		var move_angle := _norm_angle(rad_to_deg(atan2(input_movement.y, input_movement.x)))
+		body_angle = move_angle
+		if abs(_norm_angle(look_angle - body_angle)) > 45.0:
+			look_angle = body_angle
+
+	# L'animation suit la direction du regard (≈ direction du corps en marche normale)
 	var look_vec = _angle_to_vec(look_angle)
 	# Vitesse réduite si : corps ≠ regard, OU si le joueur recule par rapport au corps
 	var aligned        = abs(_norm_angle(look_angle - body_angle)) < 1.0
