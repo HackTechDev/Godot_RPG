@@ -573,13 +573,26 @@ func _save_transition_state(player: Node2D) -> void:
 # ---------------------------------------------------------------------------
 
 func _load_objects() -> void:
-	var entries := _read_level_json(
-		Player_data.level_save_dir(name) + "/objects.json",
-		"res://Scenes/Levels/%s/objects.json" % name
-	)
+	var user_path := Player_data.level_save_dir(name) + "/objects.json"
+	var res_path  := "res://Scenes/Levels/%s/objects.json" % name
+	var entries   := _read_level_json(user_path, res_path)
+
+	# Shape params par type depuis res:// (valeurs de design, pas écrasées par le cache)
+	var res_shapes: Dictionary = {}
+	var res_file := FileAccess.open(res_path, FileAccess.READ)
+	if res_file != null:
+		var parsed = JSON.parse_string(res_file.get_as_text())
+		res_file.close()
+		if parsed is Array:
+			for re in parsed:
+				var t: String = re.get("type", "")
+				if t != "" and not res_shapes.has(t):
+					res_shapes[t] = re
+
 	for entry in entries:
 		var obj: Node2D
-		match entry.get("type", ""):
+		var obj_type: String = entry.get("type", "")
+		match obj_type:
 			"computer":
 				obj = _computer_scene.instantiate()
 				obj.add_to_group("computer")
@@ -590,6 +603,12 @@ func _load_objects() -> void:
 				continue
 		obj.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
 		add_child(obj)
+		var shape_src: Dictionary = res_shapes.get(obj_type, entry)
+		obj.set_collision_shape(
+			float(shape_src.get("collision_radius",    10.0)),
+			float(shape_src.get("collision_offset_x",   0.0)),
+			float(shape_src.get("collision_offset_y",   0.0))
+		)
 
 
 func _load_enemies() -> void:

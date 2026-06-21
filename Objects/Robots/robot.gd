@@ -2,6 +2,18 @@ extends RigidBody2D
 
 @onready var interaction_label = $InteractionLabel
 
+func set_collision_shape(radius: float, offset_x: float, offset_y: float) -> void:
+	var col := $CollisionShape2D as CollisionShape2D
+	var new_shape := CircleShape2D.new()
+	new_shape.radius = radius
+	col.shape = new_shape
+	col.position = Vector2(offset_x, offset_y)
+
+func get_collision_data() -> Dictionary:
+	var col := $CollisionShape2D as CollisionShape2D
+	var radius: float = (col.shape as CircleShape2D).radius
+	return { "collision_radius": radius, "collision_offset_x": col.position.x, "collision_offset_y": col.position.y }
+
 func _process(_delta: float) -> void:
 	if GameConfig.debug_show_collision:
 		queue_redraw()

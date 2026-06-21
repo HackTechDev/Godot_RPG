@@ -1,22 +1,34 @@
 [
-	{
-		"type": "computer",
-		"x": 19200,
-		"y": 9344
-	},
-	{
-		"type": "computer",
-		"x": 18560,
-		"y": 9984
-	},
-	{
-		"type": "robot",
-		"x": 19584,
-		"y": 9344
-	},
-	{
-		"type": "robot",
-		"x": 18560,
-		"y": 10368
-	}
+  {
+    "type": "computer",
+    "x": 19200,
+    "y": 9344,
+    "collision_radius": 10.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0
+  },
+  {
+    "type": "computer",
+    "x": 18560,
+    "y": 9984,
+    "collision_radius": 10.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0
+  },
+  {
+    "type": "robot",
+    "x": 19584,
+    "y": 9344,
+    "collision_radius": 10.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0
+  },
+  {
+    "type": "robot",
+    "x": 18560,
+    "y": 10368,
+    "collision_radius": 10.0,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0
+  }
 ]

@@ -29,9 +29,21 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 	# objects.json — computers + robots collectibles
 	var objects_data: Array = []
 	for computer in computers:
-		objects_data.append({ "type": "computer", "x": computer.position.x, "y": computer.position.y })
+		var col_data: Dictionary = computer.get_collision_data()
+		objects_data.append({
+			"type": "computer", "x": computer.position.x, "y": computer.position.y,
+			"collision_radius":    col_data["collision_radius"],
+			"collision_offset_x":  col_data["collision_offset_x"],
+			"collision_offset_y":  col_data["collision_offset_y"],
+		})
 	for robot in robots:
-		objects_data.append({ "type": "robot", "x": robot.position.x, "y": robot.position.y })
+		var col_data: Dictionary = robot.get_collision_data()
+		objects_data.append({
+			"type": "robot", "x": robot.position.x, "y": robot.position.y,
+			"collision_radius":    col_data["collision_radius"],
+			"collision_offset_x":  col_data["collision_offset_x"],
+			"collision_offset_y":  col_data["collision_offset_y"],
+		})
 	var objects_file = FileAccess.open(base_dir + "/objects.json", FileAccess.WRITE)
 	objects_file.store_line(JSON.stringify(objects_data))
 	objects_file.close()
