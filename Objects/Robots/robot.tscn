@@ -28,7 +28,7 @@ texture = ExtResource("1_4bkbm")
 
 [node name="InteractionLabel" type="Label" parent="."]
 position = Vector2(-50.0, -36.0)
-z_index = 1
+z_index = 0
 theme_override_font_sizes/font_size = 10
 text = "T: Prendre
 R: Pousser"
