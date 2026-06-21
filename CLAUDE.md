@@ -214,6 +214,7 @@ Root array of mission objects with `id`, `title`, `description`, `objectives`, `
 | Tune debug flags or speeds | `Autoload/game_config.gd` |
 | Add a radial menu action | `_radial_items()` + `_handle_radial_action()` in `player.gd` |
 | Add a level transition | Both `level_connections.json` files; see `Docs/level_transition_technical.md` |
+| Understand level transition system (technical) | `Docs/level_transition_technical.md` |
 | Regenerate levels 5–10 | `python3 Scripts/build_levels.py` then open in Godot to re-import |
 | Generate a new ASCII map | `python3 Scripts/generate_level.py --output Scripts/level_0NN --seed N` |
 | Place objects in a level | Edit `res://Scenes/Levels/level_N/objects.json` then delete `user://level_N/` cache |
