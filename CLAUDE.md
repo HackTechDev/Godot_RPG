@@ -217,3 +217,4 @@ Root array of mission objects with `id`, `title`, `description`, `objectives`, `
 | Regenerate levels 5–10 | `python3 Scripts/build_levels.py` then open in Godot to re-import |
 | Generate a new ASCII map | `python3 Scripts/generate_level.py --output Scripts/level_0NN --seed N` |
 | Place objects in a level | Edit `res://Scenes/Levels/level_N/objects.json` then delete `user://level_N/` cache |
+| Understand player/enemy collision & detection | `Docs/collision_detection.md` |
