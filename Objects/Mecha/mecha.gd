@@ -40,6 +40,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if GameConfig.debug_show_collision:
+		queue_redraw()
 	if not is_occupied:
 		velocity = Vector2.ZERO
 		_update_engine_sound(false)
@@ -130,6 +132,12 @@ func _update_engine_sound(moving: bool) -> void:
 	else:
 		if _engine_sfx.is_playing():
 			_engine_sfx.stop()
+
+
+func _draw() -> void:
+	if GameConfig.debug_show_collision and _col_shape != null and _col_shape.shape != null:
+		var radius: float = (_col_shape.shape as CircleShape2D).radius
+		draw_arc(_col_shape.position, radius, 0.0, TAU, 32, Color(1, 0, 0, 0.9), 1.5)
 
 
 func _rebuild_collision_shape() -> void:
