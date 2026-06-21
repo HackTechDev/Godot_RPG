@@ -187,7 +187,9 @@ func die():
 
 func set_collision_shape(width: float, height: float, offset_x: float, offset_y: float) -> void:
 	var col := $CollisionShape2D as CollisionShape2D
-	(col.shape as RectangleShape2D).size = Vector2(width, height)
+	var new_shape := RectangleShape2D.new()
+	new_shape.size = Vector2(width, height)
+	col.shape = new_shape
 	col.position = Vector2(offset_x, offset_y)
 
 func get_collision_data() -> Dictionary:

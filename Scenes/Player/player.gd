@@ -186,7 +186,9 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	PartyData.register_node(_party_slot, self)
 	var _col := $CollisionShape2D as CollisionShape2D
-	(_col.shape as RectangleShape2D).size = Vector2(Player_data.player_collision_width, Player_data.player_collision_height)
+	var _new_shape := RectangleShape2D.new()
+	_new_shape.size = Vector2(Player_data.player_collision_width, Player_data.player_collision_height)
+	_col.shape = _new_shape
 	_col.position = Vector2(Player_data.player_collision_offset_x, Player_data.player_collision_offset_y)
 
 	# La minimap est créée pour tous les joueurs afin de recevoir level_map_ready
