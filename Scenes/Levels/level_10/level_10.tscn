@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dt7m4n9r6j2p8"]
+[gd_scene format=3 uid="uid://dt7m4oar6j2p8"]
 
 [ext_resource type="Script" uid="uid://bq5j1w8k3n7r2" path="res://Scenes/Levels/level_10/level_10.gd" id="1_xsuma"]
 [ext_resource type="Texture2D" uid="uid://kekt6idngyia" path="res://Sprites/Background/tileset_scifi.png" id="2_ciuib"]
