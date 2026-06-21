@@ -36,6 +36,7 @@ var _switch_overlay: ColorRect = null  # overlay plein-écran pour le flash
 func _ready() -> void:
 	if GameConfig.DEBUG:
 		print("Scene: " + self.name)
+	get_tree().debug_collisions_hint = GameConfig.debug_show_tile_collisions
 	Player_data.player_previous_scene = self.name
 	SceneTransition.fade_in()
 	_setup_json_transitions()

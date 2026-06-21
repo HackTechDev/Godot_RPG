@@ -5,6 +5,7 @@ const _SETTINGS_PATH = "user://settings.json"
 
 var debug_show_hitbox: bool = false
 var debug_show_collision: bool = false
+var debug_show_tile_collisions: bool = false
 
 # Effets sonores
 var sfx_enabled: bool = true
@@ -32,7 +33,8 @@ func _ready() -> void:
 	sfx_enabled          = data.get("sfx_enabled", true)
 	sfx_volume_linear    = maxf(data.get("sfx_volume_linear", 0.8), 0.01)
 	intro_music_enabled  = data.get("intro_music_enabled", true)
-	debug_show_hitbox    = data.get("debug_show_hitbox", false)
-	debug_show_collision = data.get("debug_show_collision", false)
-	show_cone            = data.get("show_cone", true)
-	show_aim_line        = data.get("show_aim_line", true)
+	debug_show_hitbox          = data.get("debug_show_hitbox", false)
+	debug_show_collision       = data.get("debug_show_collision", false)
+	debug_show_tile_collisions = data.get("debug_show_tile_collisions", false)
+	show_cone                  = data.get("show_cone", true)
+	show_aim_line              = data.get("show_aim_line", true)
