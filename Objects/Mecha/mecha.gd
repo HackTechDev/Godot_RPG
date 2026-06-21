@@ -110,13 +110,33 @@ func disembark() -> Vector2:
 	return exit_pos
 
 
+func set_collision_shape(radius: float, offset_x: float, offset_y: float) -> void:
+	if _col_shape == null:
+		return
+	var new_shape := CircleShape2D.new()
+	new_shape.radius = radius
+	_col_shape.shape = new_shape
+	_col_shape.position = Vector2(offset_x, offset_y)
+
+func get_collision_data() -> Dictionary:
+	var radius := 0.0
+	var offset := Vector2.ZERO
+	if _col_shape != null and _col_shape.shape != null:
+		radius = (_col_shape.shape as CircleShape2D).radius
+		offset = _col_shape.position
+	return { "collision_radius": radius, "collision_offset_x": offset.x, "collision_offset_y": offset.y }
+
 func get_save_data() -> Dictionary:
+	var col := get_collision_data()
 	return {
-		"id": mecha_id,
-		"x": position.x,
-		"y": position.y,
-		"facing_x": facing_dir.x,
-		"facing_y": facing_dir.y
+		"id":                  mecha_id,
+		"x":                   position.x,
+		"y":                   position.y,
+		"facing_x":            facing_dir.x,
+		"facing_y":            facing_dir.y,
+		"collision_radius":    col["collision_radius"],
+		"collision_offset_x":  col["collision_offset_x"],
+		"collision_offset_y":  col["collision_offset_y"],
 	}
 
 

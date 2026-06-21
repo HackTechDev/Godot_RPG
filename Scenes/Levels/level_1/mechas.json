@@ -6,6 +6,9 @@
 	"speed": 120.0,
 	"inertia": 6.0,
 	"proximity": 50.0,
-	"hitbox_scale": 1.0
+	"hitbox_scale": 1.0,
+	"collision_radius": 0.0,
+	"collision_offset_x": 0.0,
+	"collision_offset_y": 0.0
   }
 ]

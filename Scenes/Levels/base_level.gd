@@ -677,7 +677,18 @@ func _load_mechas() -> void:
 	print("base_level._load_mechas: user=", user_path, " | res=", res_path)
 	var entries := _read_level_json(user_path, res_path)
 	print("base_level._load_mechas: %d entrée(s) trouvée(s)" % entries.size())
-	for entry in entries:
+
+	var res_entries: Array = []
+	if FileAccess.file_exists(user_path):
+		var f := FileAccess.open(res_path, FileAccess.READ)
+		if f:
+			var parsed = JSON.parse_string(f.get_as_text())
+			f.close()
+			if parsed is Array:
+				res_entries = parsed
+
+	for i in range(entries.size()):
+		var entry := entries[i]
 		var mecha := _mecha_scene.instantiate() as Mecha
 		if mecha == null:
 			push_error("base_level._load_mechas: instantiate() as Mecha a retourné null — vérifier mecha.tscn/mecha.gd")
@@ -695,6 +706,14 @@ func _load_mechas() -> void:
 		add_child(mecha)
 		mecha.global_position = Vector2(px, py)
 		print("base_level._load_mechas: mecha.global_position après add_child = ", mecha.global_position)
+		var shape_src: Dictionary = res_entries[i] if i < res_entries.size() else entry
+		var col_radius := float(shape_src.get("collision_radius", 0.0))
+		if col_radius > 0.0:
+			mecha.set_collision_shape(
+				col_radius,
+				float(shape_src.get("collision_offset_x", 0.0)),
+				float(shape_src.get("collision_offset_y", 0.0))
+			)
 
 
 func _emit_level_map() -> void:
