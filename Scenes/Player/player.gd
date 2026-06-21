@@ -581,8 +581,7 @@ func input_move():
 	if input_movement != Vector2.ZERO:
 		movement_sounds()
 		anim_tree.set("parameters/Idle/blend_position", look_vec)
-		# Blend Move depuis input_movement → animation correcte dans toutes les directions
-		anim_tree.set("parameters/Move/blend_position", input_movement)
+		anim_tree.set("parameters/Move/blend_position", look_vec)
 		anim_state.travel("Move")
 		velocity = input_movement * current_speed
 	else:
