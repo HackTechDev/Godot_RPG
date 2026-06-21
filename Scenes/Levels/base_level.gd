@@ -325,6 +325,9 @@ func _create_json_trigger(conn: Dictionary) -> void:
 
 
 func _process(_delta: float) -> void:
+	for child in get_children():
+		if child is PhysicsBody2D:
+			child.z_index = int(child.position.y)
 	if GameConfig.debug_show_tile_collisions:
 		queue_redraw()
 	if _trigger_hint == null or _all_triggers.is_empty():
@@ -606,9 +609,10 @@ func _load_objects() -> void:
 		add_child(obj)
 		var shape_src: Dictionary = res_shapes.get(obj_type, entry)
 		obj.set_collision_shape(
-			float(shape_src.get("collision_radius",    10.0)),
-			float(shape_src.get("collision_offset_x",   0.0)),
-			float(shape_src.get("collision_offset_y",   0.0))
+			float(shape_src.get("collision_width",    20.0)),
+			float(shape_src.get("collision_height",   20.0)),
+			float(shape_src.get("collision_offset_x",  0.0)),
+			float(shape_src.get("collision_offset_y",  0.0))
 		)
 
 
