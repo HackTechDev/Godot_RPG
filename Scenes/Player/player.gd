@@ -420,8 +420,8 @@ func _draw() -> void:
 		var spr_rect: Rect2 = master_sprite.get_rect()
 		draw_rect(Rect2(master_sprite.position + spr_rect.position, spr_rect.size), Color(0.0, 0.5, 1.0, 1.0), false, 2.0)
 	if GameConfig.DEBUG:
-		var col_pos  := $CollisionShape2D.position
-		var col_size := ($CollisionShape2D.shape as RectangleShape2D).size
+		var col_pos: Vector2  = $CollisionShape2D.position
+		var col_size: Vector2 = ($CollisionShape2D.shape as RectangleShape2D).size
 		draw_rect(Rect2(col_pos - col_size / 2.0, col_size), Color(1, 0, 0, 0.9), false, 1.5)
 
 	if GameConfig.show_cone:
