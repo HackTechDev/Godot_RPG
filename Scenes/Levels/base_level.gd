@@ -536,19 +536,42 @@ func _load_objects() -> void:
 
 
 func _load_enemies() -> void:
-	var entries := _read_level_json(
-		Player_data.level_save_dir(name) + "/enemies.json",
-		"res://Scenes/Levels/%s/enemies.json" % name
-	)
-	for entry in entries:
-		var enemy = _enemy_scene.instantiate()
+	var user_path := Player_data.level_save_dir(name) + "/enemies.json"
+	var res_path  := "res://Scenes/Levels/%s/enemies.json" % name
+	var entries   := _read_level_json(user_path, res_path)
+
+	# Positions initiales depuis res:// pour les ennemis statiques
+	var res_entries: Array = []
+	if FileAccess.file_exists(user_path):
+		var f := FileAccess.open(res_path, FileAccess.READ)
+		if f:
+			var parsed = JSON.parse_string(f.get_as_text())
+			f.close()
+			if parsed is Array:
+				res_entries = parsed
+
+	for i in range(entries.size()):
+		var entry  = entries[i]
+		var follow := int(entry.get("follow_player", 1)) != 0
+		var enemy  = _enemy_scene.instantiate()
 		enemy.add_to_group("robot_enemy")
-		enemy.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+
+		# Ennemi statique : position toujours depuis res://, jamais la cache
+		if not follow and i < res_entries.size():
+			enemy.position = Vector2(res_entries[i].get("x", 0.0), res_entries[i].get("y", 0.0))
+		else:
+			enemy.position = Vector2(entry.get("x", 0.0), entry.get("y", 0.0))
+
 		add_child(enemy)
 		if entry.has("attack"):
 			enemy.enemy_attack  = int(entry.get("attack",  10))
 			enemy.enemy_defense = int(entry.get("defense", 10))
 			enemy.enemy_health  = int(entry.get("health",   2))
+		enemy.follow_player = follow
+		if entry.has("facing_angle"):
+			enemy.facing_angle = float(entry.get("facing_angle"))
+		if GameConfig.DEBUG:
+			print("[LOAD_ENEMY] pos=(%.0f,%.0f) follow_player=%s facing_angle=%.0f" % [enemy.position.x, enemy.position.y, enemy.follow_player, enemy.facing_angle])
 		if entry.get("dead", false):
 			enemy.death_rotation = float(entry.get("death_rotation", PI / 2.0))
 			enemy.apply_dead_state()

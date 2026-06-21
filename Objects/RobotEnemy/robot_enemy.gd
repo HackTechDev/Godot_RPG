@@ -16,7 +16,10 @@ var facing_angle: float = -90.0  # direction du regard (degrés, 0 = droite)
 var enemy_attack: int
 var enemy_defense: int
 var enemy_health: int
+var follow_player: bool = true
 var in_combat: bool = false
+var _debug_label: Label = null
+var _debug_cooldown: float = 0.0
 var is_dead: bool = false
 var death_rotation: float = 0.0
 var combat_label: Label
@@ -27,6 +30,19 @@ func _ready():
 	enemy_defense = randi_range(10, 15)
 	enemy_health = randi_range(2, 3)
 	_create_combat_label()
+	_create_debug_label()
+
+func _create_debug_label():
+	_debug_label = Label.new()
+	_debug_label.position = Vector2(-20, -100)
+	_debug_label.text = "STAT"
+	_debug_label.visible = false
+	_debug_label.z_index = 12
+	_debug_label.add_theme_font_size_override("font_size", 12)
+	_debug_label.add_theme_constant_override("outline_size", 2)
+	_debug_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_debug_label.add_theme_color_override("font_color", Color.YELLOW)
+	add_child(_debug_label)
 
 func _create_combat_label():
 	combat_label = Label.new()
@@ -41,6 +57,15 @@ func _create_combat_label():
 
 func _physics_process(delta):
 	queue_redraw()
+	if _debug_label:
+		_debug_label.visible = GameConfig.DEBUG and not follow_player
+
+	# Ennemi statique : aucun déplacement possible, on court-circuite tout
+	if not follow_player:
+		_stand_idle()
+		return
+
+	_debug_cooldown -= delta
 	if in_combat:
 		_stand_idle()
 		return
@@ -60,11 +85,21 @@ func _physics_process(delta):
 
 	if dist <= DETECTION_RADIUS and _in_cone(to_player):
 		var dir = to_player.normalized()
-		facing_angle = rad_to_deg(dir.angle())
-		velocity = dir * SPEED
-		anim_tree.set("parameters/Idle/blend_position", dir)
-		anim_tree.set("parameters/Move/blend_position", dir)
-		anim_state.travel("Move")
+
+		if follow_player:
+			if GameConfig.DEBUG and _debug_cooldown <= 0.0:
+				print("[ENEMY_FOLLOW] suit le joueur dist=", int(dist), " pos=", global_position)
+				_debug_cooldown = 2.0
+			facing_angle = rad_to_deg(dir.angle())
+			velocity = dir * SPEED
+			anim_tree.set("parameters/Idle/blend_position", dir)
+			anim_tree.set("parameters/Move/blend_position", dir)
+			anim_state.travel("Move")
+		else:
+			if GameConfig.DEBUG and _debug_cooldown <= 0.0:
+				print("[ENEMY_STAT] follow_player=", follow_player, " dist=", int(dist), " pos=", global_position, " → statique, idle")
+				_debug_cooldown = 2.0
+			_stand_idle()
 
 		if dist <= COMBAT_RADIUS:
 			Player_data.contact_enemy = self

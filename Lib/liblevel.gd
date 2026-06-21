@@ -45,6 +45,8 @@ func saveAllObjects(current_scene, computers, robots, robot_enemies = [], mechas
 			"attack":         enemy.enemy_attack,
 			"defense":        enemy.enemy_defense,
 			"health":         enemy.enemy_health,
+			"follow_player":  1 if enemy.follow_player else 0,
+			"facing_angle":   enemy.facing_angle,
 			"dead":           enemy.is_dead,
 			"death_rotation": enemy.death_rotation
 		})
