@@ -385,7 +385,7 @@ func _exit_tree():
 		Performance.remove_custom_monitor("Joueur/vitesse")
 
 func _physics_process(delta: float) -> void:
-	if not is_active_player:
+	if not is_active_player or GameConfig.console_open:
 		velocity = Vector2.ZERO
 		return
 	if _mecha_cooldown > 0.0:
@@ -463,7 +463,7 @@ func _draw() -> void:
 		)
 
 func _input(event):
-	if not is_active_player:
+	if not is_active_player or GameConfig.console_open:
 		return
 
 	# Shift+1/2 : basculer vers un autre personnage de l'équipe

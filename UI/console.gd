@@ -2,10 +2,9 @@ extends CanvasLayer
 
 const MAX_LINES := 5
 
-var _history:           Array[String] = []
-var _labels:            Array[Label]  = []
-var _input:             LineEdit
-var _paused_by_console: bool          = false
+var _history: Array[String] = []
+var _labels:  Array[Label]  = []
+var _line_edit:   LineEdit
 
 func _ready() -> void:
 	layer        = 9
@@ -16,8 +15,7 @@ func _ready() -> void:
 func _build_ui() -> void:
 	var panel := Panel.new()
 	panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	panel.size         = Vector2(0, 148)
-	panel.offset_top   = -148
+	panel.offset_top    = -148
 	panel.offset_bottom = 0
 
 	var bg := StyleBoxFlat.new()
@@ -37,7 +35,6 @@ func _build_ui() -> void:
 	vbox.add_theme_constant_override("separation", 1)
 	panel.add_child(vbox)
 
-	# 5 lignes d'historique
 	for _i in MAX_LINES:
 		var lbl := Label.new()
 		lbl.text = ""
@@ -52,7 +49,6 @@ func _build_ui() -> void:
 	sep.add_theme_color_override("color", Color(0.0, 0.6, 0.0, 0.7))
 	vbox.add_child(sep)
 
-	# Ligne de saisie
 	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 2)
 	vbox.add_child(hbox)
@@ -63,40 +59,47 @@ func _build_ui() -> void:
 	prompt.add_theme_font_size_override("font_size", 12)
 	hbox.add_child(prompt)
 
-	_input = LineEdit.new()
-	_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_input.add_theme_color_override("font_color",       Color(0.0, 0.85, 0.0))
-	_input.add_theme_color_override("caret_color",      Color(0.0, 0.85, 0.0))
-	_input.add_theme_color_override("selection_color",  Color(0.0, 0.5, 0.0, 0.5))
-	_input.add_theme_font_size_override("font_size", 12)
-	_input.placeholder_text = ""
+	_line_edit = LineEdit.new()
+	_line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_line_edit.add_theme_color_override("font_color",      Color(0.0, 0.85, 0.0))
+	_line_edit.add_theme_color_override("caret_color",     Color(0.0, 0.85, 0.0))
+	_line_edit.add_theme_color_override("selection_color", Color(0.0, 0.5, 0.0, 0.5))
+	_line_edit.add_theme_font_size_override("font_size", 12)
+	_line_edit.placeholder_text = ""
 	var flat := StyleBoxFlat.new()
 	flat.bg_color = Color(0, 0, 0, 0)
 	flat.set_border_width_all(0)
-	_input.add_theme_stylebox_override("normal", flat)
-	_input.add_theme_stylebox_override("focus",  flat)
-	_input.connect("text_submitted", _on_submitted)
-	hbox.add_child(_input)
+	_line_edit.add_theme_stylebox_override("normal", flat)
+	_line_edit.add_theme_stylebox_override("focus",  flat)
+	# Pas de connexion text_submitted — on intercepte Enter nous-mêmes
+	hbox.add_child(_line_edit)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.keycode == KEY_F1 and event.pressed and not event.echo:
+func _input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	if event.keycode == KEY_F1:
 		get_viewport().set_input_as_handled()
 		toggle()
+		return
+	if not visible:
+		return
+	if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+		get_viewport().set_input_as_handled()
+		var cmd := _line_edit.text.strip_edges()
+		_line_edit.clear()
+		if cmd != "":
+			print_line("> " + cmd)
+			_execute(cmd)
 
 
 func toggle() -> void:
 	visible = !visible
+	GameConfig.console_open = visible
 	if visible:
-		if not get_tree().paused:
-			get_tree().paused    = true
-			_paused_by_console   = true
-		_input.grab_focus()
+		_line_edit.grab_focus()
 	else:
-		if _paused_by_console:
-			get_tree().paused  = false
-			_paused_by_console = false
-		_input.release_focus()
+		_line_edit.release_focus()
 
 
 func print_line(text: String) -> void:
@@ -112,22 +115,13 @@ func _refresh() -> void:
 		_labels[i].text = "" if i < pad else _history[i - pad]
 
 
-func _on_submitted(text: String) -> void:
-	var cmd := text.strip_edges()
-	_input.clear()
-	if cmd == "":
-		return
-	print_line("> " + cmd)
-	_execute(cmd)
-
-
 func _execute(cmd: String) -> void:
 	var parts := cmd.split(" ", false)
 	if parts.is_empty():
 		return
 	match parts[0].to_lower():
 		"help":
-			print_line("help  clear  pos  level  credits  version")
+			print_line("help  clear  pos  level  credits  version  debug")
 		"clear":
 			_history.clear()
 			_refresh()
@@ -143,5 +137,10 @@ func _execute(cmd: String) -> void:
 				print_line("joueur introuvable")
 		"level":
 			print_line("niveau: " + Player_data.player_previous_scene)
+		"debug":
+			print_line("sfx:%s vol:%.2f  music:%s" % [GameConfig.sfx_enabled, GameConfig.sfx_volume_linear, GameConfig.intro_music_enabled])
+			print_line("speed:%d/%d  cone:%s  aim:%s" % [GameConfig.player_speed_normal, GameConfig.player_speed_slow, GameConfig.show_cone, GameConfig.show_aim_line])
+			print_line("dbg_hitbox:%s  dbg_coll:%s  dbg_tiles:%s" % [GameConfig.debug_show_hitbox, GameConfig.debug_show_collision, GameConfig.debug_show_tile_collisions])
+			print_line("DEBUG:%s  console_open:%s" % [GameConfig.DEBUG, GameConfig.console_open])
 		_:
 			print_line("inconnu: " + parts[0] + "  (help pour la liste)")

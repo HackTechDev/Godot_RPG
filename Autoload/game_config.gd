@@ -22,6 +22,9 @@ var player_speed_slow: int = 35
 var show_cone: bool      = true
 var show_aim_line: bool  = true
 
+# Bloque les inputs du joueur quand une UI "terminale" est active
+var console_open: bool = false
+
 func _ready() -> void:
 	if not FileAccess.file_exists(_SETTINGS_PATH):
 		return
