@@ -2,13 +2,15 @@ extends CanvasLayer
 
 const MAX_LINES := 5
 
-var _history: Array[String] = []
-var _labels:  Array[Label]  = []
-var _input:   LineEdit
+var _history:           Array[String] = []
+var _labels:            Array[Label]  = []
+var _input:             LineEdit
+var _paused_by_console: bool          = false
 
 func _ready() -> void:
-	layer   = 9
-	visible = false
+	layer        = 9
+	visible      = false
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 
 func _build_ui() -> void:
@@ -86,8 +88,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func toggle() -> void:
 	visible = !visible
 	if visible:
+		if not get_tree().paused:
+			get_tree().paused    = true
+			_paused_by_console   = true
 		_input.grab_focus()
 	else:
+		if _paused_by_console:
+			get_tree().paused  = false
+			_paused_by_console = false
 		_input.release_focus()
 
 
