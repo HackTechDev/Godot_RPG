@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://console_terminal"]
+
+[ext_resource type="Script" path="res://UI/console.gd" id="1_consolegd"]
+
+[node name="Console" type="CanvasLayer"]
+script = ExtResource("1_consolegd")

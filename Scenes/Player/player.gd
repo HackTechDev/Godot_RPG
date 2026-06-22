@@ -57,6 +57,9 @@ var radial_menu_instance = null
 var minimap_scene = preload("res://UI/minimap.tscn")
 var minimap_instance = null
 
+var console_scene = preload("res://UI/console.tscn")
+var console_instance = null
+
 const RADIAL_CLICK_RADIUS = 26.0
 
 var _aiming: bool        = false
@@ -267,6 +270,9 @@ func _setup_active_ui() -> void:
 	radial_menu_instance = radial_menu_scene.instantiate()
 	add_child(radial_menu_instance)
 	radial_menu_instance.action_selected.connect(_handle_radial_action)
+
+	console_instance = console_scene.instantiate()
+	add_child(console_instance)
 	radial_menu_instance.closed.connect(func():
 		get_tree().paused = false
 		if _aiming:
