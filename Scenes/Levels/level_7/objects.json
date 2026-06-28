@@ -1,0 +1,42 @@
+[
+  {
+    "type": "computer",
+    "x": 6272,
+    "y": 9600,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0,
+    "collision_width": 20.0,
+    "collision_height": 20.0
+  },
+  {
+    "type": "computer",
+    "x": 5632,
+    "y": 10240,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0,
+    "collision_width": 20.0,
+    "collision_height": 20.0
+  },
+  {
+    "type": "robot",
+    "x": 6656,
+    "y": 9600,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0,
+    "collision_width": 20.0,
+    "collision_height": 20.0
+  },
+  {
+    "type": "robot",
+    "x": 5632,
+    "y": 10624,
+    "collision_offset_x": 0.0,
+    "collision_offset_y": 0.0,
+    "facing_angle": 0.0,
+    "collision_width": 20.0,
+    "collision_height": 20.0
+  }
+]

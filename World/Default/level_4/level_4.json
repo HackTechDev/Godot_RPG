@@ -1,0 +1,7 @@
+{"computer1": {"scene":"level_4", "object":"computer", "position": {"x":300, "y":200}},
+"computer2": {"scene":"level_4", "object":"computer", "position": {"x":600, "y":400}},
+"robot1": {"scene":"level_4", "object":"robot", "position": {"x":450, "y":350}},
+"robot2": {"scene":"level_4", "object":"robot", "position": {"x":200, "y":300}},
+"robot_enemy1": {"scene":"level_4", "object":"robot_enemy", "position": {"x":400, "y":180}},
+"robot_enemy2": {"scene":"level_4", "object":"robot_enemy", "position": {"x":500, "y":400}},
+"robot_enemy3": {"scene":"level_4", "object":"robot_enemy", "position": {"x":150, "y":300}}}

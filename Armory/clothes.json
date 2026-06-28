@@ -1,0 +1,262 @@
+[
+  {
+    "id": "clothing_urban_stealth_v1",
+    "name": "Tenue urbaine discrète",
+    "model": "Urban Stealth",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Tenue légère adaptée aux environnements urbains, favorisant la discrétion.",
+    "weight": 2.5,
+    "images": [
+      "images/clothing_urban_stealth_v1_1.jpg",
+      "images/clothing_urban_stealth_v1_2.jpg",
+      "images/clothing_urban_stealth_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 3,
+      "stealth_bonus": 6,
+      "stealth_penalty": 0,
+      "mobility_bonus": 2,
+      "mobility_penalty": 0,
+      "noise_reduction": 3,
+      "noise_increase": 0,
+      "visibility_reduction": 5,
+      "temperature_resistance": 1
+    }
+  },
+  {
+    "id": "clothing_night_ops_v3",
+    "name": "Tenue d'infiltration nocturne",
+    "model": "Night Ops",
+    "version": "v3",
+    "category": "clothing",
+    "description": "Tenue optimisée pour les opérations de nuit avec réduction maximale du bruit.",
+    "weight": 2.0,
+    "images": [
+      "images/clothing_night_ops_v3_1.jpg",
+      "images/clothing_night_ops_v3_2.jpg",
+      "images/clothing_night_ops_v3_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 4,
+      "stealth_bonus": 10,
+      "stealth_penalty": 0,
+      "mobility_bonus": 3,
+      "mobility_penalty": 0,
+      "noise_reduction": 6,
+      "noise_increase": 0,
+      "visibility_reduction": 8,
+      "temperature_resistance": 1
+    }
+  },
+  {
+    "id": "clothing_combat_heavy_mk2",
+    "name": "Tenue de combat lourde",
+    "model": "Combat Suit",
+    "version": "MK2",
+    "category": "clothing",
+    "description": "Tenue renforcée offrant une bonne protection mais réduisant la mobilité.",
+    "weight": 6.5,
+    "images": [
+      "images/clothing_combat_heavy_mk2_1.jpg",
+      "images/clothing_combat_heavy_mk2_2.jpg",
+      "images/clothing_combat_heavy_mk2_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 18,
+      "stealth_bonus": 0,
+      "stealth_penalty": 5,
+      "mobility_bonus": 0,
+      "mobility_penalty": 3,
+      "noise_reduction": 0,
+      "noise_increase": 3,
+      "visibility_reduction": 1,
+      "temperature_resistance": 4
+    }
+  },
+  {
+    "id": "clothing_forest_camo_v2",
+    "name": "Tenue camouflage forêt",
+    "model": "Forest Camo",
+    "version": "v2",
+    "category": "clothing",
+    "description": "Tenue adaptée aux missions en forêt et zones végétales.",
+    "weight": 3.0,
+    "images": [
+      "images/clothing_forest_camo_v2_1.jpg",
+      "images/clothing_forest_camo_v2_2.jpg",
+      "images/clothing_forest_camo_v2_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 5,
+      "stealth_bonus": 7,
+      "stealth_penalty": 0,
+      "mobility_bonus": 1,
+      "mobility_penalty": 0,
+      "noise_reduction": 2,
+      "noise_increase": 0,
+      "visibility_reduction": 7,
+      "temperature_resistance": 3
+    }
+  },
+  {
+    "id": "clothing_desert_camo_v1",
+    "name": "Tenue camouflage désert",
+    "model": "Desert Camo",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Tenue légère conçue pour les environnements chauds et sablonneux.",
+    "weight": 2.8,
+    "images": [
+      "images/clothing_desert_camo_v1_1.jpg",
+      "images/clothing_desert_camo_v1_2.jpg",
+      "images/clothing_desert_camo_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 4,
+      "stealth_bonus": 5,
+      "stealth_penalty": 0,
+      "mobility_bonus": 2,
+      "mobility_penalty": 0,
+      "noise_reduction": 1,
+      "noise_increase": 0,
+      "visibility_reduction": 6,
+      "temperature_resistance": 8
+    }
+  },
+  {
+    "id": "clothing_arctic_ops_v1",
+    "name": "Tenue grand froid",
+    "model": "Arctic Ops",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Tenue isolante pour les missions en montagne ou zones enneigées.",
+    "weight": 4.5,
+    "images": [
+      "images/clothing_arctic_ops_v1_1.jpg",
+      "images/clothing_arctic_ops_v1_2.jpg",
+      "images/clothing_arctic_ops_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 6,
+      "stealth_bonus": 4,
+      "stealth_penalty": 0,
+      "mobility_bonus": 0,
+      "mobility_penalty": 1,
+      "noise_reduction": 2,
+      "noise_increase": 0,
+      "visibility_reduction": 5,
+      "temperature_resistance": 10
+    }
+  },
+  {
+    "id": "clothing_civilian_worker_v1",
+    "name": "Vêtements civils d'ouvrier",
+    "model": "Worker Outfit",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Tenue civile permettant de se fondre dans certains environnements industriels.",
+    "weight": 2.2,
+    "images": [
+      "images/clothing_civilian_worker_v1_1.jpg",
+      "images/clothing_civilian_worker_v1_2.jpg",
+      "images/clothing_civilian_worker_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 2,
+      "stealth_bonus": 3,
+      "stealth_penalty": 0,
+      "mobility_bonus": 1,
+      "mobility_penalty": 0,
+      "noise_reduction": 1,
+      "noise_increase": 0,
+      "visibility_reduction": 3,
+      "temperature_resistance": 2
+    }
+  },
+  {
+    "id": "clothing_medic_field_v1",
+    "name": "Tenue médicale de terrain",
+    "model": "Field Medic",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Tenue légère avec poches de rangement pour matériel médical.",
+    "weight": 2.7,
+    "images": [
+      "images/clothing_medic_field_v1_1.jpg",
+      "images/clothing_medic_field_v1_2.jpg",
+      "images/clothing_medic_field_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 3,
+      "stealth_bonus": 2,
+      "stealth_penalty": 0,
+      "mobility_bonus": 2,
+      "mobility_penalty": 0,
+      "noise_reduction": 1,
+      "noise_increase": 0,
+      "visibility_reduction": 2,
+      "temperature_resistance": 2
+    }
+  },
+  {
+    "id": "clothing_black_ops_mk1",
+    "name": "Tenue Black Ops",
+    "model": "Black Ops",
+    "version": "MK1",
+    "category": "clothing",
+    "description": "Tenue tactique sombre pensée pour les opérations rapides et discrètes.",
+    "weight": 3.4,
+    "images": [
+      "images/clothing_black_ops_mk1_1.jpg",
+      "images/clothing_black_ops_mk1_2.jpg",
+      "images/clothing_black_ops_mk1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 8,
+      "stealth_bonus": 8,
+      "stealth_penalty": 0,
+      "mobility_bonus": 2,
+      "mobility_penalty": 0,
+      "noise_reduction": 4,
+      "noise_increase": 0,
+      "visibility_reduction": 7,
+      "temperature_resistance": 3
+    }
+  },
+  {
+    "id": "clothing_exosuit_light_v1",
+    "name": "Combinaison assistée légère",
+    "model": "Light Exosuit",
+    "version": "v1",
+    "category": "clothing",
+    "description": "Combinaison expérimentale améliorant la mobilité mais augmentant le bruit.",
+    "weight": 5.5,
+    "images": [
+      "images/clothing_exosuit_light_v1_1.jpg",
+      "images/clothing_exosuit_light_v1_2.jpg",
+      "images/clothing_exosuit_light_v1_3.jpg"
+    ],
+    "price": 30,
+    "clothing": {
+      "defense": 10,
+      "stealth_bonus": 0,
+      "stealth_penalty": 3,
+      "mobility_bonus": 5,
+      "mobility_penalty": 0,
+      "noise_reduction": 0,
+      "noise_increase": 4,
+      "visibility_reduction": 0,
+      "temperature_resistance": 5
+    }
+  }
+]

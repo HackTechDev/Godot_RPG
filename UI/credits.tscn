@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://b0t2m85evvkke"]
+
+[ext_resource type="Script" uid="uid://creditsscript01" path="res://UI/credits.gd" id="1_cred"]
+[ext_resource type="AudioStream" uid="uid://c8rtkgmrt5gr3" path="res://Sounds/music/les_commandos.mp3" id="2_music"]
+[ext_resource type="Texture2D" uid="uid://csiv02rrxrcu8" path="res://Images/special-forces-film.jpg" id="3_bg"]
+
+[node name="Credits" type="CanvasLayer"]
+script = ExtResource("1_cred")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_music")
+autoplay = true
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bg")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="CreditsPanel" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 100.0
+theme_override_constants/separation = 20
+
+[node name="LabelTitle" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
+text = "COMMANDO ZOMBI RPG"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="LabelDevTitle" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+text = "Développement"
+horizontal_alignment = 1
+
+[node name="LabelDev" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Le Sanglier des Ardennes
+lesanglierdesardennes@gmail.com"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="LabelMusicTitle" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+text = "Musique"
+horizontal_alignment = 1
+
+[node name="LabelMusic" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Neon Dreams"
+horizontal_alignment = 1
+
+[node name="Spacer3" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="LabelEngineTitle" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+text = "Moteur de jeu"
+horizontal_alignment = 1
+
+[node name="LabelEngine" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Godot Engine 4.6"
+horizontal_alignment = 1
+
+[node name="Spacer4" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+
+[node name="LabelThanks" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Merci d'avoir joué !"
+horizontal_alignment = 1
+
+[node name="Spacer5" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+
+[node name="LabelVersion" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Version 0.0.4"
+horizontal_alignment = 1
+
+[node name="Spacer6" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="LabelSkip" type="Label" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+text = "Appuyez sur une touche pour quitter"
+horizontal_alignment = 1
+
+[node name="Spacer7" type="Control" parent="CreditsPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 100)

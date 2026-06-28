@@ -1,7 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://cakef76kp4kgi"]
+[gd_scene load_steps=29 format=3 uid="uid://cakef76kp4kgi"]
 
-[ext_resource type="Script" path="res://Scripts/Entity/player.gd" id="1_2tdbd"]
-[ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Sprites/Player/player_without_sword.png" id="1_ny3qo"]
+[ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_76lnb"]
+[ext_resource type="Texture2D" uid="uid://8ld4yngi8tm2" path="res://Scenes/Player/player_without_sword.png" id="2_gwmam"]
+[ext_resource type="AudioStream" uid="uid://b8oh2oikug6cp" path="res://Sounds/effect/footstep.wav" id="3_8n50g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_386wa"]
 size = Vector2(32, 50)
@@ -226,13 +227,88 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
-script = ExtResource("1_2tdbd")
+script = ExtResource("1_76lnb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_ny3qo")
+texture = ExtResource("2_gwmam")
 hframes = 13
 vframes = 21
 frame = 105
+
+[node name="AppearanceLayers" type="Node2D" parent="."]
+visible = false
+
+[node name="SpriteBody" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteLegs" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteFeet" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteShoulders" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteTorso" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteArms" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteBracers" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteGloves" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteHead" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteFace" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteHair" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
+
+[node name="SpriteHeadwear" type="Sprite2D" parent="AppearanceLayers"]
+z_index = 0
+hframes = 13
+vframes = 54
+frame = 130
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5)
@@ -250,10 +326,10 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_752pq")
-}
 tree_root = SubResource("AnimationNodeStateMachine_g406o")
 anim_player = NodePath("../anim")
 parameters/Idle/blend_position = Vector2(0, 0.00550628)
 parameters/Move/blend_position = Vector2(0, 0)
+
+[node name="Footstep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8n50g")

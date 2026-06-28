@@ -1,0 +1,212 @@
+[
+  {
+    "id": "drone_recon_dr1_v2",
+    "name": "Drone de reconnaissance",
+    "model": "DR-1",
+    "version": "v2",
+    "description": "Petit drone permettant de révéler les ennemis dans une zone proche.",
+    "category": "gadget",
+    "weight": 2.0,
+    "images": [
+      "images/drone_recon_dr1_v2_1.jpg",
+      "images/drone_recon_dr1_v2_2.jpg",
+      "images/drone_recon_dr1_v2_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "reveal_enemies",
+      "detection_radius": 15,
+      "duration": 10,
+      "cooldown": 30
+    }
+  },
+  {
+    "id": "gadget_nvg_pvs31",
+    "name": "Lunettes de vision nocturne",
+    "model": "PVS-31",
+    "version": "Standard",
+    "description": "Permet de voir dans l'obscurité avec une meilleure détection des silhouettes.",
+    "category": "gadget",
+    "weight": 0.8,
+    "images": [
+      "images/gadget_nvg_pvs31_1.jpg",
+      "images/gadget_nvg_pvs31_2.jpg",
+      "images/gadget_nvg_pvs31_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "night_vision",
+      "detection_radius": 25,
+      "duration": 120,
+      "cooldown": 5
+    }
+  },
+  {
+    "id": "gadget_thermal_scope_ts1",
+    "name": "Module de vision thermique",
+    "model": "TS-1",
+    "version": "v1",
+    "description": "Détecte les sources de chaleur derrière les obstacles légers.",
+    "category": "gadget",
+    "weight": 1.1,
+    "images": [
+      "images/gadget_thermal_scope_ts1_1.jpg",
+      "images/gadget_thermal_scope_ts1_2.jpg",
+      "images/gadget_thermal_scope_ts1_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "thermal_detection",
+      "detection_radius": 20,
+      "duration": 20,
+      "cooldown": 45
+    }
+  },
+  {
+    "id": "gadget_flashbang_m84",
+    "name": "Grenade flashbang",
+    "model": "M84",
+    "version": "Standard",
+    "description": "Désoriente temporairement les ennemis dans une zone.",
+    "category": "gadget",
+    "weight": 0.4,
+    "images": [
+      "images/gadget_flashbang_m84_1.jpg",
+      "images/gadget_flashbang_m84_2.jpg",
+      "images/gadget_flashbang_m84_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "stun_enemies",
+      "detection_radius": 8,
+      "duration": 5,
+      "cooldown": 15
+    }
+  },
+  {
+    "id": "gadget_smoke_grenade_m18",
+    "name": "Grenade fumigène",
+    "model": "M18",
+    "version": "Standard",
+    "description": "Crée un écran de fumée réduisant la visibilité ennemie.",
+    "category": "gadget",
+    "weight": 0.5,
+    "images": [
+      "images/gadget_smoke_grenade_m18_1.jpg",
+      "images/gadget_smoke_grenade_m18_2.jpg",
+      "images/gadget_smoke_grenade_m18_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "smoke_screen",
+      "detection_radius": 10,
+      "duration": 18,
+      "cooldown": 20
+    }
+  },
+  {
+    "id": "gadget_medkit_field_v1",
+    "name": "Kit de soin tactique",
+    "model": "Field Medkit",
+    "version": "v1",
+    "description": "Restaure une partie de la santé du personnage.",
+    "price": 30,
+    "category": "gadget",
+    "weight": 1.2,
+    "gadget": {
+      "effect": "heal_player",
+      "detection_radius": 0,
+      "duration": 3,
+      "cooldown": 60
+    },
+    "images": [
+      "images/gadget_medkit_field_v1_1.jpg",
+      "images/gadget_medkit_field_v1_2.jpg",
+      "images/gadget_medkit_field_v1_3.jpg"
+    ]
+  },
+  {
+    "id": "gadget_lockpick_kit_v2",
+    "name": "Kit de crochetage",
+    "model": "Lockpick Kit",
+    "version": "v2",
+    "description": "Permet d'ouvrir certaines portes verrouillées sans alerter les ennemis.",
+    "category": "gadget",
+    "weight": 0.3,
+    "images": [
+      "images/gadget_lockpick_kit_v2_1.jpg",
+      "images/gadget_lockpick_kit_v2_2.jpg",
+      "images/gadget_lockpick_kit_v2_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "unlock_silent",
+      "detection_radius": 0,
+      "duration": 6,
+      "cooldown": 10
+    }
+  },
+  {
+    "id": "gadget_breaching_charge_bc1",
+    "name": "Charge de brèche",
+    "model": "BC-1",
+    "version": "v1",
+    "description": "Permet de détruire une porte ou un obstacle, mais génère beaucoup de bruit.",
+    "category": "gadget",
+    "weight": 1.8,
+    "images": [
+      "images/gadget_breaching_charge_bc1_1.jpg",
+      "images/gadget_breaching_charge_bc1_2.jpg",
+      "images/gadget_breaching_charge_bc1_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "breach_door",
+      "detection_radius": 35,
+      "duration": 2,
+      "cooldown": 90
+    }
+  },
+  {
+    "id": "gadget_jammer_jm2",
+    "name": "Brouilleur électronique",
+    "model": "JM-2",
+    "version": "v2",
+    "description": "Désactive temporairement caméras, alarmes et drones ennemis dans un rayon limité.",
+    "category": "gadget",
+    "weight": 2.4,
+    "images": [
+      "images/gadget_jammer_jm2_1.jpg",
+      "images/gadget_jammer_jm2_2.jpg",
+      "images/gadget_jammer_jm2_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "disable_electronics",
+      "detection_radius": 18,
+      "duration": 15,
+      "cooldown": 75
+    }
+  },
+  {
+    "id": "gadget_tactical_radio_rt5",
+    "name": "Radio tactique",
+    "model": "RT-5",
+    "version": "v1",
+    "description": "Améliore la coordination de l'escouade et révèle les objectifs secondaires.",
+    "category": "gadget",
+    "weight": 1.0,
+    "images": [
+      "images/gadget_tactical_radio_rt5_1.jpg",
+      "images/gadget_tactical_radio_rt5_2.jpg",
+      "images/gadget_tactical_radio_rt5_3.jpg"
+    ],
+    "price": 30,
+    "gadget": {
+      "effect": "squad_coordination",
+      "detection_radius": 30,
+      "duration": 30,
+      "cooldown": 40
+    }
+  }
+]

@@ -1,0 +1,228 @@
+# ============================================================
+# image_url.txt — URLs des images pour chaque item
+# ============================================================
+#
+# Format : {id}_{numero}={url}
+#   - 3 images par item : suffixes _1, _2, _3
+#   - Une URL par ligne
+#   - Lignes vides et lignes commençant par # sont ignorées
+#
+# Le script download_images.py lit ce fichier et sauvegarde
+# chaque image sous le nom images/{id}_{numero}.jpg
+#
+# Pour ajouter une URL, supprime simplement le # en début de ligne
+# et colle l'URL après le signe =
+# ============================================================
+
+
+# --- ARMES (12 items) ---
+
+# Fusil d'assaut HK416 (HK416 A5)
+# Fusil d'assaut HK416 (HK416 A5)
+weapon_hk416_a5_1=https://www.ops-store.fr/upload/image/replique-aeg-hk416-a5-carbine-eyetrace-umarex-noir-canon-gauche-p-image-210431-grande.jpg
+weapon_hk416_a5_2=https://www.ops-store.fr/upload/image/replique-aeg-hk416-a5-carbine-eyetrace-umarex-noir-canon-droite-p-image-210430-grande.jpg
+weapon_hk416_a5_3=https://taktikairsoft.com/wp-content/uploads/2019/04/56732757_2403582962986666_3802959207192330240_o.jpg
+
+# Carabine M4A1 (M4A1 SOPMOD)
+#weapon_m4a1_sopmod_1=
+#weapon_m4a1_sopmod_2=
+#weapon_m4a1_sopmod_3=
+
+# Fusil SCAR-H (SCAR-H MK17)
+#weapon_scar_h_mk17_1=
+#weapon_scar_h_mk17_2=
+#weapon_scar_h_mk17_3=
+
+# Pistolet-mitrailleur MP5SD (MP5SD SD6)
+#weapon_mp5sd6_1=
+#weapon_mp5sd6_2=
+#weapon_mp5sd6_3=
+
+# Pistolet-mitrailleur P90 (P90 TR)
+#weapon_p90_tr_1=
+#weapon_p90_tr_2=
+#weapon_p90_tr_3=
+
+# Pistolet Glock 17 (Glock 17 Gen5)
+#weapon_glock17_gen5_1=
+#weapon_glock17_gen5_2=
+#weapon_glock17_gen5_3=
+
+# Pistolet SIG P226 (P226 MK25)
+#weapon_sig_p226_mk25_1=
+#weapon_sig_p226_mk25_2=
+#weapon_sig_p226_mk25_3=
+
+# Pistolet MK23 (MK23 SOCOM)
+#weapon_mk23_socom_1=
+#weapon_mk23_socom_2=
+#weapon_mk23_socom_3=
+
+# Fusil de précision M110 (M110 SASS)
+#weapon_m110_sass_1=
+#weapon_m110_sass_2=
+#weapon_m110_sass_3=
+
+# Fusil sniper L96A1 (L96A1 Standard)
+#weapon_l96a1_1=
+#weapon_l96a1_2=
+#weapon_l96a1_3=
+
+# Fusil à pompe Benelli M4 (Benelli M4 Tactical)
+#weapon_benelli_m4_1=
+#weapon_benelli_m4_2=
+#weapon_benelli_m4_3=
+
+# Couteau tactique (Combat Knife MK1)
+#weapon_knife_tactical_mk1_1=
+#weapon_knife_tactical_mk1_2=
+#weapon_knife_tactical_mk1_3=
+
+
+# --- GADGETS (10 items) ---
+
+# Drone de reconnaissance (DR-1 v2)
+#drone_recon_dr1_v2_1=
+#drone_recon_dr1_v2_2=
+#drone_recon_dr1_v2_3=
+
+# Lunettes de vision nocturne (PVS-31 Standard)
+#gadget_nvg_pvs31_1=
+#gadget_nvg_pvs31_2=
+#gadget_nvg_pvs31_3=
+
+# Module de vision thermique (TS-1 v1)
+#gadget_thermal_scope_ts1_1=
+#gadget_thermal_scope_ts1_2=
+#gadget_thermal_scope_ts1_3=
+
+# Grenade flashbang (M84 Standard)
+#gadget_flashbang_m84_1=
+#gadget_flashbang_m84_2=
+#gadget_flashbang_m84_3=
+
+# Grenade fumigène (M18 Standard)
+#gadget_smoke_grenade_m18_1=
+#gadget_smoke_grenade_m18_2=
+#gadget_smoke_grenade_m18_3=
+
+# Kit de soin tactique (Field Medkit v1)
+#gadget_medkit_field_v1_1=
+#gadget_medkit_field_v1_2=
+#gadget_medkit_field_v1_3=
+
+# Kit de crochetage (Lockpick Kit v2)
+#gadget_lockpick_kit_v2_1=
+#gadget_lockpick_kit_v2_2=
+#gadget_lockpick_kit_v2_3=
+
+# Charge de brèche (BC-1 v1)
+#gadget_breaching_charge_bc1_1=
+#gadget_breaching_charge_bc1_2=
+#gadget_breaching_charge_bc1_3=
+
+# Brouilleur électronique (JM-2 v2)
+#gadget_jammer_jm2_1=
+#gadget_jammer_jm2_2=
+#gadget_jammer_jm2_3=
+
+# Radio tactique (TR-5 v1)
+#gadget_tactical_radio_tr5_1=
+#gadget_tactical_radio_tr5_2=
+#gadget_tactical_radio_tr5_3=
+
+
+# --- PROTECTIONS (8 items) ---
+
+# Gilet tactique MK2 (Plate Carrier MK2)
+#armor_plate_carrier_mk2_1=
+#armor_plate_carrier_mk2_2=
+#armor_plate_carrier_mk2_3=
+
+# Gilet léger (Light Vest MK1)
+#armor_light_vest_mk1_1=
+#armor_light_vest_mk1_2=
+#armor_light_vest_mk1_3=
+
+# Armure d'assaut lourde (Heavy Assault MK3)
+#armor_heavy_assault_mk3_1=
+#armor_heavy_assault_mk3_2=
+#armor_heavy_assault_mk3_3=
+
+# Gilet discret (Stealth Carrier v1)
+#armor_stealth_carrier_v1_1=
+#armor_stealth_carrier_v1_2=
+#armor_stealth_carrier_v1_3=
+
+# Bouclier balistique (Riot Shield v2)
+#armor_riot_shield_v2_1=
+#armor_riot_shield_v2_2=
+#armor_riot_shield_v2_3=
+
+# Casque tactique FAST (FAST Helmet MK1)
+#armor_helmet_fast_mk1_1=
+#armor_helmet_fast_mk1_2=
+#armor_helmet_fast_mk1_3=
+
+# Casque lourd renforcé (Heavy Helmet MK2)
+#armor_helmet_heavy_mk2_1=
+#armor_helmet_heavy_mk2_2=
+#armor_helmet_heavy_mk2_3=
+
+# Protections articulaires (Joint Pads v1)
+#armor_knee_elbow_pads_v1_1=
+#armor_knee_elbow_pads_v1_2=
+#armor_knee_elbow_pads_v1_3=
+
+
+# --- VETEMENTS (10 items) ---
+
+# Tenue urbaine discrète (Urban Stealth v1)
+#clothing_urban_stealth_v1_1=
+#clothing_urban_stealth_v1_2=
+#clothing_urban_stealth_v1_3=
+
+# Tenue d'infiltration nocturne (Night Ops v3)
+#clothing_night_ops_v3_1=
+#clothing_night_ops_v3_2=
+#clothing_night_ops_v3_3=
+
+# Tenue de combat lourde (Combat Suit MK2)
+#clothing_combat_heavy_mk2_1=
+#clothing_combat_heavy_mk2_2=
+#clothing_combat_heavy_mk2_3=
+
+# Tenue camouflage forêt (Forest Camo v2)
+#clothing_forest_camo_v2_1=
+#clothing_forest_camo_v2_2=
+#clothing_forest_camo_v2_3=
+
+# Tenue camouflage désert (Desert Camo v1)
+#clothing_desert_camo_v1_1=
+#clothing_desert_camo_v1_2=
+#clothing_desert_camo_v1_3=
+
+# Tenue grand froid (Arctic Ops v1)
+#clothing_arctic_ops_v1_1=
+#clothing_arctic_ops_v1_2=
+#clothing_arctic_ops_v1_3=
+
+# Vêtements civils d'ouvrier (Worker Outfit v1)
+#clothing_civilian_worker_v1_1=
+#clothing_civilian_worker_v1_2=
+#clothing_civilian_worker_v1_3=
+
+# Tenue médicale de terrain (Field Medic v1)
+#clothing_medic_field_v1_1=
+#clothing_medic_field_v1_2=
+#clothing_medic_field_v1_3=
+
+# Tenue Black Ops (Black Ops MK1)
+#clothing_black_ops_mk1_1=
+#clothing_black_ops_mk1_2=
+#clothing_black_ops_mk1_3=
+
+# Combinaison assistée légère (Light Exosuit v1)
+#clothing_exosuit_light_v1_1=
+#clothing_exosuit_light_v1_2=
+#clothing_exosuit_light_v1_3=

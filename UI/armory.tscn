@@ -1,0 +1,192 @@
+[gd_scene format=3 uid="uid://PhyCRQ7Wn8aVS"]
+
+[ext_resource type="Script" uid="uid://GthNZsXgCymAR" path="res://UI/armory.gd" id="1_armory"]
+
+[node name="Armory" type="CanvasLayer"]
+layer = 10
+visible = false
+script = ExtResource("1_armory")
+
+[node name="Main" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Center" type="CenterContainer" parent="Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Main/Center"]
+custom_minimum_size = Vector2(900, 520)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Main/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Main/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Main/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Armurerie"
+horizontal_alignment = 1
+
+[node name="TitleSep" type="HSeparator" parent="Main/Center/Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="CategoryBar" type="HBoxContainer" parent="Main/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnWeapons" type="Button" parent="Main/Center/Panel/Margin/VBox/CategoryBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Armes"
+
+[node name="BtnArmors" type="Button" parent="Main/Center/Panel/Margin/VBox/CategoryBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Protections"
+
+[node name="BtnGadgets" type="Button" parent="Main/Center/Panel/Margin/VBox/CategoryBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Matériel"
+
+[node name="BtnClothes" type="Button" parent="Main/Center/Panel/Margin/VBox/CategoryBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vêtements"
+
+[node name="ContentRow" type="HBoxContainer" parent="Main/Center/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="LeftPanel" type="PanelContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="ItemList" type="ItemList" parent="Main/Center/Panel/Margin/VBox/ContentRow/LeftPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VSep" type="VSeparator" parent="Main/Center/Panel/Margin/VBox/ContentRow"]
+layout_mode = 2
+
+[node name="DetailScroll" type="ScrollContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DetailVBox" type="VBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DetName" type="Label" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "—"
+
+[node name="DetModel" type="Label" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = ""
+
+[node name="DetImgBox" type="VBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 4
+
+[node name="DetImg" type="TextureRect" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ImgNav" type="HBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="BtnImgPrev" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+text = "<"
+
+[node name="ImgNavLabel" type="Label" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+custom_minimum_size = Vector2(50, 0)
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+text = "1 / 1"
+
+[node name="BtnImgNext" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav"]
+layout_mode = 2
+visible = false
+text = ">"
+
+[node name="DetDesc" type="RichTextLabel" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+fit_content = true
+bbcode_enabled = false
+scroll_active = false
+theme_override_font_sizes/normal_font_size = 13
+text = ""
+
+[node name="DetSep" type="HSeparator" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+
+[node name="DetStats" type="VBoxContainer" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="BtnBuy" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Acheter"
+
+[node name="BtnSell" type="Button" parent="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+visible = false
+text = "Vendre"
+
+[node name="ButtonClose" type="Button" parent="Main/Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Fermer"
+
+[connection signal="item_selected" from="Main/Center/Panel/Margin/VBox/ContentRow/LeftPanel/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnWeapons" to="." method="_on_btn_weapons_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnArmors" to="." method="_on_btn_armors_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnGadgets" to="." method="_on_btn_gadgets_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/CategoryBar/BtnClothes" to="." method="_on_btn_clothes_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav/BtnImgPrev" to="." method="_on_btn_img_prev_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/DetImgBox/ImgNav/BtnImgNext" to="." method="_on_btn_img_next_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnBuy" to="." method="_on_btn_buy_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ContentRow/DetailScroll/DetailVBox/BtnSell" to="." method="_on_btn_sell_pressed"]
+[connection signal="pressed" from="Main/Center/Panel/Margin/VBox/ButtonClose" to="." method="_on_button_close_pressed"]
